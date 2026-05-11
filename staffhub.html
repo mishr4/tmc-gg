@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMC StaffHub — Download Portal</title>
+<link rel="icon" href="faviconlight.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:#f5f5fa;color:#1a1a2e;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+  .hero{background:linear-gradient(135deg,#7C4DFF 0%,#5225cc 50%,#3a1a99 100%);padding:80px 20px 100px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,0.03),transparent,rgba(255,72,188,0.05),transparent);animation:spin 20s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero-content{position:relative;z-index:2;max-width:700px;margin:0 auto}
+  .hero-logo{height:64px;width:auto;margin-bottom:24px;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.2))}
+  .hero h1{font-size:42px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px}
+  .hero h1 span{background:linear-gradient(135deg,#FF48BC,#0ED7FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{font-size:16px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:500px;margin:0 auto}
+  .hero-badge{display:inline-block;padding:4px 14px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);margin-bottom:20px;letter-spacing:0.5px}
+
+  .download-section{max-width:520px;margin:-50px auto 60px;padding:0 20px;position:relative;z-index:10}
+
+  .card{background:#fff;border-radius:20px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,0.08),0 1px 3px rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.04)}
+
+  .lock-icon{width:48px;height:48px;background:linear-gradient(135deg,#7C4DFF,#5225cc);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+  .lock-icon svg{color:#fff}
+
+  .card h2{font-size:20px;font-weight:800;text-align:center;margin-bottom:6px}
+  .card .subtitle{font-size:13px;color:#999;text-align:center;margin-bottom:28px}
+
+  .input-wrap{position:relative;margin-bottom:16px}
+  .input-wrap label{display:block;font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+  .input-wrap input{width:100%;padding:12px 16px;background:#f5f5fa;border:1px solid rgba(0,0,0,0.08);border-radius:12px;font-size:14px;font-family:inherit;color:#1a1a2e;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .input-wrap input:focus{border-color:#7C4DFF;box-shadow:0 0 0 3px rgba(124,77,255,0.1)}
+  .input-wrap input::placeholder{color:#ccc}
+  .input-wrap input[type="password"]{letter-spacing:2px}
+
+  .btn-download{width:100%;padding:14px;background:linear-gradient(135deg,#7C4DFF,#5225cc);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.15s;margin-top:8px;box-shadow:0 4px 16px rgba(124,77,255,0.25)}
+  .btn-download:hover{box-shadow:0 6px 24px rgba(124,77,255,0.35);transform:translateY(-1px)}
+  .btn-download:active{transform:translateY(0)}
+  .btn-download:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+  .error-msg{font-size:13px;color:#F44336;text-align:center;margin-top:12px;display:none;font-weight:500}
+  .error-msg.show{display:block;animation:shake 0.4s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  .success-area{display:none;text-align:center}
+  .success-area.show{display:block;animation:fadeUp 0.4s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .success-icon{width:56px;height:56px;background:linear-gradient(135deg,#00C853,#00E676);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  .success-area h3{font-size:18px;font-weight:700;margin-bottom:8px}
+  .success-area p{font-size:13px;color:#999;margin-bottom:20px;line-height:1.5}
+  .btn-dl-real{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#1a1a2e;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.15s;text-decoration:none}
+  .btn-dl-real:hover{background:#2a2a4e;transform:translateY(-1px)}
+  .dl-meta{font-size:11px;color:#bbb;margin-top:12px}
+
+  .features{max-width:800px;margin:0 auto 60px;padding:0 20px}
+  .features h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:32px;letter-spacing:-0.3px}
+  .feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  .feature-card{background:#fff;border:1px solid rgba(0,0,0,0.04);border-radius:16px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.03)}
+  .feature-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:18px}
+  .feature-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+  .feature-card p{font-size:12px;color:#888;line-height:1.5}
+
+  .footer{text-align:center;padding:30px 20px;border-top:1px solid rgba(0,0,0,0.04)}
+  .footer p{font-size:12px;color:#bbb}
+  .footer a{color:#7C4DFF;text-decoration:none;font-weight:500}
+
+  .version-badge{display:inline-block;padding:3px 10px;background:rgba(124,77,255,0.08);border-radius:6px;font-size:11px;font-weight:600;color:#7C4DFF;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">INTERNAL SOFTWARE</div>
+    <img src="https://i.postimg.cc/bv1y0KCx/TMC-logo.png" alt="TMC" class="hero-logo">
+    <h1>Staff<span>Hub</span> Portal</h1>
+    <p>The official staff management application for The Mishra Corporation. Clock-in, announcements, emergency alerts, and Cirya Radio — all in one place.</p>
+  </div>
+</div>
+
+<div class="download-section">
+  <div class="card">
+    <!-- Login Form -->
+    <div id="auth-form">
+      <div class="lock-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2>Staff Access Required</h2>
+      <p class="subtitle">Enter your staff password to download</p>
+
+      <div class="input-wrap">
+        <label>Staff Password</label>
+        <input type="password" id="staff-password" placeholder="Enter password" autocomplete="off">
+      </div>
+
+      <button class="btn-download" id="btn-auth" onclick="authenticate()">Verify & Download</button>
+      <p class="error-msg" id="error-msg">Incorrect password. Contact your administrator.</p>
+    </div>
+
+    <!-- Success / Download -->
+    <div class="success-area" id="success-area">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Access Granted</h3>
+      <p>You're authorized to download TMC StaffHub. Click below to start the download.</p>
+      <a class="btn-dl-real" id="btn-real-download" href="#" onclick="startDownload()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Installer
+      </a>
+      <p class="dl-meta">TMC StaffHub Setup 1.1.0.exe — Windows x64 — ~82 MB</p>
+      <div class="version-badge">v1.1.0 — Latest</div>
+    </div>
+  </div>
+</div>
+
+<div class="features">
+  <h2>What's included</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(0,200,83,0.08);color:#00C853">&#9654;</div>
+      <h3>Staff Clock-In/Out</h3>
+      <p>Track who's on shift with one-click clock in and out for all staff members.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(124,77,255,0.08);color:#7C4DFF">&#9726;</div>
+      <h3>Presenter Mode</h3>
+      <p>Big-screen display for staff room TVs — shows live clock status on a second monitor.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(255,72,188,0.08);color:#FF48BC">&#9993;</div>
+      <h3>Announcements</h3>
+      <p>Post and manage announcements visible to all staff from the dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(244,67,54,0.08);color:#F44336">&#9888;</div>
+      <h3>Emergency Alerts</h3>
+      <p>Trigger emergency alerts with alarm sounds that display on all screens instantly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(14,215,255,0.08);color:#0ED7FF">&#9836;</div>
+      <h3>Cirya Radio</h3>
+      <p>Built-in radio streamer for store speakers with live metadata from CiryaCast.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(255,107,53,0.08);color:#FF6B35">&#8635;</div>
+      <h3>Auto Updates</h3>
+      <p>Automatic update checks keep the app on the latest version.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 The Mishra Corporation &middot; <a href="https://tmc.gg">tmc.gg</a> &middot; <a href="https://corporate.cirya.co">corporate.cirya.co</a></p>
+  <p style="margin-top:6px">Internal use only. Unauthorized distribution is prohibited.</p>
+</div>
+
+<script>
+function authenticate() {
+  const pw = document.getElementById('staff-password').value;
+  const err = document.getElementById('error-msg');
+  const btn = document.getElementById('btn-auth');
+
+  if (pw === 'Mishra2026') {
+    document.getElementById('auth-form').style.display = 'none';
+    document.getElementById('success-area').classList.add('show');
+  } else {
+    err.classList.add('show');
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 400);
+    setTimeout(() => err.classList.remove('show'), 3000);
+  }
+}
+
+function startDownload() {
+  alert('Download would start here. Host the installer file and update this link.');
+}
+
+document.getElementById('staff-password').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') authenticate();
+});
+</script>
+</body>
+</html>
