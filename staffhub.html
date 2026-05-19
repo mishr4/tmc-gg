@@ -160,6 +160,13 @@
 </div>
 
 <script>
+  window.ciryaSsoConfig = {
+    theme: 'light',
+    position: 'top-right',
+  };
+</script>
+<script src="https://cirya.co/sso-sdk.js" async></script>
+<script>
 function authenticate() {
   const pw = document.getElementById('staff-password').value;
   const err = document.getElementById('error-msg');
