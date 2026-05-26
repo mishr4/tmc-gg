@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pageTitles = {
         home: 'TMC — The Mishra Corporation | Cirya Media Network',
-        infrastructure: 'Infrastructure — TMC | Cirya Media Network',
+        services: 'Services — TMC | Cirya Media Network',
+        ciryacast: 'CiryaCast Radio Hosting — TMC | Plans & Pricing',
         about: 'About — TMC | The Mishra Corporation',
         join: 'Careers — TMC | Cirya Media Network'
     };

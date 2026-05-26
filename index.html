@@ -53,7 +53,8 @@
                 </svg>
             </a>
             <div class="nav-right">
-                <a href="#" class="nav-link" data-page="infrastructure">Infrastructure</a>
+                <a href="#" class="nav-link" data-page="services">Services</a>
+                <a href="#" class="nav-link" data-page="ciryacast">CiryaCast</a>
                 <a href="#" class="nav-link" data-page="about">About</a>
                 <a href="#" class="nav-link" data-page="join">Careers</a>
                 <a href="https://discord.gg/cirya" target="_blank" class="nav-btn">Discord</a>
@@ -101,10 +102,10 @@
         <section class="card-section">
             <div class="section-header">
                 <h2 class="section-title">Our Divisions</h2>
-                <a href="#" class="section-link" data-page="infrastructure">View all</a>
+                <a href="#" class="section-link" data-page="services">View all</a>
             </div>
             <div class="networks-grid">
-                <div class="network-card" data-page="infrastructure">
+                <div class="network-card" data-page="services">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #536DFE)">
                         <span class="network-card-letter">R1</span>
                     </div>
@@ -113,7 +114,7 @@
                         <p>Audio streaming service</p>
                     </div>
                 </div>
-                <div class="network-card" data-page="infrastructure">
+                <div class="network-card" data-page="services">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)">
                         <span class="network-card-letter">GN</span>
                     </div>
@@ -122,7 +123,7 @@
                         <p>7 clusters across 4 continents</p>
                     </div>
                 </div>
-                <div class="network-card" data-page="infrastructure">
+                <div class="network-card" data-page="services">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)">
                         <span class="network-card-letter">CC</span>
                     </div>
@@ -131,7 +132,7 @@
                         <p>Custom broadcast platform</p>
                     </div>
                 </div>
-                <div class="network-card" data-page="infrastructure">
+                <div class="network-card" data-page="services">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #FF2A2A, #FF6B6B)">
                         <span class="network-card-letter">RHL</span>
                     </div>
@@ -195,16 +196,23 @@
         <section class="card-section">
             <div class="section-header">
                 <h2 class="section-title">Services</h2>
-                <a href="#" class="section-link" data-page="infrastructure">View all</a>
+                <a href="#" class="section-link" data-page="services">View all</a>
             </div>
+
+            <div class="service-hero">
+                <h2>CiryaCast Radio Hosting</h2>
+                <p>Launch your own internet radio station. Fully managed, 24/7 streaming, starting at just $10/month. ASCAP licensing available separately.</p>
+                <a href="#" class="hero-btn" data-page="ciryacast">View Plans & Pricing</a>
+            </div>
+
             <div class="networks-grid">
-                <div class="network-card" onclick="window.open('https://cast.cirya.co','_blank')" style="cursor:pointer">
+                <div class="network-card" data-page="ciryacast" style="cursor:pointer">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)">
                         <span class="network-card-letter">&#9836;</span>
                     </div>
                     <div class="network-card-info">
-                        <h3>CiryaCast Hosting</h3>
-                        <p>Host your own radio station — $10/mo</p>
+                        <h3>Radio Hosting</h3>
+                        <p>Your own station from $10/mo</p>
                     </div>
                 </div>
                 <div class="network-card" onclick="window.open('https://cirya.co/licensing','_blank')" style="cursor:pointer">
@@ -213,7 +221,7 @@
                     </div>
                     <div class="network-card-info">
                         <h3>ASCAP Licensing</h3>
-                        <p>Music licensing for your broadcast</p>
+                        <p>Music licensing for broadcasts</p>
                     </div>
                 </div>
             </div>
@@ -233,15 +241,103 @@
     </main>
 
     <!-- ═══════════════════════════════════════ -->
-    <!--          PAGE: INFRASTRUCTURE           -->
+    <!--             PAGE: SERVICES              -->
     <!-- ═══════════════════════════════════════ -->
-    <main class="page" id="page-infrastructure">
+    <main class="page" id="page-services">
         <section class="page-header">
-            <h1 class="page-title">Infrastructure</h1>
-            <p class="page-subtitle">Our divisions and global operations</p>
+            <h1 class="page-title">Services</h1>
+            <p class="page-subtitle">Everything TMC offers — radio hosting, licensing, media, and infrastructure</p>
         </section>
 
+        <!-- CiryaCast Hero Banner -->
         <section class="card-section">
+            <div class="service-hero">
+                <h2>CiryaCast Radio Hosting</h2>
+                <p>Launch your own internet radio station on TMC's broadcast platform. Fully managed, 24/7 streaming, starting at $10/month.</p>
+                <a href="#" class="hero-btn" data-page="ciryacast">View Plans & Pricing</a>
+            </div>
+        </section>
+
+        <!-- Service Cards -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">What We Offer</h2>
+            </div>
+            <div class="networks-grid">
+                <div class="network-card" data-page="ciryacast" style="cursor:pointer">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)">
+                        <span class="network-card-letter">&#9836;</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>Radio Station Hosting</h3>
+                        <p>Your own station on CiryaCast — from $10/mo</p>
+                    </div>
+                </div>
+                <div class="network-card" onclick="window.open('https://cirya.co/licensing','_blank')" style="cursor:pointer">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)">
+                        <span class="network-card-letter">&#9834;</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>ASCAP Licensing</h3>
+                        <p>Music licensing for your broadcast</p>
+                    </div>
+                </div>
+                <div class="network-card" onclick="window.open('https://cirya.co','_blank')" style="cursor:pointer">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #00C853, #69F0AE)">
+                        <span class="network-card-letter">C</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>Cirya Media Network</h3>
+                        <p>News, entertainment & community</p>
+                    </div>
+                </div>
+                <div class="network-card" onclick="window.open('https://inlinetelevision.com','_blank')" style="cursor:pointer">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF6B35, #FFB74D)">
+                        <span class="network-card-letter">iTV</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>Inline Television</h3>
+                        <p>Television & video content</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASCAP Licensing Detail -->
+        <section class="card-section">
+            <div class="info-card network-detail-card">
+                <div class="network-detail-header">
+                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)"></div>
+                    <div>
+                        <h2 class="card-title">ASCAP Music Licensing</h2>
+                        <span class="network-badge">Licensing Service</span>
+                    </div>
+                </div>
+                <p class="card-body">Need to play licensed music on your radio station or broadcast? TMC offers ASCAP licensing assistance through Cirya. We help you get properly licensed so you can legally stream copyrighted music on your station.</p>
+                <div class="network-stats">
+                    <div class="network-stat">
+                        <span class="network-stat-num">ASCAP</span>
+                        <span class="network-stat-label">Licensed</span>
+                    </div>
+                    <div class="network-stat">
+                        <span class="network-stat-num">Legal</span>
+                        <span class="network-stat-label">Compliance</span>
+                    </div>
+                    <div class="network-stat">
+                        <span class="network-stat-num">Simple</span>
+                        <span class="network-stat-label">Setup</span>
+                    </div>
+                </div>
+                <div style="margin-top:16px"><a href="https://cirya.co/licensing" target="_blank" class="card-cta">Learn More</a></div>
+            </div>
+        </section>
+
+        <!-- Divisions -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Our Divisions</h2>
+            </div>
+
             <div class="info-card network-detail-card">
                 <div class="network-detail-header">
                     <div class="network-dot-lg" style="background: linear-gradient(135deg, #7C4DFF, #536DFE)"></div>
@@ -269,40 +365,13 @@
 
             <div class="info-card network-detail-card">
                 <div class="network-detail-header">
-                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)"></div>
-                    <div>
-                        <h2 class="card-title">Global Nodes</h2>
-                        <span class="network-badge">Server Infrastructure</span>
-                    </div>
-                </div>
-                <p class="card-body">7 server clusters deployed across 4 continents powering the TMC network. Our global node infrastructure ensures low-latency delivery and maximum uptime worldwide. Recently expanded into Southeast Asia (May 2026).</p>
-                <div class="network-stats">
-                    <div class="network-stat">
-                        <span class="network-stat-num">7</span>
-                        <span class="network-stat-label">Clusters</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">4</span>
-                        <span class="network-stat-label">Continents</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">99.9%</span>
-                        <span class="network-stat-label">Uptime</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="card-section">
-            <div class="info-card network-detail-card">
-                <div class="network-detail-header">
                     <div class="network-dot-lg" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)"></div>
                     <div>
                         <h2 class="card-title">CiryaCast</h2>
                         <span class="network-badge">Broadcast Platform</span>
                     </div>
                 </div>
-                <p class="card-body">Custom-built broadcast platform based on AzuraCast, tailored for TMC's media operations. CiryaCast powers live audio streaming, scheduling, and station management across all TMC properties.</p>
+                <p class="card-body">Custom-built broadcast platform based on AzuraCast, tailored for TMC's media operations. Powers live audio streaming, scheduling, and station management across all TMC properties — and open for public hosting.</p>
                 <div class="network-stats">
                     <div class="network-stat">
                         <span class="network-stat-num">Custom</span>
@@ -345,124 +414,37 @@
             </div>
         </section>
 
-        <section class="card-section">
-            <div class="info-card network-detail-card">
-                <div class="network-detail-header">
-                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #00C853, #69F0AE)"></div>
-                    <div>
-                        <h2 class="card-title">Cirya</h2>
-                        <span class="network-badge">Media Network</span>
-                    </div>
-                </div>
-                <p class="card-body">The flagship media brand of TMC. Cirya is a full-stack media network covering news, entertainment, and community across multiple platforms. Home to Cirya News, CiryaSSO, and the Cirya Media Network.</p>
-                <div class="network-stats">
-                    <div class="network-stat">
-                        <span class="network-stat-num">News</span>
-                        <span class="network-stat-label">Coverage</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">SSO</span>
-                        <span class="network-stat-label">Identity</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">Multi</span>
-                        <span class="network-stat-label">Platform</span>
-                    </div>
-                </div>
-                <div style="margin-top:16px"><a href="https://cirya.co" target="_blank" class="card-cta">Visit cirya.co</a></div>
-            </div>
-
-            <div class="info-card network-detail-card">
-                <div class="network-detail-header">
-                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #FF6B35, #FFB74D)"></div>
-                    <div>
-                        <h2 class="card-title">Inline Television</h2>
-                        <span class="network-badge">Television & Video</span>
-                    </div>
-                </div>
-                <p class="card-body">TMC's television and video content division. Inline Television produces and distributes video programming, live broadcasts, and on-demand content across the network.</p>
-                <div class="network-stats">
-                    <div class="network-stat">
-                        <span class="network-stat-num">Video</span>
-                        <span class="network-stat-label">Production</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">Live</span>
-                        <span class="network-stat-label">Broadcasts</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">On-Demand</span>
-                        <span class="network-stat-label">Content</span>
-                    </div>
-                </div>
-                <div style="margin-top:16px"><a href="https://inlinetelevision.com" target="_blank" class="card-cta">Visit inlinetelevision.com</a></div>
-            </div>
-        </section>
-
-        <!-- Services -->
+        <!-- Infrastructure -->
         <section class="card-section">
             <div class="section-header">
-                <h2 class="section-title">Services</h2>
+                <h2 class="section-title">Infrastructure</h2>
             </div>
 
             <div class="info-card network-detail-card">
                 <div class="network-detail-header">
-                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)"></div>
+                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)"></div>
                     <div>
-                        <h2 class="card-title">CiryaCast Radio Hosting</h2>
-                        <span class="network-badge">$10/month</span>
+                        <h2 class="card-title">Global Nodes</h2>
+                        <span class="network-badge">Server Infrastructure</span>
                     </div>
                 </div>
-                <p class="card-body">Host your own internet radio station on CiryaCast — TMC's custom broadcast platform built on AzuraCast. Get a fully managed station with live streaming, scheduling, metadata, and a public player page. Perfect for communities, creators, and businesses.</p>
+                <p class="card-body">7 server clusters deployed across 4 continents powering the TMC network. Low-latency delivery and maximum uptime worldwide.</p>
                 <div class="network-stats">
                     <div class="network-stat">
-                        <span class="network-stat-num">$10</span>
-                        <span class="network-stat-label">Per Month</span>
+                        <span class="network-stat-num">7</span>
+                        <span class="network-stat-label">Clusters</span>
                     </div>
                     <div class="network-stat">
-                        <span class="network-stat-num">Managed</span>
-                        <span class="network-stat-label">Hosting</span>
+                        <span class="network-stat-num">4</span>
+                        <span class="network-stat-label">Continents</span>
                     </div>
                     <div class="network-stat">
-                        <span class="network-stat-num">24/7</span>
-                        <span class="network-stat-label">Streaming</span>
+                        <span class="network-stat-num">99.9%</span>
+                        <span class="network-stat-label">Uptime</span>
                     </div>
                 </div>
-                <p class="card-body" style="margin-top:12px;font-size:12px;color:#999">ASCAP music licensing is not included and must be obtained separately.</p>
-                <div style="margin-top:12px"><a href="https://cast.cirya.co" target="_blank" class="card-cta">Get Started</a></div>
             </div>
 
-            <div class="info-card network-detail-card">
-                <div class="network-detail-header">
-                    <div class="network-dot-lg" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)"></div>
-                    <div>
-                        <h2 class="card-title">ASCAP Music Licensing</h2>
-                        <span class="network-badge">Licensing Service</span>
-                    </div>
-                </div>
-                <p class="card-body">Need to play licensed music on your radio station or broadcast? TMC offers ASCAP licensing assistance through Cirya. We help you get properly licensed so you can legally stream copyrighted music on your station.</p>
-                <div class="network-stats">
-                    <div class="network-stat">
-                        <span class="network-stat-num">ASCAP</span>
-                        <span class="network-stat-label">Licensed</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">Legal</span>
-                        <span class="network-stat-label">Compliance</span>
-                    </div>
-                    <div class="network-stat">
-                        <span class="network-stat-num">Simple</span>
-                        <span class="network-stat-label">Setup</span>
-                    </div>
-                </div>
-                <div style="margin-top:16px"><a href="https://cirya.co/licensing" target="_blank" class="card-cta">Learn More</a></div>
-            </div>
-        </section>
-
-        <section class="card-section">
-            <div class="section-header">
-                <h2 class="section-title">Node Locations</h2>
-            </div>
             <div class="info-card">
                 <div class="nodes-list">
                     <div class="node-row">
@@ -499,17 +481,222 @@
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section class="card-section">
             <div class="info-card">
                 <h2 class="card-title">Privacy by Design</h2>
-                <p class="card-body" style="margin-bottom: 16px">All TMC infrastructure operates with zero-retention protocols. We don't track users, we don't sell data, and we don't store what isn't needed. Privacy isn't a feature — it's the foundation.</p>
+                <p class="card-body" style="margin-bottom: 16px">All TMC infrastructure operates with zero-retention protocols. We don't track users, we don't sell data, and we don't store what isn't needed.</p>
                 <div class="privacy-pills">
                     <span class="privacy-pill">Zero-retention protocols</span>
                     <span class="privacy-pill">No user tracking</span>
                     <span class="privacy-pill">No data sales</span>
-                    <span class="privacy-pill">Updated ethics standards (April 2026)</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--            PAGE: CIRYACAST              -->
+    <!-- ═══════════════════════════════════════ -->
+    <main class="page" id="page-ciryacast">
+        <section class="page-header">
+            <h1 class="page-title">CiryaCast</h1>
+            <p class="page-subtitle">Host your own internet radio station on TMC's broadcast platform</p>
+        </section>
+
+        <!-- Feature highlights -->
+        <section class="card-section">
+            <div class="service-features-row">
+                <div class="service-feature-item">
+                    <div class="sf-icon" style="background:rgba(124,77,255,0.08);color:#7C4DFF">&#9654;</div>
+                    <h3>24/7 Streaming</h3>
+                    <p>Your station runs around the clock on our global infrastructure</p>
+                </div>
+                <div class="service-feature-item">
+                    <div class="sf-icon" style="background:rgba(255,72,188,0.08);color:#FF48BC">&#9836;</div>
+                    <h3>AutoDJ</h3>
+                    <p>Upload your library and let AutoDJ handle scheduling automatically</p>
+                </div>
+                <div class="service-feature-item">
+                    <div class="sf-icon" style="background:rgba(14,215,255,0.08);color:#0ED7FF">&#9776;</div>
+                    <h3>Live Metadata</h3>
+                    <p>Now playing, album art, and listener stats in real time</p>
+                </div>
+                <div class="service-feature-item">
+                    <div class="sf-icon" style="background:rgba(0,200,83,0.08);color:#00C853">&#9881;</div>
+                    <h3>Full Dashboard</h3>
+                    <p>Manage everything from a clean web-based control panel</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Plans -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Plans & Pricing</h2>
+            </div>
+            <div class="pricing-grid">
+                <!-- Starter -->
+                <div class="pricing-card">
+                    <div class="pricing-plan-name">Starter</div>
+                    <div class="pricing-plan-desc">Perfect for personal projects and small communities</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$10</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>1 radio station</li>
+                        <li>128kbps MP3 streaming</li>
+                        <li>5 GB media storage</li>
+                        <li>AutoDJ with scheduling</li>
+                        <li>Public player page</li>
+                        <li>Live now-playing metadata</li>
+                        <li>Basic listener analytics</li>
+                        <li class="disabled">Live DJ connections</li>
+                        <li class="disabled">Custom domain</li>
+                    </ul>
+                    <a href="https://discord.gg/cirya" target="_blank" class="pricing-cta pricing-cta-outline">Get Started</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="pricing-card featured">
+                    <div class="pricing-popular">Most Popular</div>
+                    <div class="pricing-plan-name">Pro</div>
+                    <div class="pricing-plan-desc">For creators and growing communities who want more</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$25</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>1 radio station</li>
+                        <li>320kbps HQ streaming</li>
+                        <li>25 GB media storage</li>
+                        <li>AutoDJ with scheduling</li>
+                        <li>Public player page</li>
+                        <li>Live now-playing metadata</li>
+                        <li>Advanced listener analytics</li>
+                        <li>Up to 3 live DJ connections</li>
+                        <li>Custom domain support</li>
+                    </ul>
+                    <a href="https://discord.gg/cirya" target="_blank" class="pricing-cta pricing-cta-primary">Get Started</a>
+                </div>
+
+                <!-- Business -->
+                <div class="pricing-card">
+                    <div class="pricing-plan-name">Business</div>
+                    <div class="pricing-plan-desc">For organizations running multiple stations at scale</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$50</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Up to 3 radio stations</li>
+                        <li>320kbps HQ streaming</li>
+                        <li>100 GB media storage</li>
+                        <li>AutoDJ with scheduling</li>
+                        <li>Public player pages</li>
+                        <li>Live now-playing metadata</li>
+                        <li>Full analytics dashboard</li>
+                        <li>Unlimited DJ connections</li>
+                        <li>Custom domain + priority support</li>
+                    </ul>
+                    <a href="https://discord.gg/cirya" target="_blank" class="pricing-cta pricing-cta-outline">Contact Us</a>
+                </div>
+            </div>
+            <p class="pricing-note">All plans are billed monthly. ASCAP music licensing is not included and must be obtained separately. <a href="https://cirya.co/licensing" target="_blank" style="color:var(--accent-purple);text-decoration:none;font-weight:500">Get licensed here.</a></p>
+        </section>
+
+        <!-- What's Included -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Every Plan Includes</h2>
+            </div>
+            <div class="ops-grid">
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                    </div>
+                    <h3>TMC Global Infrastructure</h3>
+                    <p>Your station runs on TMC's 7-cluster network across 4 continents for low-latency worldwide</p>
+                </div>
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Zero-Retention Privacy</h3>
+                    <p>We don't track your listeners. No data sold, no analytics shared with third parties</p>
+                </div>
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <h3>99.9% Uptime</h3>
+                    <p>Fully managed hosting with automatic failover and 24/7 monitoring</p>
+                </div>
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    </div>
+                    <h3>AutoDJ & Scheduling</h3>
+                    <p>Upload tracks, build playlists, and schedule programming — runs when you're not live</p>
+                </div>
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <h3>Discord Support</h3>
+                    <p>Get help from the TMC team directly in our Discord server</p>
+                </div>
+                <div class="ops-card">
+                    <div class="ops-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3>Embed Widget</h3>
+                    <p>Drop a player widget on your own website with a single line of code</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="card-section">
+            <div class="info-card">
+                <h2 class="card-title">Frequently Asked Questions</h2>
+                <div class="faq-list" style="margin-top:20px">
+                    <div class="faq-item">
+                        <div class="faq-q">What is CiryaCast?</div>
+                        <div class="faq-a">CiryaCast is TMC's custom broadcast platform built on AzuraCast. It powers all of TMC's internal radio operations, and we also offer public hosting so anyone can run their own internet radio station on our infrastructure.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">Do I need ASCAP licensing?</div>
+                        <div class="faq-a">If you plan to stream copyrighted music, yes — you'll need an ASCAP (or equivalent) license. CiryaCast hosting does not include music licensing. We offer an ASCAP licensing service through <a href="https://cirya.co/licensing" target="_blank" style="color:var(--accent-purple);text-decoration:none;font-weight:500">cirya.co/licensing</a> to make it easy.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">Can I go live with a microphone or DJ software?</div>
+                        <div class="faq-a">Yes! Pro and Business plans support live DJ connections via standard broadcasting software (like BUTT, Mixxx, or SAM Broadcaster). You get dedicated mount points for seamless handoff between AutoDJ and live.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">How do I get started?</div>
+                        <div class="faq-a">Join our Discord, pick a plan, and we'll have your station set up and streaming within 24 hours. You'll get access to the full CiryaCast dashboard to manage your station.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">Can I use a custom domain?</div>
+                        <div class="faq-a">Pro and Business plans support custom domains. Point your domain (e.g., radio.yourdomain.com) to your CiryaCast station and we'll configure SSL automatically.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">Can I cancel anytime?</div>
+                        <div class="faq-a">Yes, all plans are month-to-month with no contracts. Cancel anytime and your station will remain active until the end of your billing period.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="card-section">
+            <div class="info-card cta-card">
+                <h2 class="card-title">Ready to go live?</h2>
+                <p class="card-body">Join our Discord and we'll get your radio station set up within 24 hours.</p>
+                <div class="cta-buttons">
+                    <a href="https://discord.gg/cirya" target="_blank" class="card-cta">Join Discord to Start</a>
+                    <a href="https://cirya.co/licensing" target="_blank" class="card-cta-outline">Get ASCAP Licensed</a>
                 </div>
             </div>
         </section>
@@ -850,12 +1037,13 @@
                 </svg>
             </a>
             <div class="footer-links">
+                <a href="#" data-page="ciryacast">CiryaCast</a>
                 <a href="https://cirya.co" target="_blank">Cirya</a>
                 <a href="https://inlinetelevision.com" target="_blank">Inline Television</a>
-                <a href="https://cirya.co/licensing" target="_blank">ASCAP Licensing</a>
+                <a href="https://cirya.co/licensing" target="_blank">Licensing</a>
                 <a href="https://corporate.cirya.co/" target="_blank">Corporate</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
             </div>
         </div>
     </footer>
@@ -866,9 +1054,13 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span>Home</span>
         </a>
-        <a href="#" class="tab" data-page="infrastructure">
+        <a href="#" class="tab" data-page="services">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-            <span>Infra</span>
+            <span>Services</span>
+        </a>
+        <a href="#" class="tab" data-page="ciryacast">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <span>CiryaCast</span>
         </a>
         <a href="#" class="tab" data-page="about">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
