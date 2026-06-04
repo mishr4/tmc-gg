@@ -67,212 +67,100 @@
     <!--              PAGE: HOME                 -->
     <!-- ═══════════════════════════════════════ -->
     <main class="page active" id="page-home">
-        <!-- Hero -->
+
+        <!-- Hero — clean, corporate, no cards -->
         <section class="hero">
-            <p class="hero-eyebrow">The Mishra Corporation</p>
-            <h1 class="hero-title">
-                Media, radio, and<br>technology — <span class="hero-bold">built right.</span>
-            </h1>
-            <p class="hero-sub">A California-based media corporation. We build radio platforms, news networks, and global infrastructure — with zero data retention.</p>
-            <div class="hero-actions">
-                <a href="#" class="hero-btn" data-page="about">About TMC</a>
-                <a href="#" class="hero-btn-outline" data-page="ciryacast">CiryaCast Hosting</a>
+            <h1 class="hero-title">The Mishra<br>Corporation</h1>
+            <p class="hero-sub">A California-based media and technology corporation operating radio networks, news platforms, and global broadcast infrastructure.</p>
+        </section>
+
+        <!-- Ticker / Latest -->
+        <section class="home-ticker">
+            <div class="ticker-label">Latest</div>
+            <div class="ticker-items">
+                <a href="#" data-page="ciryacast" class="ticker-item">CiryaCast public radio hosting now live</a>
+                <span class="ticker-dot"></span>
+                <a href="https://cirya.co" target="_blank" class="ticker-item">Southeast Asia node cluster operational</a>
+                <span class="ticker-dot"></span>
+                <a href="#" data-page="ciryacast" class="ticker-item">Live DJ broadcasting via Mixxx and BUTT</a>
             </div>
         </section>
 
-        <!-- Featured News / Announcements -->
-        <section class="card-section">
-            <div class="section-header">
-                <h2 class="section-title">Latest</h2>
-                <a href="https://cirya.co" target="_blank" class="section-link">Cirya News</a>
-            </div>
-            <div class="news-row">
-                <a href="https://cirya.co" target="_blank" class="news-card news-card-featured">
-                    <div class="news-tag">Announcement</div>
-                    <h3>CiryaCast is now open for public hosting</h3>
-                    <p>Launch your own internet radio station on TMC's broadcast platform. AutoDJ, live DJ, song requests, and more — starting at $10/month.</p>
-                    <span class="news-date">June 2026</span>
+        <!-- Divisions — horizontal, no cards -->
+        <section class="home-section">
+            <h2 class="home-section-title">Our Companies</h2>
+            <div class="division-list">
+                <a href="https://cirya.co" target="_blank" class="division-row">
+                    <div class="division-dot" style="background:#7C4DFF"></div>
+                    <div class="division-name">Cirya Radio One</div>
+                    <div class="division-desc">Flagship 24/7 radio — music, live DJs, listener requests</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                 </a>
-                <div class="news-col">
-                    <a href="https://cirya.co" target="_blank" class="news-card news-card-sm">
-                        <div class="news-tag news-tag-green">Expansion</div>
-                        <h3>Southeast Asia node cluster goes live</h3>
-                        <span class="news-date">May 2026</span>
-                    </a>
-                    <a href="https://cirya.co" target="_blank" class="news-card news-card-sm">
-                        <div class="news-tag news-tag-blue">Platform</div>
-                        <h3>Live DJ broadcasting now supported via Mixxx and BUTT</h3>
-                        <span class="news-date">June 2026</span>
-                    </a>
-                </div>
+                <a href="https://cirya.co" target="_blank" class="division-row">
+                    <div class="division-dot" style="background:#00C853"></div>
+                    <div class="division-name">Cirya</div>
+                    <div class="division-desc">Media network and news platform</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" data-page="ciryacast" class="division-row">
+                    <div class="division-dot" style="background:#FF48BC"></div>
+                    <div class="division-name">CiryaCast</div>
+                    <div class="division-desc">Radio hosting platform — from $10/month</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://inlinetelevision.com" target="_blank" class="division-row">
+                    <div class="division-dot" style="background:#FF6B35"></div>
+                    <div class="division-name">Inline Television</div>
+                    <div class="division-desc">Television and video content</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://cirya.co" target="_blank" class="division-row">
+                    <div class="division-dot" style="background:#FF2A2A"></div>
+                    <div class="division-name">RHL Now</div>
+                    <div class="division-desc">Entertainment, live events, original programming</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" data-page="services" class="division-row">
+                    <div class="division-dot" style="background:#0ED7FF"></div>
+                    <div class="division-name">Global Nodes</div>
+                    <div class="division-desc">7 server clusters across 4 continents</div>
+                    <svg class="division-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
             </div>
         </section>
 
-        <!-- Radio Brands -->
-        <section class="card-section">
-            <div class="section-header">
-                <h2 class="section-title">Radio & Broadcasting</h2>
-                <a href="#" class="section-link" data-page="ciryacast">View all</a>
-            </div>
-            <div class="radio-showcase">
-                <div class="radio-card" data-page="ciryacast">
-                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
-                    <div class="radio-card-body">
-                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)">
-                            <span>R1</span>
-                        </div>
-                        <div>
-                            <h3>Cirya Radio One</h3>
-                            <p>Flagship station — 24/7 music, live DJs, and listener requests</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="radio-card" data-page="ciryacast">
-                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#FF48BC,#FF6EC7)"></div>
-                    <div class="radio-card-body">
-                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#FF48BC,#FF6EC7)">
-                            <span>CC</span>
-                        </div>
-                        <div>
-                            <h3>CiryaCast</h3>
-                            <p>Host your own station — AutoDJ, live broadcasting, from $10/mo</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="radio-card" onclick="window.open('https://cirya.co','_blank')">
-                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#FF2A2A,#FF6B6B)"></div>
-                    <div class="radio-card-body">
-                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#FF2A2A,#FF6B6B)">
-                            <span>RHL</span>
-                        </div>
-                        <div>
-                            <h3>RHL Now</h3>
-                            <p>Entertainment, live events, and original programming</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Numbers — inline, no card -->
+        <section class="home-numbers">
+            <div class="home-num"><span>6+</span> subsidiaries</div>
+            <div class="home-num"><span>7</span> server clusters</div>
+            <div class="home-num"><span>4</span> continents</div>
+            <div class="home-num"><span>0</span> data retained</div>
+        </section>
+
+        <!-- About -->
+        <section class="home-section">
+            <h2 class="home-section-title">About</h2>
+            <p class="home-body">TMC owns and operates Cirya, CiryaCast, Inline Television, Cirya MServices, and RHL Now. We build decentralized audio networks, broadcast systems, and privacy-first media infrastructure from California.</p>
+            <p class="home-body" style="margin-top:12px">All TMC infrastructure operates with zero-retention protocols. We don't track users, we don't sell data.</p>
+            <div class="home-links">
+                <a href="#" class="home-link" data-page="about">About TMC</a>
+                <a href="https://corporate.cirya.co/" target="_blank" class="home-link">Corporate</a>
+                <a href="https://cirya.co/licensing" target="_blank" class="home-link">ASCAP Licensing</a>
             </div>
         </section>
 
-        <!-- Stats -->
-        <section class="stats-bar">
-            <div class="stat">
-                <span class="stat-number">6+</span>
-                <span class="stat-label">Subsidiaries</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat">
-                <span class="stat-number">7</span>
-                <span class="stat-label">Server Clusters</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat">
-                <span class="stat-number">4</span>
-                <span class="stat-label">Continents</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat">
-                <span class="stat-number">Zero</span>
-                <span class="stat-label">Data Retained</span>
-            </div>
-        </section>
-
-        <!-- Network & News -->
-        <section class="card-section">
-            <div class="section-header">
-                <h2 class="section-title">The Network</h2>
-                <a href="#" class="section-link" data-page="services">All divisions</a>
-            </div>
-            <div class="networks-grid">
-                <div class="network-card" onclick="window.open('https://cirya.co','_blank')">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #00C853, #69F0AE)">
-                        <span class="network-card-letter">C</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Cirya</h3>
-                        <p>Media network & news platform</p>
-                    </div>
-                </div>
-                <div class="network-card" onclick="window.open('https://inlinetelevision.com','_blank')">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF6B35, #FFB74D)">
-                        <span class="network-card-letter">iTV</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Inline Television</h3>
-                        <p>Television & video content</p>
-                    </div>
-                </div>
-                <div class="network-card" data-page="services">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)">
-                        <span class="network-card-letter">GN</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Global Nodes</h3>
-                        <p>7 clusters across 4 continents</p>
-                    </div>
-                </div>
-                <div class="network-card" onclick="window.open('https://cirya.co/licensing','_blank')">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)">
-                        <span class="network-card-letter">&#9834;</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>ASCAP Licensing</h3>
-                        <p>Music licensing for broadcasts</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CiryaCast Banner -->
-        <section class="card-section">
-            <div class="service-hero">
-                <h2>Your radio station, live in 24 hours.</h2>
-                <p>Launch on CiryaCast — AutoDJ, live DJ support, song requests, and global infrastructure. Starting at $10/month.</p>
-                <a href="#" class="hero-btn" data-page="ciryacast" style="background:#fff;color:#5225cc">View Plans</a>
-            </div>
-        </section>
-
-        <!-- About + Initiative -->
-        <section class="card-section">
-            <div class="info-card highlight-card">
-                <div class="highlight-card-inner">
-                    <div class="highlight-text">
-                        <h2 class="card-title">The Mishra Corporation</h2>
-                        <p class="card-body">A California-based media and technology corporation. TMC owns and operates Cirya, CiryaCast, Inline Television, MServices, and RHL Now — building privacy-first media infrastructure.</p>
-                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
-                            <a href="https://corporate.cirya.co/" target="_blank" class="card-cta">Corporate Site</a>
-                            <a href="#" class="card-cta-outline" data-page="about">About Us</a>
-                        </div>
-                    </div>
-                    <div class="highlight-graphic">
-                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="20" y="100" width="35" height="80" rx="6" fill="#FF48BC" opacity="0.9"/>
-                            <rect x="65" y="60" width="35" height="120" rx="6" fill="#7C4DFF" opacity="0.9"/>
-                            <rect x="110" y="30" width="35" height="150" rx="6" fill="#0ED7FF" opacity="0.9"/>
-                            <rect x="155" y="70" width="35" height="110" rx="6" fill="#FF2A2A" opacity="0.9"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="card-section">
-            <div class="info-card initiative-card">
-                <div class="initiative-badge">Initiative</div>
-                <h2 class="card-title">Missing Children Alerts</h2>
-                <p class="card-body">We repurpose our 404 error pages to display missing children alerts. Every dead link becomes a chance to bring someone home.</p>
-            </div>
+        <!-- Initiative — subtle -->
+        <section class="home-section home-initiative">
+            <p class="initiative-text"><strong>Missing Children Alerts</strong> — We repurpose our 404 error pages to display missing children alerts. Every dead link becomes a chance to bring someone home.</p>
         </section>
 
         <!-- CTA -->
-        <section class="card-section">
-            <div class="info-card cta-card">
-                <h2 class="card-title">Join the team</h2>
-                <p class="card-body">We're looking for people across engineering, media, and infrastructure to help build what's next.</p>
-                <div class="cta-buttons">
-                    <a href="#" class="card-cta" data-page="join">Careers</a>
-                    <a href="https://discord.gg/cirya" target="_blank" class="card-cta-outline">Discord</a>
-                </div>
+        <section class="home-section home-cta-section">
+            <h2 class="home-section-title">Work with us</h2>
+            <p class="home-body">We're looking for people across engineering, media operations, and infrastructure.</p>
+            <div class="home-links">
+                <a href="#" class="home-link" data-page="join">Careers</a>
+                <a href="https://discord.gg/cirya" target="_blank" class="home-link">Discord</a>
             </div>
         </section>
     </main>

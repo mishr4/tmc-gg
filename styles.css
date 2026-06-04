@@ -132,20 +132,18 @@ body {
 /* ── Hero ── */
 .hero {
     padding-top: 160px;
-    padding-bottom: 60px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding-bottom: 48px;
+    max-width: 90%;
+    margin: 0 auto;
 }
 
 .hero-title {
     font-family: 'Lexend', sans-serif;
     font-size: 52px;
     font-weight: 400;
-    letter-spacing: 0.01em;
-    line-height: 1em;
-    margin-bottom: 36px;
+    letter-spacing: -0.01em;
+    line-height: 1.1em;
+    margin-bottom: 24px;
 }
 
 .hero-bold {
@@ -153,14 +151,14 @@ body {
 }
 
 .hero-sub {
-    font-family: 'Lexend', sans-serif;
-    font-size: 23px;
-    font-weight: 300;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
     letter-spacing: 0.01em;
-    line-height: 1.4em;
-    color: var(--text-primary);
-    max-width: 58%;
-    margin-bottom: 36px;
+    line-height: 1.6em;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin-bottom: 0;
 }
 
 .hero-btn {
@@ -183,225 +181,234 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* ── Hero eyebrow + actions ── */
-.hero-eyebrow {
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent-purple);
-    margin-bottom: 16px;
-}
+/* ══ Corporate Homepage ══ */
 
-.hero-actions {
+/* CiryaSSO — blend into nav */
+[data-cirya-sso] button,
+[data-cirya-sso] a,
+.cirya-sso-btn {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border: 1.5px solid rgba(0,0,0,0.12) !important;
+    border-radius: 13px !important;
+    padding: 8px 20px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s !important;
+}
+[data-cirya-sso] button:hover,
+[data-cirya-sso] a:hover {
+    border-color: rgba(0,0,0,0.3) !important;
+    background: transparent !important;
+}
+[data-cirya-sso] img { display: none !important; }
+
+/* News ticker */
+.home-ticker {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.hero-btn-outline {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: transparent;
-    color: #000;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 10px 32px;
-    border-radius: 14px;
-    text-decoration: none;
-    border: 1.5px solid rgba(0,0,0,0.15);
-    transition: transform 0.2s, border-color 0.2s;
-    cursor: pointer;
-}
-
-.hero-btn-outline:hover {
-    transform: translateY(-2px);
-    border-color: rgba(0,0,0,0.3);
-}
-
-/* ── News Row ── */
-.news-row {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
     gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 48px;
     max-width: 90%;
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.news-col {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.news-card {
-    background: var(--card-bg);
-    border-radius: var(--card-radius);
-    padding: 28px;
-    box-shadow: var(--card-shadow);
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.news-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-}
-
-.news-card-featured {
-    justify-content: flex-end;
-}
-
-.news-card h3 {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.35;
-}
-
-.news-card-sm h3 {
-    font-size: 15px;
-}
-
-.news-card p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.45;
-}
-
-.news-tag {
-    display: inline-block;
+.ticker-label {
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: #f0eaff;
+    letter-spacing: 0.1em;
     color: var(--accent-purple);
-    width: fit-content;
+    flex-shrink: 0;
 }
 
-.news-tag-green {
-    background: #e8f5e9;
-    color: #2e7d32;
+.ticker-items {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
 }
 
-.news-tag-blue {
-    background: #e3f2fd;
-    color: #1565c0;
+.ticker-item {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+.ticker-item:hover { color: var(--text-primary); }
+
+.ticker-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.2);
+    flex-shrink: 0;
 }
 
-.news-date {
-    font-size: 12px;
+/* Home sections — no cards, just clean sections */
+.home-section {
+    max-width: 90%;
+    margin: 0 auto 48px;
+}
+
+.home-section-title {
+    font-family: 'Lexend', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--text-muted);
-    font-weight: 500;
+    margin-bottom: 24px;
 }
 
-/* ── Radio Showcase ── */
-.radio-showcase {
+.home-body {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 640px;
+}
+
+.home-links {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.home-link {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1.5px solid rgba(0,0,0,0.15);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+}
+.home-link:hover { border-color: rgba(0,0,0,0.5); }
+
+/* Division list — clean rows, no cards */
+.division-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-width: 90%;
-    width: 100%;
 }
 
-.radio-card {
-    background: var(--card-bg);
-    border-radius: var(--card-radius);
-    box-shadow: var(--card-shadow);
+.division-row {
     display: flex;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
     text-decoration: none;
     color: inherit;
+    transition: padding-left 0.2s;
+    cursor: pointer;
 }
+.division-row:first-child { border-top: 1px solid rgba(0,0,0,0.06); }
+.division-row:hover { padding-left: 8px; }
 
-.radio-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-}
-
-.radio-card-accent {
-    width: 5px;
+.division-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
     flex-shrink: 0;
 }
 
-.radio-card-body {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 22px 24px;
-    flex: 1;
-}
-
-.radio-card-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.radio-card-icon span {
-    font-family: 'Lexend', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-}
-
-.radio-card h3 {
+.division-name {
     font-family: 'Instrument Sans', sans-serif;
     font-size: 16px;
     font-weight: 600;
+    min-width: 160px;
+}
+
+.division-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    flex: 1;
+}
+
+.division-arrow {
+    width: 16px;
+    height: 16px;
+    color: rgba(0,0,0,0.15);
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+.division-row:hover .division-arrow { color: rgba(0,0,0,0.4); }
+
+/* Numbers — inline strip */
+.home-numbers {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px;
+    max-width: 90%;
+    margin: 0 auto 48px;
+    padding: 32px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.home-num {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-muted);
+}
+
+.home-num span {
+    font-family: 'Lexend', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
     margin-bottom: 2px;
 }
 
-.radio-card p {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.4;
+/* Initiative — subtle inline */
+.home-initiative {
+    padding: 24px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 48px;
 }
 
-/* ── News responsive ── */
+.initiative-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.initiative-text strong {
+    color: var(--text-primary);
+}
+
+/* CTA section */
+.home-cta-section {
+    padding-bottom: 40px;
+}
+
+/* Corporate responsive */
 @media (max-width: 809px) {
-    .news-row {
-        grid-template-columns: 1fr;
-        max-width: 100%;
-    }
-    .radio-showcase {
-        max-width: 100%;
-    }
+    .home-section, .home-numbers, .home-ticker { max-width: 100%; }
+    .division-name { min-width: auto; font-size: 14px; }
+    .division-desc { display: none; }
+    .home-numbers { gap: 20px; flex-wrap: wrap; }
+    .home-num span { font-size: 22px; }
+    .ticker-items { gap: 12px; }
+    .ticker-item { font-size: 12px; }
 }
 
 @media (min-width: 810px) and (max-width: 1199px) {
-    .news-row {
-        max-width: 100%;
-    }
-    .radio-showcase {
-        max-width: 100%;
-    }
+    .home-section, .home-numbers, .home-ticker { max-width: 100%; }
 }
 
 @media (min-width: 1200px) {
-    .news-row {
-        max-width: 100%;
-    }
-    .radio-showcase {
-        max-width: 100%;
-    }
+    .home-section, .home-numbers, .home-ticker { max-width: 100%; }
 }
 
 /* ── Page Header ── */
@@ -1221,7 +1228,8 @@ body {
 
     .hero {
         padding-top: 100px;
-        padding-bottom: 36px;
+        padding-bottom: 32px;
+        max-width: 100%;
     }
 
     .hero-title {
@@ -1229,8 +1237,8 @@ body {
     }
 
     .hero-sub {
-        font-size: 17px;
-        max-width: 95%;
+        font-size: 16px;
+        max-width: 100%;
     }
 
     .page-header {
