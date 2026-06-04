@@ -133,8 +133,6 @@ body {
 .hero {
     padding-top: 160px;
     padding-bottom: 48px;
-    max-width: 90%;
-    margin: 0 auto;
 }
 
 .hero-title {
@@ -214,9 +212,6 @@ body {
     border-top: 1px solid rgba(0,0,0,0.06);
     border-bottom: 1px solid rgba(0,0,0,0.06);
     margin-bottom: 48px;
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .ticker-label {
@@ -255,7 +250,6 @@ body {
 
 /* Home sections — no cards, just clean sections */
 .home-section {
-    max-width: 90%;
     margin: 0 auto 48px;
 }
 
@@ -349,7 +343,6 @@ body {
     display: flex;
     justify-content: flex-start;
     gap: 40px;
-    max-width: 90%;
     margin: 0 auto 48px;
     padding: 32px 0;
     border-top: 1px solid rgba(0,0,0,0.06);
@@ -1334,7 +1327,7 @@ body {
     .page {
         padding: 0 48px;
         padding-bottom: 40px;
-        max-width: 960px;
+        max-width: 1100px;
         margin: 0 auto;
     }
 
@@ -1380,19 +1373,19 @@ body {
 /* ── Responsive: Desktop (1200px – 1599px) ── */
 @media (min-width: 1200px) and (max-width: 1599px) {
     .page {
-        max-width: 1100px;
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 0 40px;
+        padding: 0 60px;
         padding-bottom: 40px;
     }
 
     .nav-inner {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
     }
 
     .footer-inner {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
     }
 
@@ -1440,9 +1433,9 @@ body {
 /* ── Responsive: Large Desktop (1600px+) ── */
 @media (min-width: 1600px) {
     .page {
-        max-width: 1280px;
+        max-width: 1440px;
         margin: 0 auto;
-        padding: 0 60px;
+        padding: 0 80px;
         padding-bottom: 60px;
     }
 
