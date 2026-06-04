@@ -1923,11 +1923,20 @@ body {
 
 /* Spacing overrides for CiryaCast page */
 #page-ciryacast .card-section {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 #page-ciryacast .stats-bar {
-    margin-bottom: 40px;
+    margin-top: 32px;
+    margin-bottom: 48px;
+}
+
+#page-ciryacast .service-features-row {
+    margin-top: 8px;
+}
+
+#page-ciryacast .section-header {
+    margin-top: 16px;
 }
 
 /* ── Hero Section ── */
@@ -1940,14 +1949,14 @@ body {
     position: relative;
     background: linear-gradient(135deg, #4a1fbb 0%, #7C4DFF 40%, #b03aff 72%, #FF48BC 100%);
     border-radius: var(--card-radius);
-    padding: 52px 52px 48px;
+    padding: 52px 52px 60px;
     width: 100%;
     color: #fff;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 280px;
+    min-height: 300px;
 }
 
 .cc-hero-content {
@@ -2057,16 +2066,18 @@ body {
 .cc-hero-waveform {
     position: absolute;
     bottom: 0;
+    left: 0;
     right: 0;
-    width: 56%;
+    width: 100%;
     pointer-events: none;
-    opacity: 1;
+    opacity: 0.6;
 }
 
 .cc-hero-waveform svg {
     width: 100%;
-    height: 60px;
+    height: 50px;
     display: block;
+    vertical-align: bottom;
 }
 
 /* ── SF Icon SVG sizing ── */
