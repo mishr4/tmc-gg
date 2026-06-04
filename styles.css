@@ -1921,10 +1921,19 @@ body {
 /*            CIRYACAST PAGE               */
 /* ═══════════════════════════════════════ */
 
+/* Spacing overrides for CiryaCast page */
+#page-ciryacast .card-section {
+    margin-bottom: 40px;
+}
+
+#page-ciryacast .stats-bar {
+    margin-bottom: 40px;
+}
+
 /* ── Hero Section ── */
 .cc-hero-section {
     padding-top: 120px;
-    margin-bottom: 0;
+    margin-bottom: 16px;
 }
 
 .cc-hero {
