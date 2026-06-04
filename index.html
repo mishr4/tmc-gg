@@ -67,15 +67,94 @@
     <!--              PAGE: HOME                 -->
     <!-- ═══════════════════════════════════════ -->
     <main class="page active" id="page-home">
+        <!-- Hero -->
         <section class="hero">
+            <p class="hero-eyebrow">The Mishra Corporation</p>
             <h1 class="hero-title">
-                <span class="hero-bold">#1</span> in<br>media and technology
+                Media, radio, and<br>technology — <span class="hero-bold">built right.</span>
             </h1>
-            <p class="hero-sub">High-fidelity decentralized audio networks and global server infrastructure. We don't track, we don't sell — we just build.</p>
-            <a href="#" class="hero-btn" data-page="about">Learn what we do</a>
+            <p class="hero-sub">A California-based media corporation. We build radio platforms, news networks, and global infrastructure — with zero data retention.</p>
+            <div class="hero-actions">
+                <a href="#" class="hero-btn" data-page="about">About TMC</a>
+                <a href="#" class="hero-btn-outline" data-page="ciryacast">CiryaCast Hosting</a>
+            </div>
         </section>
 
-        <!-- Stats bar -->
+        <!-- Featured News / Announcements -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Latest</h2>
+                <a href="https://cirya.co" target="_blank" class="section-link">Cirya News</a>
+            </div>
+            <div class="news-row">
+                <a href="https://cirya.co" target="_blank" class="news-card news-card-featured">
+                    <div class="news-tag">Announcement</div>
+                    <h3>CiryaCast is now open for public hosting</h3>
+                    <p>Launch your own internet radio station on TMC's broadcast platform. AutoDJ, live DJ, song requests, and more — starting at $10/month.</p>
+                    <span class="news-date">June 2026</span>
+                </a>
+                <div class="news-col">
+                    <a href="https://cirya.co" target="_blank" class="news-card news-card-sm">
+                        <div class="news-tag news-tag-green">Expansion</div>
+                        <h3>Southeast Asia node cluster goes live</h3>
+                        <span class="news-date">May 2026</span>
+                    </a>
+                    <a href="https://cirya.co" target="_blank" class="news-card news-card-sm">
+                        <div class="news-tag news-tag-blue">Platform</div>
+                        <h3>Live DJ broadcasting now supported via Mixxx and BUTT</h3>
+                        <span class="news-date">June 2026</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radio Brands -->
+        <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Radio & Broadcasting</h2>
+                <a href="#" class="section-link" data-page="ciryacast">View all</a>
+            </div>
+            <div class="radio-showcase">
+                <div class="radio-card" data-page="ciryacast">
+                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
+                    <div class="radio-card-body">
+                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)">
+                            <span>R1</span>
+                        </div>
+                        <div>
+                            <h3>Cirya Radio One</h3>
+                            <p>Flagship station — 24/7 music, live DJs, and listener requests</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="radio-card" data-page="ciryacast">
+                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#FF48BC,#FF6EC7)"></div>
+                    <div class="radio-card-body">
+                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#FF48BC,#FF6EC7)">
+                            <span>CC</span>
+                        </div>
+                        <div>
+                            <h3>CiryaCast</h3>
+                            <p>Host your own station — AutoDJ, live broadcasting, from $10/mo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="radio-card" onclick="window.open('https://cirya.co','_blank')">
+                    <div class="radio-card-accent" style="background:linear-gradient(135deg,#FF2A2A,#FF6B6B)"></div>
+                    <div class="radio-card-body">
+                        <div class="radio-card-icon" style="background:linear-gradient(135deg,#FF2A2A,#FF6B6B)">
+                            <span>RHL</span>
+                        </div>
+                        <div>
+                            <h3>RHL Now</h3>
+                            <p>Entertainment, live events, and original programming</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
         <section class="stats-bar">
             <div class="stat">
                 <span class="stat-number">6+</span>
@@ -98,49 +177,13 @@
             </div>
         </section>
 
-        <!-- Divisions Preview -->
+        <!-- Network & News -->
         <section class="card-section">
             <div class="section-header">
-                <h2 class="section-title">Our Divisions</h2>
-                <a href="#" class="section-link" data-page="services">View all</a>
+                <h2 class="section-title">The Network</h2>
+                <a href="#" class="section-link" data-page="services">All divisions</a>
             </div>
             <div class="networks-grid">
-                <div class="network-card" data-page="services">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #536DFE)">
-                        <span class="network-card-letter">R1</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Radio One</h3>
-                        <p>Audio streaming service</p>
-                    </div>
-                </div>
-                <div class="network-card" data-page="services">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)">
-                        <span class="network-card-letter">GN</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Global Nodes</h3>
-                        <p>7 clusters across 4 continents</p>
-                    </div>
-                </div>
-                <div class="network-card" data-page="services">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)">
-                        <span class="network-card-letter">CC</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>CiryaCast</h3>
-                        <p>Custom broadcast platform</p>
-                    </div>
-                </div>
-                <div class="network-card" data-page="services">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF2A2A, #FF6B6B)">
-                        <span class="network-card-letter">RHL</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>RHL Now</h3>
-                        <p>Entertainment & media</p>
-                    </div>
-                </div>
                 <div class="network-card" onclick="window.open('https://cirya.co','_blank')">
                     <div class="network-card-icon" style="background: linear-gradient(135deg, #00C853, #69F0AE)">
                         <span class="network-card-letter">C</span>
@@ -159,17 +202,47 @@
                         <p>Television & video content</p>
                     </div>
                 </div>
+                <div class="network-card" data-page="services">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #0ED7FF, #00B4D8)">
+                        <span class="network-card-letter">GN</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>Global Nodes</h3>
+                        <p>7 clusters across 4 continents</p>
+                    </div>
+                </div>
+                <div class="network-card" onclick="window.open('https://cirya.co/licensing','_blank')">
+                    <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)">
+                        <span class="network-card-letter">&#9834;</span>
+                    </div>
+                    <div class="network-card-info">
+                        <h3>ASCAP Licensing</h3>
+                        <p>Music licensing for broadcasts</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- About preview -->
+        <!-- CiryaCast Banner -->
+        <section class="card-section">
+            <div class="service-hero">
+                <h2>Your radio station, live in 24 hours.</h2>
+                <p>Launch on CiryaCast — AutoDJ, live DJ support, song requests, and global infrastructure. Starting at $10/month.</p>
+                <a href="#" class="hero-btn" data-page="ciryacast" style="background:#fff;color:#5225cc">View Plans</a>
+            </div>
+        </section>
+
+        <!-- About + Initiative -->
         <section class="card-section">
             <div class="info-card highlight-card">
                 <div class="highlight-card-inner">
                     <div class="highlight-text">
                         <h2 class="card-title">The Mishra Corporation</h2>
-                        <p class="card-body">A California-based media and technology corporation. TMC owns and operates Cirya, CiryaCast, Inline Television, Cirya MServices, and RHL Now — building the future of decentralized media infrastructure.</p>
-                        <a href="https://corporate.cirya.co/" target="_blank" class="card-cta">Corporate Site</a>
+                        <p class="card-body">A California-based media and technology corporation. TMC owns and operates Cirya, CiryaCast, Inline Television, MServices, and RHL Now — building privacy-first media infrastructure.</p>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
+                            <a href="https://corporate.cirya.co/" target="_blank" class="card-cta">Corporate Site</a>
+                            <a href="#" class="card-cta-outline" data-page="about">About Us</a>
+                        </div>
                     </div>
                     <div class="highlight-graphic">
                         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +256,6 @@
             </div>
         </section>
 
-        <!-- 404 Initiative -->
         <section class="card-section">
             <div class="info-card initiative-card">
                 <div class="initiative-badge">Initiative</div>
@@ -192,49 +264,14 @@
             </div>
         </section>
 
-        <!-- Services Preview -->
-        <section class="card-section">
-            <div class="section-header">
-                <h2 class="section-title">Services</h2>
-                <a href="#" class="section-link" data-page="services">View all</a>
-            </div>
-
-            <div class="service-hero">
-                <h2>CiryaCast Radio Hosting</h2>
-                <p>Launch your own internet radio station. Fully managed, 24/7 streaming, starting at just $10/month. ASCAP licensing available separately.</p>
-                <a href="#" class="hero-btn" data-page="ciryacast">View Plans & Pricing</a>
-            </div>
-
-            <div class="networks-grid">
-                <div class="network-card" data-page="ciryacast" style="cursor:pointer">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #FF48BC, #FF6EC7)">
-                        <span class="network-card-letter">&#9836;</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>Radio Hosting</h3>
-                        <p>Your own station from $10/mo</p>
-                    </div>
-                </div>
-                <div class="network-card" onclick="window.open('https://cirya.co/licensing','_blank')" style="cursor:pointer">
-                    <div class="network-card-icon" style="background: linear-gradient(135deg, #7C4DFF, #B388FF)">
-                        <span class="network-card-letter">&#9834;</span>
-                    </div>
-                    <div class="network-card-info">
-                        <h3>ASCAP Licensing</h3>
-                        <p>Music licensing for broadcasts</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- CTA -->
         <section class="card-section">
             <div class="info-card cta-card">
-                <h2 class="card-title">Ready to join?</h2>
-                <p class="card-body">We're always looking for passionate people to join our team across engineering, infrastructure, and media operations.</p>
+                <h2 class="card-title">Join the team</h2>
+                <p class="card-body">We're looking for people across engineering, media, and infrastructure to help build what's next.</p>
                 <div class="cta-buttons">
-                    <a href="#" class="card-cta" data-page="join">View Careers</a>
-                    <a href="https://discord.gg/cirya" target="_blank" class="card-cta-outline">Join Discord</a>
+                    <a href="#" class="card-cta" data-page="join">Careers</a>
+                    <a href="https://discord.gg/cirya" target="_blank" class="card-cta-outline">Discord</a>
                 </div>
             </div>
         </section>
@@ -498,39 +535,169 @@
     <!--            PAGE: CIRYACAST              -->
     <!-- ═══════════════════════════════════════ -->
     <main class="page" id="page-ciryacast">
-        <section class="page-header">
-            <h1 class="page-title">CiryaCast</h1>
-            <p class="page-subtitle">Host your own internet radio station on TMC's broadcast platform</p>
+
+        <!-- Hero Banner -->
+        <section class="card-section cc-hero-section">
+            <div class="cc-hero">
+                <div class="cc-hero-content">
+                    <div class="cc-onair-badge">
+                        <span class="cc-onair-dot"></span>
+                        On Air
+                    </div>
+                    <h1 class="cc-hero-title">Your radio station,<br>live in 24 hours.</h1>
+                    <p class="cc-hero-sub">Host your own internet radio on TMC's global broadcast infrastructure. AutoDJ, live streaming, and custom domains — starting at $10/month.</p>
+                    <div class="cc-hero-actions">
+                        <a href="https://discord.gg/cirya" target="_blank" class="cc-btn-primary">Get Started</a>
+                        <a href="#" onclick="event.preventDefault();document.getElementById('cc-pricing').scrollIntoView({behavior:'smooth'})" class="cc-btn-ghost">See Plans</a>
+                    </div>
+                </div>
+                <div class="cc-hero-waveform" aria-hidden="true">
+                    <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="24" width="6" height="12" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="10" y="19" width="6" height="22" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="20" y="12" width="6" height="36" rx="3" fill="rgba(255,255,255,0.3)"/>
+                        <rect x="30" y="8" width="6" height="44" rx="3" fill="rgba(255,255,255,0.3)"/>
+                        <rect x="40" y="5" width="6" height="50" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="50" y="9" width="6" height="42" rx="3" fill="rgba(255,255,255,0.3)"/>
+                        <rect x="60" y="16" width="6" height="28" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="70" y="22" width="6" height="16" rx="3" fill="rgba(255,255,255,0.2)"/>
+                        <rect x="80" y="25" width="6" height="10" rx="3" fill="rgba(255,255,255,0.18)"/>
+                        <rect x="90" y="21" width="6" height="18" rx="3" fill="rgba(255,255,255,0.22)"/>
+                        <rect x="100" y="15" width="6" height="30" rx="3" fill="rgba(255,255,255,0.28)"/>
+                        <rect x="110" y="7" width="6" height="46" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="120" y="4" width="6" height="52" rx="3" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="130" y="6" width="6" height="48" rx="3" fill="rgba(255,255,255,0.38)"/>
+                        <rect x="140" y="11" width="6" height="38" rx="3" fill="rgba(255,255,255,0.32)"/>
+                        <rect x="150" y="19" width="6" height="22" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="160" y="24" width="6" height="12" rx="3" fill="rgba(255,255,255,0.2)"/>
+                        <rect x="170" y="26" width="6" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+                        <rect x="180" y="20" width="6" height="20" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="190" y="10" width="6" height="40" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="200" y="2" width="6" height="56" rx="3" fill="rgba(255,255,255,0.45)"/>
+                        <rect x="210" y="10" width="6" height="40" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="220" y="20" width="6" height="20" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="230" y="26" width="6" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+                        <rect x="240" y="24" width="6" height="12" rx="3" fill="rgba(255,255,255,0.2)"/>
+                        <rect x="250" y="19" width="6" height="22" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="260" y="11" width="6" height="38" rx="3" fill="rgba(255,255,255,0.32)"/>
+                        <rect x="270" y="6" width="6" height="48" rx="3" fill="rgba(255,255,255,0.38)"/>
+                        <rect x="280" y="4" width="6" height="52" rx="3" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="290" y="7" width="6" height="46" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="300" y="15" width="6" height="30" rx="3" fill="rgba(255,255,255,0.28)"/>
+                        <rect x="310" y="21" width="6" height="18" rx="3" fill="rgba(255,255,255,0.22)"/>
+                        <rect x="320" y="25" width="6" height="10" rx="3" fill="rgba(255,255,255,0.18)"/>
+                        <rect x="330" y="22" width="6" height="16" rx="3" fill="rgba(255,255,255,0.2)"/>
+                        <rect x="340" y="16" width="6" height="28" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="350" y="9" width="6" height="42" rx="3" fill="rgba(255,255,255,0.3)"/>
+                        <rect x="360" y="5" width="6" height="50" rx="3" fill="rgba(255,255,255,0.35)"/>
+                        <rect x="370" y="8" width="6" height="44" rx="3" fill="rgba(255,255,255,0.3)"/>
+                        <rect x="380" y="12" width="6" height="36" rx="3" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="390" y="19" width="6" height="22" rx="3" fill="rgba(255,255,255,0.2)"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar" style="max-width:100%;margin-bottom:0">
+            <div class="stat">
+                <span class="stat-number">$10</span>
+                <span class="stat-label">Starting / month</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Always Streaming</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">99.9%</span>
+                <span class="stat-label">Uptime SLA</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">7</span>
+                <span class="stat-label">Global Clusters</span>
+            </div>
         </section>
 
         <!-- Feature highlights -->
         <section class="card-section">
             <div class="service-features-row">
                 <div class="service-feature-item">
-                    <div class="sf-icon" style="background:rgba(124,77,255,0.08);color:#7C4DFF">&#9654;</div>
+                    <div class="sf-icon" style="background:rgba(124,77,255,0.08);color:#7C4DFF">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
                     <h3>24/7 Streaming</h3>
                     <p>Your station runs around the clock on our global infrastructure</p>
                 </div>
                 <div class="service-feature-item">
-                    <div class="sf-icon" style="background:rgba(255,72,188,0.08);color:#FF48BC">&#9836;</div>
+                    <div class="sf-icon" style="background:rgba(255,72,188,0.08);color:#FF48BC">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    </div>
                     <h3>AutoDJ</h3>
                     <p>Upload your library and let AutoDJ handle scheduling automatically</p>
                 </div>
                 <div class="service-feature-item">
-                    <div class="sf-icon" style="background:rgba(14,215,255,0.08);color:#0ED7FF">&#9776;</div>
+                    <div class="sf-icon" style="background:rgba(14,215,255,0.08);color:#0ED7FF">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
                     <h3>Live Metadata</h3>
                     <p>Now playing, album art, and listener stats in real time</p>
                 </div>
                 <div class="service-feature-item">
-                    <div class="sf-icon" style="background:rgba(0,200,83,0.08);color:#00C853">&#9881;</div>
+                    <div class="sf-icon" style="background:rgba(0,200,83,0.08);color:#00C853">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                    </div>
                     <h3>Full Dashboard</h3>
                     <p>Manage everything from a clean web-based control panel</p>
                 </div>
             </div>
         </section>
 
-        <!-- Pricing Plans -->
+        <!-- How it works -->
         <section class="card-section">
+            <div class="section-header">
+                <h2 class="section-title">Up and running in 24 hours</h2>
+            </div>
+            <div class="info-card cc-how-card">
+                <div class="cc-steps">
+                    <div class="cc-step">
+                        <div class="cc-step-num">1</div>
+                        <div class="cc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <h3>Join Discord</h3>
+                        <p>Pick a plan and drop us a message — no forms, no waiting</p>
+                    </div>
+                    <div class="cc-step-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                    <div class="cc-step">
+                        <div class="cc-step-num">2</div>
+                        <div class="cc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                        </div>
+                        <h3>We Set You Up</h3>
+                        <p>Your station is configured and live within 24 hours — we handle everything</p>
+                    </div>
+                    <div class="cc-step-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                    <div class="cc-step">
+                        <div class="cc-step-num">3</div>
+                        <div class="cc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+                        </div>
+                        <h3>Go Live</h3>
+                        <p>Stream 24/7 with AutoDJ or connect your DJ software and broadcast live</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Plans -->
+        <section class="card-section" id="cc-pricing">
             <div class="section-header">
                 <h2 class="section-title">Plans & Pricing</h2>
             </div>
@@ -656,33 +823,51 @@
             </div>
         </section>
 
-        <!-- FAQ -->
+        <!-- FAQ Accordion -->
         <section class="card-section">
             <div class="info-card">
                 <h2 class="card-title">Frequently Asked Questions</h2>
                 <div class="faq-list" style="margin-top:20px">
-                    <div class="faq-item">
-                        <div class="faq-q">What is CiryaCast?</div>
+                    <div class="faq-item open">
+                        <button class="faq-q">
+                            What is CiryaCast?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">CiryaCast is TMC's custom broadcast platform built on AzuraCast. It powers all of TMC's internal radio operations, and we also offer public hosting so anyone can run their own internet radio station on our infrastructure.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-q">Do I need ASCAP licensing?</div>
+                        <button class="faq-q">
+                            Do I need ASCAP licensing?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">If you plan to stream copyrighted music, yes — you'll need an ASCAP (or equivalent) license. CiryaCast hosting does not include music licensing. We offer an ASCAP licensing service through <a href="https://cirya.co/licensing" target="_blank" style="color:var(--accent-purple);text-decoration:none;font-weight:500">cirya.co/licensing</a> to make it easy.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-q">Can I go live with a microphone or DJ software?</div>
+                        <button class="faq-q">
+                            Can I go live with a microphone or DJ software?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">Yes! Pro and Business plans support live DJ connections via standard broadcasting software (like BUTT, Mixxx, or SAM Broadcaster). You get dedicated mount points for seamless handoff between AutoDJ and live.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-q">How do I get started?</div>
+                        <button class="faq-q">
+                            How do I get started?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">Join our Discord, pick a plan, and we'll have your station set up and streaming within 24 hours. You'll get access to the full CiryaCast dashboard to manage your station.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-q">Can I use a custom domain?</div>
+                        <button class="faq-q">
+                            Can I use a custom domain?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">Pro and Business plans support custom domains. Point your domain (e.g., radio.yourdomain.com) to your CiryaCast station and we'll configure SSL automatically.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-q">Can I cancel anytime?</div>
+                        <button class="faq-q">
+                            Can I cancel anytime?
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
                         <div class="faq-a">Yes, all plans are month-to-month with no contracts. Cancel anytime and your station will remain active until the end of your billing period.</div>
                     </div>
                 </div>
@@ -691,12 +876,20 @@
 
         <!-- CTA -->
         <section class="card-section">
-            <div class="info-card cta-card">
-                <h2 class="card-title">Ready to go live?</h2>
-                <p class="card-body">Join our Discord and we'll get your radio station set up within 24 hours.</p>
-                <div class="cta-buttons">
-                    <a href="https://discord.gg/cirya" target="_blank" class="card-cta">Join Discord to Start</a>
-                    <a href="https://cirya.co/licensing" target="_blank" class="card-cta-outline">Get ASCAP Licensed</a>
+            <div class="info-card cc-cta-card">
+                <div class="cc-cta-inner">
+                    <div class="cc-cta-text">
+                        <div class="cc-onair-badge cc-cta-badge-small">
+                            <span class="cc-onair-dot"></span>
+                            Ready to Go Live
+                        </div>
+                        <h2 class="cc-cta-title">Your station, up in 24 hours.</h2>
+                        <p class="cc-cta-body">Join our Discord and we'll get you streaming — no long setup, no complexity.</p>
+                    </div>
+                    <div class="cc-cta-actions">
+                        <a href="https://discord.gg/cirya" target="_blank" class="cc-btn-white">Join Discord to Start</a>
+                        <a href="https://cirya.co/licensing" target="_blank" class="cc-btn-white-outline">Get ASCAP Licensed</a>
+                    </div>
                 </div>
             </div>
         </section>
