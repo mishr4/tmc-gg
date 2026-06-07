@@ -172,6 +172,7 @@ let stations = [];
 let currentFilter = 'all';
 let currentStation = null;
 const audio = document.getElementById('audio');
+const hiddenStations = JSON.parse(localStorage.getItem('tmc_hidden_stations') || '[]');
 
 function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -281,7 +282,7 @@ function copyUrl(id) {
 async function load() {
   try {
     const res = await fetch(`${API}/api/nowplaying`);
-    stations = await res.json();
+    stations = (await res.json()).filter(s => !hiddenStations.includes(s.station.id));
     document.getElementById('station-count').textContent = stations.length;
     applyFilters();
 
