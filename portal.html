@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Portal — TMC</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fef6f0;--bg2:#fdf2fd;--card:#fff;--shadow:0 1px 21px rgba(0,0,0,0.07);--text:#000;--muted:#777;--accent:#7C4DFF;--pink:#FF48BC;--red:#FF2A2A;--green:#00C853}
+html{-webkit-font-smoothing:antialiased;background:linear-gradient(90deg,var(--bg),var(--bg2))}
+body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-height:1.5;min-height:100vh}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(254,246,240,0.9),rgba(253,242,253,0.9));backdrop-filter:blur(20px)}
+.nav-left{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--text)}
+.nav-left svg{width:80px;height:auto}
+.nav-sep{width:1px;height:20px;background:rgba(0,0,0,0.12)}
+.nav-sub{font-family:'Lexend',sans-serif;font-size:14px;font-weight:500;color:var(--muted)}
+.nav-right{display:flex;gap:10px;align-items:center}
+
+.main{max-width:900px;margin:0 auto;padding:100px 40px 60px}
+.main h1{font-family:'Lexend',sans-serif;font-size:28px;font-weight:700;margin-bottom:8px}
+.main>p{color:var(--muted);margin-bottom:32px}
+
+.section-title{font-family:'Lexend',sans-serif;font-size:18px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+.btn{padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:0.85}
+.btn-outline{background:transparent;border:1.5px solid rgba(0,0,0,0.1);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:transparent;border:1.5px solid rgba(255,42,42,0.2);color:var(--red)}
+.btn-danger:hover{background:rgba(255,42,42,0.06)}
+.btn-sm{padding:6px 14px;font-size:12px}
+
+/* Station list */
+.station-list{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
+.station-row{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 20px;display:flex;align-items:center;gap:16px;transition:all 0.15s}
+.station-row:hover{box-shadow:0 4px 24px rgba(124,77,255,0.1)}
+.station-logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--pink));overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.station-logo img{width:100%;height:100%;object-fit:cover}
+.station-logo svg{width:22px;height:22px;color:#fff}
+.station-info{flex:1;min-width:0}
+.station-info h3{font-family:'Lexend',sans-serif;font-size:15px;font-weight:600;margin-bottom:2px}
+.station-info p{font-size:12px;color:var(--muted)}
+.station-meta{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.badge{padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600}
+.badge-live{background:rgba(255,42,42,0.1);color:var(--red)}
+.badge-online{background:rgba(0,200,83,0.1);color:var(--green)}
+.badge-offline{background:rgba(0,0,0,0.05);color:var(--muted)}
+.station-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--card);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,0.15);padding:32px;width:90%;max-width:480px}
+.modal h2{font-family:'Lexend',sans-serif;font-size:20px;font-weight:600;margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid rgba(0,0,0,0.1);border-radius:10px;font-family:inherit;font-size:14px;outline:none;transition:border-color 0.15s;background:var(--card)}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:12px;background:var(--text);color:#fff;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+
+@media(max-width:640px){
+  .nav{padding:14px 20px}
+  .main{padding:90px 20px 40px}
+  .station-row{flex-wrap:wrap;gap:12px}
+  .station-actions{width:100%}
+  .station-actions .btn{flex:1;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-left">
+    <svg viewBox="0 0 101 36" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 3.66 22.711 L 3.66 13.799 L 0 13.799 L 0 8.951 L 3.66 8.951 L 3.66 3.088 L 9.248 3.088 L 9.248 8.951 L 14.601 8.951 L 14.601 13.799 L 9.248 13.799 L 9.248 21.851 C 9.248 23.61 9.957 24.235 11.964 24.235 C 12.948 24.235 13.853 24.118 14.679 23.923 L 14.679 28.652 C 13.459 29.004 12.121 29.161 10.665 29.161 C 5.785 29.161 3.66 27.245 3.66 22.711 Z M 47.845 15.831 L 47.845 28.887 L 42.256 28.887 L 42.256 17.199 C 42.256 14.658 41.312 13.447 39.108 13.447 C 36.589 13.447 35.094 14.932 35.094 17.59 L 35.094 28.887 L 29.506 28.887 L 29.506 17.199 C 29.506 14.658 28.522 13.447 26.318 13.447 C 23.838 13.447 22.343 14.971 22.343 17.59 L 22.343 28.887 L 16.755 28.887 L 16.755 8.951 L 22.225 8.951 L 22.225 11.844 C 23.327 9.772 25.649 8.404 28.443 8.404 C 31.276 8.404 33.48 9.733 34.425 12.118 C 35.487 9.811 38.085 8.404 41.115 8.404 C 45.365 8.404 47.845 11.14 47.845 15.831 Z M 49.926 18.919 C 49.926 12.704 54.137 8.404 60.433 8.404 C 64.369 8.404 67.675 10.124 69.288 12.978 L 65.117 15.909 C 64.015 14.228 62.44 13.447 60.591 13.447 C 57.6 13.447 55.593 15.597 55.593 18.919 C 55.593 22.242 57.6 24.392 60.591 24.392 C 62.44 24.392 64.015 23.61 65.117 21.929 L 69.288 24.822 C 67.675 27.753 64.369 29.434 60.433 29.434 C 54.137 29.434 49.926 25.095 49.926 18.919 Z" fill="#000" transform="translate(0 6.566)"/>
+      <rect x="72.099" y="15.269" width="5.842" height="7.024" rx="0" fill="#FF48BC"/>
+      <rect x="79.785" y="9.162" width="5.842" height="15.575" rx="0" fill="#7C4DFF"/>
+      <rect x="87.472" y="0" width="5.842" height="20.155" rx="0" fill="#0ED7FF"/>
+      <rect x="95.158" y="5.192" width="5.842" height="10.994" rx="0" fill="#FF2A2A"/>
+    </svg>
+    <div class="nav-sep"></div>
+    <span class="nav-sub">Staff Portal</span>
+  </a>
+  <div class="nav-right">
+    <a href="/stations" class="btn btn-outline btn-sm">View Directory</a>
+  </div>
+</nav>
+
+<div class="main">
+  <h1>Station Management</h1>
+  <p>Add, edit, and manage stations shown in the public directory.</p>
+
+  <div class="section-title">
+    Stations
+    <button class="btn btn-primary btn-sm" onclick="openAdd()">+ Add Station</button>
+  </div>
+  <div class="station-list" id="station-list">
+    <div class="empty" style="padding:40px;text-align:center;color:var(--muted)">Loading...</div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2 id="modal-title">Add Station</h2>
+    <input type="hidden" id="edit-id">
+    <div class="form-group"><label>Station Name</label><input id="f-name" placeholder="e.g. Cirya Radio One"></div>
+    <div class="form-group"><label>Genre</label><input id="f-genre" placeholder="e.g. Pop, Electronic, Various"></div>
+    <div class="form-group"><label>Description</label><input id="f-desc" placeholder="Short description"></div>
+    <div class="form-group"><label>Logo URL</label><input id="f-logo" placeholder="https://..."></div>
+    <div class="form-group"><label>Location</label><input id="f-location" placeholder="e.g. California, US"></div>
+    <div class="form-group"><label>Website</label><input id="f-website" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStation()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://cast.tmc.gg';
+let stations = [];
+
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+async function load() {
+  try {
+    const res = await fetch(`${API}/api/stations`, { credentials: 'include' });
+    stations = await res.json();
+    render();
+  } catch {
+    document.getElementById('station-list').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">Could not connect to CiryaCast</div>';
+  }
+}
+
+function render() {
+  const list = document.getElementById('station-list');
+  if (!stations.length) {
+    list.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">No stations yet. Add one to get started.</div>';
+    return;
+  }
+  list.innerHTML = stations.map(s => {
+    const status = s.live ? 'live' : (s.autodj_running ? 'online' : 'offline');
+    const statusLabel = s.live ? 'Live' : (s.autodj_running ? 'On Air' : 'Offline');
+    return `
+      <div class="station-row">
+        <div class="station-logo">
+          ${s.logo_url ? `<img src="${esc(s.logo_url)}" onerror="this.style.display='none'">` : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`}
+        </div>
+        <div class="station-info">
+          <h3>${esc(s.name)}</h3>
+          <p>${esc(s.genre || 'Radio')} ${s.location ? '&middot; ' + esc(s.location) : ''} &middot; ${s.listeners || 0} listeners</p>
+        </div>
+        <span class="badge badge-${status}">${statusLabel}</span>
+        <div class="station-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEdit('${s.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteStation('${s.id}','${esc(s.name)}')">Delete</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openAdd() {
+  document.getElementById('modal-title').textContent = 'Add Station';
+  document.getElementById('edit-id').value = '';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-genre').value = '';
+  document.getElementById('f-desc').value = '';
+  document.getElementById('f-logo').value = '';
+  document.getElementById('f-location').value = '';
+  document.getElementById('f-website').value = '';
+  document.getElementById('modal').classList.add('active');
+}
+
+function openEdit(id) {
+  const s = stations.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('modal-title').textContent = 'Edit Station';
+  document.getElementById('edit-id').value = id;
+  document.getElementById('f-name').value = s.name || '';
+  document.getElementById('f-genre').value = s.genre || '';
+  document.getElementById('f-desc').value = s.description || '';
+  document.getElementById('f-logo').value = s.logo_url || '';
+  document.getElementById('f-location').value = s.location || '';
+  document.getElementById('f-website').value = s.website_url || '';
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+async function saveStation() {
+  const id = document.getElementById('edit-id').value;
+  const body = {
+    name: document.getElementById('f-name').value,
+    genre: document.getElementById('f-genre').value,
+    description: document.getElementById('f-desc').value,
+    logo_url: document.getElementById('f-logo').value,
+    location: document.getElementById('f-location').value,
+    website_url: document.getElementById('f-website').value,
+  };
+
+  try {
+    if (id) {
+      await fetch(`${API}/api/stations/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) });
+      toast('Station updated');
+    } else {
+      await fetch(`${API}/api/stations`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) });
+      toast('Station created');
+    }
+    closeModal();
+    load();
+  } catch (e) {
+    toast('Error: ' + e.message);
+  }
+}
+
+async function deleteStation(id, name) {
+  if (!confirm(`Delete "${name}"? This removes all media and playlists.`)) return;
+  try {
+    await fetch(`${API}/api/stations/${id}`, { method: 'DELETE', credentials: 'include' });
+    toast('Station deleted');
+    load();
+  } catch (e) {
+    toast('Error: ' + e.message);
+  }
+}
+
+load();
+</script>
+</body>
+</html>

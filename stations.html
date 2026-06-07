@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stations — TMC | CiryaCast Radio Directory</title>
+<meta name="description" content="Browse and listen to live radio stations on the CiryaCast network. Stream music, request songs, and discover new stations.">
+<meta property="og:title" content="Station Directory — TMC">
+<meta property="og:description" content="Browse and listen to live radio stations on the CiryaCast network.">
+<meta property="og:image" content="https://tmc.gg/og-image.png">
+<meta property="og:url" content="https://tmc.gg/stations">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#fef6f0;--bg2:#fdf2fd;
+  --card:#fff;--card-shadow:0 1px 21px rgba(0,0,0,0.07);--card-radius:16px;
+  --text:#000;--muted:#777;--subtle:#aaa;
+  --accent:#7C4DFF;--pink:#FF48BC;--cyan:#0ED7FF;--red:#FF2A2A;
+}
+html{-webkit-font-smoothing:antialiased;background:linear-gradient(90deg,var(--bg) 0%,var(--bg2) 100%)}
+body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-height:1.5;min-height:100vh;padding-bottom:100px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(254,246,240,0.9),rgba(253,242,253,0.9));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-left{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--text)}
+.nav-left svg{width:80px;height:auto}
+.nav-sep{width:1px;height:20px;background:rgba(0,0,0,0.12)}
+.nav-sub{font-family:'Lexend',sans-serif;font-size:14px;font-weight:500;color:var(--muted)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.nav-btn{padding:8px 20px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.nav-btn-outline{background:transparent;border:1.5px solid rgba(0,0,0,0.12);color:var(--text)}
+.nav-btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.nav-btn-primary{background:var(--accent);color:#fff;border:none}
+.nav-btn-primary:hover{opacity:0.9}
+
+/* Hero */
+.hero{padding:120px 40px 48px;max-width:900px;margin:0 auto}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:16px}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:'Lexend',sans-serif;font-size:clamp(32px,5vw,56px);font-weight:700;line-height:1.1;letter-spacing:-1px;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:16px;color:var(--muted);max-width:440px;line-height:1.6}
+.hero-count{font-family:'Lexend',sans-serif;font-weight:700;color:var(--accent)}
+
+/* Filters */
+.filters{max-width:900px;margin:0 auto;padding:0 40px 32px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:200px;padding:11px 18px;background:var(--card);border:1.5px solid rgba(0,0,0,0.08);border-radius:12px;font-family:inherit;font-size:14px;color:var(--text);outline:none;transition:border-color 0.2s;box-shadow:var(--card-shadow)}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--subtle)}
+.filter-pill{padding:9px 18px;background:var(--card);border:1.5px solid rgba(0,0,0,0.08);border-radius:10px;font-family:inherit;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.filter-pill:hover{border-color:var(--accent);color:var(--accent)}
+.filter-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Grid */
+.grid{max-width:900px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+
+/* Station Card */
+.card{background:var(--card);border-radius:var(--card-radius);box-shadow:var(--card-shadow);overflow:hidden;cursor:pointer;transition:all 0.2s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;border:1.5px solid transparent}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(124,77,255,0.12);border-color:rgba(124,77,255,0.2)}
+.card-art{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#f0eaf8,#fce4f6);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.card-art img{width:100%;height:100%;object-fit:cover}
+.card-art-placeholder{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--pink));display:flex;align-items:center;justify-content:center}
+.card-art-placeholder svg{width:22px;height:22px;color:#fff}
+.live-dot{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;background:rgba(255,42,42,0.9);color:#fff}
+.live-dot::before{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:pulse 1.5s ease-in-out infinite}
+.listeners-pill{position:absolute;top:10px;right:10px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(0,0,0,0.45);color:#fff;backdrop-filter:blur(6px)}
+.card-body{padding:14px 16px;flex:1}
+.card-name{font-family:'Lexend',sans-serif;font-size:15px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-genre{font-size:12px;color:var(--muted);margin-bottom:6px}
+.card-np{font-size:12px;color:var(--subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-np b{color:var(--text);font-weight:500}
+.card-actions{display:flex;border-top:1px solid rgba(0,0,0,0.05)}
+.card-action{flex:1;padding:10px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s;text-decoration:none}
+.card-action:first-child{border-right:1px solid rgba(0,0,0,0.05)}
+.card-action:hover{color:var(--accent);background:rgba(124,77,255,0.04)}
+.card-action svg{width:13px;height:13px}
+
+/* Empty state */
+.empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted)}
+.empty h3{font-family:'Lexend',sans-serif;font-size:20px;color:var(--text);margin-bottom:6px}
+
+/* Player bar */
+.player{position:fixed;bottom:0;left:0;right:0;z-index:60;padding:12px 40px;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,0.06);display:none;align-items:center;gap:16px}
+.player.active{display:flex}
+.player-art{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--pink));overflow:hidden;flex-shrink:0}
+.player-art img{width:100%;height:100%;object-fit:cover}
+.player-info{flex:1;min-width:0}
+.player-name{font-family:'Lexend',sans-serif;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-np{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-btn{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;background:var(--accent);color:#fff;flex-shrink:0}
+.player-btn:hover{opacity:0.85}
+.player-btn svg{width:18px;height:18px}
+.player-vol{width:80px;height:4px;-webkit-appearance:none;appearance:none;background:rgba(0,0,0,0.1);border-radius:2px;outline:none;cursor:pointer}
+.player-vol::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer}
+.player-close{width:32px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s}
+.player-close:hover{background:rgba(0,0,0,0.05);color:var(--text)}
+
+@media(max-width:640px){
+  .nav{padding:14px 20px}
+  .hero{padding:100px 20px 32px}
+  .filters{padding:0 20px 24px}
+  .grid{padding:0 20px;grid-template-columns:repeat(2,1fr);gap:12px}
+  .player{padding:10px 16px}
+  .card-name{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-left">
+    <svg viewBox="0 0 101 36" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 3.66 22.711 L 3.66 13.799 L 0 13.799 L 0 8.951 L 3.66 8.951 L 3.66 3.088 L 9.248 3.088 L 9.248 8.951 L 14.601 8.951 L 14.601 13.799 L 9.248 13.799 L 9.248 21.851 C 9.248 23.61 9.957 24.235 11.964 24.235 C 12.948 24.235 13.853 24.118 14.679 23.923 L 14.679 28.652 C 13.459 29.004 12.121 29.161 10.665 29.161 C 5.785 29.161 3.66 27.245 3.66 22.711 Z M 47.845 15.831 L 47.845 28.887 L 42.256 28.887 L 42.256 17.199 C 42.256 14.658 41.312 13.447 39.108 13.447 C 36.589 13.447 35.094 14.932 35.094 17.59 L 35.094 28.887 L 29.506 28.887 L 29.506 17.199 C 29.506 14.658 28.522 13.447 26.318 13.447 C 23.838 13.447 22.343 14.971 22.343 17.59 L 22.343 28.887 L 16.755 28.887 L 16.755 8.951 L 22.225 8.951 L 22.225 11.844 C 23.327 9.772 25.649 8.404 28.443 8.404 C 31.276 8.404 33.48 9.733 34.425 12.118 C 35.487 9.811 38.085 8.404 41.115 8.404 C 45.365 8.404 47.845 11.14 47.845 15.831 Z M 49.926 18.919 C 49.926 12.704 54.137 8.404 60.433 8.404 C 64.369 8.404 67.675 10.124 69.288 12.978 L 65.117 15.909 C 64.015 14.228 62.44 13.447 60.591 13.447 C 57.6 13.447 55.593 15.597 55.593 18.919 C 55.593 22.242 57.6 24.392 60.591 24.392 C 62.44 24.392 64.015 23.61 65.117 21.929 L 69.288 24.822 C 67.675 27.753 64.369 29.434 60.433 29.434 C 54.137 29.434 49.926 25.095 49.926 18.919 Z" fill="#000" transform="translate(0 6.566)"/>
+      <rect x="72.099" y="15.269" width="5.842" height="7.024" rx="0" fill="#FF48BC"/>
+      <rect x="79.785" y="9.162" width="5.842" height="15.575" rx="0" fill="#7C4DFF"/>
+      <rect x="87.472" y="0" width="5.842" height="20.155" rx="0" fill="#0ED7FF"/>
+      <rect x="95.158" y="5.192" width="5.842" height="10.994" rx="0" fill="#FF2A2A"/>
+    </svg>
+    <div class="nav-sep"></div>
+    <span class="nav-sub">Stations</span>
+  </a>
+  <div class="nav-right">
+    <a href="/#ciryacast" class="nav-btn nav-btn-outline">Get Your Station</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Live Radio</div>
+  <h1>Browse <span id="station-count">—</span> stations<br><span>on CiryaCast.</span></h1>
+  <p>Stream, request songs, and tune in to stations broadcasting on the TMC network.</p>
+</div>
+
+<div class="filters">
+  <input class="search-input" id="search" placeholder="Search stations..." oninput="applyFilters()">
+  <button class="filter-pill active" data-filter="all" onclick="setFilter('all',this)">All</button>
+  <button class="filter-pill" data-filter="live" onclick="setFilter('live',this)">Live</button>
+  <button class="filter-pill" data-filter="online" onclick="setFilter('online',this)">On Air</button>
+</div>
+
+<div class="grid" id="grid">
+  <div class="empty"><h3>Loading stations...</h3></div>
+</div>
+
+<!-- Persistent Player -->
+<div class="player" id="player">
+  <div class="player-art" id="player-art"></div>
+  <div class="player-info">
+    <div class="player-name" id="player-name"></div>
+    <div class="player-np" id="player-np"></div>
+  </div>
+  <button class="player-btn" id="player-toggle" onclick="togglePlay()">
+    <svg viewBox="0 0 24 24" fill="currentColor" id="play-icon"><polygon points="6 3 20 12 6 21"/></svg>
+    <svg viewBox="0 0 24 24" fill="currentColor" id="pause-icon" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  </button>
+  <input type="range" class="player-vol" min="0" max="100" value="80" oninput="setVolume(this.value)">
+  <button class="player-close" onclick="stopPlayer()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+const API = 'https://cast.tmc.gg';
+let stations = [];
+let currentFilter = 'all';
+let currentStation = null;
+const audio = document.getElementById('audio');
+
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const grid = document.getElementById('grid');
+  let list = stations;
+
+  if (currentFilter === 'live') list = list.filter(s => s.live);
+  else if (currentFilter === 'online') list = list.filter(s => s.now_playing && s.now_playing.title !== 'Unknown');
+
+  if (q) list = list.filter(s =>
+    s.station.name.toLowerCase().includes(q) ||
+    (s.station.genre || '').toLowerCase().includes(q) ||
+    (s.station.description || '').toLowerCase().includes(q)
+  );
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty"><h3>No stations found</h3><p>Try a different search or filter</p></div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(s => {
+    const np = s.now_playing;
+    const art = np?.artwork_url || s.station.logo_url || '';
+    const hasNp = np && np.title && np.title !== 'Unknown';
+    return `
+      <div class="card" onclick="playStation('${s.station.id}')">
+        <div class="card-art">
+          ${art ? `<img src="${esc(art)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+          <div class="card-art-placeholder" ${art ? 'style="display:none"' : ''}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          ${s.live ? '<div class="live-dot">Live</div>' : ''}
+          ${s.listeners.current > 0 ? `<div class="listeners-pill">${s.listeners.current} listening</div>` : ''}
+        </div>
+        <div class="card-body">
+          <div class="card-name">${esc(s.station.name)}</div>
+          <div class="card-genre">${esc(s.station.genre || 'Radio')}</div>
+          ${hasNp
+            ? `<div class="card-np"><b>${esc(np.artist)}</b> — ${esc(np.title)}</div>`
+            : `<div class="card-np">${s.live ? 'Broadcasting live' : 'Offline'}</div>`}
+        </div>
+        <div class="card-actions">
+          <button class="card-action" onclick="event.stopPropagation();playStation('${s.station.id}')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"/></svg>Listen
+          </button>
+          <button class="card-action" onclick="event.stopPropagation();copyUrl('${s.station.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Link
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function playStation(id) {
+  const s = stations.find(x => x.station.id === id);
+  if (!s) return;
+  currentStation = s;
+
+  audio.src = `${API}/listen/${id}/radio.mp3`;
+  audio.volume = document.querySelector('.player-vol').value / 100;
+  audio.play();
+
+  const np = s.now_playing;
+  const art = np?.artwork_url || s.station.logo_url || '';
+  document.getElementById('player-art').innerHTML = art ? `<img src="${esc(art)}">` : '';
+  document.getElementById('player-name').textContent = s.station.name;
+  document.getElementById('player-np').textContent = np?.title ? `${np.artist} — ${np.title}` : 'Now playing';
+  document.getElementById('player').classList.add('active');
+  document.getElementById('play-icon').style.display = 'none';
+  document.getElementById('pause-icon').style.display = 'block';
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play();
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'block';
+  } else {
+    audio.pause();
+    document.getElementById('play-icon').style.display = 'block';
+    document.getElementById('pause-icon').style.display = 'none';
+  }
+}
+
+function stopPlayer() {
+  audio.pause();
+  audio.src = '';
+  currentStation = null;
+  document.getElementById('player').classList.remove('active');
+}
+
+function setVolume(v) { audio.volume = v / 100; }
+
+function copyUrl(id) {
+  navigator.clipboard.writeText(`${API}/player/${id}`);
+}
+
+async function load() {
+  try {
+    const res = await fetch(`${API}/api/nowplaying`);
+    stations = await res.json();
+    document.getElementById('station-count').textContent = stations.length;
+    applyFilters();
+
+    if (currentStation) {
+      const updated = stations.find(x => x.station.id === currentStation.station.id);
+      if (updated) {
+        currentStation = updated;
+        const np = updated.now_playing;
+        const art = np?.artwork_url || updated.station.logo_url || '';
+        document.getElementById('player-art').innerHTML = art ? `<img src="${esc(art)}">` : '';
+        document.getElementById('player-np').textContent = np?.title ? `${np.artist} — ${np.title}` : 'Now playing';
+      }
+    }
+  } catch {
+    document.getElementById('grid').innerHTML = '<div class="empty"><h3>Could not load stations</h3><p>CiryaCast may be offline</p></div>';
+  }
+}
+
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>

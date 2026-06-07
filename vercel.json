@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "functions": {
     "api/spotisaver.js": {
       "maxDuration": 60
