@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (p.id === 'page-' + pageId) {
                 p.style.display = 'block';
                 requestAnimationFrame(() => {
-                    p.classList.add('active');
+                    requestAnimationFrame(() => {
+                        p.classList.add('active');
+                    });
                 });
             } else {
                 p.classList.remove('active');
-                setTimeout(() => {
-                    if (!p.classList.contains('active')) p.style.display = 'none';
-                }, 300);
+                p.style.display = 'none';
             }
         });
 
@@ -61,4 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         history.replaceState({ page: 'home' }, '', '#home');
     }
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
 });
