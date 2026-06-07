@@ -13,27 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function navigateTo(pageId) {
         document.title = pageTitles[pageId] || pageTitles.home;
+
         pages.forEach(p => {
-            if (p.id === 'page-' + pageId) {
-                p.style.display = 'block';
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        p.classList.add('active');
-                    });
-                });
-            } else {
-                p.classList.remove('active');
-                p.style.display = 'none';
-            }
+            const isTarget = p.id === 'page-' + pageId;
+            p.classList.toggle('active', isTarget);
+            p.style.display = isTarget ? 'block' : 'none';
         });
 
-        tabs.forEach(t => {
-            t.classList.toggle('active', t.dataset.page === pageId);
-        });
-
-        navLinks.forEach(l => {
-            l.classList.toggle('active', l.dataset.page === pageId);
-        });
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.page === pageId));
+        navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
 
         window.scrollTo({ top: 0, behavior: 'instant' });
         history.pushState({ page: pageId }, '', '#' + pageId);
@@ -48,11 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('popstate', (e) => {
-        if (e.state && e.state.page) {
-            navigateTo(e.state.page);
-        } else {
-            navigateTo('home');
-        }
+        navigateTo(e.state?.page || 'home');
     });
 
     const hash = window.location.hash.replace('#', '');

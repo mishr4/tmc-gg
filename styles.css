@@ -45,15 +45,10 @@ body {
     margin: 0 auto;
     padding: 0 40px;
     padding-bottom: 40px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .page.active {
     display: block;
-    opacity: 1;
-    transform: translateY(0);
 }
 
 /* ── Desktop Nav ── */
