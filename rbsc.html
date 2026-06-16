@@ -13,7 +13,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --ink: #0a0a0f;
+      --ink: #0a0b22;
+      --stage: #05061c;
       --paper: #ffffff;
       --muted: #868686;
       --line: rgba(0,0,0,0.08);
@@ -22,8 +23,23 @@
       --cirya-navy: #002BBA;
       --flag-red: #A51A23;
       --flag-blue: #1F3D7F;
+      --gold: #FFD24A;
+      --glow: rgba(0,215,226,.45);
+      --aurora: linear-gradient(135deg,#00D7E2 0%,#0041E5 38%,#002BBA 60%,#FF48BC 100%);
+      --aurora-soft: linear-gradient(135deg, rgba(0,215,226,.16), rgba(255,72,188,.16));
       --radius: 24px;
     }
+
+    /* Aurora text accent + festive helpers */
+    .grad-text { background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .aurora-rule { border: none; height: 5px; border-radius: 999px; background: var(--aurora); max-width: 1480px; margin: 0 auto; opacity: 0.9; }
+    @keyframes drift { 0%{transform:translate3d(0,0,0) scale(1)} 100%{transform:translate3d(6%, -4%,0) scale(1.15)} }
+    @keyframes beams { 0%{transform:skewX(-12deg) scale(1.4) translateX(-6%)} 100%{transform:skewX(-12deg) scale(1.4) translateX(6%)} }
+    @keyframes floatUp { 0%{transform:translateY(20px); opacity:0} 20%{opacity:.3} 100%{transform:translateY(-120px); opacity:0} }
+    @keyframes heartbeat { 0%,92%,100%{transform:scale(1)} 4%{transform:scale(1.06)} 8%{transform:scale(1)} }
+    @keyframes pop { 0%{transform:scale(.8)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    @keyframes navline { from{width:0} to{width:100%} }
+    @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0); opacity:1} 100%{transform:translateY(220px) rotate(540deg); opacity:0} }
 
     html { scroll-behavior: smooth; }
 
@@ -49,16 +65,21 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 48px;
-      background: rgba(255,255,255,0.82);
-      backdrop-filter: saturate(180%) blur(20px);
+      padding: 18px 48px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(22px);
       border-bottom: 1px solid var(--line);
+    }
+    .nav::after {
+      content: ''; position: absolute; left: 0; bottom: -1px; height: 2px;
+      background: var(--aurora); animation: navline 0.8s ease-out forwards;
     }
 
     .nav-left { display: flex; align-items: center; gap: 40px; }
 
-    .nav-logo { display: flex; align-items: center; }
-    .nav-logo svg { height: 34px; width: auto; display: block; }
+    .nav-logo { display: flex; align-items: center; gap: 11px; }
+    .nav-logo svg.cirya-mark { height: 32px; width: auto; display: block; }
+    .nav-heart { filter: drop-shadow(0 2px 8px var(--glow)); flex-shrink: 0; }
 
     .nav-links { display: flex; align-items: center; gap: 34px; list-style: none; }
     .nav-links a {
@@ -99,7 +120,11 @@
       position: relative;
       border-radius: var(--radius);
       overflow: hidden;
-      background: linear-gradient(135deg, #14163a 0%, #1b1d4d 45%, #0a0b22 100%);
+      /* Eurovision "Aurora ink" theme-art base */
+      background:
+        radial-gradient(120% 90% at 15% 0%, rgba(0,215,226,.30), transparent 55%),
+        radial-gradient(110% 90% at 100% 100%, rgba(255,72,188,.34), transparent 55%),
+        linear-gradient(160deg,#141642 0%,#0a0b22 60%,#05061c 100%);
       min-height: 520px;
       display: grid;
       grid-template-columns: 0.9fr 1.1fr;
@@ -108,13 +133,27 @@
       padding: 56px 64px;
       box-shadow: 0 30px 80px -30px rgba(20,22,58,0.55);
     }
+    /* Layer A — drifting aurora blobs */
+    .hero-card::before {
+      content: '';
+      position: absolute; inset: -10%;
+      background: radial-gradient(40% 40% at 22% 28%, rgba(0,215,226,.55), transparent 60%),
+                  radial-gradient(45% 45% at 80% 78%, rgba(255,72,188,.5), transparent 60%);
+      filter: blur(60px); opacity: .6; pointer-events: none; z-index: 0;
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+    /* Layer B — light beams */
     .hero-card::after {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(110% 120% at 12% 20%, rgba(0,215,226,0.22), transparent 50%),
-                  radial-gradient(120% 120% at 100% 100%, rgba(31,61,127,0.45), transparent 55%);
+      background: repeating-linear-gradient(100deg, transparent 0 70px, rgba(0,215,226,.05) 70px 72px);
+      transform: skewX(-12deg) scale(1.4); opacity: .5;
       pointer-events: none; z-index: 1;
+      animation: beams 24s linear infinite alternate;
     }
+    /* Layer C — bokeh */
+    .hero-bokeh { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+    .hero-bokeh span { position: absolute; bottom: -30px; border-radius: 50%; filter: blur(3px); opacity: .25; animation: floatUp linear infinite; }
     .hero-card video,
     .hero-card .hero-poster {
       position: absolute; inset: 0;
@@ -143,7 +182,29 @@
     }
     .hero-card:hover .hero-flag { transform: rotate(-1deg) scale(1.02); }
 
-    /* Live info bar under the hero */
+    /* Heart-with-flag (Eurovision signature) */
+    .heart-flag { display: block; }
+    .hero-flagwrap .heart-flag {
+      width: 100% !important; max-width: 340px;
+      filter: drop-shadow(0 22px 44px rgba(0,0,0,0.55));
+      animation: heartbeat 3.2s ease-in-out infinite;
+    }
+    .ro-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      border: 1.5px solid var(--gold); color: var(--gold);
+      border-radius: 999px; padding: 4px 13px; margin-bottom: 14px;
+      letter-spacing: 0.12em; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    }
+    .ro-chip b { font-family: 'Archivo', sans-serif; font-weight: 900; }
+
+    /* Live info bar under the hero — full-bleed dark broadcast strap */
+    .livebar-band {
+      margin-top: 14px; padding: 20px 0;
+      background:
+        radial-gradient(80% 140% at 10% 0%, rgba(0,215,226,.12), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255,72,188,.12), transparent 60%),
+        linear-gradient(120deg,#0a0b22,#05061c);
+    }
     .livebar {
       max-width: 1480px; margin: 0 auto; padding: 0 48px;
       display: flex; align-items: center; justify-content: space-between;
@@ -152,17 +213,23 @@
     .livebar-card {
       flex: 1; min-width: 260px;
       display: flex; align-items: center; gap: 16px;
-      padding: 18px 24px; border-radius: 16px; border: 1px solid var(--line);
-      background: #fafafa;
+      padding: 16px 22px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
     }
-    .livebar-card .iplayer-btn { white-space: nowrap; }
-    .livebar-meta { font-size: 13px; color: var(--muted); line-height: 1.4; }
-    .livebar-meta strong { color: var(--ink); }
+    .onair {
+      display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #fff; background: var(--flag-red); padding: 6px 11px; border-radius: 999px;
+    }
+    .onair .live-dot { background: #fff; }
+    .livebar-card .iplayer-btn { white-space: nowrap; box-shadow: 0 0 24px -6px var(--glow); }
+    .livebar-meta { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; }
+    .livebar-meta strong { color: #fff; }
     .countdown {
       flex: 1; min-width: 260px;
-      border-radius: 16px; padding: 18px 28px;
+      border-radius: 16px; padding: 16px 26px;
       background: linear-gradient(120deg, var(--cirya-navy), var(--cirya-blue));
-      color: #fff;
+      color: #fff; border-top: 2px solid transparent; border-image: var(--aurora) 1;
       display: flex; align-items: center; justify-content: space-between;
     }
 
@@ -263,6 +330,7 @@
     .country-rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 
     .country-chip {
+      position: relative;
       flex: 0 0 auto;
       scroll-snap-align: start;
       display: flex; align-items: center; gap: 12px;
@@ -274,7 +342,8 @@
       transition: all 0.2s;
     }
     .country-chip:hover { border-color: var(--ink); transform: translateY(-2px); }
-    .country-chip.active { border-color: var(--cirya-blue); background: rgba(0,65,229,0.05); }
+    .country-chip.active { border: 1.5px solid transparent; border-image: var(--aurora) 1; background: rgba(0,65,229,0.05); }
+    .chip-ro { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px; color: var(--ink); opacity: 0.16; line-height: 1; margin-right: 2px; }
     .chip-flag { font-size: 26px; line-height: 1; }
     .chip-name { font-weight: 600; font-size: 15px; }
     .chip-artist { font-size: 12px; color: var(--muted); }
@@ -335,15 +404,34 @@
     .tile-blocked-link { color: var(--cirya-cyan); text-decoration: underline; }
     .tile-song { font-size: 13px; color: rgba(255,255,255,0.82); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tile-votes { margin-top: 10px; display: flex; align-items: center; gap: 8px; }
-    .tile-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.22); border-radius: 2px; overflow: hidden; }
-    .tile-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cirya-cyan), var(--cirya-blue)); transition: width 0.6s ease; }
-    .tile-pct { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .tile-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.22); border-radius: 3px; overflow: hidden; }
+    .tile-fill { height: 100%; width: 0%; background: var(--aurora); transition: width 0.6s ease; }
+    .tile-pct { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.65); }
+    /* Scoreboard: running-order number + points chip + douze-points leader */
+    .tile-ro {
+      position: absolute; top: 12px; left: 14px; z-index: 3;
+      font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 30px; color: #fff;
+      opacity: 0.92; text-shadow: 0 2px 12px rgba(0,0,0,0.6); line-height: 1;
+    }
+    .tile-points {
+      font-weight: 800; font-size: 12px; color: var(--cirya-cyan);
+      background: rgba(0,215,226,0.16); border-radius: 999px; padding: 3px 9px;
+      font-variant-numeric: tabular-nums; white-space: nowrap;
+    }
+    .video-tile.is-leader { box-shadow: 0 0 0 2px var(--gold) inset, 0 26px 50px -22px rgba(0,0,0,0.55); }
+    .tile-points.is-douze { background: var(--gold); color: #2a1f00; animation: pop 0.5s ease; }
+    .tile-crown {
+      position: absolute; top: 12px; right: 14px; z-index: 3; display: none;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+      color: #2a1f00; background: var(--gold); padding: 4px 9px; border-radius: 999px;
+    }
+    .video-tile.is-leader .tile-crown { display: inline-block; animation: pop 0.5s ease; }
 
     /* ─────────────────────── SCHEDULE (timeline) ─────────────────────── */
     .timeline { position: relative; max-width: 760px; margin: 0; }
     .timeline::before {
-      content: ''; position: absolute; left: 9px; top: 10px; bottom: 18px; width: 2px;
-      background: linear-gradient(180deg, var(--cirya-cyan), var(--cirya-blue) 55%, var(--line));
+      content: ''; position: absolute; left: 9px; top: 10px; bottom: 18px; width: 3px; border-radius: 2px;
+      background: var(--aurora);
     }
     .tl-item { position: relative; padding: 0 0 30px 52px; }
     .tl-item:last-child { padding-bottom: 0; }
@@ -418,18 +506,30 @@
     .news-card svg { width: 22px; height: 22px; flex-shrink: 0; opacity: 0.6; }
 
     /* ─────────────────────── BRAND FOOTER ─────────────────────── */
+    /* Dark "stage" footer */
+    .stage-foot {
+      position: relative; margin-top: 24px; overflow: hidden;
+      background:
+        radial-gradient(70% 120% at 12% 0%, rgba(0,215,226,.14), transparent 60%),
+        radial-gradient(70% 120% at 100% 100%, rgba(255,72,188,.16), transparent 60%),
+        var(--stage);
+      border-top: 3px solid transparent; border-image: var(--aurora) 1;
+    }
+    .stage-heart { position: absolute; right: 6%; top: 50%; transform: translateY(-50%); opacity: 0.1; pointer-events: none; }
+    .stage-heart .heart-flag { width: 200px !important; }
     .brand {
+      position: relative; z-index: 1;
       max-width: 1480px; margin: 0 auto; padding: 72px 48px;
       display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
     }
     .brand-left { display: flex; flex-direction: column; gap: 4px; }
-    .brand-kicker { font-size: 13px; font-weight: 600; color: var(--muted); }
-    .brand-name { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(42px, 6.5vw, 92px); line-height: 0.96; letter-spacing: -0.01em; color: var(--ink); }
-    .brand-aka { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+    .brand-kicker { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.55); }
+    .brand-name { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(42px, 6.5vw, 92px); line-height: 0.96; letter-spacing: -0.01em; color: #fff; }
+    .brand-aka { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.55); margin-top: 2px; }
     .brand-logo svg { height: 96px; width: auto; }
 
-    .footer-bar { border-top: 1px solid var(--line); padding: 28px 48px; text-align: center; font-size: 13px; color: var(--muted); }
-    .footer-bar a { color: var(--cirya-blue); text-decoration: none; font-weight: 600; }
+    .footer-bar { position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.1); padding: 24px 48px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .footer-bar a { color: var(--cirya-cyan); text-decoration: none; font-weight: 600; }
 
     /* ─────────────────────── VOTE MODAL ─────────────────────── */
     .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,15,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 24px; }
@@ -505,6 +605,16 @@
     @media (max-width: 380px) {
       .video-grid { grid-template-columns: 1fr; }
     }
+
+    /* Respect reduced-motion: kill all ambient/festive animation */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-card::before, .hero-card::after, .hero-bokeh, .hero-bokeh span,
+      .hero-flagwrap .heart-flag, .nav::after, [class*="confetti"],
+      .tile-points.is-douze, .video-tile.is-leader .tile-crown {
+        animation: none !important;
+      }
+      html { scroll-behavior: auto; }
+    }
   </style>
 </head>
 <body>
@@ -512,8 +622,9 @@
   <!-- ───────── NAV ───────── -->
   <nav class="nav">
     <div class="nav-left">
-      <a href="/rbsc" class="nav-logo" aria-label="Cirya">
-        <svg viewBox="0 0 83 59" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <a href="/rbsc" class="nav-logo" aria-label="RBSC · Cirya">
+        <span class="nav-heart" id="nav-heart"></span>
+        <svg class="cirya-mark" viewBox="0 0 83 59" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M83 43.6836L34.9474 31.3232L34.9474 17.4731L83 29.8335L83 43.6836Z" fill="#00D7E2"/>
           <path d="M83 58.9727L34.9474 45.5822L34.9474 30.5779L83 43.9684L83 58.9727Z" fill="#002BBA"/>
           <path d="M83 30.5781L34.9474 18.2177L34.9474 4.3676L83 16.728L83 30.5781Z" fill="#0041E5"/>
@@ -537,15 +648,17 @@
   <header>
     <div class="hero">
       <div class="hero-card" id="hero-card">
+        <div class="hero-bokeh" aria-hidden="true" id="hero-bokeh"></div>
         <div class="scrim"></div>
 
-        <!-- Flag (left) — custom Figma flag; JS just swaps the src to the featured country -->
-        <div class="hero-flagwrap">
+        <!-- Flag (left) — heart-with-flag, set by JS to the featured country -->
+        <div class="hero-flagwrap" id="hero-flagwrap">
           <img class="hero-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
         </div>
 
         <!-- Text (right) -->
         <div class="hero-card-inner">
+          <span class="ro-chip">Entry <b id="hero-ro">04</b></span>
           <div class="hero-eyebrow">Tune into the RBSC Live Stream</div>
           <h1 class="hero-country poster" id="hero-country">Netherlands</h1>
           <p class="hero-desc" id="hero-desc">
@@ -561,21 +674,24 @@
       </div>
     </div>
 
-    <!-- Live info bar -->
-    <div class="livebar" id="tune">
-      <div class="livebar-card">
-        <a href="/songcontest" target="_blank" class="iplayer-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Watch Live
-        </a>
-        <div class="livebar-meta">Host: <strong>SRB Network</strong><br><span id="host-loc">Zurich, Switzerland</span></div>
-      </div>
-      <div class="countdown">
-        <div>
-          <div class="countdown-label">Voting closes in</div>
-          <div class="countdown-time" id="countdown">TBA</div>
+    <!-- Live info bar (dark broadcast strap) -->
+    <div class="livebar-band" id="tune">
+      <div class="livebar">
+        <div class="livebar-card">
+          <span class="onair"><span class="live-dot"></span> On Air</span>
+          <a href="/songcontest" target="_blank" class="iplayer-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Live
+          </a>
+          <div class="livebar-meta">Host: <strong>SRB Network</strong><br><span id="host-loc">Zurich, Switzerland</span></div>
         </div>
-        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <div class="countdown">
+          <div>
+            <div class="countdown-label">Voting closes in</div>
+            <div class="countdown-time" id="countdown">TBA</div>
+          </div>
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
       </div>
     </div>
   </header>
@@ -593,9 +709,9 @@
   <!-- ───────── VIDEO GRID ───────── -->
   <section class="section" id="vote" style="padding-top:0;">
     <div class="section-head">
-      <div class="section-kicker">All performances</div>
+      <div class="section-kicker">★ Live Scoreboard</div>
       <h2 class="section-title display">Watch &amp; vote</h2>
-      <p class="section-sub">Tap any performance to watch the full video and cast your vote. Results update live.</p>
+      <p class="section-sub">Tap any performance to watch the full video and cast your vote. Vote share is shown as live points — the leader takes <b style="color:var(--cirya-blue)">douze points</b>.</p>
     </div>
     <div class="video-grid" id="video-grid"></div>
   </section>
@@ -640,6 +756,8 @@
   </section>
 
   <!-- ───────── BRAND ───────── -->
+  <footer class="stage-foot">
+  <div class="stage-heart" id="stage-heart" aria-hidden="true"></div>
   <section class="brand">
     <div class="brand-left">
       <span class="brand-kicker">Corporación de Noticias Mishra</span>
@@ -661,6 +779,7 @@
   <div class="footer-bar">
     RBSC 2026 · Hosted by Switzerland · <a href="https://tmc.gg">The Mishra Corporation</a> · Powered by <a href="https://cirya.co">Cirya</a>
   </div>
+  </footer>
 
   <!-- ───────── VOTE MODAL ───────── -->
   <div class="modal" id="modal">
@@ -712,14 +831,68 @@
   }
   const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
 
+  // Heart-with-flag (Eurovision signature). Reused at any size; any flag fills it.
+  let _hid = 0;
+  function heartFlag(country, px) {
+    const slug = slugFor(country), id = 'hc' + (_hid++);
+    const d = "M50 86 C 8 56, 10 18, 38 22 C 47 23, 50 31, 50 36 C 50 31, 53 23, 62 22 C 90 18, 92 56, 50 86 Z";
+    return `<svg class="heart-flag" viewBox="0 0 100 92" style="width:${px}px;height:auto" role="img" aria-label="${esc(country)}">`
+      + `<defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>`
+      + `<image href="/flags/${slug}.svg" width="100" height="92" clip-path="url(#${id})" preserveAspectRatio="xMidYMid slice"/>`
+      + `<path d="${d}" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>`
+      + `</svg>`;
+  }
+
+  // CSS confetti burst (vote success only — never ambient)
+  function burstConfetti(x, y) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cols = ['#00D7E2','#0041E5','#FF48BC','#FFD24A'];
+    const host = document.body;
+    for (let i = 0; i < 16; i++) {
+      const p = document.createElement('span');
+      const sz = 6 + Math.random() * 4;
+      p.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${sz}px;height:${sz*1.4}px;`
+        + `background:${cols[i%4]};z-index:2000;border-radius:1px;pointer-events:none;`
+        + `transform:translateX(${(Math.random()-0.5)*180}px);`
+        + `animation:confetti-fall ${1+Math.random()*0.5}s ${Math.random()*0.15}s ease-out forwards`;
+      host.appendChild(p);
+      setTimeout(() => p.remove(), 1700);
+    }
+  }
+
   let performances = [];
   let votes = {};
   let current = null;
   let votingEnd = null;
   let votingStatus = 'open';
 
+  function setupFestive() {
+    // Host heart mark in the nav
+    const nh = document.getElementById('nav-heart');
+    if (nh) nh.innerHTML = heartFlag('Switzerland', 28);
+    // Footer host-heart watermark
+    const sh = document.getElementById('stage-heart');
+    if (sh) sh.innerHTML = heartFlag('Switzerland', 200);
+    // Hero bokeh sparkles
+    const bk = document.getElementById('hero-bokeh');
+    if (bk) {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {
+        let h = '';
+        for (let i = 0; i < 10; i++) {
+          const sz = 8 + (i*2 % 18), left = (i*11 + 5) % 95;
+          const col = i % 2 ? 'rgba(255,72,188,.45)' : 'rgba(0,215,226,.5)';
+          const dur = 14 + (i % 7), delay = -(i * 1.8);
+          h += `<span style="left:${left}%;width:${sz}px;height:${sz}px;background:${col};animation-duration:${dur}s;animation-delay:${delay}s"></span>`;
+        }
+        bk.innerHTML = h;
+      }
+    }
+  }
+
   async function init() {
     // Render instantly (no network) so there's no placeholder flash
+    setupFestive();
     renderSchedule();
     startCountdown();
 
@@ -770,9 +943,12 @@
 
   function renderHero() {
     // Feature Netherlands if present, else first performance
-    const feat = performances.find(p => /netherlands/i.test(p.country)) || performances[0];
+    const idx = Math.max(0, performances.findIndex(p => /netherlands/i.test(p.country)));
+    const feat = performances[idx] || performances[0];
     if (!feat) return;
-    document.getElementById('hero-country').textContent = feat.country;
+    document.getElementById('hero-country').innerHTML = `<span class="grad-text">${esc(feat.country)}</span>`;
+    const roEl = document.getElementById('hero-ro');
+    if (roEl) roEl.textContent = String(idx + 1).padStart(2, '0');
     if (!/netherlands/i.test(feat.country)) {
       document.getElementById('hero-desc').innerHTML =
         `Now on the Cirya Noticias stage in <strong>RBSC hosted by Switzerland</strong> — ` +
@@ -785,12 +961,9 @@
       card.insertBefore(v, card.firstChild);
     }
 
-    // Point the hero flag at the featured country's custom flag
-    const heroFlag = document.getElementById('hero-flag-img');
-    if (heroFlag) {
-      heroFlag.alt = feat.country + ' flag';
-      heroFlag.src = `/flags/${slugFor(feat.country)}.svg`;
-    }
+    // Heart-with-flag for the featured country
+    const wrap = document.getElementById('hero-flagwrap');
+    if (wrap) wrap.innerHTML = heartFlag(feat.country, 320);
 
     fitHeroText();
   }
@@ -799,7 +972,8 @@
     const rail = document.getElementById('country-rail');
     rail.innerHTML = performances.map((p,i) => `
       <div class="country-chip${i===0?' active':''}" onclick="scrollToTile('${p.id}', this)">
-        ${flagImg(p.country,'chip-flag-img')}
+        <span class="chip-ro">${String(i+1).padStart(2,'0')}</span>
+        ${heartFlag(p.country, 30)}
         <div><div class="chip-name">${esc(p.country)}</div><div class="chip-artist">${esc(p.broadcaster || p.artist)}</div></div>
       </div>
     `).join('');
@@ -813,16 +987,17 @@
           ? `<video src="${esc(p.videoUrl)}" muted loop playsinline preload="metadata" onmouseover="this.play()" onmouseout="this.pause()"></video>`
           : `<div class="tile-poster" style="background-image:${TILE_GRADS[i%4]}"></div>`}
         <div class="tile-scrim"></div>
-        ${p.votingDisabled ? '' : '<div class="tile-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>'}
-        ${p.votingDisabled ? '<span class="tile-badge">Not aired</span>' : ''}
+        <span class="tile-ro">${String(i+1).padStart(2,'0')}</span>
+        ${p.votingDisabled ? '<span class="tile-badge">Not aired</span>' : '<span class="tile-crown">★ 12 pts</span>'}
         <div class="tile-body">
-          <div class="tile-flagrow">${flagImg(p.country,'tile-flag-img')}<span class="tile-country">${esc(p.country)}</span></div>
+          <div class="tile-flagrow">${heartFlag(p.country, 26)}<span class="tile-country">${esc(p.country)}</span></div>
           ${p.broadcaster ? `<div class="tile-broadcaster">${esc(p.broadcaster)}</div>` : ''}
           <div class="tile-song">${p.song && p.song !== 'TBA' ? `${esc(p.artist)} — ${esc(p.song)}` : '<span style="opacity:.6">Song TBA</span>'}</div>
           ${p.votingDisabled
             ? `<div class="tile-blocked-note">Voting unavailable · <span class="tile-blocked-link">Why?</span></div>`
             : `<div class="tile-votes">
                  <div class="tile-bar"><div class="tile-fill" id="fill-${p.id}"></div></div>
+                 <span class="tile-points" id="pts-${p.id}">0 pts</span>
                  <span class="tile-pct" id="pct-${p.id}">0%</span>
                </div>`}
         </div>
@@ -831,14 +1006,32 @@
   }
 
   function updateVotes() {
-    const total = Object.values(votes).reduce((a,b)=>a+(+b||0),0);
+    // Only countable (votable) entries score points / can lead
+    const scoring = performances.filter(p => !p.votingDisabled);
+    const total = scoring.reduce((a,p)=>a+(+votes[p.id]||0),0);
+    let leaderId = null, leaderVotes = -1;
+    scoring.forEach(p => { const c = +votes[p.id]||0; if (c > leaderVotes) { leaderVotes = c; leaderId = p.id; } });
+    if (total <= 0) leaderId = null; // no leader until votes exist
+
     performances.forEach(p => {
       const c = +votes[p.id] || 0;
       const pct = total ? Math.round(c/total*100) : 0;
+      const pts = Math.round(pct * 1.2); // 0–120 "points" feel
       const fill = document.getElementById('fill-'+p.id);
       const pctEl = document.getElementById('pct-'+p.id);
+      const ptsEl = document.getElementById('pts-'+p.id);
+      const tile = document.getElementById('tile-'+p.id);
       if (fill) fill.style.width = pct+'%';
       if (pctEl) pctEl.textContent = pct+'%';
+      if (ptsEl) ptsEl.textContent = pts + ' pts';
+      if (tile && !p.votingDisabled) {
+        const isLeader = (p.id === leaderId);
+        tile.classList.toggle('is-leader', isLeader);
+        if (ptsEl) {
+          ptsEl.classList.toggle('is-douze', isLeader);
+          if (isLeader) ptsEl.textContent = '★ 12 points';
+        }
+      }
     });
   }
 
@@ -899,6 +1092,7 @@
         msg.className='vote-msg ok'; msg.textContent='✓ Vote counted — thank you!';
         btn.textContent='Voted';
         votes[current.id] = (+votes[current.id]||0)+1; updateVotes();
+        const r = btn.getBoundingClientRect(); burstConfetti(r.left + r.width/2, r.top);
         setTimeout(closeModal, 1400);
       } else {
         msg.className='vote-msg err'; msg.textContent = data.error || 'Could not record vote';
