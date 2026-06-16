@@ -532,7 +532,7 @@
       <div class="countdown">
         <div>
           <div class="countdown-label">Voting closes in</div>
-          <div class="countdown-time" id="countdown">--:--:--</div>
+          <div class="countdown-time" id="countdown">TBA</div>
         </div>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
       </div>
@@ -673,6 +673,10 @@
   let votingStatus = 'open';
 
   async function init() {
+    // Render instantly (no network) so there's no placeholder flash
+    renderSchedule();
+    startCountdown();
+
     try {
       performances = await (await fetch('/api/rbsc/performances')).json();
       votes = await (await fetch('/api/rbsc/votes')).json();
@@ -683,7 +687,6 @@
     renderCountries();
     renderGrid();
     updateVotes();
-    startCountdown();
 
     setInterval(async () => {
       try { votes = await (await fetch('/api/rbsc/votes')).json(); updateVotes(); } catch {}
@@ -884,11 +887,9 @@
     function tick() {
       if (votingStatus === 'closed') { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting is'; return; }
       if (votingStatus === 'paused') { el.textContent = 'PAUSED'; if (label) label.textContent = 'Voting is'; return; }
-      let end = (votingEnd && !isNaN(votingEnd)) ? votingEnd : (() => {
-        const n = new Date();
-        return new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()+1, 0,0,0));
-      })();
-      let s = Math.floor((end - new Date())/1000);
+      // No end date configured yet → show TBA instead of a misleading countdown
+      if (!votingEnd || isNaN(votingEnd)) { el.textContent = 'TBA'; if (label) label.textContent = 'Voting dates'; return; }
+      let s = Math.floor((votingEnd - new Date())/1000);
       if (s <= 0) { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting has'; return; }
       if (label) label.textContent = 'Voting closes in';
       const d = Math.floor(s/86400);
