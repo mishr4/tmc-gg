@@ -336,6 +336,42 @@
     .tile-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cirya-cyan), var(--cirya-blue)); transition: width 0.6s ease; }
     .tile-pct { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
+    /* ─────────────────────── SCHEDULE (timeline) ─────────────────────── */
+    .timeline { position: relative; max-width: 760px; margin: 0; }
+    .timeline::before {
+      content: ''; position: absolute; left: 9px; top: 10px; bottom: 18px; width: 2px;
+      background: linear-gradient(180deg, var(--cirya-cyan), var(--cirya-blue) 55%, var(--line));
+    }
+    .tl-item { position: relative; padding: 0 0 30px 52px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-node {
+      position: absolute; left: 2px; top: 3px; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--paper); border: 3px solid var(--cirya-blue); z-index: 1;
+    }
+    .tl-item.tbd .tl-node { border-color: #c9c9d1; }
+    .tl-item.final .tl-node {
+      background: var(--cirya-blue); border-color: var(--cirya-cyan);
+      box-shadow: 0 0 0 5px rgba(0,65,229,0.12);
+    }
+    .tl-when {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.01em; color: var(--cirya-blue);
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .tl-item.tbd .tl-when { color: var(--muted); font-weight: 600; }
+    .tl-when svg { width: 13px; height: 13px; opacity: 0.85; flex-shrink: 0; }
+    .tl-title {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: 23px; letter-spacing: -0.02em; margin: 5px 0 10px; line-height: 1.1;
+    }
+    .tl-item.final .tl-title { font-size: 28px; }
+    .tl-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tl-tag {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 4px 11px; border-radius: 999px; background: rgba(0,0,0,0.05); color: var(--muted);
+    }
+    .tl-tag.live { background: rgba(0,65,229,0.1); color: var(--cirya-blue); }
+    .tl-tag.final { background: linear-gradient(120deg, var(--cirya-navy), var(--cirya-blue)); color: #fff; }
+
     /* ─────────────────────── BREAKING NEWS ─────────────────────── */
     .news {
       background: var(--ink);
@@ -897,11 +933,19 @@
     const el = document.getElementById('timeline');
     if (!el) return;
     el.innerHTML = SCHEDULE.map(s => `
-      <div class="tl-card${s.final ? ' final' : ''}${s.tbd ? ' tbd' : ''}">
-        ${s.badge ? `<span class="tl-badge">${esc(s.badge)}</span>` : ''}
-        <div class="tl-phase">${esc(s.phase)}</div>
-        <div class="tl-name">${esc(s.name)}</div>
-        <div class="tl-date">${esc(s.date)}</div>
+      <div class="tl-item${s.final ? ' final' : ''}${s.tbd ? ' tbd' : ''}">
+        <span class="tl-node"></span>
+        <div class="tl-when">
+          ${s.tbd
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>'}
+          ${esc(s.date)}
+        </div>
+        <div class="tl-title">${esc(s.name)}</div>
+        <div class="tl-tags">
+          <span class="tl-tag${s.phase === 'Live Show' ? ' live' : ''}">${esc(s.phase)}</span>
+          ${s.badge ? `<span class="tl-tag${s.final ? ' final' : ''}">${esc(s.badge)}</span>` : ''}
+        </div>
       </div>
     `).join('');
   }
