@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RBSC Admin — Performance Management</title>
+  <link rel="icon" href="/favicon-32.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a14;
+      --card: #13131f;
+      --border: rgba(255,255,255,0.06);
+      --text: #fff;
+      --muted: rgba(255,255,255,0.5);
+      --accent: #7C4DFF;
+      --pink: #FF48BC;
+    }
+
+    body {
+      font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 0;
+      transition: color 0.2s;
+      font-family: inherit;
+    }
+
+    .tab.active {
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 6px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Forms */
+    .form-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      background: rgba(124,77,255,0.05);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .file-upload {
+      position: relative;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent);
+      background: rgba(124,77,255,0.05);
+    }
+
+    .file-upload input[type="file"] {
+      display: none;
+    }
+
+    .file-upload-text {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .file-upload-hint {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .button-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .button-primary:hover {
+      opacity: 0.9;
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .button-secondary:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table th {
+      background: rgba(255,255,255,0.03);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .video-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .status.live {
+      color: #4CAF50;
+      background: rgba(76,175,80,0.1);
+    }
+
+    .status.draft {
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .status.error {
+      color: #FF1744;
+      background: rgba(255,23,68,0.1);
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .alert.success {
+      background: rgba(76,175,80,0.1);
+      color: #4CAF50;
+      border: 1px solid rgba(76,175,80,0.2);
+    }
+
+    .alert.error {
+      background: rgba(255,23,68,0.1);
+      color: #FF1744;
+      border: 1px solid rgba(255,23,68,0.2);
+    }
+
+    .alert.info {
+      background: rgba(124,77,255,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(124,77,255,0.2);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>RBSC Admin Portal</h1>
+    <p>Manage performances, videos, and voting configuration</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('upload')">Upload Performance</button>
+    <button class="tab" onclick="switchTab('manage')">Manage Entries</button>
+    <button class="tab" onclick="switchTab('voting')">Voting Config</button>
+    <button class="tab" onclick="switchTab('stats')">Statistics</button>
+  </div>
+
+  <!-- Upload Tab -->
+  <div class="tab-content active" id="upload">
+    <div class="form-section">
+      <h2 style="margin-bottom: 20px; font-size: 20px;">Upload New Performance</h2>
+
+      <div id="upload-alert" style="display:none"></div>
+
+      <div class="form-group">
+        <label>Country Name</label>
+        <input type="text" id="country" placeholder="e.g., Netherlands" required>
+      </div>
+
+      <div class="form-group">
+        <label>Artist Name</label>
+        <input type="text" id="artist" placeholder="e.g., Joost Klein" required>
+      </div>
+
+      <div class="form-group">
+        <label>Song Title</label>
+        <input type="text" id="song" placeholder="e.g., EUROPAPA" required>
+      </div>
+
+      <div class="form-group">
+        <label>Video URL or Upload</label>
+        <div class="file-upload" onclick="document.getElementById('video-file').click()">
+          <div class="file-upload-text">📹 Click to upload or paste YouTube/MP4 URL</div>
+          <div class="file-upload-hint">Supports MP4, WebM, or YouTube links</div>
+          <input type="file" id="video-file" accept="video/*" onchange="handleVideoFile(this)">
+        </div>
+        <input type="text" id="video-url" placeholder="Or paste YouTube URL..." style="margin-top:12px">
+      </div>
+
+      <div class="form-group">
+        <label>Description (Optional)</label>
+        <textarea id="description" placeholder="Add notes about this performance..."></textarea>
+      </div>
+
+      <button class="button button-primary" onclick="uploadPerformance()">
+        ✓ Upload Performance
+      </button>
+    </div>
+  </div>
+
+  <!-- Manage Tab -->
+  <div class="tab-content" id="manage">
+    <div class="form-section">
+      <h2 style="margin-bottom: 20px; font-size: 20px;">Performance Entries</h2>
+      <div id="manage-alert" style="display:none"></div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Artist</th>
+            <th>Song</th>
+            <th>Video</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="entries-table">
+          <tr>
+            <td colspan="6" style="text-align:center;color:var(--muted)">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Voting Config Tab -->
+  <div class="tab-content" id="voting">
+    <div class="form-section">
+      <h2 style="margin-bottom: 20px; font-size: 20px;">Voting Configuration</h2>
+
+      <div id="voting-alert" style="display:none"></div>
+
+      <div class="form-group">
+        <label>Voting Status</label>
+        <select id="voting-status" onchange="updateVotingConfig()">
+          <option value="open">Open (Accepting votes)</option>
+          <option value="closed">Closed (No new votes)</option>
+          <option value="paused">Paused (Temporarily suspended)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Voting End Time (Optional)</label>
+        <input type="datetime-local" id="voting-end-time" onchange="updateVotingConfig()">
+      </div>
+
+      <div class="form-group">
+        <label>Host Country (for API integration)</label>
+        <input type="text" id="host-country" placeholder="e.g., Switzerland" onchange="updateVotingConfig()">
+      </div>
+
+      <div class="form-group">
+        <label>API Key (from host country)</label>
+        <input type="password" id="api-key" placeholder="Paste API key here..." onchange="updateVotingConfig()">
+      </div>
+
+      <div class="alert info">
+        💡 Once voting ends, you can download results as CSV and integrate with the official voting system.
+      </div>
+
+      <button class="button button-primary" onclick="downloadResults()">
+        ⬇ Download Results CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Tab -->
+  <div class="tab-content" id="stats">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="total-votes">0</div>
+        <div class="stat-label">Total Votes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="total-entries">0</div>
+        <div class="stat-label">Performances</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="voting-status-display">Open</div>
+        <div class="stat-label">Voting Status</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 style="margin-bottom: 20px; font-size: 20px;">Vote Distribution</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Votes</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody id="votes-table">
+          <tr>
+            <td colspan="3" style="text-align:center;color:var(--muted)">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`button[onclick*="${tab}"]`).classList.add('active');
+  document.getElementById(tab).classList.add('active');
+
+  if (tab === 'manage') loadEntries();
+  if (tab === 'stats') loadStats();
+}
+
+function showAlert(id, msg, type = 'info') {
+  const el = document.getElementById(id);
+  el.innerHTML = msg;
+  el.className = `alert ${type}`;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 5000);
+}
+
+async function uploadPerformance() {
+  const country = document.getElementById('country').value;
+  const artist = document.getElementById('artist').value;
+  const song = document.getElementById('song').value;
+  const videoUrl = document.getElementById('video-url').value;
+  const description = document.getElementById('description').value;
+
+  if (!country || !artist || !song || !videoUrl) {
+    showAlert('upload-alert', '❌ Please fill all required fields', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/rbsc/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country, artist, song, videoUrl, description })
+    });
+
+    if (res.ok) {
+      showAlert('upload-alert', '✓ Performance uploaded successfully!', 'success');
+      document.getElementById('country').value = '';
+      document.getElementById('artist').value = '';
+      document.getElementById('song').value = '';
+      document.getElementById('video-url').value = '';
+      document.getElementById('description').value = '';
+    } else {
+      const err = await res.json();
+      showAlert('upload-alert', `❌ ${err.error}`, 'error');
+    }
+  } catch (e) {
+    showAlert('upload-alert', `❌ ${e.message}`, 'error');
+  }
+}
+
+function handleVideoFile(input) {
+  if (input.files?.[0]) {
+    const file = input.files[0];
+    // For demo: just show filename
+    document.getElementById('video-url').value = `[File: ${file.name}]`;
+  }
+}
+
+async function loadEntries() {
+  try {
+    const res = await fetch('/api/rbsc/performances');
+    const entries = await res.json();
+
+    const tbody = document.getElementById('entries-table');
+    tbody.innerHTML = entries.map(e => `
+      <tr>
+        <td><strong>${e.country}</strong></td>
+        <td>${e.artist}</td>
+        <td>${e.song}</td>
+        <td><div class="video-thumb">🎬</div></td>
+        <td><span class="status live">● Live</span></td>
+        <td>
+          <button class="button button-secondary" style="font-size:12px" onclick="deleteEntry('${e.id}')">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    showAlert('manage-alert', `❌ Failed to load entries: ${e.message}`, 'error');
+  }
+}
+
+async function deleteEntry(id) {
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+
+  try {
+    await fetch(`/api/rbsc/performances/${id}`, { method: 'DELETE' });
+    showAlert('manage-alert', '✓ Entry deleted', 'success');
+    loadEntries();
+  } catch (e) {
+    showAlert('manage-alert', `❌ ${e.message}`, 'error');
+  }
+}
+
+async function updateVotingConfig() {
+  // Save to localStorage for now (would normally POST to API)
+  const config = {
+    status: document.getElementById('voting-status').value,
+    end_time: document.getElementById('voting-end-time').value,
+    host_country: document.getElementById('host-country').value,
+    api_key: document.getElementById('api-key').value,
+  };
+  localStorage.setItem('rbsc_config', JSON.stringify(config));
+  showAlert('voting-alert', '✓ Configuration saved', 'success');
+}
+
+async function downloadResults() {
+  try {
+    const res = await fetch('/api/rbsc/votes');
+    const votes = await res.json();
+
+    const perfRes = await fetch('/api/rbsc/performances');
+    const perf = await perfRes.json();
+
+    const total = Object.values(votes).reduce((a,b) => a+b, 0);
+    const csv = ['Country,Artist,Song,Votes,Percentage'].concat(
+      perf.map(p => `${p.country},${p.artist},${p.song},${votes[p.id] || 0},${total > 0 ? ((votes[p.id] || 0) / total * 100).toFixed(1) : 0}`)
+    ).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rbsc-results-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  } catch (e) {
+    showAlert('voting-alert', `❌ ${e.message}`, 'error');
+  }
+}
+
+async function loadStats() {
+  try {
+    const votesRes = await fetch('/api/rbsc/votes');
+    const votes = await votesRes.json();
+
+    const perfRes = await fetch('/api/rbsc/performances');
+    const perf = await perfRes.json();
+
+    const total = Object.values(votes).reduce((a,b) => a+b, 0);
+
+    document.getElementById('total-votes').textContent = total;
+    document.getElementById('total-entries').textContent = perf.length;
+
+    const tbody = document.getElementById('votes-table');
+    tbody.innerHTML = perf
+      .map(p => ({...p, votes: votes[p.id] || 0}))
+      .sort((a,b) => b.votes - a.votes)
+      .map(p => `
+        <tr>
+          <td><strong>${p.country}</strong></td>
+          <td>${p.votes}</td>
+          <td>${total > 0 ? (p.votes / total * 100).toFixed(1) : 0}%</td>
+        </tr>
+      `).join('');
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// Load config on init
+const config = JSON.parse(localStorage.getItem('rbsc_config') || '{}');
+if (config.status) document.getElementById('voting-status').value = config.status;
+if (config.end_time) document.getElementById('voting-end-time').value = config.end_time;
+if (config.host_country) document.getElementById('host-country').value = config.host_country;
+
+// Refresh stats every 10s
+setInterval(loadStats, 10000);
+</script>
+
+</body>
+</html>
