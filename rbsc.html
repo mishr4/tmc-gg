@@ -644,7 +644,7 @@
     const slug = slugFor(country);
     const emoji = flagFor(country);
     return `<span class="flag-wrap">`
-      + `<img class="flag-svg ${cls}" src="/flags/${slug}.png" alt="${esc(country)} flag" `
+      + `<img class="flag-svg ${cls}" src="/flags/${slug}.svg" alt="${esc(country)} flag" `
       + `onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">`
       + `<span class="${cls}-emoji" style="display:none;font-size:1.3em;line-height:1">${emoji}</span>`
       + `</span>`;
@@ -728,7 +728,7 @@
       img.className = 'hero-flag';
       img.alt = feat.country + ' flag';
       img.onload = () => heroFlag.replaceWith(img);
-      img.src = `/flags/${slugFor(feat.country)}.png`;
+      img.src = `/flags/${slugFor(feat.country)}.svg`;
     }
 
     ['watch-live','watch-live-2'].forEach(id => {
