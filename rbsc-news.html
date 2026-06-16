@@ -33,7 +33,7 @@
     @media (max-width:860px){ .nav-links{ display:none; } }
 
     /* Masthead */
-    .masthead{ background:linear-gradient(135deg,#0d0f2e,#14163a 55%,#0a0b22); color:#fff; padding:64px 40px 0; overflow:hidden; }
+    .masthead{ background:linear-gradient(135deg,#0d0f2e,#14163a 55%,#0a0b22); color:#fff; padding:64px 40px 58px; overflow:hidden; }
     .mh{ max-width:1180px; margin:0 auto; }
     .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px; }
     .eyebrow::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--red); animation:pulse 1.6s infinite; }
@@ -63,13 +63,13 @@
 
     /* Featured */
     .feature{ display:grid; grid-template-columns:1.15fr 1fr; gap:0; border:1px solid var(--line); border-radius:24px; overflow:hidden; margin-bottom:40px; background:var(--soft); }
-    .feature-media{ position:relative; min-height:300px; background:linear-gradient(135deg,var(--navy),var(--blue) 60%,var(--cyan)); display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .feature-media::after{ content:''; position:absolute; inset:0; background:radial-gradient(120% 100% at 20% 20%, rgba(255,255,255,0.12), transparent 55%); }
-    .feature-media .bigflag{ width:55%; max-width:240px; filter:drop-shadow(0 18px 40px rgba(0,0,0,0.45)); transform:rotate(-4deg); position:relative; z-index:1; }
-    .feature-media .bigmark{ font-family:'Archivo',sans-serif; font-weight:900; font-size:72px; color:rgba(255,255,255,0.16); letter-spacing:-0.04em; position:relative; z-index:1; }
+    .feature-media{ position:relative; min-height:300px; background:radial-gradient(130% 120% at 18% 12%, #16183e, #0a0b22 58%, #07081c); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .feature-media::after{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(115deg, transparent 0 64px, rgba(255,255,255,0.025) 64px 66px); }
+    .feature-media .bigflag{ width:52%; max-width:240px; height:auto; filter:drop-shadow(0 18px 40px rgba(0,0,0,0.5)); transform:rotate(-4deg); position:relative; z-index:1; }
+    .feature-media .bigmark{ font-family:'Archivo',sans-serif; font-weight:900; font-size:78px; color:rgba(255,255,255,0.12); letter-spacing:-0.04em; position:relative; z-index:1; }
     .feature-body{ padding:40px; display:flex; flex-direction:column; justify-content:center; }
     .feature-body .chip{ align-self:flex-start; margin-bottom:14px; }
-    .feature-body h2{ font-family:'Plus Jakarta Sans'; font-weight:800; font-size:clamp(24px,2.6vw,34px); letter-spacing:-0.02em; line-height:1.08; margin-bottom:12px; }
+    .feature-body h2{ font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:clamp(26px,2.8vw,38px); letter-spacing:-0.01em; line-height:1.12; margin-bottom:12px; }
     .feature-body p{ color:#3a3a42; font-size:16px; }
     .byline{ margin-top:18px; font-size:13px; color:var(--muted); font-weight:600; }
     @media (max-width:780px){ .feature{ grid-template-columns:1fr; } .feature-media{ min-height:200px; } .feature-body{ padding:28px; } }
@@ -87,7 +87,7 @@
     .card-cat{ position:absolute; top:12px; left:12px; z-index:2; font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:4px 10px; border-radius:999px; color:#fff; }
     .card-body{ padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
     .card-kind{ font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-    .card-title{ font-weight:800; font-size:17px; letter-spacing:-0.01em; line-height:1.22; margin-bottom:8px; }
+    .card-title{ font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:18.5px; letter-spacing:0; line-height:1.25; margin-bottom:8px; }
     .card-text{ font-size:13.5px; color:#4a4a52; flex:1; }
     .card-date{ margin-top:14px; font-size:12px; color:var(--muted); font-weight:600; }
 
@@ -124,10 +124,6 @@
       <div class="eyebrow">RBSC 2026 · Newsroom</div>
       <h1 class="title">Song Contest News</h1>
       <p class="dek">Reveals, production, odds, backstage and the road to Zurich — reported live by Cirya Noticias.</p>
-    </div>
-    <div class="ticker">
-      <div class="ticker-label">Breaking</div>
-      <div class="ticker-track-wrap"><div class="ticker-track" id="ticker"></div></div>
     </div>
   </header>
 
@@ -220,10 +216,6 @@
     const cats = ['all', ...Object.keys(CAT)];
     tabsEl.innerHTML = cats.map(c=>`<button class="tab${c==='all'?' on':''}" data-cat="${c}">${c==='all'?'All news':CAT[c].label}</button>`).join('');
     tabsEl.addEventListener('click', e=>{ const b=e.target.closest('.tab'); if(!b) return; active=b.dataset.cat; [...tabsEl.children].forEach(t=>t.classList.toggle('on',t===b)); render(); });
-
-    // Ticker (latest 10 headlines, duplicated for seamless loop)
-    const tk = sorted.slice(0,10).map(a=>`<span><b>${esc(CAT[a.category].label)}</b>${esc(a.title)}</span>`).join('');
-    document.getElementById('ticker').innerHTML = tk + tk;
 
     // Featured (newest featured item)
     const feat = sorted.find(a=>a.featured) || sorted[0];

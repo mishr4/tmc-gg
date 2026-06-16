@@ -182,13 +182,16 @@
     }
     .hero-card:hover .hero-flag { transform: rotate(-1deg) scale(1.02); }
 
-    /* Heart-with-flag (Eurovision signature) */
-    .heart-flag { display: block; }
-    .hero-flagwrap .heart-flag {
-      width: 100% !important; max-width: 340px;
-      filter: drop-shadow(0 22px 44px rgba(0,0,0,0.55));
-      animation: heartbeat 3.2s ease-in-out infinite;
+    /* Chevron flag — our unique mark (resembles the Cirya logo) */
+    .chev-flag { display: block; object-fit: contain; }
+    .hero-flagwrap .chev-flag {
+      width: 100% !important; max-width: 380px;
+      transform: rotate(-3deg);
+      filter: drop-shadow(0 22px 44px rgba(0,0,0,0.5));
+      animation: heroFloat 8s ease-in-out infinite;
     }
+    @keyframes heroFloat { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(-3deg) translateY(-10px)} }
+    .nav-heart .chev-flag { filter: drop-shadow(0 2px 6px var(--glow)); }
     .ro-chip {
       display: inline-flex; align-items: center; gap: 7px;
       border: 1.5px solid var(--gold); color: var(--gold);
@@ -516,7 +519,7 @@
       border-top: 3px solid transparent; border-image: var(--aurora) 1;
     }
     .stage-heart { position: absolute; right: 6%; top: 50%; transform: translateY(-50%); opacity: 0.1; pointer-events: none; }
-    .stage-heart .heart-flag { width: 200px !important; }
+    .stage-heart .chev-flag { width: 220px !important; }
     .brand {
       position: relative; z-index: 1;
       max-width: 1480px; margin: 0 auto; padding: 72px 48px;
@@ -590,7 +593,7 @@
       .nav-links { display: none; }
       .hero { padding: 24px 16px; }
       .hero-card { padding: 30px 24px; min-height: 0; }
-      .hero-flag { max-width: 220px; }
+      .hero-flagwrap .chev-flag { max-width: 240px; }
       .livebar { padding: 0 16px; }
       .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -609,7 +612,7 @@
     /* Respect reduced-motion: kill all ambient/festive animation */
     @media (prefers-reduced-motion: reduce) {
       .hero-card::before, .hero-card::after, .hero-bokeh, .hero-bokeh span,
-      .hero-flagwrap .heart-flag, .nav::after, [class*="confetti"],
+      .hero-flagwrap .chev-flag, .nav::after, [class*="confetti"],
       .tile-points.is-douze, .video-tile.is-leader .tile-crown {
         animation: none !important;
       }
@@ -831,16 +834,10 @@
   }
   const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
 
-  // Heart-with-flag (Eurovision signature). Reused at any size; any flag fills it.
-  let _hid = 0;
-  function heartFlag(country, px) {
-    const slug = slugFor(country), id = 'hc' + (_hid++);
-    const d = "M50 86 C 8 56, 10 18, 38 22 C 47 23, 50 31, 50 36 C 50 31, 53 23, 62 22 C 90 18, 92 56, 50 86 Z";
-    return `<svg class="heart-flag" viewBox="0 0 100 92" style="width:${px}px;height:auto" role="img" aria-label="${esc(country)}">`
-      + `<defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>`
-      + `<image href="/flags/${slug}.svg" width="100" height="92" clip-path="url(#${id})" preserveAspectRatio="xMidYMid slice"/>`
-      + `<path d="${d}" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>`
-      + `</svg>`;
+  // Our unique chevron flag is the mark (resembles the Cirya logo). Reused at any size.
+  function chevFlag(country, px) {
+    const slug = slugFor(country);
+    return `<img class="chev-flag" src="/flags/${slug}.svg" alt="${esc(country)} flag" style="width:${px}px;height:auto" onerror="this.style.visibility='hidden'">`;
   }
 
   // CSS confetti burst (vote success only — never ambient)
@@ -869,10 +866,10 @@
   function setupFestive() {
     // Host heart mark in the nav
     const nh = document.getElementById('nav-heart');
-    if (nh) nh.innerHTML = heartFlag('Switzerland', 28);
+    if (nh) nh.innerHTML = chevFlag('Switzerland', 28);
     // Footer host-heart watermark
     const sh = document.getElementById('stage-heart');
-    if (sh) sh.innerHTML = heartFlag('Switzerland', 200);
+    if (sh) sh.innerHTML = chevFlag('Switzerland', 200);
     // Hero bokeh sparkles
     const bk = document.getElementById('hero-bokeh');
     if (bk) {
@@ -963,7 +960,7 @@
 
     // Heart-with-flag for the featured country
     const wrap = document.getElementById('hero-flagwrap');
-    if (wrap) wrap.innerHTML = heartFlag(feat.country, 320);
+    if (wrap) wrap.innerHTML = chevFlag(feat.country, 320);
 
     fitHeroText();
   }
@@ -973,7 +970,7 @@
     rail.innerHTML = performances.map((p,i) => `
       <div class="country-chip${i===0?' active':''}" onclick="scrollToTile('${p.id}', this)">
         <span class="chip-ro">${String(i+1).padStart(2,'0')}</span>
-        ${heartFlag(p.country, 30)}
+        ${chevFlag(p.country, 30)}
         <div><div class="chip-name">${esc(p.country)}</div><div class="chip-artist">${esc(p.broadcaster || p.artist)}</div></div>
       </div>
     `).join('');
@@ -990,7 +987,7 @@
         <span class="tile-ro">${String(i+1).padStart(2,'0')}</span>
         ${p.votingDisabled ? '<span class="tile-badge">Not aired</span>' : '<span class="tile-crown">★ 12 pts</span>'}
         <div class="tile-body">
-          <div class="tile-flagrow">${heartFlag(p.country, 26)}<span class="tile-country">${esc(p.country)}</span></div>
+          <div class="tile-flagrow">${chevFlag(p.country, 26)}<span class="tile-country">${esc(p.country)}</span></div>
           ${p.broadcaster ? `<div class="tile-broadcaster">${esc(p.broadcaster)}</div>` : ''}
           <div class="tile-song">${p.song && p.song !== 'TBA' ? `${esc(p.artist)} — ${esc(p.song)}` : '<span style="opacity:.6">Song TBA</span>'}</div>
           ${p.votingDisabled
