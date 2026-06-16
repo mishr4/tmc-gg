@@ -5,6 +5,9 @@
       "maxDuration": 60
     }
   },
+  "rewrites": [
+    { "source": "/api/rbsc/:path*", "destination": "/api/rbsc" }
+  ],
   "redirects": [
     {
       "source": "/songcontest",

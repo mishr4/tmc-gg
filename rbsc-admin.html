@@ -587,16 +587,49 @@ async function deleteEntry(id) {
   }
 }
 
+const ADMIN_KEY = 'demo-key-12345'; // set RBSC_ADMIN_KEY env var in production
+
 async function updateVotingConfig() {
-  // Save to localStorage for now (would normally POST to API)
+  const localVal = document.getElementById('voting-end-time').value;
   const config = {
     status: document.getElementById('voting-status').value,
-    end_time: document.getElementById('voting-end-time').value,
-    host_country: document.getElementById('host-country').value,
-    api_key: document.getElementById('api-key').value,
+    // datetime-local is in the admin's local timezone -> store as ISO/UTC
+    endTime: localVal ? new Date(localVal).toISOString() : null,
+    hostCountry: document.getElementById('host-country').value,
+    apiKey: document.getElementById('api-key').value,
   };
-  localStorage.setItem('rbsc_config', JSON.stringify(config));
-  showAlert('voting-alert', '✓ Configuration saved', 'success');
+  try {
+    const res = await fetch('/api/rbsc/config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-rbsc-admin-key': ADMIN_KEY },
+      body: JSON.stringify(config)
+    });
+    if (res.ok) {
+      showAlert('voting-alert', '✓ Voting configuration saved & live', 'success');
+    } else {
+      const err = await res.json().catch(() => ({}));
+      showAlert('voting-alert', `❌ ${err.error || 'Save failed'}`, 'error');
+    }
+  } catch (e) {
+    showAlert('voting-alert', `❌ ${e.message}`, 'error');
+  }
+}
+
+async function loadVotingConfig() {
+  try {
+    const cfg = await (await fetch('/api/rbsc/config')).json();
+    if (cfg.status) document.getElementById('voting-status').value = cfg.status;
+    if (cfg.hostCountry) document.getElementById('host-country').value = cfg.hostCountry;
+    if (cfg.endTime) {
+      const d = new Date(cfg.endTime);
+      const pad = n => String(n).padStart(2, '0');
+      // back to datetime-local (admin's local timezone)
+      document.getElementById('voting-end-time').value =
+        `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    document.getElementById('voting-status-display').textContent =
+      (cfg.status || 'open').charAt(0).toUpperCase() + (cfg.status || 'open').slice(1);
+  } catch {}
 }
 
 async function downloadResults() {
@@ -652,11 +685,8 @@ async function loadStats() {
   }
 }
 
-// Load config on init
-const config = JSON.parse(localStorage.getItem('rbsc_config') || '{}');
-if (config.status) document.getElementById('voting-status').value = config.status;
-if (config.end_time) document.getElementById('voting-end-time').value = config.end_time;
-if (config.host_country) document.getElementById('host-country').value = config.host_country;
+// Load voting config from the API on init
+loadVotingConfig();
 
 // Refresh stats every 10s
 setInterval(loadStats, 10000);

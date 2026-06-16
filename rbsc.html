@@ -8,7 +8,7 @@
   <link rel="icon" href="/favicon-32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600;1,700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -37,7 +37,7 @@
     }
 
     .display { font-family: 'Archivo', sans-serif; }
-    .script { font-family: 'Sacramento', cursive; }
+    .script { font-family: 'Playfair Display', Georgia, serif; }
 
     /* ─────────────────────────── NAV ─────────────────────────── */
     .nav {
@@ -135,11 +135,18 @@
     .hero-flag {
       position: absolute;
       top: 36px; right: 36px;
-      width: 168px; height: auto;
+      width: clamp(96px, 12vw, 180px); height: auto;
       z-index: 2;
       filter: drop-shadow(0 12px 28px rgba(0,0,0,0.45));
       opacity: 0.96;
     }
+
+    /* Custom SVG flag images (exported from Figma) with emoji fallback */
+    .flag-wrap { display: inline-flex; align-items: center; justify-content: center; }
+    .flag-svg { display: block; object-fit: contain; }
+    .chip-flag-img { width: 30px; height: 22px; border-radius: 3px; }
+    .tile-flag-img { width: 26px; height: 19px; border-radius: 2px; }
+    .modal-flag-img { width: 46px; height: 34px; border-radius: 4px; }
 
     .hero-card-inner { position: relative; z-index: 2; }
     .hero-eyebrow {
@@ -152,12 +159,14 @@
     .hero-country {
       font-family: 'Archivo', sans-serif;
       font-weight: 900;
-      font-size: clamp(48px, 6vw, 92px);
+      font-size: clamp(38px, 5vw, 80px);
       line-height: 0.92;
       letter-spacing: -0.04em;
       color: #fff;
       text-transform: uppercase;
       margin-bottom: 18px;
+      white-space: nowrap;
+      max-width: 100%;
     }
     .hero-desc {
       font-size: 16px;
@@ -387,7 +396,7 @@
     }
     .brand-left { display: flex; flex-direction: column; gap: 4px; }
     .brand-kicker { font-size: 13px; font-weight: 600; color: var(--muted); }
-    .brand-name { font-family: 'Sacramento', cursive; font-size: clamp(56px, 8vw, 110px); line-height: 0.9; color: var(--ink); }
+    .brand-name { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(42px, 6.5vw, 92px); line-height: 0.96; letter-spacing: -0.01em; color: var(--ink); }
     .brand-aka { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 2px; }
     .brand-logo svg { height: 96px; width: auto; }
 
@@ -415,22 +424,45 @@
     .modal-x { position: absolute; top: 20px; right: 24px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1001; }
 
     /* ─────────────────────── RESPONSIVE ─────────────────────── */
+    /* Ultrawide — cap content width, keep centered */
+    @media (min-width: 1900px) {
+      .hero, .section, .news-inner, .news-cards, .brand { max-width: 1680px; }
+    }
+    /* Large laptop — 3-col video grid */
+    @media (max-width: 1400px) {
+      .video-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    /* Tablet / small laptop — stack hero + 2-col grid */
     @media (max-width: 1080px) {
-      .hero { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; gap: 24px; }
+      .hero-card { min-height: 480px; }
       .news-inner { grid-template-columns: 1fr; gap: 32px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); }
       .news-cards { grid-template-columns: 1fr; }
     }
+    /* Landscape short screens (TVs / 16:9 broadcast monitors) */
+    @media (min-width: 1081px) and (max-height: 760px) {
+      .hero-card { min-height: 60vh; }
+    }
+    /* Phones */
     @media (max-width: 680px) {
       .nav { padding: 16px 20px; }
       .nav-links { display: none; }
-      .hero { padding: 32px 20px; }
-      .hero-card { padding: 28px; min-height: 440px; }
-      .hero-flag { width: 104px; top: 22px; right: 22px; }
-      .section { padding: 44px 20px; }
+      .hero { padding: 24px 16px; }
+      .hero-card { padding: 26px; min-height: 420px; }
+      .hero-flag { top: 20px; right: 20px; }
+      .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .news-inner, .news-cards, .brand { padding-left: 20px; padding-right: 20px; }
-      .tune-block { padding: 28px; }
+      .news { padding: 56px 0; }
+      .news-inner, .news-cards, .brand { padding-left: 16px; padding-right: 16px; }
+      .brand { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .tune-block { padding: 26px; }
+      .countdown { padding: 22px 26px; }
+      .btn { padding: 13px 22px; font-size: 14px; }
+    }
+    /* Very small phones */
+    @media (max-width: 380px) {
+      .video-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -613,11 +645,26 @@
     slovenia:'🇸🇮', 'czechia':'🇨🇿', 'czech republic':'🇨🇿', moldova:'🇲🇩', sanmarino:'🇸🇲'
   };
   const flagFor = c => FLAGS[(c||'').toLowerCase().trim()] || '🏳️';
+  const slugFor = c => (c||'').toLowerCase().trim().replace(/\s+/g,'-');
+
+  // Renders a custom Figma SVG flag from /flags/<slug>.svg, falling back to
+  // the emoji flag if the file isn't there yet.
+  function flagImg(country, cls) {
+    const slug = slugFor(country);
+    const emoji = flagFor(country);
+    return `<span class="flag-wrap">`
+      + `<img class="flag-svg ${cls}" src="/flags/${slug}.svg" alt="${esc(country)} flag" `
+      + `onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">`
+      + `<span class="${cls}-emoji" style="display:none;font-size:1.3em;line-height:1">${emoji}</span>`
+      + `</span>`;
+  }
   const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
 
   let performances = [];
   let votes = {};
   let current = null;
+  let votingEnd = null;
+  let votingStatus = 'open';
 
   async function init() {
     try {
@@ -625,6 +672,7 @@
       votes = await (await fetch('/api/rbsc/votes')).json();
     } catch (e) { performances = []; votes = {}; }
 
+    await loadConfig();
     renderHero();
     renderCountries();
     renderGrid();
@@ -634,6 +682,33 @@
     setInterval(async () => {
       try { votes = await (await fetch('/api/rbsc/votes')).json(); updateVotes(); } catch {}
     }, 5000);
+    // Refresh config (voting date/status) every 30s
+    setInterval(loadConfig, 30000);
+  }
+
+  async function loadConfig() {
+    try {
+      const cfg = await (await fetch('/api/rbsc/config')).json();
+      if (cfg) {
+        votingEnd = cfg.endTime ? new Date(cfg.endTime) : null;
+        votingStatus = cfg.status || 'open';
+      }
+    } catch {}
+  }
+
+  // Shrinks the big country headline until it fits its card on any screen.
+  function fitHeroText() {
+    const el = document.getElementById('hero-country');
+    const parent = el && el.parentElement;
+    if (!el || !parent) return;
+    el.style.fontSize = '';
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    const avail = parent.clientWidth;
+    let guard = 80;
+    while (el.scrollWidth > avail && size > 16 && guard-- > 0) {
+      size -= 2;
+      el.style.fontSize = size + 'px';
+    }
   }
 
   function renderHero() {
@@ -652,7 +727,19 @@
       v.src = feat.videoUrl; v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
       card.insertBefore(v, card.firstChild);
     }
+
+    // Swap the inline chevron flag for the country's custom Figma SVG if present
+    const heroFlag = document.querySelector('.hero-flag');
+    if (heroFlag) {
+      const img = new Image();
+      img.className = 'hero-flag';
+      img.alt = feat.country + ' flag';
+      img.onload = () => heroFlag.replaceWith(img);
+      img.src = `/flags/${slugFor(feat.country)}.svg`;
+    }
+
     document.getElementById('watch-live').onclick = (e) => { e.preventDefault(); openModal(feat); };
+    fitHeroText();
   }
 
   function renderCountries() {
@@ -753,17 +840,25 @@
     }
   }
 
-  // Countdown to next midnight UTC
+  // Countdown to the admin-configured voting end time (falls back to next midnight UTC)
   function startCountdown() {
     const el = document.getElementById('countdown');
+    const label = document.querySelector('.countdown-label');
     function tick() {
-      const now = new Date();
-      const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()+1, 0,0,0));
-      let s = Math.max(0, Math.floor((end - now)/1000));
-      const h = String(Math.floor(s/3600)).padStart(2,'0');
+      if (votingStatus === 'closed') { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting is'; return; }
+      if (votingStatus === 'paused') { el.textContent = 'PAUSED'; if (label) label.textContent = 'Voting is'; return; }
+      let end = (votingEnd && !isNaN(votingEnd)) ? votingEnd : (() => {
+        const n = new Date();
+        return new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()+1, 0,0,0));
+      })();
+      let s = Math.floor((end - new Date())/1000);
+      if (s <= 0) { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting has'; return; }
+      if (label) label.textContent = 'Voting closes in';
+      const d = Math.floor(s/86400);
+      const h = String(Math.floor((s%86400)/3600)).padStart(2,'0');
       const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
       const sec = String(s%60).padStart(2,'0');
-      el.textContent = `${h}:${m}:${sec}`;
+      el.textContent = d > 0 ? `${d}d ${h}:${m}:${sec}` : `${h}:${m}:${sec}`;
     }
     tick(); setInterval(tick, 1000);
   }
@@ -775,6 +870,12 @@
 
   document.getElementById('modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
   document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+  // Keep the big country headline fitting on resize / orientation change
+  let _rt;
+  window.addEventListener('resize', () => { clearTimeout(_rt); _rt = setTimeout(fitHeroText, 120); });
+  window.addEventListener('orientationchange', () => setTimeout(fitHeroText, 200));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroText);
 
   init();
 </script>
