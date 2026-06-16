@@ -19,7 +19,7 @@ let performances = [
   { id: 'nl', country: 'Netherlands',    broadcaster: 'Cirya',                              artist: 'Joost Klein',   song: 'Europapa',         videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'au', country: 'Australia',      broadcaster: 'UBC',                                artist: 'Delta Goodrem', song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'se', country: 'Sweden',         broadcaster: 'Blue News Broadcast',                artist: 'Honey.',        song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'gb', country: 'United Kingdom', broadcaster: 'Northwest Radio Network',            artist: 'Amy Winehouse', song: 'Take the Box',     videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'gb', country: 'United Kingdom', broadcaster: 'Northwest Radio Network', votingDisabled: true, statementUrl: '/rbsc-uk', artist: 'Amy Winehouse', song: 'Take the Box', videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'at', country: 'Austria',        broadcaster: 'Austrian RoBroadcasting Corporation', artist: 'JJ',           song: 'Shapeshifter',     videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'ee', country: 'Estonia',        broadcaster: 'ABU Television',                     artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'fi', country: 'Finland',        broadcaster: 'REV',                                artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
@@ -116,6 +116,8 @@ module.exports = async function handler(req, res) {
       if (votingConfig.status !== 'open') return send(res, 403, { error: 'Voting is currently ' + votingConfig.status });
       if (votingConfig.endTime && new Date() > new Date(votingConfig.endTime)) return send(res, 403, { error: 'Voting has closed' });
       if (!Object.prototype.hasOwnProperty.call(votes, id)) return send(res, 404, { error: 'Country not found' });
+      const perf = performances.find((p) => p.id === id);
+      if (perf && perf.votingDisabled) return send(res, 403, { error: 'Voting for this entry is not permitted via the Cirya portal.' });
       votes[id] = (votes[id] || 0) + 1;
       return send(res, 200, { ok: true, votes: votes[id] });
     }

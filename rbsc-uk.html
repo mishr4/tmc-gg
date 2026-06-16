@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statement: The United Kingdom's participation — Cirya Noticias / RBSC 2026</title>
+  <meta name="description" content="Editorial statement on why Cirya Noticias is not airing the United Kingdom's RBSC 2026 entry, and why voting is not accepted through our portal.">
+  <link rel="icon" href="/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Archivo:wght@800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a0a0f; --paper: #fff; --muted: #6b6b72;
+      --line: rgba(0,0,0,0.09);
+      --cirya-cyan: #00D7E2; --cirya-blue: #0041E5; --cirya-navy: #002BBA;
+      --flag-red: #A51A23;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--paper); color: var(--ink);
+      -webkit-font-smoothing: antialiased; line-height: 1.6;
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px; background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--line);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+    .nav-logo svg { height: 30px; }
+    .nav-logo span { font-weight: 700; font-size: 15px; }
+    .nav-back { font-size: 14px; font-weight: 600; color: var(--cirya-blue); text-decoration: none; }
+    .nav-back:hover { text-decoration: underline; }
+
+    /* Masthead */
+    .masthead {
+      background: linear-gradient(135deg, #0d0f2e 0%, #14163a 50%, #0a0b22 100%);
+      color: #fff; padding: 72px 40px 64px;
+    }
+    .masthead-inner { max-width: 860px; margin: 0 auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--cirya-cyan); margin-bottom: 18px;
+    }
+    .eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--flag-red); }
+    h1 {
+      font-family: 'Archivo', sans-serif; font-weight: 900;
+      font-size: clamp(30px, 4.5vw, 52px); line-height: 1.05; letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+    .dek { font-size: 18px; color: rgba(255,255,255,0.72); max-width: 640px; }
+    .meta-row { margin-top: 26px; display: flex; gap: 22px; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .meta-row strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+    /* Body */
+    .article { max-width: 760px; margin: 0 auto; padding: 56px 40px 80px; }
+    .lead { font-size: 20px; line-height: 1.6; color: var(--ink); margin-bottom: 36px; font-weight: 500; }
+
+    .article h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: 24px; letter-spacing: -0.02em; margin: 40px 0 14px;
+    }
+    .article h3 { font-size: 18px; font-weight: 700; margin: 28px 0 10px; }
+    .article p { font-size: 16.5px; color: #2b2b33; margin-bottom: 18px; }
+    .article ul { margin: 0 0 18px 22px; }
+    .article li { font-size: 16.5px; color: #2b2b33; margin-bottom: 7px; }
+    .article a { color: var(--cirya-blue); font-weight: 600; }
+
+    .callout {
+      border-left: 4px solid var(--flag-red);
+      background: rgba(165,26,35,0.05);
+      padding: 20px 24px; border-radius: 0 14px 14px 0; margin: 28px 0;
+    }
+    .callout strong { color: var(--flag-red); }
+
+    .pressbox {
+      border: 1px solid var(--line); border-radius: 16px;
+      padding: 28px; margin: 30px 0; background: #fafafa;
+    }
+    .pressbox .label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .pressbox blockquote { font-size: 15.5px; color: #3a3a42; font-style: italic; line-height: 1.6; }
+    .pressbox .src { margin-top: 14px; font-size: 13px; color: var(--muted); }
+
+    .divider { height: 1px; background: var(--line); margin: 44px 0; }
+
+    .signoff { margin-top: 40px; }
+    .signoff .name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+    .signoff .role { font-size: 14px; color: var(--muted); }
+
+    /* Footer */
+    .brand-foot { border-top: 1px solid var(--line); padding: 40px; text-align: center; }
+    .brand-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 40px; color: var(--ink); }
+    .brand-aka { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .footer-bar { padding: 22px 40px; text-align: center; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
+    .footer-bar a { color: var(--cirya-blue); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .nav { padding: 14px 20px; }
+      .masthead { padding: 52px 20px 44px; }
+      .article { padding: 40px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/rbsc" class="nav-logo" aria-label="Cirya Noticias">
+      <svg viewBox="0 0 83 59" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M83 43.6836L34.9474 31.3232L34.9474 17.4731L83 29.8335L83 43.6836Z" fill="#00D7E2"/>
+        <path d="M83 58.9727L34.9474 45.5822L34.9474 30.5779L83 43.9684L83 58.9727Z" fill="#002BBA"/>
+        <path d="M83 30.5781L34.9474 18.2177L34.9474 4.3676L83 16.728L83 30.5781Z" fill="#0041E5"/>
+        <path d="M0.0175781 13.125L48.0474 25.7355V41.5197L0.0175781 28.4225V13.125Z" fill="#00D7E2"/>
+        <path d="M0 28.3945L48.0526 40.7549V54.6051L0 42.2446V28.3945Z" fill="#0041E5"/>
+        <path d="M0 0L48.0526 12.3604V26.2105L0 13.8501V0Z" fill="#002BBA"/>
+      </svg>
+      <span>Cirya Noticias</span>
+    </a>
+    <a href="/rbsc" class="nav-back">← Back to RBSC</a>
+  </nav>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="eyebrow">Editorial Statement</div>
+      <h1>On the United Kingdom's participation in RBSC 2026</h1>
+      <p class="dek">Why Cirya Noticias is not broadcasting the United Kingdom's entry, and why voting for it is not accepted through the Cirya portal.</p>
+      <div class="meta-row">
+        <span>Issued by <strong>Cirya Noticias · The Mishra Corporation</strong></span>
+        <span><strong>RBSC 2026</strong> · Hosted by Switzerland</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="article">
+    <p class="lead">Cirya Noticias has elected not to air the United Kingdom's RBSC 2026 performance, submitted by the Northwest Radio Network. Accordingly, voting for the United Kingdom entry is disabled across our portal for the duration of the contest.</p>
+
+    <div class="callout">
+      <p><strong>Voting notice:</strong> Votes cannot be cast for the United Kingdom through the Cirya portal. The entry remains listed for transparency, but its voting controls are disabled and any submitted votes are rejected.</p>
+    </div>
+
+    <h2>Background</h2>
+    <p>On 12 April 2026, the Northwest Radio Network (formerly operating under the Tahoma Media Group family of brands) issued a press release announcing a complete rebrand and a public disaffiliation from a number of organisations, The Mishra Corporation and its affiliates among them.</p>
+
+    <div class="pressbox">
+      <div class="label">From the Northwest Radio Network press release · Seattle · 12 April 2026</div>
+      <blockquote>"Effective 3:30am PDT today, all branding — including Tahoma Media Group, Tahoma Media and Communications Group, Pike Place Radio, DTMG-FM 94.1, DTMC-FM 91.1, TMC Radio, TMC and TMG — will be indefinitely discontinued and will no longer be used. We would also like to clarify that we are in no way affiliated with Inline, Mishra Music Group, Team Mishra, Mishra News, Astera Group, or tagnzz anymore, following recent events at another private company involving intellectual property."</blockquote>
+      <div class="src">New branding now in use includes Northwest Radio Network, Radio One, Radio Two, and nwradionetwork.xyz.</div>
+    </div>
+
+    <p>Given that the Northwest Radio Network has publicly and repeatedly distanced itself from The Mishra Corporation and our affiliates, we consider it inappropriate to platform or solicit votes for its entry through our own broadcast and voting infrastructure. The decision is editorial, and applies only to distribution and voting on the Cirya portal — it does not affect the United Kingdom's standing with the host broadcaster or the wider contest.</p>
+
+    <h2>Our position</h2>
+    <p>The Mishra Corporation stands by its operational decisions, its management structure, and the platforms it has built — including CiryaCast, which continues to be developed in the open and has been a point of reference for others in the Ro-broadcasting space. We welcome and encourage that influence.</p>
+    <p>We consider the present disagreement a matter of differing direction between organisations, and we have no further comment on the internal affairs of other companies. Our focus remains on delivering RBSC 2026 to our audience.</p>
+
+    <div class="divider"></div>
+
+    <h2>Background context</h2>
+    <h3>Separation from Tahoma Digital (2024–2025)</h3>
+    <p>The Mishra Corporation was formerly associated with Tahoma Digital during its early development. As the organisation expanded its networks and internal structure, it separated to operate independently under its own leadership and branding. This separation allowed The Mishra Corporation to focus fully on its own broadcast vision, management structure, and media direction without external oversight.</p>
+
+    <h3>Dispute with the Astera Group (2023–2026)</h3>
+    <p>The Mishra Corporation was involved in a public dispute with the Astera Group, another organisation in the Roblox media space. The disagreement centred on organisational practices, partnerships, and differing approaches to media operations. While the situation created tension between the groups for a period of time, The Mishra Corporation continued to focus on its internal development and network growth. The matter is regarded as a notable moment in the corporation's history within the Roblox media community.</p>
+
+    <div class="signoff">
+      <p>Issued on behalf of the editorial board,</p>
+      <div class="name">Cirya Noticias</div>
+      <div class="role">Corporación de Noticias Mishra · The Mishra Corporation</div>
+    </div>
+  </article>
+
+  <div class="brand-foot">
+    <div class="brand-name">Cirya Noticias</div>
+    <div class="brand-aka">aka: The Mishra Corporation</div>
+  </div>
+  <div class="footer-bar">
+    RBSC 2026 · Hosted by Switzerland · <a href="/rbsc">Back to the contest</a>
+  </div>
+
+</body>
+</html>
