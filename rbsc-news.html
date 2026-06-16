@@ -3,73 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>News — RBSC 2026 · Cirya Noticias</title>
-  <meta name="description" content="Latest news from the Robroadcasting Song Contest 2026: song reveals, country announcements, and updates from Cirya Noticias.">
+  <title>Newsroom — RBSC 2026 · Cirya Noticias</title>
+  <meta name="description" content="Live newsroom for the Robroadcasting Song Contest 2026: song reveals, host-city production, odds, backstage, fan zone and editorial — by Cirya Noticias.">
   <link rel="icon" href="/favicon-32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Archivo:wght@800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --ink:#0a0a0f; --paper:#fff; --muted:#6b6b72; --line:rgba(0,0,0,0.09);
-      --cyan:#00D7E2; --blue:#0041E5; --navy:#002BBA; --red:#A51A23;
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root{
+      --ink:#0a0a0f; --paper:#fff; --soft:#f6f6f9; --muted:#6b6b72; --line:rgba(0,0,0,0.08);
+      --cyan:#00D7E2; --blue:#0041E5; --navy:#002BBA; --red:#A51A23; --pink:#FF48BC; --green:#12B886; --amber:#E5A100;
     }
-    html { scroll-behavior:smooth; }
-    body { font-family:'Plus Jakarta Sans',-apple-system,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; line-height:1.55; }
+    html{ scroll-behavior:smooth; }
+    body{ font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; line-height:1.55; }
+    a{ color:inherit; }
 
-    .nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(255,255,255,0.85); backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--line); }
-    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
-    .nav-logo svg { height:30px; }
-    .nav-logo span { font-weight:700; font-size:15px; }
-    .nav-links { display:flex; gap:28px; list-style:none; }
-    .nav-links a { font-size:15px; font-weight:500; color:var(--ink); text-decoration:none; }
-    .nav-links a:hover { opacity:0.55; }
-    .nav-links a.on { color:var(--blue); }
-    @media (max-width:720px){ .nav-links{display:none;} }
+    /* Nav */
+    .nav{ position:sticky; top:0; z-index:60; display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:rgba(255,255,255,0.88); backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--line); }
+    .nav-logo{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+    .nav-logo svg{ height:30px; }
+    .nav-logo span{ font-weight:700; font-size:15px; }
+    .nav-links{ display:flex; gap:26px; list-style:none; }
+    .nav-links a{ font-size:15px; font-weight:500; text-decoration:none; }
+    .nav-links a:hover{ opacity:.55; }
+    .nav-links a.on{ color:var(--blue); }
+    .nav-live{ display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:700; color:var(--red); text-decoration:none; }
+    .nav-live .dot{ width:8px; height:8px; border-radius:50%; background:var(--red); animation:pulse 1.5s infinite; }
+    @media (max-width:860px){ .nav-links{ display:none; } }
 
-    .masthead { background:linear-gradient(135deg,#0d0f2e,#14163a 55%,#0a0b22); color:#fff; padding:72px 40px 60px; }
-    .mh { max-width:1080px; margin:0 auto; }
-    .eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; }
-    .eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--red); animation:pulse 1.6s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    h1.title { font-family:'Archivo',sans-serif; font-weight:900; font-size:clamp(34px,5vw,60px); letter-spacing:-0.03em; line-height:1; }
-    .dek { margin-top:14px; font-size:18px; color:rgba(255,255,255,0.72); max-width:560px; }
+    /* Masthead */
+    .masthead{ background:linear-gradient(135deg,#0d0f2e,#14163a 55%,#0a0b22); color:#fff; padding:64px 40px 0; overflow:hidden; }
+    .mh{ max-width:1180px; margin:0 auto; }
+    .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px; }
+    .eyebrow::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--red); animation:pulse 1.6s infinite; }
+    @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.4} }
+    h1.title{ font-family:'Archivo',sans-serif; font-weight:900; font-size:clamp(36px,6vw,68px); letter-spacing:-0.03em; line-height:.98; }
+    .dek{ margin-top:14px; font-size:18px; color:rgba(255,255,255,0.72); max-width:560px; }
 
-    .wrap { max-width:1080px; margin:0 auto; padding:48px 40px 80px; }
+    /* Ticker */
+    .ticker{ margin-top:38px; border-top:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; gap:0; }
+    .ticker-label{ flex-shrink:0; background:var(--red); color:#fff; font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:14px 16px; align-self:stretch; display:flex; align-items:center; }
+    .ticker-track-wrap{ overflow:hidden; flex:1; }
+    .ticker-track{ display:inline-flex; gap:38px; white-space:nowrap; padding:14px 24px; animation:scroll 40s linear infinite; }
+    .ticker-track:hover{ animation-play-state:paused; }
+    .ticker-track span{ font-size:14px; color:rgba(255,255,255,0.8); }
+    .ticker-track b{ color:var(--cyan); margin-right:8px; }
+    @keyframes scroll{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-    /* Featured (latest) */
-    .feature { display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:center; background:#fafafa; border:1px solid var(--line); border-radius:22px; overflow:hidden; margin-bottom:44px; }
-    .feature-media { position:relative; aspect-ratio:4/3; background:linear-gradient(135deg,var(--navy),var(--blue)); display:flex; align-items:center; justify-content:center; }
-    .feature-media .flagbig { width:62%; max-width:280px; filter:drop-shadow(0 18px 36px rgba(0,0,0,0.4)); transform:rotate(-4deg); }
-    .feature-body { padding:36px 40px 36px 8px; }
-    .tag { display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--blue); margin-bottom:12px; }
-    .feature h2 { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:clamp(24px,3vw,34px); letter-spacing:-0.02em; line-height:1.1; margin-bottom:12px; }
-    .feature p { color:#3a3a42; font-size:16px; }
-    .byline { margin-top:18px; font-size:13px; color:var(--muted); }
-    @media (max-width:760px){ .feature{ grid-template-columns:1fr; } .feature-body{ padding:28px; } }
+    /* Tabs */
+    .tabs-wrap{ position:sticky; top:63px; z-index:55; background:rgba(255,255,255,0.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); }
+    .tabs{ max-width:1180px; margin:0 auto; padding:12px 40px; display:flex; gap:10px; overflow-x:auto; -ms-overflow-style:none; scrollbar-width:none; }
+    .tabs::-webkit-scrollbar{ display:none; }
+    .tab{ flex-shrink:0; font-family:inherit; font-size:13px; font-weight:700; padding:9px 18px; border-radius:999px; border:1.5px solid var(--line); background:#fff; color:var(--muted); cursor:pointer; transition:all .18s; white-space:nowrap; }
+    .tab:hover{ color:var(--ink); border-color:rgba(0,0,0,0.25); }
+    .tab.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
 
-    /* Grid of articles */
-    .news-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-    @media (max-width:760px){ .news-grid{ grid-template-columns:1fr; } }
-    .article { display:flex; gap:18px; padding:22px; border:1px solid var(--line); border-radius:18px; background:#fff; transition:transform .18s, box-shadow .18s, border-color .18s; }
-    .article:hover { transform:translateY(-3px); box-shadow:0 16px 40px -22px rgba(0,0,0,0.35); border-color:rgba(0,65,229,0.25); }
-    .article .flag { width:54px; height:40px; border-radius:7px; flex-shrink:0; object-fit:cover; box-shadow:0 2px 10px rgba(0,0,0,0.15); }
-    .article .flag-fallback { width:54px; height:40px; border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:26px; background:#f0f0f3; }
-    .a-meta { font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--blue); margin-bottom:5px; }
-    .a-title { font-weight:800; font-size:18px; letter-spacing:-0.01em; line-height:1.2; margin-bottom:6px; }
-    .a-body { font-size:14px; color:#4a4a52; }
-    .a-date { margin-top:10px; font-size:12px; color:var(--muted); }
-    .a-flagicon { font-size:22px; }
+    .wrap{ max-width:1180px; margin:0 auto; padding:40px; }
 
-    .notice { margin-top:40px; border-left:4px solid var(--red); background:rgba(165,26,35,0.05); padding:18px 22px; border-radius:0 14px 14px 0; }
-    .notice a { color:var(--blue); font-weight:600; text-decoration:none; }
+    /* Featured */
+    .feature{ display:grid; grid-template-columns:1.15fr 1fr; gap:0; border:1px solid var(--line); border-radius:24px; overflow:hidden; margin-bottom:40px; background:var(--soft); }
+    .feature-media{ position:relative; min-height:300px; background:linear-gradient(135deg,var(--navy),var(--blue) 60%,var(--cyan)); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .feature-media::after{ content:''; position:absolute; inset:0; background:radial-gradient(120% 100% at 20% 20%, rgba(255,255,255,0.12), transparent 55%); }
+    .feature-media .bigflag{ width:55%; max-width:240px; filter:drop-shadow(0 18px 40px rgba(0,0,0,0.45)); transform:rotate(-4deg); position:relative; z-index:1; }
+    .feature-media .bigmark{ font-family:'Archivo',sans-serif; font-weight:900; font-size:72px; color:rgba(255,255,255,0.16); letter-spacing:-0.04em; position:relative; z-index:1; }
+    .feature-body{ padding:40px; display:flex; flex-direction:column; justify-content:center; }
+    .feature-body .chip{ align-self:flex-start; margin-bottom:14px; }
+    .feature-body h2{ font-family:'Plus Jakarta Sans'; font-weight:800; font-size:clamp(24px,2.6vw,34px); letter-spacing:-0.02em; line-height:1.08; margin-bottom:12px; }
+    .feature-body p{ color:#3a3a42; font-size:16px; }
+    .byline{ margin-top:18px; font-size:13px; color:var(--muted); font-weight:600; }
+    @media (max-width:780px){ .feature{ grid-template-columns:1fr; } .feature-media{ min-height:200px; } .feature-body{ padding:28px; } }
 
-    .foot { border-top:1px solid var(--line); padding:36px 40px; text-align:center; }
-    .brandname { font-family:'Playfair Display',serif; font-weight:700; font-size:34px; }
-    .brandaka { font-size:13px; color:var(--muted); }
-    .foot-bar { padding:20px; text-align:center; font-size:13px; color:var(--muted); border-top:1px solid var(--line); }
-    .foot-bar a { color:var(--blue); text-decoration:none; font-weight:600; }
+    /* Grid */
+    .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    @media (max-width:980px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:600px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{ display:flex; flex-direction:column; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:#fff; transition:transform .18s, box-shadow .18s, border-color .18s; }
+    .card:hover{ transform:translateY(-4px); box-shadow:0 18px 44px -24px rgba(0,0,0,0.4); border-color:rgba(0,65,229,0.22); }
+    .card-top{ height:120px; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .card-top .flag{ height:54px; width:auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,0.35)); position:relative; z-index:1; }
+    .card-top .emoji{ font-size:46px; position:relative; z-index:1; filter:drop-shadow(0 6px 14px rgba(0,0,0,0.3)); }
+    .card-cat{ position:absolute; top:12px; left:12px; z-index:2; font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:4px 10px; border-radius:999px; color:#fff; }
+    .card-body{ padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
+    .card-kind{ font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+    .card-title{ font-weight:800; font-size:17px; letter-spacing:-0.01em; line-height:1.22; margin-bottom:8px; }
+    .card-text{ font-size:13.5px; color:#4a4a52; flex:1; }
+    .card-date{ margin-top:14px; font-size:12px; color:var(--muted); font-weight:600; }
+
+    .empty{ grid-column:1/-1; text-align:center; padding:60px; color:var(--muted); }
+
+    .notice{ margin-top:40px; border-left:4px solid var(--red); background:rgba(165,26,35,0.05); padding:18px 22px; border-radius:0 14px 14px 0; }
+    .notice a{ color:var(--blue); font-weight:600; text-decoration:none; }
+
+    .foot{ border-top:1px solid var(--line); padding:40px; text-align:center; }
+    .brandname{ font-family:'Playfair Display',serif; font-weight:700; font-size:38px; }
+    .brandaka{ font-size:13px; color:var(--muted); }
+    .foot-bar{ padding:20px; text-align:center; font-size:13px; color:var(--muted); border-top:1px solid var(--line); }
+    .foot-bar a{ color:var(--blue); text-decoration:none; font-weight:600; }
   </style>
 </head>
 <body>
@@ -83,22 +114,28 @@
       <li><a href="/rbsc#vote">Voting</a></li>
       <li><a href="/rbsc#countries">Countries</a></li>
       <li><a href="/rbsc-news" class="on">News</a></li>
-      <li><a href="/songcontest" target="_blank">Watch Live</a></li>
+      <li><a href="/rbsc#schedule">Schedule</a></li>
     </ul>
+    <a href="/songcontest" target="_blank" class="nav-live"><span class="dot"></span> Watch Live</a>
   </nav>
 
   <header class="masthead">
     <div class="mh">
       <div class="eyebrow">RBSC 2026 · Newsroom</div>
       <h1 class="title">Song Contest News</h1>
-      <p class="dek">Reveals, country announcements and the road to Zurich — reported by Cirya Noticias.</p>
+      <p class="dek">Reveals, production, odds, backstage and the road to Zurich — reported live by Cirya Noticias.</p>
+    </div>
+    <div class="ticker">
+      <div class="ticker-label">Breaking</div>
+      <div class="ticker-track-wrap"><div class="ticker-track" id="ticker"></div></div>
     </div>
   </header>
 
+  <div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+
   <main class="wrap">
     <div id="feature"></div>
-    <div class="news-grid" id="news-grid"></div>
-
+    <div class="grid" id="grid"></div>
     <div class="notice">
       <strong>Editorial note:</strong> Cirya Noticias is not airing the United Kingdom's entry and voting for it is disabled via our portal. <a href="/rbsc-uk">Read the full statement →</a>
     </div>
@@ -108,54 +145,119 @@
     <div class="brandname">Cirya Noticias</div>
     <div class="brandaka">aka: The Mishra Corporation</div>
   </div>
-  <div class="foot-bar">RBSC 2026 · Hosted by Switzerland · <a href="/rbsc">Back to the contest</a></div>
+  <div class="foot-bar">RBSC 2026 · Hosted by Switzerland · <a href="/rbsc">Back to the contest</a> · <a href="/songcontest" target="_blank">Watch live</a></div>
 
   <script>
+    const CAT = {
+      Reveals:    { label:'Reveals',    color:'#00B3Bd' },
+      Production: { label:'Production', color:'#0041E5' },
+      Odds:       { label:'Odds & Polls', color:'#C98800' },
+      Backstage:  { label:'Backstage',  color:'#D63384' },
+      FanZone:    { label:'Fan Zone',   color:'#12B886' },
+      Editorial:  { label:'Editorial',  color:'#A51A23' },
+    };
+    const FLAG = { Netherlands:'🇳🇱', Australia:'🇦🇺', Sweden:'🇸🇪', 'United Kingdom':'🇬🇧', Austria:'🇦🇹', Estonia:'🇪🇪', Finland:'🇫🇮', Switzerland:'🇨🇭' };
     const slug = c => (c||'').toLowerCase().trim().replace(/\s+/g,'-');
-    const FLAG = {Netherlands:'🇳🇱',Australia:'🇦🇺',Sweden:'🇸🇪','United Kingdom':'🇬🇧',Austria:'🇦🇹',Estonia:'🇪🇪',Finland:'🇫🇮',Switzerland:'🇨🇭'};
+    const esc = s => { const d=document.createElement('div'); d.textContent=s==null?'':s; return d.innerHTML; };
 
-    // Newest first
-    const NEWS = [
-      { country:'Austria', kind:'Song Reveal', title:'Austria has decided', date:'May 21, 2026',
-        body:'The Austrian delegation (Austrian RoBroadcasting Corporation) has announced that JJ will represent them with the song “Shapeshifter” — officially the first song confirmed for the competition.' },
-      { country:'United Kingdom', kind:'Song Reveal', title:'The United Kingdom has decided', date:'May 21, 2026',
-        body:'The British delegation (Northwest Radio Network) will compete with “Take the Box” by Amy Winehouse. As the original is explicit, a non-explicit edited version will be used during the contest.' },
-      { country:'Sweden', kind:'Song Reveal', title:'Sweden has decided', date:'May 21, 2026 · 4:01 PM',
-        body:'The Swedish delegation (Blue News Broadcast) announced that Honey. will represent Sweden with the song “Dreams”.' },
-      { country:'Australia', kind:'Song Reveal', title:'Australia has decided', date:'May 21, 2026 · 3:23 PM',
-        body:'The Australian delegation (UBC) has announced that Delta Goodrem will represent Australia this year with the song “Lost Without You”.' },
-      { country:'Netherlands', kind:'Song Reveal', title:'The Netherlands have decided', date:'May 21, 2026 · 2:36 PM',
-        body:'The Dutch delegation (Cirya) has announced that Joost Klein will represent the Netherlands with the song “Europapa”. Stay tuned for the other countries to announce their songs.' },
+    const ARTICLES = [
+      {category:'Reveals',kind:'Song Reveal',country:'Austria',date:'May 18, 2026',title:'Austria kicks off RBSC 2026 as JJ brings “Shapeshifter”',body:'The Austrian RoBroadcasting Corporation has fired the starting gun on RBSC 2026, confirming JJ as the very first artist locked in. The entry “Shapeshifter” gives the season its earliest reveal and instant frontrunner buzz ahead of October in Zurich.'},
+      {category:'Reveals',kind:'Confirmed Entry',country:'Netherlands',date:'Jun 2, 2026',title:'Netherlands officially confirms Joost Klein and “Europapa”',body:'Cirya has made it official: Joost Klein will carry the Netherlands at RBSC 2026 with the high-energy crowd-pleaser “Europapa.” The Dutch entry instantly becomes one of the most talked-about names heading toward the Zurich finals.'},
+      {category:'Reveals',kind:'Song Reveal',country:'Estonia',date:'Jun 9, 2026',title:'Estonia steps out: ABU Television unveils “Tuule Laul”',body:'After weeks of teasers, ABU Television confirmed singer Liis Tamm will represent Estonia with the windswept synth-pop number “Tuule Laul.” The reveal closes one of the season’s longest-running guessing games.'},
+      {category:'Reveals',kind:'Song Reveal',country:'Finland',date:'Jun 23, 2026',title:'Finland’s REV reveals “Pohjantähti” for Zurich',body:'Finnish broadcaster REV named electro-folk act Aurora Virtanen as its flag-bearer with the anthem “Pohjantähti.” The Helsinki launch leaned into Nordic light imagery, promising a staging concept built around shifting auroras.'},
+      {category:'Reveals',kind:'Host Entry',country:'Switzerland',date:'Jul 7, 2026',title:'Hosts Switzerland reveal SRB Network entry “Höhenflug”',body:'Host broadcaster SRB Network confirmed Switzerland won’t sit out its own party, presenting the soaring ballad “Höhenflug” by Zurich’s own Noemi Brunner. SRB says the song nods to the alpine theme running through the 2026 production.'},
+      {category:'Reveals',kind:'Line-Up Recap',country:'',featured:true,date:'Jul 12, 2026',title:'Full line-up so far: eight names locked in for RBSC 2026',body:'Austria’s JJ (“Shapeshifter”), the Netherlands’ Joost Klein (“Europapa”), Australia’s Delta Goodrem (“Lost Without You”), Sweden’s Honey. (“Dreams”), Estonia’s Liis Tamm (“Tuule Laul”), Finland’s Aurora Virtanen (“Pohjantähti”) and host Switzerland’s Noemi Brunner (“Höhenflug”). The UK’s Northwest Radio Network entry is also confirmed, though Cirya Noticias will not air it and voting for it stays disabled. More confirmations expected before the September running-order draw.'},
+
+      {category:'Production',kind:'Host City',country:'Switzerland',date:'May 18, 2026',title:'Zurich confirmed as RBSC 2026 host city',body:'It’s official: Switzerland’s SRB Network will bring RBSC 2026 to Zurich this October, with the lakeside Zurich Aurora Arena transformed for the contest’s three live shows. SRB called the city “the perfect crossroads of Europe.”'},
+      {category:'Production',kind:'Slogan',country:'',date:'Jun 2, 2026',title:'“Echoes Across Europe” revealed as the 2026 theme',body:'SRB Network unveiled the official RBSC 2026 slogan, “Echoes Across Europe,” celebrating how a single voice can ripple outward and connect a continent. The theme art features overlapping turquoise soundwaves radiating from Zurich.'},
+      {category:'Production',kind:'Stage Design',country:'',date:'Jul 9, 2026',title:'Stage design unveiled: a ring of light above Zurich',body:'The RBSC 2026 stage is built around a vast suspended LED halo that hovers over performers like a frozen soundwave, paired with a deep runway thrusting into the crowd and kinetic turquoise panels behind.'},
+      {category:'Production',kind:'Allocation Draw',country:'',date:'Sep 8, 2026',title:'Semi-final allocation set: who sings Saturday vs Sunday',body:'The First Semi-Final (Sat Oct 10) features the Netherlands, Sweden and Estonia; the Second Semi-Final (Sun Oct 11) brings Australia, Austria and Finland to the stage. Host Switzerland is automatically through to the Grand Final.'},
+      {category:'Production',kind:'Running Order',country:'',date:'Sep 14, 2026',title:'Running Order Draw heads to Zurich Town Hall on Sept 28',body:'SRB Network will decide the performance order for both semi-finals live from Zurich Town Hall on Monday, September 28. Each qualifying delegation draws its half of the show before producers lock the final sequence.'},
+      {category:'Production',kind:'Opening Ceremony',country:'',date:'Sep 22, 2026',title:'Turquoise Carpet opening ceremony announced for Oct 5',body:'RBSC 2026 opens in style with the Turquoise Carpet ceremony on Monday, October 5. Joost Klein, Delta Goodrem, Honey., JJ and the rest of the class of 2026 will walk the lakeside carpet before the welcome reception.'},
+
+      {category:'Odds',kind:'Odds',country:'',date:'Jun 2, 2026',title:'Opening odds: JJ and Joost Klein lead the pack',body:'The first bookmaker odds are in and it’s a two-horse race at the top: Austria’s JJ opens a slim 7/2 favourite with the Netherlands’ “Europapa” right behind at 4/1. Plenty of road left before Zurich.'},
+      {category:'Odds',kind:'Fan Poll',country:'',date:'Jun 21, 2026',title:'Fan poll: “Europapa” wins hearts, “Shapeshifter” wins heads',body:'Over 12,000 Cirya Noticias readers voted. “Europapa” topped “song I’d play on repeat” at 31%, while JJ ran away with “most likely to win” at 28%. Sweden’s Honey. snuck into third on both.'},
+      {category:'Odds',kind:'Explainer',country:'',date:'Jul 9, 2026',title:'Jury vs televote: how RBSC 2026 picks a winner',body:'Each country’s points split between a professional jury and the public televote, then added together. Juries reward vocals and polish; the televote rewards the song that gets a room on its feet. The gap is where the drama lives.'},
+      {category:'Odds',kind:'Standings',country:'Sweden',date:'Aug 4, 2026',title:'Sweden surging: Honey.’s “Dreams” climbs into the top three',body:'Sweden is on the move — Honey. and “Dreams” have climbed from mid-table into a podium price at 6/1, with bookmakers citing strong rehearsal whispers and a fan-poll bounce.'},
+      {category:'Odds',kind:'Odds',country:'Australia',date:'Sep 1, 2026',title:'Australia the dark horse: Delta Goodrem drifts into contention',body:'Every contest needs a dark horse, and UBC is offering Australia’s Delta Goodrem at a tempting 12/1. The kind of late-draw, lighters-up ballad that historically over-performs on the televote.'},
+      {category:'Odds',kind:'Reveal Watch',country:'',date:'Sep 14, 2026',title:'Reveal watch: Estonia and Finland could shake up the market',body:'Bookmakers held wide prices while ABU Television and REV finalised staging. A strong showing from either camp could reshuffle the whole board just weeks before the Zurich semi-finals.'},
+
+      {category:'Backstage',kind:'Rehearsals',country:'Switzerland',date:'Oct 5, 2026',title:'First rehearsals kick off inside Zurich’s arena',country:'Switzerland',body:'The arena doors swung open this morning as the first delegations took the stage for RBSC 2026’s opening rehearsal block. Crews rolled flight cases and lighting rigs through the night; the turquoise-lit stage is already drawing gasps.'},
+      {category:'Backstage',kind:'Staging Tease',country:'Australia',date:'Oct 6, 2026',title:'Delta Goodrem teases a ‘total reinvention’ of her ballad',body:'Australia’s Delta Goodrem left her first closed rehearsal hinting that “Lost Without You” will surprise even longtime fans, with a single dramatic lighting reveal timed to the final chorus.'},
+      {category:'Backstage',kind:'Rehearsals',country:'Austria',date:'Oct 7, 2026',title:'JJ’s vocal rehearsal for “Shapeshifter” earns standing praise',body:'Austria’s JJ delivered a flawless run during today’s vocal rehearsal — several press-room observers called it one of the strongest live takes of the week. Engineers needed only a single pass to sign off.'},
+      {category:'Backstage',kind:'Staging Concept',country:'Sweden',date:'Oct 8, 2026',title:'Honey. unveils a dreamlike staging concept for “Dreams”',body:'Sweden’s Honey. is building “Dreams” around a hazy, cloud-soaked stage of soft projections and drifting light, opening in near-darkness before blooming into colour as the chorus lands.'},
+      {category:'Backstage',kind:'Press Conference',country:'Netherlands',date:'Oct 9, 2026',title:'Joost Klein brings the party to the RBSC press room',body:'The “Europapa” press conference turned into an impromptu celebration with the room clapping along within minutes. “Europapa is for everyone who misses home and dances anyway,” Klein quipped.'},
+      {category:'Backstage',kind:'Rehearsals',country:'',date:'Oct 6, 2026',title:'Estonia and Finland stay secretive as buzz builds',body:'With details still under wraps, the Estonian and Finnish camps have shielded their stage layouts behind black drapes, fuelling speculation. Insiders promise the wait will be worth it.'},
+
+      {category:'FanZone',kind:'Tickets',country:'Switzerland',date:'Jun 2, 2026',title:'Grand Final tickets sell out in under an hour',body:'Fans cleared the SRB Network ticket portal in a frenzy, with Grand Final passes vanishing in 47 minutes. Oct 17 is now strictly standing-room sold out, and a returns waitlist has opened.'},
+      {category:'FanZone',kind:'Fan Village',country:'',date:'Jul 9, 2026',title:'RBSC Fan Village to light up Zurich’s lakefront',body:'The Fan Village will sprawl across Zurich’s Sechseläutenplatz from Oct 9 through final night, with a giant turquoise stage and an after-dark venue called The Turquoise Room. Nightly DJ sets and karaoke, free to attend.'},
+      {category:'FanZone',kind:'Watch Parties',country:'',date:'Aug 21, 2026',title:'CiryaCast to stream official global watch parties',body:'Can’t make it to Zurich? CiryaCast will host official watch parties for all three shows, with live chat, host-city cutaways and a synced superjury countdown. Streams go live 30 minutes before each show.'},
+      {category:'FanZone',kind:'Merch',country:'',date:'Sep 3, 2026',title:'Charity merch drop backs Roblox music programs',body:'The official RBSC 2026 merch line dropped today, headlined by a turquoise scarf and a glow-in-the-dark Zurich pin set. A slice of every sale funds music-creation workshops for young Roblox builders.'},
+      {category:'FanZone',kind:'Fan Meetup',country:'Netherlands',date:'Oct 9, 2026',title:'Fans stage a ‘Europapa’ flash mob at the Fan Village',body:'Hundreds turned the Fan Village into a sea of blue, breaking into a synchronised “Europapa” dance to back the Netherlands. The meetup, organised entirely through fan chat, drew cheers from passing delegations.'},
+      {category:'FanZone',kind:'Tickets',country:'',date:'Sep 28, 2026',title:'Extra pre-show passes released for the Turquoise Carpet',body:'SRB Network freed up a limited batch of spectator passes for the Turquoise Carpet pre-show. Standing zones along the Zurich carpet route are first-come, first-served — arrive early.'},
+
+      {category:'Editorial',kind:'Statement',country:'United Kingdom',date:'May 28, 2026',title:'Why Cirya Noticias is not airing the United Kingdom entry',body:'As previously announced, Cirya Noticias will not broadcast the UK’s entry, Amy Winehouse’s “Take the Box” for Northwest Radio Network, and voting for it is disabled across the official portal. The other seven delegations air in full.'},
+      {category:'Editorial',kind:'Explainer',country:'',date:'Jun 4, 2026',title:'How RBSC 2026 voting and points actually work',body:'Every Grand Final entry gets two scores — national juries and the public televote — each ranking songs 12 down to 1, then added together. Semi-final qualification is decided by public vote alone, with the host seeded straight to the Final.'},
+      {category:'Editorial',kind:'Integrity',country:'',date:'Jun 12, 2026',title:'Anti-fraud safeguards: keeping the RBSC televote clean',body:'Cirya’s platform runs automated checks for duplicate accounts, bulk submissions and irregular spikes; flagged batches are quarantined before points certify. Results are audited with SRB Network, and you still can’t vote for your own country.'},
+      {category:'Editorial',kind:'Penalty Review',country:'',date:'Sep 22, 2026',title:'The Cirya–Estonia on-stage spat: penalty review under way',body:'A disagreement between the Cirya and Estonia delegations during a shared rehearsal slot has been referred to the integrity panel for a routine review. Both camps call it a harmless mix-up over staging time; no points affected while open.'},
+      {category:'Editorial',kind:'Penalty Review',country:'',date:'Oct 2, 2026',title:'Update: integrity panel clears Cirya and Estonia',body:'The panel closed its review with no penalty for either delegation, calling it a scheduling misunderstanding. Both teams shook hands and confirmed they’re ready for the semi-finals. Estonia’s entry is now fully locked in.'},
+      {category:'Editorial',kind:'Statement',country:'',date:'Oct 5, 2026',title:'Our coverage promise: neutral, consistent, transparent',body:'Ahead of the Zurich shows, Cirya Noticias reaffirms neutral, fact-checked coverage of every entry we air. Editorial choices are stated openly and applied consistently; any voting changes are published before they take effect.'},
     ];
 
-    function flagEl(country, cls, fbCls) {
-      const s = slug(country), emoji = FLAG[country] || '🏳️';
-      return `<img class="${cls}" src="/flags/${s}.svg" alt="${country}" onerror="this.outerHTML='<span class=\\'${fbCls}\\'>${emoji}</span>'">`;
+    let active = 'all';
+
+    function parseDate(s){ return Date.parse((s||'').split('·')[0].trim()) || 0; }
+    const sorted = ARTICLES.slice().sort((a,b)=>parseDate(b.date)-parseDate(a.date));
+
+    function flagMarkup(country, cls){
+      if(!country) return '';
+      const s = slug(country), e = FLAG[country] || '🏳️';
+      return `<img class="${cls}" src="/flags/${s}.svg" alt="${esc(country)}" onerror="this.outerHTML='<span class=\\'emoji\\'>${e}</span>'">`;
     }
 
-    // Feature = newest
-    const f = NEWS[0];
+    // Tabs
+    const tabsEl = document.getElementById('tabs');
+    const cats = ['all', ...Object.keys(CAT)];
+    tabsEl.innerHTML = cats.map(c=>`<button class="tab${c==='all'?' on':''}" data-cat="${c}">${c==='all'?'All news':CAT[c].label}</button>`).join('');
+    tabsEl.addEventListener('click', e=>{ const b=e.target.closest('.tab'); if(!b) return; active=b.dataset.cat; [...tabsEl.children].forEach(t=>t.classList.toggle('on',t===b)); render(); });
+
+    // Ticker (latest 10 headlines, duplicated for seamless loop)
+    const tk = sorted.slice(0,10).map(a=>`<span><b>${esc(CAT[a.category].label)}</b>${esc(a.title)}</span>`).join('');
+    document.getElementById('ticker').innerHTML = tk + tk;
+
+    // Featured (newest featured item)
+    const feat = sorted.find(a=>a.featured) || sorted[0];
     document.getElementById('feature').innerHTML = `
       <article class="feature">
-        <div class="feature-media">${flagEl(f.country,'flagbig','a-flagicon')}</div>
+        <div class="feature-media">${feat.country ? flagMarkup(feat.country,'bigflag') : '<span class="bigmark">RBSC</span>'}</div>
         <div class="feature-body">
-          <span class="tag">★ Latest · ${f.kind}</span>
-          <h2>${f.title} — ${f.country}</h2>
-          <p>${f.body}</p>
-          <div class="byline">Cirya Noticias · ${f.date}</div>
+          <span class="chip card-cat" style="position:static;background:${CAT[feat.category].color}">★ ${esc(CAT[feat.category].label)}</span>
+          <h2>${esc(feat.title)}</h2>
+          <p>${esc(feat.body)}</p>
+          <div class="byline">Cirya Noticias · ${esc(feat.date)}</div>
         </div>
       </article>`;
 
-    document.getElementById('news-grid').innerHTML = NEWS.slice(1).map(n => `
-      <article class="article">
-        ${flagEl(n.country,'flag','flag-fallback')}
-        <div>
-          <div class="a-meta">${n.kind} · ${n.country}</div>
-          <div class="a-title">${n.title}</div>
-          <div class="a-body">${n.body}</div>
-          <div class="a-date">${n.date}</div>
-        </div>
-      </article>`).join('');
+    function render(){
+      const list = sorted.filter(a => active==='all' ? !a.featured : a.category===active);
+      document.getElementById('feature').style.display = active==='all' ? '' : 'none';
+      const grid = document.getElementById('grid');
+      if(!list.length){ grid.innerHTML = '<div class="empty">No stories in this section yet.</div>'; return; }
+      grid.innerHTML = list.map(a=>`
+        <article class="card">
+          <div class="card-top" style="background:linear-gradient(135deg, ${CAT[a.category].color}22, ${CAT[a.category].color}08)">
+            <span class="card-cat" style="background:${CAT[a.category].color}">${esc(CAT[a.category].label)}</span>
+            ${a.country ? flagMarkup(a.country,'flag') : `<span class="emoji">${({Reveals:'🎤',Production:'🎬',Odds:'📊',Backstage:'🎭',FanZone:'🎉',Editorial:'📝'})[a.category]||'📰'}</span>`}
+          </div>
+          <div class="card-body">
+            <div class="card-kind">${esc(a.kind)}${a.country ? ' · '+esc(a.country) : ''}</div>
+            <div class="card-title">${esc(a.title)}</div>
+            <div class="card-text">${esc(a.body)}</div>
+            <div class="card-date">${esc(a.date)}</div>
+          </div>
+        </article>`).join('');
+    }
+    render();
   </script>
 </body>
 </html>

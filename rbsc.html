@@ -134,13 +134,14 @@
       display: flex; align-items: center; justify-content: center;
     }
     .hero-flag {
-      width: 100%; max-width: 420px; height: auto;
-      border-radius: 10px;
-      transform: rotate(-4deg);
-      filter: drop-shadow(0 26px 50px rgba(0,0,0,0.5));
+      width: 100%; max-width: 400px; height: auto;
+      object-fit: contain;
+      transform: rotate(-3deg);
+      /* drop-shadow follows the flag's actual (chevron) shape — no boxy outline */
+      filter: drop-shadow(0 22px 44px rgba(0,0,0,0.5));
       transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
     }
-    .hero-card:hover .hero-flag { transform: rotate(-2deg) scale(1.02); }
+    .hero-card:hover .hero-flag { transform: rotate(-1deg) scale(1.02); }
 
     /* Live info bar under the hero */
     .livebar {
@@ -167,10 +168,12 @@
 
     /* Custom SVG flag images (exported from Figma) with emoji fallback */
     .flag-wrap { display: inline-flex; align-items: center; justify-content: center; }
-    .flag-svg { display: block; object-fit: contain; }
-    .chip-flag-img { width: 30px; height: 22px; border-radius: 3px; }
-    .tile-flag-img { width: 26px; height: 19px; border-radius: 2px; }
-    .modal-flag-img { width: 46px; height: 34px; border-radius: 4px; }
+    /* Flags are angular/chevron shapes — no rounding or box-shadow (those clip the
+       points / draw a boxy outline on iOS). Shadow via filter follows the shape. */
+    .flag-svg { display: block; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.18)); }
+    .chip-flag-img { width: 32px; height: auto; }
+    .tile-flag-img { width: 28px; height: auto; }
+    .modal-flag-img { width: 48px; height: auto; }
 
     .hero-card-inner { position: relative; z-index: 2; }
     .hero-eyebrow {
@@ -536,19 +539,9 @@
       <div class="hero-card" id="hero-card">
         <div class="scrim"></div>
 
-        <!-- Flag (left) — swapped to the country's custom Figma flag by JS -->
+        <!-- Flag (left) — custom Figma flag; JS just swaps the src to the featured country -->
         <div class="hero-flagwrap">
-          <svg class="hero-flag" viewBox="0 0 1783 459" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs><clipPath id="flagClip"><rect width="1783" height="459" rx="38"/></clipPath></defs>
-            <g clip-path="url(#flagClip)">
-              <path d="M753 506.957L314.413 391.571L314.413 262.278L753 377.664L753 506.957Z" fill="#A51A23"/>
-              <path d="M753 382.168L314.413 266.493L314.413 136.877L753 252.552L753 382.168Z" fill="#fff"/>
-              <path d="M0 230.465L438.587 346.14V475.756L0 360.081V230.465Z" fill="#A51A23"/>
-              <path d="M0 101.404L438.587 217.079V346.695L0 231.02V101.404Z" fill="#fff"/>
-              <path d="M0 -24L438.587 91.3863V220.679L0 105.293V-24Z" fill="#1F3D7F"/>
-              <path d="M753 252.492L314.413 137.106L314.413 7.81303L753 123.199L753 252.492Z" fill="#1F3D7F"/>
-            </g>
-          </svg>
+          <img class="hero-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
         </div>
 
         <!-- Text (right) -->
@@ -792,14 +785,11 @@
       card.insertBefore(v, card.firstChild);
     }
 
-    // Swap the inline chevron flag for the country's custom Figma flag if present
-    const heroFlag = document.querySelector('.hero-flag');
+    // Point the hero flag at the featured country's custom flag
+    const heroFlag = document.getElementById('hero-flag-img');
     if (heroFlag) {
-      const img = new Image();
-      img.className = 'hero-flag';
-      img.alt = feat.country + ' flag';
-      img.onload = () => heroFlag.replaceWith(img);
-      img.src = `/flags/${slugFor(feat.country)}.svg`;
+      heroFlag.alt = feat.country + ' flag';
+      heroFlag.src = `/flags/${slugFor(feat.country)}.svg`;
     }
 
     fitHeroText();
