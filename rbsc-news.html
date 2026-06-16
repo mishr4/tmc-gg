@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News — RBSC 2026 · Cirya Noticias</title>
+  <meta name="description" content="Latest news from the Robroadcasting Song Contest 2026: song reveals, country announcements, and updates from Cirya Noticias.">
+  <link rel="icon" href="/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Archivo:wght@800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink:#0a0a0f; --paper:#fff; --muted:#6b6b72; --line:rgba(0,0,0,0.09);
+      --cyan:#00D7E2; --blue:#0041E5; --navy:#002BBA; --red:#A51A23;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Plus Jakarta Sans',-apple-system,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; line-height:1.55; }
+
+    .nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(255,255,255,0.85); backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--line); }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+    .nav-logo svg { height:30px; }
+    .nav-logo span { font-weight:700; font-size:15px; }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { font-size:15px; font-weight:500; color:var(--ink); text-decoration:none; }
+    .nav-links a:hover { opacity:0.55; }
+    .nav-links a.on { color:var(--blue); }
+    @media (max-width:720px){ .nav-links{display:none;} }
+
+    .masthead { background:linear-gradient(135deg,#0d0f2e,#14163a 55%,#0a0b22); color:#fff; padding:72px 40px 60px; }
+    .mh { max-width:1080px; margin:0 auto; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; }
+    .eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--red); animation:pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    h1.title { font-family:'Archivo',sans-serif; font-weight:900; font-size:clamp(34px,5vw,60px); letter-spacing:-0.03em; line-height:1; }
+    .dek { margin-top:14px; font-size:18px; color:rgba(255,255,255,0.72); max-width:560px; }
+
+    .wrap { max-width:1080px; margin:0 auto; padding:48px 40px 80px; }
+
+    /* Featured (latest) */
+    .feature { display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:center; background:#fafafa; border:1px solid var(--line); border-radius:22px; overflow:hidden; margin-bottom:44px; }
+    .feature-media { position:relative; aspect-ratio:4/3; background:linear-gradient(135deg,var(--navy),var(--blue)); display:flex; align-items:center; justify-content:center; }
+    .feature-media .flagbig { width:62%; max-width:280px; filter:drop-shadow(0 18px 36px rgba(0,0,0,0.4)); transform:rotate(-4deg); }
+    .feature-body { padding:36px 40px 36px 8px; }
+    .tag { display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--blue); margin-bottom:12px; }
+    .feature h2 { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:clamp(24px,3vw,34px); letter-spacing:-0.02em; line-height:1.1; margin-bottom:12px; }
+    .feature p { color:#3a3a42; font-size:16px; }
+    .byline { margin-top:18px; font-size:13px; color:var(--muted); }
+    @media (max-width:760px){ .feature{ grid-template-columns:1fr; } .feature-body{ padding:28px; } }
+
+    /* Grid of articles */
+    .news-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    @media (max-width:760px){ .news-grid{ grid-template-columns:1fr; } }
+    .article { display:flex; gap:18px; padding:22px; border:1px solid var(--line); border-radius:18px; background:#fff; transition:transform .18s, box-shadow .18s, border-color .18s; }
+    .article:hover { transform:translateY(-3px); box-shadow:0 16px 40px -22px rgba(0,0,0,0.35); border-color:rgba(0,65,229,0.25); }
+    .article .flag { width:54px; height:40px; border-radius:7px; flex-shrink:0; object-fit:cover; box-shadow:0 2px 10px rgba(0,0,0,0.15); }
+    .article .flag-fallback { width:54px; height:40px; border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:26px; background:#f0f0f3; }
+    .a-meta { font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--blue); margin-bottom:5px; }
+    .a-title { font-weight:800; font-size:18px; letter-spacing:-0.01em; line-height:1.2; margin-bottom:6px; }
+    .a-body { font-size:14px; color:#4a4a52; }
+    .a-date { margin-top:10px; font-size:12px; color:var(--muted); }
+    .a-flagicon { font-size:22px; }
+
+    .notice { margin-top:40px; border-left:4px solid var(--red); background:rgba(165,26,35,0.05); padding:18px 22px; border-radius:0 14px 14px 0; }
+    .notice a { color:var(--blue); font-weight:600; text-decoration:none; }
+
+    .foot { border-top:1px solid var(--line); padding:36px 40px; text-align:center; }
+    .brandname { font-family:'Playfair Display',serif; font-weight:700; font-size:34px; }
+    .brandaka { font-size:13px; color:var(--muted); }
+    .foot-bar { padding:20px; text-align:center; font-size:13px; color:var(--muted); border-top:1px solid var(--line); }
+    .foot-bar a { color:var(--blue); text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/rbsc" class="nav-logo">
+      <svg viewBox="0 0 83 59" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M83 43.6836L34.9474 31.3232L34.9474 17.4731L83 29.8335L83 43.6836Z" fill="#00D7E2"/><path d="M83 58.9727L34.9474 45.5822L34.9474 30.5779L83 43.9684L83 58.9727Z" fill="#002BBA"/><path d="M83 30.5781L34.9474 18.2177L34.9474 4.3676L83 16.728L83 30.5781Z" fill="#0041E5"/><path d="M0.0175781 13.125L48.0474 25.7355V41.5197L0.0175781 28.4225V13.125Z" fill="#00D7E2"/><path d="M0 28.3945L48.0526 40.7549V54.6051L0 42.2446V28.3945Z" fill="#0041E5"/><path d="M0 0L48.0526 12.3604V26.2105L0 13.8501V0Z" fill="#002BBA"/></svg>
+      <span>Cirya Noticias</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/rbsc">Home</a></li>
+      <li><a href="/rbsc#vote">Voting</a></li>
+      <li><a href="/rbsc#countries">Countries</a></li>
+      <li><a href="/rbsc-news" class="on">News</a></li>
+      <li><a href="/songcontest" target="_blank">Watch Live</a></li>
+    </ul>
+  </nav>
+
+  <header class="masthead">
+    <div class="mh">
+      <div class="eyebrow">RBSC 2026 · Newsroom</div>
+      <h1 class="title">Song Contest News</h1>
+      <p class="dek">Reveals, country announcements and the road to Zurich — reported by Cirya Noticias.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="feature"></div>
+    <div class="news-grid" id="news-grid"></div>
+
+    <div class="notice">
+      <strong>Editorial note:</strong> Cirya Noticias is not airing the United Kingdom's entry and voting for it is disabled via our portal. <a href="/rbsc-uk">Read the full statement →</a>
+    </div>
+  </main>
+
+  <div class="foot">
+    <div class="brandname">Cirya Noticias</div>
+    <div class="brandaka">aka: The Mishra Corporation</div>
+  </div>
+  <div class="foot-bar">RBSC 2026 · Hosted by Switzerland · <a href="/rbsc">Back to the contest</a></div>
+
+  <script>
+    const slug = c => (c||'').toLowerCase().trim().replace(/\s+/g,'-');
+    const FLAG = {Netherlands:'🇳🇱',Australia:'🇦🇺',Sweden:'🇸🇪','United Kingdom':'🇬🇧',Austria:'🇦🇹',Estonia:'🇪🇪',Finland:'🇫🇮',Switzerland:'🇨🇭'};
+
+    // Newest first
+    const NEWS = [
+      { country:'Austria', kind:'Song Reveal', title:'Austria has decided', date:'May 21, 2026',
+        body:'The Austrian delegation (Austrian RoBroadcasting Corporation) has announced that JJ will represent them with the song “Shapeshifter” — officially the first song confirmed for the competition.' },
+      { country:'United Kingdom', kind:'Song Reveal', title:'The United Kingdom has decided', date:'May 21, 2026',
+        body:'The British delegation (Northwest Radio Network) will compete with “Take the Box” by Amy Winehouse. As the original is explicit, a non-explicit edited version will be used during the contest.' },
+      { country:'Sweden', kind:'Song Reveal', title:'Sweden has decided', date:'May 21, 2026 · 4:01 PM',
+        body:'The Swedish delegation (Blue News Broadcast) announced that Honey. will represent Sweden with the song “Dreams”.' },
+      { country:'Australia', kind:'Song Reveal', title:'Australia has decided', date:'May 21, 2026 · 3:23 PM',
+        body:'The Australian delegation (UBC) has announced that Delta Goodrem will represent Australia this year with the song “Lost Without You”.' },
+      { country:'Netherlands', kind:'Song Reveal', title:'The Netherlands have decided', date:'May 21, 2026 · 2:36 PM',
+        body:'The Dutch delegation (Cirya) has announced that Joost Klein will represent the Netherlands with the song “Europapa”. Stay tuned for the other countries to announce their songs.' },
+    ];
+
+    function flagEl(country, cls, fbCls) {
+      const s = slug(country), emoji = FLAG[country] || '🏳️';
+      return `<img class="${cls}" src="/flags/${s}.svg" alt="${country}" onerror="this.outerHTML='<span class=\\'${fbCls}\\'>${emoji}</span>'">`;
+    }
+
+    // Feature = newest
+    const f = NEWS[0];
+    document.getElementById('feature').innerHTML = `
+      <article class="feature">
+        <div class="feature-media">${flagEl(f.country,'flagbig','a-flagicon')}</div>
+        <div class="feature-body">
+          <span class="tag">★ Latest · ${f.kind}</span>
+          <h2>${f.title} — ${f.country}</h2>
+          <p>${f.body}</p>
+          <div class="byline">Cirya Noticias · ${f.date}</div>
+        </div>
+      </article>`;
+
+    document.getElementById('news-grid').innerHTML = NEWS.slice(1).map(n => `
+      <article class="article">
+        ${flagEl(n.country,'flag','flag-fallback')}
+        <div>
+          <div class="a-meta">${n.kind} · ${n.country}</div>
+          <div class="a-title">${n.title}</div>
+          <div class="a-body">${n.body}</div>
+          <div class="a-date">${n.date}</div>
+        </div>
+      </article>`).join('');
+  </script>
+</body>
+</html>

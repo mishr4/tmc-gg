@@ -395,6 +395,8 @@
       margin-bottom: 22px;
     }
     .news-body { font-size: 19px; line-height: 1.6; color: rgba(255,255,255,0.7); }
+    .news-readmore { display: inline-block; margin-top: 22px; font-size: 15px; font-weight: 700; color: var(--cirya-cyan); text-decoration: none; }
+    .news-readmore:hover { text-decoration: underline; }
     .news-media {
       position: relative; border-radius: var(--radius); overflow: hidden;
       aspect-ratio: 16/10; background: linear-gradient(135deg, #1b1d4d, #0a0b22);
@@ -521,10 +523,11 @@
         <li><a href="/rbsc">Home</a></li>
         <li><a href="#vote">Voting</a></li>
         <li><a href="#countries">Countries</a></li>
-        <li><a href="#vote">Videos</a></li>
+        <li><a href="/rbsc-news">News</a></li>
+        <li><a href="#schedule">Schedule</a></li>
       </ul>
     </div>
-    <a href="#tune" class="live-pill"><span class="live-dot"></span> iPlayer LIVE</a>
+    <a href="/songcontest" target="_blank" class="live-pill"><span class="live-dot"></span> Watch Live</a>
   </nav>
 
   <!-- ───────── HERO ───────── -->
@@ -559,7 +562,7 @@
           </p>
           <div class="hero-actions">
             <a href="#vote" class="btn btn-primary">Voting Information</a>
-            <a href="#" class="btn btn-ghost" id="watch-live">▶ iPlayer</a>
+            <a href="/songcontest" target="_blank" class="btn btn-ghost">▶ Watch on iPlayer</a>
           </div>
         </div>
       </div>
@@ -568,7 +571,7 @@
     <!-- Live info bar -->
     <div class="livebar" id="tune">
       <div class="livebar-card">
-        <a href="#" class="iplayer-btn" id="watch-live-2">
+        <a href="/songcontest" target="_blank" class="iplayer-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Watch Live
         </a>
@@ -614,29 +617,30 @@
     <div class="timeline" id="timeline"></div>
   </section>
 
-  <!-- ───────── BREAKING NEWS ───────── -->
+  <!-- ───────── NEWS ───────── -->
   <section class="news">
     <div class="news-inner">
       <div>
-        <span class="news-tag"><span class="live-dot" style="background:#fff"></span> Breaking</span>
-        <h2 class="news-headline display">Cirya ends in a heated argument with leading country Estonia.</h2>
-        <p class="news-body">After Cirya's groundbreaking performance, Dutch artist Joost Klein starts an argument with a competing team that ends up costing them a penalty. Cirya's President calls this penalty unjust and demands a review of the argument.</p>
+        <span class="news-tag"><span class="live-dot" style="background:#fff"></span> Latest</span>
+        <h2 class="news-headline display">Austria is first to confirm: JJ to perform "Shapeshifter".</h2>
+        <p class="news-body">The Austrian RoBroadcasting Corporation has revealed JJ as its act for RBSC 2026 — the first song officially locked in. The Netherlands, Australia, Sweden and the United Kingdom have since announced their entries too.</p>
+        <a class="news-readmore" href="/rbsc-news">Read all RBSC news →</a>
       </div>
       <div class="news-media">
         <img src="https://framerusercontent.com/images/ZZ34WteKaGGafWIvwTDsxm3o.png?width=1920&height=1080" alt="RBSC broadcast" onerror="this.parentElement.style.background='linear-gradient(135deg,#1b1d4d,#0a0b22)';this.remove()">
       </div>
     </div>
     <div class="news-cards">
+      <a class="news-card" href="/rbsc-news">
+        <span class="news-card-title">🎵 Song reveals: every confirmed entry so far</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+      </a>
       <a class="news-card" href="/rbsc-uk">
         <span class="news-card-title">Why we aren't airing the UK's performance</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
       </a>
-      <a class="news-card" href="#vote">
-        <span class="news-card-title">Live results &amp; current standings</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
-      </a>
-      <a class="news-card" href="#tune">
-        <span class="news-card-title">How to watch RBSC on the iPlayer</span>
+      <a class="news-card" href="/songcontest" target="_blank">
+        <span class="news-card-title">Watch RBSC live on the iPlayer</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
       </a>
     </div>
@@ -798,10 +802,6 @@
       img.src = `/flags/${slugFor(feat.country)}.svg`;
     }
 
-    ['watch-live','watch-live-2'].forEach(id => {
-      const b = document.getElementById(id);
-      if (b) b.onclick = (e) => { e.preventDefault(); openModal(feat); };
-    });
     fitHeroText();
   }
 
