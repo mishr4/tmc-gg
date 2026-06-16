@@ -4,8 +4,14 @@
     {
       "name": "tmc-site",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-l", "3001", "."],
-      "port": 3001
+      "runtimeArgs": ["serve", "-l", "3500", "."],
+      "port": 3500
+    },
+    {
+      "name": "ciryacast",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:/Users/alexn/Downloads/CiryaCast/server.js"],
+      "port": 8420
     }
   ]
 }

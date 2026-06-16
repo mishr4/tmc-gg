@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Roboto:wght@400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+  }
+
+  .lower-third {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+  }
+
+  /* BREAKING NEWS tag */
+  .breaking-tag {
+    position: absolute;
+    top: -38px;
+    left: 30px;
+    background: #d40000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding: 8px 22px;
+    text-transform: uppercase;
+    z-index: 10;
+  }
+
+  .main-bar {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  /* Logo box */
+  .logo-box {
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    min-width: 160px;
+    border-right: 3px solid #d40000;
+    flex-shrink: 0;
+  }
+
+  .logo-main {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .logo-sub {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+
+  /* Headline area */
+  .headline-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .headline {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 14px 30px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .headline h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.2;
+  }
+
+  /* Bottom ticker bar */
+  .ticker-bar {
+    display: flex;
+    align-items: stretch;
+    height: 32px;
+  }
+
+  .date-time {
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    min-width: 160px;
+    justify-content: center;
+  }
+
+  .date-time span {
+    opacity: 0.5;
+  }
+
+  .ticker {
+    background: rgba(60, 60, 60, 0.95);
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .ticker-category {
+    background: #d40000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  .ticker-scroll {
+    display: flex;
+    animation: scroll 20s linear infinite;
+    white-space: nowrap;
+    padding-left: 16px;
+  }
+
+  .ticker-scroll p {
+    color: #ddd;
+    font-size: 13px;
+    font-weight: 500;
+    padding-right: 80px;
+    white-space: nowrap;
+  }
+
+  @keyframes scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Slide-in animations */
+  .lower-third {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .breaking-tag {
+    animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lower-third">
+  <div class="breaking-tag">BREAKING NEWS</div>
+
+  <div class="main-bar">
+    <div class="logo-box">
+      <div class="logo-main">BLOX</div>
+      <div class="logo-sub">NETWORK</div>
+    </div>
+    <div class="headline-area">
+      <div class="headline">
+        <h1>Blox Radio is actually in Debt because of Sigma Penetrator</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-bar">
+    <div class="date-time">
+      SAT. 6 2026 <span>|</span> 2:45 PM PST
+    </div>
+    <div class="ticker">
+      <div class="ticker-category">GENERAL</div>
+      <div class="ticker-scroll">
+        <p>Hashtag's Maccas trips cancelled due to lack of funding in Blox Radio.&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp;Sigma Penetrator denies all allegations.&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp;Blox Network exclusive coverage continues.</p>
+        <p>Hashtag's Maccas trips cancelled due to lack of funding in Blox Radio.&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp;Sigma Penetrator denies all allegations.&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp;Blox Network exclusive coverage continues.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
