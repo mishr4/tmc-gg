@@ -16,17 +16,23 @@
  */
 
 let performances = [
-  { id: 'nl-001', country: 'Netherlands', artist: 'Joost Klein', song: 'EUROPAPA', videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'ch-001', country: 'Switzerland', artist: 'Nemo', song: 'The Code', videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'se-001', country: 'Sweden', artist: 'Marcus & Martinus', song: 'Unforgettable', videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'nl', country: 'Netherlands',    broadcaster: 'Cirya',                              artist: 'Joost Klein',   song: 'Europapa',         videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'au', country: 'Australia',      broadcaster: 'UBC',                                artist: 'Delta Goodrem', song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'se', country: 'Sweden',         broadcaster: 'Blue News Broadcast',                artist: 'Honey.',        song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'gb', country: 'United Kingdom', broadcaster: 'Northwest Radio Network',            artist: 'Amy Winehouse', song: 'Take the Box',     videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'at', country: 'Austria',        broadcaster: 'Austrian RoBroadcasting Corporation', artist: 'JJ',           song: 'Shapeshifter',     videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'ee', country: 'Estonia',        broadcaster: 'ABU Television',                     artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'fi', country: 'Finland',        broadcaster: 'REV',                                artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'ch', country: 'Switzerland',    broadcaster: 'SRB Network',           host: true,  artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
 ];
 
-let votes = { 'nl-001': 234, 'ch-001': 189, 'se-001': 156 };
+let votes = { nl: 312, au: 240, se: 198, gb: 176, at: 264, ee: 0, fi: 0, ch: 0 };
 
 let votingConfig = {
   status: 'open',          // open | closed | paused
   endTime: null,           // ISO string
   hostCountry: 'Switzerland',
+  hostCity: 'Zurich',
   apiKey: null,
 };
 
@@ -78,10 +84,10 @@ module.exports = async function handler(req, res) {
     if (path === '/upload' && method === 'POST') {
       if (!isAdmin(req, query)) return send(res, 401, { error: 'Unauthorized' });
       const body = await readBody(req);
-      const { country, artist, song, videoUrl, description } = body;
+      const { country, broadcaster, artist, song, videoUrl, description } = body;
       if (!country || !artist || !song) return send(res, 400, { error: 'country, artist and song are required' });
       const id = `${country.toLowerCase().replace(/[^a-z]/g, '').slice(0, 3)}-${Date.now().toString(36)}`;
-      const perf = { id, country, artist, song, videoUrl: videoUrl || '', description: description || '', uploadedAt: new Date().toISOString() };
+      const perf = { id, country, broadcaster: broadcaster || '', artist, song, videoUrl: videoUrl || '', description: description || '', uploadedAt: new Date().toISOString() };
       performances.push(perf);
       votes[id] = 0;
       return send(res, 201, perf);
@@ -127,6 +133,7 @@ module.exports = async function handler(req, res) {
       if (body.status !== undefined) votingConfig.status = body.status;
       if (body.endTime !== undefined) votingConfig.endTime = body.endTime;
       if (body.hostCountry !== undefined) votingConfig.hostCountry = body.hostCountry;
+      if (body.hostCity !== undefined) votingConfig.hostCity = body.hostCity;
       if (body.apiKey !== undefined) votingConfig.apiKey = body.apiKey;
       return send(res, 200, { ok: true, config: { ...votingConfig, apiKey: votingConfig.apiKey ? '••••••' : null } });
     }

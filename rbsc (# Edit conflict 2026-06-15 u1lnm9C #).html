@@ -332,6 +332,25 @@
     .tile-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cirya-cyan), var(--cirya-blue)); transition: width 0.6s ease; }
     .tile-pct { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
+    /* ─────────────────────── SCHEDULE ─────────────────────── */
+    .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .tl-card {
+      border: 1px solid var(--line); border-radius: 18px; padding: 24px;
+      background: #fafafa; position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .tl-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -20px rgba(0,0,0,0.3); border-color: rgba(0,65,229,0.25); }
+    .tl-card.final { background: linear-gradient(135deg, var(--cirya-navy), var(--cirya-blue)); color: #fff; border: none; }
+    .tl-phase { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cirya-blue); margin-bottom: 10px; }
+    .tl-card.final .tl-phase { color: var(--cirya-cyan); }
+    .tl-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .tl-date { font-size: 14px; color: var(--muted); line-height: 1.45; }
+    .tl-card.final .tl-date { color: rgba(255,255,255,0.85); }
+    .tl-badge { position: absolute; top: 18px; right: 18px; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: rgba(0,65,229,0.1); color: var(--cirya-blue); }
+    .tl-card.final .tl-badge { background: rgba(255,255,255,0.2); color: #fff; }
+    .tl-card.tbd { opacity: 0.85; }
+    .tl-card.tbd .tl-date { font-style: italic; }
+
     /* ─────────────────────── BREAKING NEWS ─────────────────────── */
     .news {
       background: var(--ink);
@@ -425,7 +444,6 @@
       .hero-actions { justify-content: center; }
       .news-inner { grid-template-columns: 1fr; gap: 32px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); }
-      .timeline { grid-template-columns: repeat(2, 1fr); }
       .news-cards { grid-template-columns: 1fr; }
       .livebar { flex-direction: column; }
       .livebar-card, .countdown { width: 100%; }
@@ -444,7 +462,6 @@
       .livebar { padding: 0 16px; }
       .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .timeline { grid-template-columns: 1fr; }
       .news { padding: 56px 0; }
       .news-inner, .news-cards, .brand { padding-left: 16px; padding-right: 16px; }
       .brand { flex-direction: column; align-items: flex-start; gap: 24px; }
@@ -682,6 +699,7 @@
     renderHero();
     renderCountries();
     renderGrid();
+    renderSchedule();
     updateVotes();
     startCountdown();
 
@@ -853,28 +871,6 @@
       msg.className='vote-msg err'; msg.textContent = 'Network error — try again';
       btn.disabled=false; btn.textContent='Vote for this performance';
     }
-  }
-
-  const SCHEDULE = [
-    { phase: 'Running Order', name: 'Drawing', date: 'Date to be announced', tbd: true },
-    { phase: 'Running Order', name: 'Running Order Reveal', date: 'Date to be announced', tbd: true },
-    { phase: 'Opening', name: 'Turquoise Carpet', date: 'Date to be announced', tbd: true },
-    { phase: 'Live Show', name: 'First Semi-Final', date: 'Sat, Oct 10, 2026 · 9:00–10:30 AM', badge: 'Semi 1' },
-    { phase: 'Live Show', name: 'Second Semi-Final', date: 'Sun, Oct 11, 2026 · 9:00–10:30 AM', badge: 'Semi 2' },
-    { phase: 'Live Show', name: 'Grand Final', date: 'Sat, Oct 17, 2026 · 9:00–10:30 AM', badge: 'Final', final: true },
-  ];
-
-  function renderSchedule() {
-    const el = document.getElementById('timeline');
-    if (!el) return;
-    el.innerHTML = SCHEDULE.map(s => `
-      <div class="tl-card${s.final ? ' final' : ''}${s.tbd ? ' tbd' : ''}">
-        ${s.badge ? `<span class="tl-badge">${esc(s.badge)}</span>` : ''}
-        <div class="tl-phase">${esc(s.phase)}</div>
-        <div class="tl-name">${esc(s.name)}</div>
-        <div class="tl-date">${esc(s.date)}</div>
-      </div>
-    `).join('');
   }
 
   // Countdown to the admin-configured voting end time (falls back to next midnight UTC)
