@@ -122,12 +122,12 @@
       overflow: hidden;
       /* Solid deep-navy stage — NO colour gradients */
       background: #0a0b22;
-      min-height: 520px;
+      min-height: 440px;
       display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
+      grid-template-columns: 1fr 1.05fr;
       align-items: center;
-      gap: 48px;
-      padding: 56px 64px;
+      gap: 56px;
+      padding: 52px 64px;
       box-shadow: 0 30px 80px -30px rgba(20,22,58,0.55);
     }
     /* Subtle chevron-stripe texture (flat, on-brand — not a colour blend) */
@@ -144,34 +144,18 @@
       object-fit: cover;
       z-index: 0; opacity: 0.5;
     }
-    .hero-card video,
-    .hero-card .hero-poster {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0; opacity: 0.5;
-    }
     .hero-card .scrim { display: none; }
 
-    /* Flag — big, on the left, full (never cropped) */
+    /* Flag — big, centred in its column */
     .hero-flagwrap {
       position: relative; z-index: 2;
       display: flex; align-items: center; justify-content: center;
     }
-    .hero-flag {
-      width: 100%; max-width: 400px; height: auto;
-      object-fit: contain;
-      transform: rotate(-3deg);
-      /* drop-shadow follows the flag's actual (chevron) shape — no boxy outline */
-      filter: drop-shadow(0 22px 44px rgba(0,0,0,0.5));
-      transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
-    }
-    .hero-card:hover .hero-flag { transform: rotate(-1deg) scale(1.02); }
 
     /* Chevron flag — our unique mark (resembles the Cirya logo) */
     .chev-flag { display: block; object-fit: contain; }
     .hero-flagwrap .chev-flag {
-      width: 100% !important; max-width: 380px;
+      width: 86% !important; max-width: 440px;
       transform: rotate(-3deg);
       filter: drop-shadow(0 22px 44px rgba(0,0,0,0.5));
       animation: heroFloat 8s ease-in-out infinite;
@@ -582,7 +566,7 @@
     @media (max-width: 1080px) {
       .hero-card { grid-template-columns: 1fr; gap: 28px; padding: 44px; text-align: center; }
       .hero-flagwrap { order: -1; }
-      .hero-flag { max-width: 300px; }
+      .hero-flagwrap .chev-flag { width: 100% !important; max-width: 320px; }
       .hero-desc { margin-left: auto; margin-right: auto; }
       .hero-actions { justify-content: center; }
       .news-inner { grid-template-columns: 1fr; gap: 32px; }
@@ -670,7 +654,7 @@
 
         <!-- Flag (left) — heart-with-flag, set by JS to the featured country -->
         <div class="hero-flagwrap" id="hero-flagwrap">
-          <img class="hero-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
+          <img class="chev-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
         </div>
 
         <!-- Text (right) -->
@@ -904,14 +888,11 @@
   const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
 
   // Our unique chevron flag is the mark (resembles the Cirya logo). Reused at any size.
-  // Falls back to the emoji flag if a custom SVG isn't there yet.
+  // Bare <img> so CSS can size it; falls back to the emoji flag if the SVG is missing.
   function chevFlag(country, px) {
-    const slug = slugFor(country), emoji = flagFor(country);
-    return `<span class="flag-wrap" style="display:inline-block">`
-      + `<img class="chev-flag" src="/flags/${slug}.svg" alt="${esc(country)} flag" style="width:${px}px;height:auto" `
-      + `onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">`
-      + `<span style="display:none;font-size:${Math.round(px*0.7)}px;line-height:1">${emoji}</span>`
-      + `</span>`;
+    const slug = slugFor(country), emoji = flagFor(country), ef = Math.round(px * 0.72);
+    const fb = `this.outerHTML='&lt;span style=&quot;font-size:${ef}px;line-height:1&quot;&gt;${emoji}&lt;/span&gt;'`;
+    return `<img class="chev-flag" src="/flags/${slug}.svg" alt="${esc(country)} flag" style="width:${px}px;height:auto" onerror="${fb}">`;
   }
 
   // CSS confetti burst (vote success only — never ambient)
