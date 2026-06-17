@@ -51,7 +51,8 @@
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
+      /* clip (not hidden) so it doesn't become a scroll container and break Lenis */
+      overflow-x: clip;
     }
 
     /* Archivo Black only for the giant poster country name; everything else Jakarta */
@@ -634,7 +635,6 @@
       .tile-points.is-douze, .video-tile.is-leader .tile-crown {
         animation: none !important;
       }
-      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -1088,7 +1088,9 @@
   function featureCountry(id) {
     renderHero(id);
     const hero = document.getElementById('hero-card');
-    if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!hero) return;
+    if (window.__lenis) window.__lenis.scrollTo(hero, { offset: -84 });
+    else hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function renderCountries() {
@@ -1300,6 +1302,28 @@
   window.addEventListener('resize', () => { clearTimeout(_rt); _rt = setTimeout(fitHeroText, 120); });
   window.addEventListener('orientationchange', () => setTimeout(fitHeroText, 200));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroText);
+
+  // ── Smooth momentum scrolling (Lenis) — buttery wheel + eased anchor jumps ──
+  let lenis = null;
+  (function initSmoothScroll(){
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || typeof Lenis === 'undefined') return; // native scroll fallback
+    lenis = new Lenis({ duration: 1.05, easing: t => 1 - Math.pow(1 - t, 3), smoothWheel: true, touchMultiplier: 1.6 });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    // Same-page anchor links → eased scroll with sticky-nav offset
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      if (id.length < 2) return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: -84 });
+    });
+    window.__lenis = lenis;
+  })();
 
   init();
 </script>
