@@ -42,6 +42,8 @@
     @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0); opacity:1} 100%{transform:translateY(220px) rotate(540deg); opacity:0} }
 
     html { scroll-behavior: smooth; }
+    /* offset anchored scrolls so the sticky nav doesn't cover section tops */
+    .section, .livebar-band, #hero-card, [id] { scroll-margin-top: 84px; }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -267,7 +269,8 @@
     }
     .iplayer-btn:hover { transform: translateY(-2px); }
     .countdown-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; }
-    .countdown-time { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 4px; }
+    .countdown-time { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; margin-top: 4px; display: flex; align-items: baseline; gap: 14px; }
+    .countdown-time .cd-d { font-size: 24px; opacity: 0.78; }
 
     /* ─────────────────── CHOOSE YOUR COUNTRY ─────────────────── */
     .section { max-width: 1480px; margin: 0 auto; padding: 64px 48px; }
@@ -1260,7 +1263,8 @@
     const h = String(Math.floor((s%86400)/3600)).padStart(2,'0');
     const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
     const sec = String(s%60).padStart(2,'0');
-    return d > 0 ? `${d}d ${h}:${m}:${sec}` : `${h}:${m}:${sec}`;
+    const time = `<span class="cd-t">${h}:${m}:${sec}</span>`;
+    return d > 0 ? `<span class="cd-d">${d}d</span>${time}` : time;
   }
   function startCountdown() {
     const el = document.getElementById('countdown');
@@ -1270,13 +1274,13 @@
       // If a voting window is open, count down to its close…
       if (votingStatus === 'open' && votingEnd && !isNaN(votingEnd)) {
         const s = Math.floor((votingEnd - new Date())/1000);
-        if (s > 0) { if (label) label.textContent = 'Voting closes in'; el.textContent = fmtCountdown(s); return; }
+        if (s > 0) { if (label) label.textContent = 'Voting closes in'; el.innerHTML = fmtCountdown(s); return; }
       }
       // …otherwise count down to the Grand Final (never a dead "TBA")
       const gf = Math.floor((GRAND_FINAL - new Date())/1000);
       if (gf <= 0) { el.textContent = 'LIVE NOW'; if (label) label.textContent = 'Grand Final is'; return; }
       if (label) label.textContent = 'Grand Final in';
-      el.textContent = fmtCountdown(gf);
+      el.innerHTML = fmtCountdown(gf);
     }
     tick(); setInterval(tick, 1000);
   }
