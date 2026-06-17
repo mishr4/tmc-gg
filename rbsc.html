@@ -130,12 +130,6 @@
       padding: 52px 64px;
       box-shadow: 0 30px 80px -30px rgba(20,22,58,0.55);
     }
-    /* Subtle chevron-stripe texture (flat, on-brand — not a colour blend) */
-    .hero-card::after {
-      content: '';
-      position: absolute; inset: 0; z-index: 0; pointer-events: none;
-      background: repeating-linear-gradient(115deg, transparent 0 38px, rgba(255,255,255,0.022) 38px 40px);
-    }
     .hero-bokeh { display: none; }
     .hero-card video,
     .hero-card .hero-poster {
@@ -162,10 +156,11 @@
     }
     @keyframes heroFloat { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(-3deg) translateY(-10px)} }
     .nav-heart .chev-flag { filter: drop-shadow(0 2px 6px var(--glow)); }
+    .hero-eyebrow-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
     .ro-chip {
       display: inline-flex; align-items: center; gap: 7px;
       border: 1.5px solid var(--gold); color: var(--gold);
-      border-radius: 999px; padding: 4px 13px; margin-bottom: 14px;
+      border-radius: 999px; padding: 5px 14px;
       letter-spacing: 0.12em; font-size: 12px; font-weight: 700; text-transform: uppercase;
     }
     .ro-chip b { font-family: 'Archivo', sans-serif; font-weight: 900; }
@@ -199,7 +194,7 @@
       flex: 1; min-width: 260px;
       border-radius: 16px; padding: 16px 26px;
       background: var(--cirya-blue);
-      color: #fff; border-top: 3px solid var(--cirya-cyan);
+      color: #fff;
       display: flex; align-items: center; justify-content: space-between;
     }
 
@@ -214,11 +209,9 @@
 
     .hero-card-inner { position: relative; z-index: 2; }
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
       font-size: 12px; font-weight: 700;
       letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--cirya-cyan);
-      margin-bottom: 14px;
     }
     .hero-country {
       font-family: 'Archivo', sans-serif;
@@ -527,6 +520,29 @@
     .host-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
     .host-tag { font-size: 12px; font-weight: 700; padding: 7px 13px; border-radius: 999px; background: rgba(255,255,255,0.08); color: #fff; }
 
+    /* ─────────────────────── INTRO HOOK ─────────────────────── */
+    .intro { text-align: center; }
+    .intro-inner { max-width: 760px; margin: 0 auto; }
+    .intro-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 3.6vw, 42px); letter-spacing: -0.03em; line-height: 1.08; margin: 10px 0 16px; }
+    .intro-text { color: #4a4a52; font-size: 17px; line-height: 1.65; }
+    .intro-actions { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+    .btn-solid { background: var(--cirya-blue); color: #fff; font-weight: 700; font-size: 15px; padding: 13px 26px; border-radius: 999px; text-decoration: none; transition: transform .18s; }
+    .btn-solid:hover { transform: translateY(-2px); }
+    .btn-line { border: 1.5px solid var(--line); color: var(--ink); font-weight: 700; font-size: 15px; padding: 13px 26px; border-radius: 999px; text-decoration: none; transition: all .18s; }
+    .btn-line:hover { border-color: var(--ink); }
+
+    /* ─────────────────────── ONES TO WATCH ─────────────────────── */
+    .fav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .fav { border: 1px solid var(--line); border-radius: 18px; padding: 24px; background: #fff; transition: transform .18s, box-shadow .18s; }
+    .fav:hover { transform: translateY(-4px); box-shadow: 0 18px 44px -24px rgba(0,0,0,0.3); }
+    .fav-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .fav-top .chev-flag { width: 40px; flex-shrink: 0; }
+    .fav-country { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+    .fav-odds { margin-left: auto; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px; color: var(--cirya-blue); }
+    .fav-song { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+    .fav-song strong { color: var(--ink); font-weight: 700; }
+    .fav-note { font-size: 13.5px; color: #4a4a52; line-height: 1.5; }
+
     /* ─────────────────────── VOTE MODAL ─────────────────────── */
     .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,15,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 24px; }
     .modal.open { display: flex; }
@@ -595,6 +611,7 @@
       .statbar { padding: 0 16px; gap: 12px; }
       .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .fav-grid { grid-template-columns: 1fr; }
       .timeline { grid-template-columns: 1fr; }
       .news { padding: 56px 0; }
       .news-inner, .news-cards, .brand { padding-left: 16px; padding-right: 16px; }
@@ -659,8 +676,10 @@
 
         <!-- Text (right) -->
         <div class="hero-card-inner">
-          <span class="ro-chip">Entry <b id="hero-ro">04</b></span>
-          <div class="hero-eyebrow">Tune into the RBSC Live Stream</div>
+          <div class="hero-eyebrow-row">
+            <span class="ro-chip">Entry <b id="hero-ro">05</b></span>
+            <span class="hero-eyebrow">Tune into the RBSC Live Stream</span>
+          </div>
           <h1 class="hero-country poster" id="hero-country">Netherlands</h1>
           <p class="hero-desc" id="hero-desc">
             Support Cirya and the RPO (Robloxse Publieke Omroep) in this edition of
@@ -688,8 +707,8 @@
         </div>
         <div class="countdown">
           <div>
-            <div class="countdown-label">Voting closes in</div>
-            <div class="countdown-time" id="countdown">TBA</div>
+            <div class="countdown-label">Grand Final in</div>
+            <div class="countdown-time" id="countdown">—</div>
           </div>
           <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
         </div>
@@ -703,6 +722,19 @@
     <div class="stat"><div class="stat-num">2</div><div class="stat-label">Semi-Finals</div></div>
     <div class="stat"><div class="stat-num">1</div><div class="stat-label">Grand Final</div></div>
     <div class="stat"><div class="stat-num">Zürich</div><div class="stat-label">Host City 🇨🇭</div></div>
+  </section>
+
+  <!-- ───────── INTRO HOOK ───────── -->
+  <section class="section intro">
+    <div class="intro-inner">
+      <div class="section-kicker" style="display:inline-block">What is the RBSC?</div>
+      <h2 class="intro-title">Eight broadcasters. One stage in Zürich. One winner — decided by you.</h2>
+      <p class="intro-text">The Robroadcasting Song Contest is Cirya Noticias' music event of the year. Each country sends an artist and an original song, the continent tunes in live, and a public vote sends one of them to the top of the scoreboard. Watch every performance, back your favourites, and follow the points all the way to the gold <strong style="color:var(--cirya-blue)">douze points</strong>.</p>
+      <div class="intro-actions">
+        <a class="btn-solid" href="#vote">Watch &amp; vote</a>
+        <a class="btn-line" href="/rbsc-news">Latest news</a>
+      </div>
+    </div>
   </section>
 
   <!-- ───────── CHOOSE COUNTRY ───────── -->
@@ -723,6 +755,32 @@
       <p class="section-sub">Tap any performance to watch the full video and cast your vote. Vote share is shown as live points — the leader takes <b style="color:var(--cirya-blue)">douze points</b>.</p>
     </div>
     <div class="video-grid" id="video-grid"></div>
+  </section>
+
+  <!-- ───────── ONES TO WATCH ───────── -->
+  <section class="section" id="favourites" style="padding-top:0;">
+    <div class="section-head">
+      <div class="section-kicker">Ones to watch</div>
+      <h2 class="section-title display">The favourites</h2>
+      <p class="section-sub">Where the bookies and the fans have their money — for now. It all changes on the night.</p>
+    </div>
+    <div class="fav-grid">
+      <div class="fav">
+        <div class="fav-top"><img class="chev-flag" src="/flags/austria.svg" alt="Austria"><span class="fav-country">Austria</span><span class="fav-odds">7/2</span></div>
+        <div class="fav-song"><strong>JJ</strong> — “Shapeshifter”</div>
+        <div class="fav-note">The first song confirmed and the early frontrunner — a soaring vocal that's been the bar to beat all season.</div>
+      </div>
+      <div class="fav">
+        <div class="fav-top"><img class="chev-flag" src="/flags/netherlands.svg" alt="Netherlands"><span class="fav-country">Netherlands</span><span class="fav-odds">4/1</span></div>
+        <div class="fav-song"><strong>Joost Klein</strong> — “Europapa”</div>
+        <div class="fav-note">Cirya's own home favourite. A high-energy, crowd-on-its-feet anthem that owns the televote.</div>
+      </div>
+      <div class="fav">
+        <div class="fav-top"><img class="chev-flag" src="/flags/sweden.svg" alt="Sweden"><span class="fav-country">Sweden</span><span class="fav-odds">6/1</span></div>
+        <div class="fav-song"><strong>Honey.</strong> — “Dreams”</div>
+        <div class="fav-note">Surging fast on strong rehearsal buzz — the dark horse the top two are watching closely.</div>
+      </div>
+    </div>
   </section>
 
   <!-- ───────── HOW TO VOTE ───────── -->
@@ -1196,22 +1254,29 @@
   }
 
   // Countdown to the admin-configured voting end time (falls back to next midnight UTC)
+  const GRAND_FINAL = new Date('2026-10-17T09:00:00Z'); // Sat 17 Oct 2026, 09:00
+  function fmtCountdown(s) {
+    const d = Math.floor(s/86400);
+    const h = String(Math.floor((s%86400)/3600)).padStart(2,'0');
+    const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
+    const sec = String(s%60).padStart(2,'0');
+    return d > 0 ? `${d}d ${h}:${m}:${sec}` : `${h}:${m}:${sec}`;
+  }
   function startCountdown() {
     const el = document.getElementById('countdown');
     const label = document.querySelector('.countdown-label');
     function tick() {
-      if (votingStatus === 'closed') { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting is'; return; }
       if (votingStatus === 'paused') { el.textContent = 'PAUSED'; if (label) label.textContent = 'Voting is'; return; }
-      // No end date configured yet → show TBA instead of a misleading countdown
-      if (!votingEnd || isNaN(votingEnd)) { el.textContent = 'TBA'; if (label) label.textContent = 'Voting dates'; return; }
-      let s = Math.floor((votingEnd - new Date())/1000);
-      if (s <= 0) { el.textContent = 'CLOSED'; if (label) label.textContent = 'Voting has'; return; }
-      if (label) label.textContent = 'Voting closes in';
-      const d = Math.floor(s/86400);
-      const h = String(Math.floor((s%86400)/3600)).padStart(2,'0');
-      const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
-      const sec = String(s%60).padStart(2,'0');
-      el.textContent = d > 0 ? `${d}d ${h}:${m}:${sec}` : `${h}:${m}:${sec}`;
+      // If a voting window is open, count down to its close…
+      if (votingStatus === 'open' && votingEnd && !isNaN(votingEnd)) {
+        const s = Math.floor((votingEnd - new Date())/1000);
+        if (s > 0) { if (label) label.textContent = 'Voting closes in'; el.textContent = fmtCountdown(s); return; }
+      }
+      // …otherwise count down to the Grand Final (never a dead "TBA")
+      const gf = Math.floor((GRAND_FINAL - new Date())/1000);
+      if (gf <= 0) { el.textContent = 'LIVE NOW'; if (label) label.textContent = 'Grand Final is'; return; }
+      if (label) label.textContent = 'Grand Final in';
+      el.textContent = fmtCountdown(gf);
     }
     tick(); setInterval(tick, 1000);
   }
