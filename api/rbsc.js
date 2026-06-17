@@ -15,18 +15,19 @@
  * or a database (ask and I'll wire it).
  */
 
+// Order = official running order (Estonia withdrew; Indonesia joined)
 let performances = [
-  { id: 'nl', country: 'Netherlands',    broadcaster: 'Cirya',                              artist: 'Joost Klein',   song: 'Europapa',         videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'au', country: 'Australia',      broadcaster: 'UBC',                                artist: 'Delta Goodrem', song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'se', country: 'Sweden',         broadcaster: 'Blue News Broadcast',                artist: 'Honey.',        song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'gb', country: 'United Kingdom', broadcaster: 'Northwest Radio Network', votingDisabled: true, statementUrl: '/rbsc-uk', artist: 'Amy Winehouse', song: 'Take the Box', videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'at', country: 'Austria',        broadcaster: 'Austrian RoBroadcasting Corporation', artist: 'JJ',           song: 'Shapeshifter',     videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'ee', country: 'Estonia',        broadcaster: 'ABU Television',                     artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'fi', country: 'Finland',        broadcaster: 'REV',                                artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'se', country: 'Sweden',         broadcaster: 'Blue News Broadcast',                artist: 'Honey.',        song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'au', country: 'Australia',      broadcaster: 'UBC',                                artist: 'Delta Goodrem', song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'ch', country: 'Switzerland',    broadcaster: 'SRB Network',           host: true,  artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'nl', country: 'Netherlands',    broadcaster: 'Cirya',                              artist: 'Joost Klein',   song: 'Europapa',         videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'id', country: 'Indonesia',      broadcaster: 'TBA',                                artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'fi', country: 'Finland',        broadcaster: 'REV',                                artist: 'TBA',           song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'gb', country: 'United Kingdom', broadcaster: 'Northwest Radio Network', votingDisabled: true, statementUrl: '/rbsc-uk', artist: 'Amy Winehouse', song: 'Take the Box', videoUrl: '', uploadedAt: new Date().toISOString() },
 ];
 
-let votes = { nl: 312, au: 240, se: 198, gb: 176, at: 264, ee: 0, fi: 0, ch: 0 };
+let votes = { at: 264, se: 198, au: 240, ch: 0, nl: 312, id: 0, fi: 0, gb: 176 };
 
 let votingConfig = {
   status: 'open',          // open | closed | paused

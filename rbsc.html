@@ -878,7 +878,7 @@
 <script>
   // Flag emoji lookup by country name
   const FLAGS = {
-    netherlands:'🇳🇱', switzerland:'🇨🇭', sweden:'🇸🇪', estonia:'🇪🇪',
+    netherlands:'🇳🇱', switzerland:'🇨🇭', sweden:'🇸🇪', estonia:'🇪🇪', indonesia:'🇮🇩',
     'united kingdom':'🇬🇧', uk:'🇬🇧', france:'🇫🇷', germany:'🇩🇪', italy:'🇮🇹',
     spain:'🇪🇸', norway:'🇳🇴', finland:'🇫🇮', ireland:'🇮🇪', ukraine:'🇺🇦',
     poland:'🇵🇱', belgium:'🇧🇪', austria:'🇦🇹', portugal:'🇵🇹', greece:'🇬🇷',
@@ -904,9 +904,14 @@
   const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
 
   // Our unique chevron flag is the mark (resembles the Cirya logo). Reused at any size.
+  // Falls back to the emoji flag if a custom SVG isn't there yet.
   function chevFlag(country, px) {
-    const slug = slugFor(country);
-    return `<img class="chev-flag" src="/flags/${slug}.svg" alt="${esc(country)} flag" style="width:${px}px;height:auto" onerror="this.style.visibility='hidden'">`;
+    const slug = slugFor(country), emoji = flagFor(country);
+    return `<span class="flag-wrap" style="display:inline-block">`
+      + `<img class="chev-flag" src="/flags/${slug}.svg" alt="${esc(country)} flag" style="width:${px}px;height:auto" `
+      + `onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">`
+      + `<span style="display:none;font-size:${Math.round(px*0.7)}px;line-height:1">${emoji}</span>`
+      + `</span>`;
   }
 
   // CSS confetti burst (vote success only — never ambient)
