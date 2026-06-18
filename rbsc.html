@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Archivo:wght@800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -44,6 +45,16 @@
     html { scroll-behavior: smooth; }
     /* offset anchored scrolls so the sticky nav doesn't cover section tops */
     .section, .livebar-band, #hero-card, [id] { scroll-margin-top: 84px; }
+    /* Lenis eased momentum scrolling (lets it drive the scroll cleanly) */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+
+    /* Scroll-reveal entrance animation */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s cubic-bezier(0.2,0.8,0.2,1), transform 0.7s cubic-bezier(0.2,0.8,0.2,1); will-change: opacity, transform; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none !important; } }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -100,11 +111,15 @@
       align-items: center;
       gap: 8px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 600;
       letter-spacing: -0.03em;
-      color: var(--flag-red);
+      color: var(--ink);
+      padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--line);
+      transition: border-color 0.2s, transform 0.2s;
     }
+    .live-pill:hover { border-color: var(--cirya-blue); transform: translateY(-1px); }
+    .live-pill svg { width: 13px; height: 13px; fill: var(--cirya-blue); }
     .live-dot {
       width: 9px; height: 9px; border-radius: 50%;
       background: var(--flag-red);
@@ -189,6 +204,13 @@
       color: #fff; background: var(--flag-red); padding: 6px 11px; border-radius: 999px;
     }
     .onair .live-dot { background: #fff; }
+    /* Off-air: contest isn't live yet — neutral, no pulse */
+    .offair {
+      display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.78); background: rgba(255,255,255,0.1); padding: 6px 11px; border-radius: 999px;
+    }
+    .offair .off-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.55); }
     .livebar-card .iplayer-btn { white-space: nowrap; box-shadow: 0 0 24px -6px var(--glow); }
     .livebar-meta { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; }
     .livebar-meta strong { color: #fff; }
@@ -661,7 +683,7 @@
         <li><a href="#schedule">Schedule</a></li>
       </ul>
     </div>
-    <a href="/songcontest" target="_blank" class="live-pill"><span class="live-dot"></span> Watch Live</a>
+    <a href="/songcontest" target="_blank" class="live-pill"><svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg> Open iPlayer</a>
   </nav>
 
   <!-- ───────── HERO ───────── -->
@@ -700,12 +722,12 @@
     <div class="livebar-band" id="tune">
       <div class="livebar">
         <div class="livebar-card">
-          <span class="onair"><span class="live-dot"></span> On Air</span>
+          <span class="offair"><span class="off-dot"></span> Off Air</span>
           <a href="/songcontest" target="_blank" class="iplayer-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Watch Live
+            Open iPlayer
           </a>
-          <div class="livebar-meta">Host: <strong>SRB Network</strong><br><span id="host-loc">Zurich, Switzerland</span></div>
+          <div class="livebar-meta">Live shows <strong>Oct 10 – 17</strong><br>Host: SRB Network · <span id="host-loc">Zürich</span></div>
         </div>
         <div class="countdown">
           <div>
@@ -1087,7 +1109,9 @@
   function featureCountry(id) {
     renderHero(id);
     const hero = document.getElementById('hero-card');
-    if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!hero) return;
+    if (window.__lenis) window.__lenis.scrollTo(hero, { offset: -84 });
+    else hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function renderCountries() {
@@ -1300,7 +1324,47 @@
   window.addEventListener('orientationchange', () => setTimeout(fitHeroText, 200));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroText);
 
-  init();
+  const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Eased momentum scrolling (Lenis) ──
+  if (!REDUCE && typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, touchMultiplier: 1.6 });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      if (id.length < 2) return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: -84 });
+    });
+    window.__lenis = lenis;
+  }
+
+  // ── Scroll-reveal entrance animations (below-the-fold only, run after render) ──
+  function scrollReveal(){
+    if (REDUCE || !('IntersectionObserver' in window)) return;
+    // Only sections below the hero — above-the-fold stays static (no flash)
+    const groups = ['#countries .section-head', '.country-chip',
+      '#vote .section-head', '.video-tile', '#favourites .section-head', '.fav',
+      '#howto .section-head', '.howto-step', '#host .section-head', '.host-card',
+      '#schedule .section-head', '.tl-item', '.news-inner > div', '.news-card', '.brand-left', '.brand-logo'];
+    const els = Array.from(document.querySelectorAll(groups.join(',')));
+    els.forEach(el => {
+      el.classList.add('reveal');
+      const sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+      el.style.transitionDelay = Math.min(Math.max(sibs,0), 6) * 55 + 'ms';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    els.forEach(el => io.observe(el));
+  }
+
+  init().then(scrollReveal).catch(scrollReveal);
 </script>
 </body>
 </html>
