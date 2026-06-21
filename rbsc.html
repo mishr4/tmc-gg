@@ -621,6 +621,7 @@
       max-width: calc(100% - 28px);
     }
     .s3d-hud .offair { background: rgba(255,255,255,0.12); }
+    .hud-info { display: inline-flex; align-items: center; gap: 14px; }
     .hud-cd { display: inline-flex; align-items: baseline; gap: 8px; color: #fff; white-space: nowrap; }
     .s3d-hud .countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; }
     .s3d-hud .countdown-time { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 8px; margin: 0; }
@@ -717,7 +718,11 @@
       .showcase3d .s3d-cap h2 { font-size: clamp(40px, 13vw, 72px); }
       .s3d-cap { padding-bottom: clamp(96px, 38vh, 176px); } /* lift captions clear of the bottom HUD, scaled to viewport height */
       .s3d-hint { bottom: 150px; }
-      .s3d-hud { gap: 9px 10px; padding: 9px 11px; bottom: 18px; row-gap: 9px; max-width: calc(100% - 20px); }
+      /* Tidy stacked card on phones (no more rounded blob) */
+      .s3d-hud { flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 14px; bottom: 18px; border-radius: 20px; width: min(94vw, 360px); max-width: none; }
+      .hud-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
+      .s3d-hud .hud-actions { display: flex; gap: 10px; }
+      .s3d-hud .hud-actions > * { flex: 1; justify-content: center; }
       .s3d-hud .countdown-time { font-size: 16px; }
       .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -733,7 +738,7 @@
     @media (max-width: 380px) {
       .video-grid { grid-template-columns: 1fr; }
       .country-photos { grid-template-columns: repeat(3, 1fr); max-width: 320px; }
-      .s3d-hud { max-width: calc(100% - 16px); }
+      .s3d-hud { width: calc(100vw - 24px); }
       .s3d-hud .countdown-label { display: none; } /* keep the timer; drop the label to fit */
     }
 
@@ -809,10 +814,12 @@
 
       <!-- Persistent EVENT HUD — sibling of the canvas so it survives the no-WebGL fallback -->
       <div class="s3d-hud" id="event-hud">
-        <span class="offair"><span class="off-dot"></span> Off Air</span>
-        <div class="hud-cd">
-          <span class="countdown-label">Grand Final in</span>
-          <span class="countdown-time" id="countdown">—</span>
+        <div class="hud-info">
+          <span class="offair"><span class="off-dot"></span> Off Air</span>
+          <div class="hud-cd">
+            <span class="countdown-label">Grand Final in</span>
+            <span class="countdown-time" id="countdown">—</span>
+          </div>
         </div>
         <div class="hud-actions">
           <a href="/songcontest" target="_blank" class="iplayer-btn hud-iplayer">
@@ -834,7 +841,7 @@
         <div class="fs-line">Live shows <strong>Oct 10 – 17</strong> · Host <strong>SRB Network</strong> · <span id="host-loc">Zürich</span></div>
       </div>
       <div class="fs-stats">
-        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Countries</div></div>
+        <div class="stat"><div class="stat-num">7</div><div class="stat-label">Countries</div></div>
         <div class="stat"><div class="stat-num">2</div><div class="stat-label">Semi-Finals</div></div>
         <div class="stat"><div class="stat-num">1</div><div class="stat-label">Grand Final</div></div>
         <div class="stat"><div class="stat-num">Zürich</div><div class="stat-label">Host City 🇨🇭</div></div>
@@ -1502,7 +1509,7 @@
       { c:'Sweden', city:'Stockholm', b:'Blue News Broadcast', lat:59.3, lng:18.1 },
       { c:'Australia', city:'Sydney', b:'UBC', lat:-33.9, lng:151.2 },
       { c:'Netherlands', city:'Amsterdam', b:'Cirya', lat:52.4, lng:4.9 },
-      { c:'Indonesia', city:'Jakarta', b:'SNO', lat:-6.2, lng:106.8 },
+      { c:'Estonia', city:'Tallinn', b:'ABU Television', lat:59.4, lng:24.75 },
       { c:'Finland', city:'Helsinki', b:'REV', lat:60.2, lng:24.9 },
     ];
 
@@ -1637,8 +1644,8 @@
     // Finale: real stock landmark photos for every nation
     (function buildGallery(){
       const wrap = document.getElementById('country-photos'); if (!wrap) return;
-      const Q = { Switzerland:'zurich,switzerland', Austria:'vienna,austria', Sweden:'stockholm,sweden', Australia:'sydney,opera-house', Netherlands:'amsterdam,canal', Indonesia:'jakarta,indonesia', Finland:'helsinki,finland' };
-      const CC = { Switzerland:'#A51A23', Austria:'#A51A23', Sweden:'#0041E5', Australia:'#002BBA', Netherlands:'#A51A23', Indonesia:'#A51A23', Finland:'#0041E5' };
+      const Q = { Switzerland:'zurich,switzerland', Austria:'vienna,austria', Sweden:'stockholm,sweden', Australia:'sydney,opera-house', Netherlands:'amsterdam,canal', Estonia:'tallinn,estonia', Finland:'helsinki,finland' };
+      const CC = { Switzerland:'#A51A23', Austria:'#A51A23', Sweden:'#0041E5', Australia:'#002BBA', Netherlands:'#A51A23', Estonia:'#0041E5', Finland:'#0041E5' };
       wrap.innerHTML = COUNTRIES.map((co,i)=>{
         const src = 'https://loremflickr.com/600/440/' + encodeURIComponent(Q[co.c] || co.city.toLowerCase()) + '?lock=' + (i+1);
         return '<figure class="cphoto" style="--cc:' + (CC[co.c]||'#0041E5') + '">'

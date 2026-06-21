@@ -15,19 +15,20 @@
  * or a database (ask and I'll wire it).
  */
 
-// Official running order. United Kingdom (Northwest Radio Network) is excluded
-// from Cirya's broadcast/portal; Estonia (ABU Television) withdrew / removed from participating.
+// Official running order (the old order, restored). Estonia (ABU Television)
+// re-participates after a change of ownership; Indonesia steps back out.
+// United Kingdom (Northwest Radio Network) remains excluded from Cirya's broadcast/portal.
 let performances = [
-  { id: 'at', country: 'Austria',     broadcaster: 'Austrian RoBroadcasting Corporation', artist: 'JJ',            song: 'Shapeshifter',     videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'se', country: 'Sweden',      broadcaster: 'Blue News Broadcast',                artist: 'Honey.',         song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'au', country: 'Australia',   broadcaster: 'UBC',                                artist: 'Delta Goodrem',  song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'ch', country: 'Switzerland', broadcaster: 'SRB Network',           host: true,  artist: 'Luca Hänni',     song: 'Love Me Better',   videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'nl', country: 'Netherlands', broadcaster: 'Cirya',                              artist: 'Joost Klein',    song: 'Europapa',         videoUrl: '', uploadedAt: new Date().toISOString() },
-  { id: 'id', country: 'Indonesia',   broadcaster: 'SNO',                                artist: 'TBA',            song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'au', country: 'Australia',   broadcaster: 'UBC',                                artist: 'Delta Goodrem',  song: 'Lost Without You', videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'se', country: 'Sweden',      broadcaster: 'Blue News Broadcast',                artist: 'Honey.',         song: 'Dreams',           videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'at', country: 'Austria',     broadcaster: 'Austrian RoBroadcasting Corporation', artist: 'JJ',            song: 'Shapeshifter',     videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'ee', country: 'Estonia',     broadcaster: 'ABU Television',                     artist: 'TBA',            song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
   { id: 'fi', country: 'Finland',     broadcaster: 'REV',                                artist: 'TBA',            song: 'TBA',              videoUrl: '', uploadedAt: new Date().toISOString() },
+  { id: 'ch', country: 'Switzerland', broadcaster: 'SRB Network',           host: true,  artist: 'Luca Hänni',     song: 'Love Me Better',   videoUrl: '', uploadedAt: new Date().toISOString() },
 ];
 
-let votes = { at: 264, se: 198, au: 240, ch: 150, nl: 312, id: 0, fi: 0 };
+let votes = { nl: 312, au: 240, se: 198, at: 264, ee: 0, fi: 0, ch: 150 };
 
 let votingConfig = {
   status: 'open',          // open | closed | paused
