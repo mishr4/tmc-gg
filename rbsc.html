@@ -584,6 +584,17 @@
     .s3d-flag img, .s3d-flag .chev-flag { width: 96px !important; height: auto; filter: drop-shadow(0 10px 26px rgba(0,0,0,0.5)); }
     .s3d-hint { position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); animation: hintbob 2s ease-in-out infinite; }
     @keyframes hintbob { 0%,100%{ transform: translate(-50%,0); } 50%{ transform: translate(-50%,6px); } }
+    /* Finale gallery — stock landmark photos of every nation */
+    .country-photos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-top: 30px; max-width: 920px; }
+    .cphoto { position: relative; aspect-ratio: 3/4; border-radius: 14px; overflow: hidden; background: var(--cc, #0041E5); box-shadow: 0 14px 34px rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1); }
+    .cphoto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cphoto::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,6,28,0.92) 8%, rgba(5,6,28,0.1) 55%); }
+    .cphoto figcaption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: center; gap: 8px; padding: 10px; text-align: left; }
+    .cphoto figcaption .chev-flag { width: 30px !important; height: auto; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+    .cphoto-meta { display: flex; flex-direction: column; min-width: 0; }
+    .cphoto-meta b { font-size: 13px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cphoto-meta i { font-size: 10px; font-style: normal; color: rgba(255,255,255,0.6); }
+    @media (max-width: 820px){ .country-photos { grid-template-columns: repeat(4, 1fr); max-width: 420px; } .cphoto-meta i { display:none; } }
     /* Fallback when WebGL/3D can't run: collapse to one screen + a soft glow */
     .showcase3d.no3d { height: auto; }
     .showcase3d.no3d .s3d-sticky { position: relative; height: auto; min-height: 80vh; padding: 120px 24px; }
@@ -796,21 +807,20 @@
           <h2 class="poster">A world<br>comes together.</h2>
           <p>From every corner of the map to one stage in Zürich.</p>
         </div>
-        <div class="s3d-cap" data-act="connect">
-          <div class="s3d-kicker">The network</div>
-          <h2 class="poster">Many nations.<br>One audience.</h2>
-          <p>Every broadcaster, every fan — connected for one night.</p>
-        </div>
-        <div class="s3d-cap" data-act="prize">
+        <div class="s3d-cap" data-act="trophy">
           <div class="s3d-kicker">The prize</div>
-          <h2 class="poster">One crown.</h2>
-          <p>Only one entry lifts it on October&nbsp;17.</p>
+          <h2 class="poster">One trophy.</h2>
+          <p>Only one nation lifts it on October&nbsp;17.</p>
         </div>
-        <div class="s3d-cap" data-act="tour">
-          <div class="s3d-kicker">On the road to Zürich</div>
-          <h2 class="poster" id="tour-country">Austria</h2>
-          <p id="tour-landmark">Vienna · Austrian RoBroadcasting Corporation</p>
-          <div class="s3d-flag" id="tour-flag"></div>
+        <div class="s3d-cap" data-act="draw">
+          <div class="s3d-kicker">The draw</div>
+          <h2 class="poster" id="draw-title">The die decides.</h2>
+          <p id="draw-sub">Which nation takes the stage…</p>
+        </div>
+        <div class="s3d-cap" data-act="gallery">
+          <div class="s3d-kicker">The line-up</div>
+          <h2 class="poster">Seven nations.<br>One stage.</h2>
+          <div class="country-photos" id="country-photos"></div>
         </div>
         <span class="s3d-hint">↓ scroll the world</span>
       </div>
@@ -1488,12 +1498,41 @@
       globe.add(ln); arcs.push(ln);
     });
 
-    // ── The prize / dice (faceted crystal) ──
-    const gemGeo = new THREE.IcosahedronGeometry(1.3, 0);
-    const gemMat = new THREE.MeshStandardMaterial({ color: 0x6b3df5, metalness: 0.55, roughness: 0.18, flatShading: true, transparent: true, opacity: 0 });
-    const gem = new THREE.Mesh(gemGeo, gemMat); gem.visible = false; scene.add(gem);
-    const gemWireMat = new THREE.LineBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0 });
-    gem.add(new THREE.LineSegments(new THREE.EdgesGeometry(gemGeo), gemWireMat));
+    // ── ACT 2: the trophy ──
+    const trophy = new THREE.Group();
+    const goldMat = new THREE.MeshStandardMaterial({ color: 0xF6C544, metalness: 1, roughness: 0.22, transparent: true, opacity: 0 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x241a04, metalness: 0.7, roughness: 0.4, transparent: true, opacity: 0 });
+    const cup  = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.30, 0.82, 44, 1, true), goldMat); cup.position.y = 1.0; trophy.add(cup);
+    const rim  = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.055, 16, 44), goldMat); rim.position.y = 1.41; rim.rotation.x = Math.PI/2; trophy.add(rim);
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.14, 22, 22), goldMat); knob.position.y = 0.56; trophy.add(knob);
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.34, 20), goldMat); stem.position.y = 0.38; trophy.add(stem);
+    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.36, 0.11, 30), goldMat); foot.position.y = 0.15; trophy.add(foot);
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.18, 0.74), darkMat); base.position.y = 0.04; trophy.add(base);
+    [[-1,1],[1,-1]].forEach(([sx,rz])=>{ const h = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.045, 12, 26, Math.PI), goldMat); h.position.set(sx*0.6, 1.05, 0); h.rotation.z = rz*Math.PI/2; trophy.add(h); });
+    trophy.position.y = -0.78; trophy.visible = false; scene.add(trophy);
+
+    // ── ACT 3: the draw — a die that rolls on a table and lands on the host ──
+    // Box material order is [+x,-x,+y,-y,+z,-z]; +y (index 2) is the face that lands up.
+    const FACE_ORDER = ['Austria','Sweden','Switzerland','Netherlands','Australia','Finland'];
+    function faceTex(name, host){
+      const cv = document.createElement('canvas'); cv.width = cv.height = 256; const x = cv.getContext('2d');
+      x.fillStyle = host ? '#0041E5' : '#0b1030'; x.fillRect(0,0,256,256);
+      x.strokeStyle = host ? '#FFD24A' : 'rgba(255,255,255,0.18)'; x.lineWidth = host ? 14 : 8; x.strokeRect(14,14,228,228);
+      x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.font = '700 ' + (name.length > 9 ? 30 : 38) + 'px "Plus Jakarta Sans", system-ui, sans-serif';
+      x.fillText(name, 128, host ? 110 : 128);
+      if (host){ x.fillStyle = '#FFD24A'; x.font = '800 26px "Plus Jakarta Sans", system-ui, sans-serif'; x.fillText('★ HOST ★', 128, 160); }
+      const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4; return tex;
+    }
+    const dieMats = FACE_ORDER.map(n => new THREE.MeshStandardMaterial({ map: faceTex(n, n==='Switzerland'), metalness: 0.15, roughness: 0.5, transparent: true, opacity: 0 }));
+    const die = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.4, 1.4), dieMats); die.visible = false; scene.add(die);
+    const dieRestY = -0.30;
+
+    // The table the die rolls on
+    const tableMat = new THREE.MeshStandardMaterial({ color: 0x0a1030, metalness: 0.25, roughness: 0.7, transparent: true, opacity: 0, side: THREE.DoubleSide });
+    const table = new THREE.Mesh(new THREE.CircleGeometry(6, 56), tableMat); table.rotation.x = -Math.PI/2; table.position.y = -1.0; table.visible = false; scene.add(table);
+    const tableRingMat = new THREE.MeshBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0, side: THREE.DoubleSide });
+    const tableRing = new THREE.Mesh(new THREE.RingGeometry(2.3, 2.42, 64), tableRingMat); tableRing.rotation.x = -Math.PI/2; tableRing.position.y = -0.99; tableRing.visible = false; scene.add(tableRing);
 
     // Lights — a white "sun" for realistic Earth shading + brand rim lights
     scene.add(new THREE.AmbientLight(0x223355, 0.45));
@@ -1506,6 +1545,20 @@
     const caps = {}; section.querySelectorAll('.s3d-cap').forEach(el => caps[el.dataset.act] = el);
     let curAct = '', curCountry = -1;
     function showAct(a){ if (a===curAct) return; curAct=a; Object.keys(caps).forEach(k => caps[k].classList.toggle('show', k===a)); }
+
+    // Finale: real stock landmark photos for every nation
+    (function buildGallery(){
+      const wrap = document.getElementById('country-photos'); if (!wrap) return;
+      const Q = { Switzerland:'zurich,switzerland', Austria:'vienna,austria', Sweden:'stockholm,sweden', Australia:'sydney,opera-house', Netherlands:'amsterdam,canal', Indonesia:'jakarta,indonesia', Finland:'helsinki,finland' };
+      const CC = { Switzerland:'#A51A23', Austria:'#A51A23', Sweden:'#0041E5', Australia:'#002BBA', Netherlands:'#A51A23', Indonesia:'#A51A23', Finland:'#0041E5' };
+      wrap.innerHTML = COUNTRIES.map((co,i)=>{
+        const src = 'https://loremflickr.com/600/440/' + encodeURIComponent(Q[co.c] || co.city.toLowerCase()) + '?lock=' + (i+1);
+        return '<figure class="cphoto" style="--cc:' + (CC[co.c]||'#0041E5') + '">'
+          + '<img loading="lazy" src="' + src + '" alt="' + co.city + '" onerror="this.remove()">'
+          + '<figcaption>' + chevFlag(co.c, 30) + '<span class="cphoto-meta"><b>' + co.c + '</b><i>' + co.city + '</i></span></figcaption>'
+          + '</figure>';
+      }).join('');
+    })();
 
     let mx = 0, my = 0, lastW = 0, lastH = 0;
     window.addEventListener('pointermove', (e) => { mx = e.clientX / window.innerWidth - 0.5; my = e.clientY / window.innerHeight - 0.5; }, { passive: true });
@@ -1521,61 +1574,81 @@
       // Starfield: gentle drift, always present (the "space" backdrop)
       stars.rotation.y = t * 0.01; stars.rotation.x = my * 0.05;
 
-      // ── Globe: present for intro + connect, fades out into the prize ──
-      const gOp = 1 - seg(p, 0.42, 0.56);
+      // Act opacities (globe → trophy → die/table → globe+photos)
+      const introVis   = 1 - seg(p, 0.20, 0.30);
+      const galleryVis = seg(p, 0.66, 0.74);
+      const gOp = Math.max(introVis, galleryVis);                  // globe: opening + finale
+      const tOp = seg(p, 0.20, 0.30) * (1 - seg(p, 0.38, 0.46));   // trophy
+      const dOp = seg(p, 0.42, 0.48) * (1 - seg(p, 0.66, 0.72));   // die + table
+
+      // ── Globe (opening + finale) ──
       globe.visible = gOp > 0.01;
       if (globe.visible) {
         sphereMat.opacity = gOp;
         cloudMat.opacity = 0.45 * gOp;
         atmoMat.uniforms.uOpacity.value = gOp;
-        globe.rotation.y = t*0.06 + p*Math.PI*1.2;
-        globe.rotation.x = lerp(0.18, -0.05, p) + my*0.12;
-        clouds.rotation.y = t*0.09; // clouds drift faster than the surface
-        globe.scale.setScalar(lerp(0.95, 1.22, seg(p,0,0.42)));
-        globe.position.y = lerp(0, 0.15, seg(p,0,0.42));
-        // markers fade in during intro→connect
-        const mOp = seg(p, 0.06, 0.22) * gOp;
+        globe.rotation.y = t * 0.06;
+        globe.rotation.x = 0.12 + my * 0.12;
+        clouds.rotation.y = t * 0.09; // clouds drift faster than the surface
+        const opening = p < 0.5;
+        globe.scale.setScalar(opening ? lerp(0.95, 1.18, seg(p,0,0.20)) : lerp(1.05, 1.0, galleryVis));
+        // markers + ambient arcs (audiences connecting)
+        const mOp = (opening ? seg(p,0.05,0.16) : galleryVis) * gOp;
         markerMats.forEach((m,i)=> m.opacity = mOp * (0.6 + 0.4*Math.sin(t*3 + i)) );
-        // arcs draw in across the connect act
-        const af = seg(p, 0.18, 0.42);
-        arcs.forEach((ln,i)=>{ const f = clamp01(af*arcs.length - i); ln.geometry.setDrawRange(0, Math.floor(2 + f*(ln.userData.count-2))); ln.material.opacity = (f>0?0.85:0)*gOp; });
+        const af = opening ? seg(p, 0.06, 0.18) : 1;
+        arcs.forEach((ln,i)=>{ const f = clamp01(af*arcs.length - i); ln.geometry.setDrawRange(0, Math.floor(2 + f*(ln.userData.count-2))); ln.material.opacity = (f>0?0.7:0)*gOp; });
       }
 
-      // ── Prize / dice: fades in ~0.45, rolls through the tour ──
-      const gemOp = seg(p, 0.46, 0.6);
-      gem.visible = gemOp > 0.01;
-      if (gem.visible) {
-        gemMat.opacity = gemOp; gemWireMat.opacity = 0.55*gemOp;
-        const roll = seg(p, 0.6, 1);
-        gem.scale.setScalar(lerp(0.55, 1.05, seg(p,0.46,0.66)));
-        gem.rotation.y = t*0.8 + p*Math.PI*6;
-        gem.rotation.x = t*0.5 + roll*Math.PI*2;
-        gem.position.x = Math.sin(roll*Math.PI*2)*0.25;
-        gem.position.y = Math.sin(t*1.5)*0.05;
+      // ── Trophy ──
+      trophy.visible = tOp > 0.01;
+      if (trophy.visible) {
+        goldMat.opacity = tOp; darkMat.opacity = tOp;
+        trophy.rotation.y = t * 0.5;
+        trophy.scale.setScalar(lerp(0.6, 1.15, seg(p,0.20,0.32)));
+        trophy.position.y = -0.78 + Math.sin(t*1.4) * 0.04;
+      }
+
+      // ── The draw: die rolls across the table and lands on the host ──
+      const showDie = dOp > 0.01;
+      die.visible = table.visible = tableRing.visible = showDie;
+      if (showDie) {
+        dieMats.forEach(m => m.opacity = dOp);
+        tableMat.opacity = 0.85 * dOp; tableRingMat.opacity = 0.5 * dOp;
+        const d = seg(p, 0.42, 0.66);
+        const ease = d*d*(3 - 2*d);                 // smoothstep
+        die.rotation.x = (1 - ease) * Math.PI * 6;  // 3 full tumbles → settles aligned
+        die.rotation.y = (1 - ease) * Math.PI * 4;
+        die.rotation.z = (1 - ease) * Math.PI;
+        die.position.x = lerp(-2.6, 0, ease);       // rolls in from the left
+        die.position.z = lerp(0.8, 0, ease);
+        die.position.y = dieRestY + Math.abs(Math.sin(d*Math.PI*3)) * (1 - ease) * 1.3; // decaying bounce
+        tableRing.rotation.z = t * 0.3;
       }
 
       // ── Captions ──
-      if (p < 0.18) showAct('intro');
-      else if (p < 0.42) showAct('connect');
-      else if (p < 0.60) showAct('prize');
-      else {
-        showAct('tour');
-        const idx = Math.min(COUNTRIES.length-1, Math.floor(seg(p,0.6,1) * COUNTRIES.length));
-        if (idx !== curCountry) {
-          curCountry = idx; const co = COUNTRIES[idx];
-          document.getElementById('tour-country').textContent = co.c;
-          document.getElementById('tour-landmark').textContent = co.city + ' · ' + co.b;
-          document.getElementById('tour-flag').innerHTML = chevFlag(co.c, 96);
+      if (p < 0.20) showAct('intro');
+      else if (p < 0.42) showAct('trophy');
+      else if (p < 0.70) {
+        showAct('draw');
+        const landed = seg(p, 0.42, 0.66) > 0.82 ? 1 : 0;
+        if (landed !== curCountry) {
+          curCountry = landed;
+          document.getElementById('draw-title').textContent = landed ? 'Switzerland.' : 'The die decides.';
+          document.getElementById('draw-sub').textContent = landed ? 'Host nation — Zürich, October 17.' : 'Which nation takes the stage…';
         }
-      }
+      } else showAct('gallery');
 
-      camera.position.x = mx*0.8; camera.position.y = -my*0.6; camera.lookAt(0,0,0);
+      // ── Camera: drops down over the table during the draw, free otherwise ──
+      camera.position.x = mx * 0.6;
+      camera.position.y = -my * 0.4 + dOp * 1.5;
+      camera.position.z = 4.4 - dOp * 0.3;
+      camera.lookAt(0, -dOp * 0.5, 0);
       l1.intensity = 1.0 + Math.sin(t*1.2)*0.3;
       renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    window.__three = { scene, globe, gem, arcs, renderer, frame };
+    window.__three = { scene, globe, trophy, die, table, arcs, renderer, frame };
   })();
 
   // ── Scroll-reveal entrance animations (below-the-fold only, run after render) ──
