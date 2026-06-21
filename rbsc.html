@@ -1433,13 +1433,38 @@
     ];
 
     // ── Globe ──
+    // ── Starfield backdrop (depth of space) ──
+    const starGeo = new THREE.BufferGeometry();
+    const starN = 2200, starPos = new Float32Array(starN*3);
+    for (let i=0;i<starN;i++){ const rr=18+Math.random()*30, u=Math.random()*2-1, a=Math.random()*Math.PI*2, s=Math.sqrt(1-u*u); starPos[i*3]=rr*s*Math.cos(a); starPos[i*3+1]=rr*u; starPos[i*3+2]=rr*s*Math.sin(a); }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x9fb6ff, size: 0.08, sizeAttenuation: true, transparent: true, opacity: 0.85 }));
+    scene.add(stars);
+
+    // ── Photoreal Earth ──
     const globe = new THREE.Group(); scene.add(globe);
-    const sphereMat = new THREE.MeshStandardMaterial({ color: 0x0b1340, metalness: 0.4, roughness: 0.75, transparent: true, opacity: 1 });
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 48, 48), sphereMat); globe.add(sphere);
-    const wireMat = new THREE.LineBasicMaterial({ color: 0x2b4cc0, transparent: true, opacity: 0.28 });
-    const wire = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(R*1.004, 24, 16)), wireMat); globe.add(wire);
-    const atmoMat = new THREE.MeshBasicMaterial({ color: 0x0ED7FF, transparent: true, opacity: 0.06, side: THREE.BackSide });
-    globe.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.18, 32, 32), atmoMat));
+    const texLoader = new THREE.TextureLoader(); texLoader.setCrossOrigin('anonymous');
+    const TBASE = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/textures/planets/';
+    const tx = (f, cb) => texLoader.load(TBASE+f, (t)=>{ if(cb)cb(t); }, undefined, ()=>{});
+    const sphereMat = new THREE.MeshPhongMaterial({ color: 0x223355, specular: 0x333333, shininess: 14, transparent: true, opacity: 1 });
+    tx('earth_atmos_2048.jpg', t=>{ sphereMat.map=t; sphereMat.color.set(0xffffff); sphereMat.needsUpdate=true; });
+    tx('earth_specular_2048.jpg', t=>{ sphereMat.specularMap=t; sphereMat.specular.set(0x555555); sphereMat.needsUpdate=true; });
+    tx('earth_normal_2048.jpg', t=>{ sphereMat.normalMap=t; sphereMat.needsUpdate=true; });
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 64), sphereMat); globe.add(sphere);
+
+    // Clouds layer
+    const cloudMat = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, depthWrite: false });
+    const clouds = new THREE.Mesh(new THREE.SphereGeometry(R*1.015, 48, 48), cloudMat); globe.add(clouds);
+    tx('earth_clouds_1024.png', t=>{ cloudMat.map=t; cloudMat.alphaMap=t; cloudMat.needsUpdate=true; });
+
+    // Fresnel atmosphere glow
+    const atmoMat = new THREE.ShaderMaterial({
+      transparent: true, side: THREE.BackSide, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uOpacity: { value: 1 }, uColor: { value: new THREE.Color(0x3aa0ff) } },
+      vertexShader: 'varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+      fragmentShader: 'varying vec3 vN; uniform float uOpacity; uniform vec3 uColor; void main(){ float i=pow(0.72 - abs(vN.z), 3.0); gl_FragColor=vec4(uColor, max(0.0,i)*uOpacity); }'
+    });
+    globe.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.25, 48, 48), atmoMat));
 
     // Country markers (glow dots) on the globe
     const markerMats = [];
@@ -1470,11 +1495,12 @@
     const gemWireMat = new THREE.LineBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0 });
     gem.add(new THREE.LineSegments(new THREE.EdgesGeometry(gemGeo), gemWireMat));
 
-    // Lights
-    scene.add(new THREE.AmbientLight(0x3322aa, 0.7));
-    const l1 = new THREE.PointLight(0x00D7E2, 1.3, 30); l1.position.set(5, 3, 5); scene.add(l1);
-    const l2 = new THREE.PointLight(0xFF48BC, 1.3, 30); l2.position.set(-5, -2, 4); scene.add(l2);
-    const l3 = new THREE.PointLight(0x0041E5, 1.1, 30); l3.position.set(0, 5, -3); scene.add(l3);
+    // Lights — a white "sun" for realistic Earth shading + brand rim lights
+    scene.add(new THREE.AmbientLight(0x223355, 0.45));
+    const sun = new THREE.DirectionalLight(0xfff4e6, 1.5); sun.position.set(-4, 2.5, 3); scene.add(sun);
+    const l1 = new THREE.PointLight(0x00D7E2, 1.1, 30); l1.position.set(5, 3, 5); scene.add(l1);
+    const l2 = new THREE.PointLight(0xFF48BC, 1.1, 30); l2.position.set(-5, -2, 4); scene.add(l2);
+    const l3 = new THREE.PointLight(0x0041E5, 0.9, 30); l3.position.set(0, 5, -3); scene.add(l3);
 
     // Caption acts
     const caps = {}; section.querySelectorAll('.s3d-cap').forEach(el => caps[el.dataset.act] = el);
@@ -1492,21 +1518,27 @@
       const p = clamp01(-r.top / ((r.height - window.innerHeight) || 1));
       const t = performance.now() * 0.001;
 
+      // Starfield: gentle drift, always present (the "space" backdrop)
+      stars.rotation.y = t * 0.01; stars.rotation.x = my * 0.05;
+
       // ── Globe: present for intro + connect, fades out into the prize ──
       const gOp = 1 - seg(p, 0.42, 0.56);
       globe.visible = gOp > 0.01;
       if (globe.visible) {
-        sphereMat.opacity = gOp; wireMat.opacity = 0.28*gOp; atmoMat.opacity = 0.06*gOp;
-        globe.rotation.y = t*0.12 + p*Math.PI*1.5;
-        globe.rotation.x = lerp(0.15, -0.1, p) + my*0.15;
-        globe.scale.setScalar(lerp(0.9, 1.18, seg(p,0,0.42)));
-        globe.position.y = lerp(0, 0.2, seg(p,0,0.42));
+        sphereMat.opacity = gOp;
+        cloudMat.opacity = 0.45 * gOp;
+        atmoMat.uniforms.uOpacity.value = gOp;
+        globe.rotation.y = t*0.06 + p*Math.PI*1.2;
+        globe.rotation.x = lerp(0.18, -0.05, p) + my*0.12;
+        clouds.rotation.y = t*0.09; // clouds drift faster than the surface
+        globe.scale.setScalar(lerp(0.95, 1.22, seg(p,0,0.42)));
+        globe.position.y = lerp(0, 0.15, seg(p,0,0.42));
         // markers fade in during intro→connect
         const mOp = seg(p, 0.06, 0.22) * gOp;
         markerMats.forEach((m,i)=> m.opacity = mOp * (0.6 + 0.4*Math.sin(t*3 + i)) );
         // arcs draw in across the connect act
         const af = seg(p, 0.18, 0.42);
-        arcs.forEach((ln,i)=>{ const f = clamp01(af*arcs.length - i); ln.geometry.setDrawRange(0, Math.floor(2 + f*(ln.userData.count-2))); ln.material.opacity = (f>0?0.75:0)*gOp; });
+        arcs.forEach((ln,i)=>{ const f = clamp01(af*arcs.length - i); ln.geometry.setDrawRange(0, Math.floor(2 + f*(ln.userData.count-2))); ln.material.opacity = (f>0?0.85:0)*gOp; });
       }
 
       // ── Prize / dice: fades in ~0.45, rolls through the tour ──
@@ -1566,7 +1598,23 @@
     els.forEach(el => io.observe(el));
   }
 
-  init().then(scrollReveal).catch(scrollReveal);
+  // ── Page-wide 3D: mouse-tilt on cards (desktop pointers only) ──
+  function init3DTilt(){
+    if (REDUCE || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.querySelectorAll('.video-tile, .fav, .host-card, .stat, .howto-step').forEach(card => {
+      card.style.transformStyle = 'preserve-3d';
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transition = 'transform 0.08s ease-out';
+        card.style.transform = `perspective(820px) rotateX(${(-py*8).toFixed(2)}deg) rotateY(${(px*10).toFixed(2)}deg) translateZ(6px)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transition = 'transform 0.4s ease'; card.style.transform = ''; });
+    });
+  }
+
+  init().then(() => { scrollReveal(); init3DTilt(); }).catch(() => { scrollReveal(); init3DTilt(); });
 </script>
 </body>
 </html>
