@@ -73,8 +73,8 @@
 
     /* ─────────────────────────── NAV ─────────────────────────── */
     .nav {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
@@ -83,11 +83,18 @@
       background: rgba(255,255,255,0.85);
       backdrop-filter: saturate(180%) blur(22px);
       border-bottom: 1px solid var(--line);
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     }
     .nav::after {
       content: ''; position: absolute; left: 0; bottom: -1px; height: 2px;
       background: var(--cirya-blue); animation: navline 0.8s ease-out forwards;
     }
+    /* Immersive nav while the cinematic owns the viewport — dark glass, light text */
+    .cine-top .nav { background: rgba(5,6,28,0.35); backdrop-filter: saturate(140%) blur(16px); border-bottom-color: transparent; }
+    .cine-top .nav::after { display: none; }
+    .cine-top .nav-links a, .cine-top .live-pill { color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.5); }
+    .cine-top .live-pill { border-color: rgba(255,255,255,0.4); }
+    .cine-top .live-pill svg { fill: #fff; }
 
     .nav-left { display: flex; align-items: center; gap: 40px; }
 
@@ -582,7 +589,7 @@
     .s3d-cap p { margin-top: 18px; font-size: 17px; color: rgba(255,255,255,0.75); max-width: 540px; }
     .s3d-flag { margin-top: 22px; width: 96px; }
     .s3d-flag img, .s3d-flag .chev-flag { width: 96px !important; height: auto; filter: drop-shadow(0 10px 26px rgba(0,0,0,0.5)); }
-    .s3d-hint { position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); animation: hintbob 2s ease-in-out infinite; }
+    .s3d-hint { position: absolute; left: 50%; bottom: 108px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); animation: hintbob 2s ease-in-out infinite; pointer-events: none; }
     @keyframes hintbob { 0%,100%{ transform: translate(-50%,0); } 50%{ transform: translate(-50%,6px); } }
     /* Finale gallery — stock landmark photos of every nation */
     .country-photos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-top: 30px; max-width: 920px; }
@@ -602,6 +609,46 @@
     .showcase3d.no3d .s3d-cap:not([data-act="intro"]) { display: none; }
     .showcase3d.no3d::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 45%, rgba(0,215,226,0.18), transparent 70%), radial-gradient(50% 50% at 60% 60%, rgba(255,72,188,0.16), transparent 70%); }
 
+    /* ── Persistent EVENT HUD (pinned to the bottom of the cinematic, survives fallback) ── */
+    .s3d-hud {
+      position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+      z-index: 4; pointer-events: auto;
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center;
+      padding: 9px 9px 9px 16px; border-radius: 999px;
+      background: rgba(5,6,28,0.55); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 16px 40px -16px rgba(0,0,0,0.7);
+      max-width: calc(100% - 28px);
+    }
+    .s3d-hud .offair { background: rgba(255,255,255,0.12); }
+    .hud-cd { display: inline-flex; align-items: baseline; gap: 8px; color: #fff; white-space: nowrap; }
+    .s3d-hud .countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; }
+    .s3d-hud .countdown-time { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 8px; margin: 0; }
+    .s3d-hud .countdown-time .cd-d { font-size: 15px; opacity: 0.78; }
+    .hud-actions { display: inline-flex; align-items: center; gap: 9px; }
+    .s3d-hud .hud-iplayer { padding: 9px 15px; font-size: 14px; background: #fff; color: var(--ink); box-shadow: none; }
+    .s3d-hud .hud-iplayer svg { fill: var(--cirya-blue); }
+    .hud-vote { display: inline-flex; align-items: center; gap: 6px; padding: 9px 17px; border-radius: 999px; font-weight: 800; font-size: 14px; color: #042b2e; background: var(--cirya-cyan); text-decoration: none; transition: transform 0.18s; }
+    .hud-vote:hover { transform: translateY(-2px); }
+    .hud-skip { display: none; }
+
+    /* ── Handoff fact strip: last dark beat of the film → hard cut to the daylight site ── */
+    .factstrip { background: #05061c; padding: 60px 48px; }
+    .factstrip-inner { max-width: 1480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 36px; flex-wrap: wrap; }
+    .fs-meta { min-width: 280px; flex: 1; }
+    .fs-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cirya-cyan); margin-bottom: 10px; }
+    .fs-line { font-size: 19px; line-height: 1.5; color: rgba(255,255,255,0.82); }
+    .fs-line strong { color: #fff; font-weight: 700; }
+    .fs-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; flex: 1.4; min-width: 320px; }
+
+    /* ── No-WebGL / reduce-motion fallback: surface the HUD + a skip link ── */
+    .showcase3d.no3d .s3d-sticky { flex-direction: column; gap: 22px; }
+    .showcase3d.no3d .s3d-stage { height: auto; width: auto; flex: none; }
+    .showcase3d.no3d .s3d-cap { position: relative; inset: auto; padding-bottom: 0; }
+    .showcase3d.no3d .s3d-hud { position: relative; left: auto; bottom: auto; transform: none; opacity: 1; }
+    .showcase3d.no3d .s3d-hint { display: none; }
+    .showcase3d.no3d .hud-skip { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.72); text-decoration: underline; font-size: 13px; font-weight: 600; }
+
     /* ─────────────────────── VOTE MODAL ─────────────────────── */
     .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,15,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 24px; }
     .modal.open { display: flex; }
@@ -615,7 +662,7 @@
     .modal-country { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.03em; text-transform: uppercase; }
     .modal-broadcaster { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cirya-blue); margin: 6px 0 2px; }
     .modal-song { font-size: 17px; color: var(--muted); margin-bottom: 26px; }
-    .modal-vote { width: 100%; padding: 17px; font-size: 17px; font-weight: 700; color: #fff; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(120deg, var(--cirya-blue), var(--cirya-cyan)); transition: transform 0.18s, opacity 0.2s; font-family: inherit; }
+    .modal-vote { width: 100%; padding: 17px; font-size: 17px; font-weight: 700; color: #fff; border: none; border-radius: 14px; cursor: pointer; background: var(--cirya-blue); transition: transform 0.18s, opacity 0.2s; font-family: inherit; }
     .modal-vote:hover { transform: translateY(-2px); }
     .modal-vote:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .vote-blocked { padding: 16px 18px; border-radius: 14px; background: rgba(165,26,35,0.07); border: 1px solid rgba(165,26,35,0.2); }
@@ -648,9 +695,8 @@
       .video-grid { grid-template-columns: repeat(2, 1fr); }
       .timeline { grid-template-columns: repeat(2, 1fr); }
       .news-cards { grid-template-columns: 1fr; }
-      .livebar { flex-direction: column; }
-      .livebar-card, .countdown { width: 100%; }
-      .statbar { grid-template-columns: repeat(2, 1fr); }
+      .factstrip-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+      .fs-stats { grid-template-columns: repeat(2, 1fr); width: 100%; }
       .howto-grid { grid-template-columns: 1fr; }
       .host-card { grid-template-columns: 1fr; text-align: center; gap: 20px; justify-items: center; }
       .host-card .host-tags { justify-content: center; }
@@ -666,10 +712,13 @@
       .hero { padding: 24px 16px; }
       .hero-card { padding: 30px 24px; min-height: 0; }
       .hero-flagwrap .chev-flag { max-width: 240px; }
-      .livebar { padding: 0 16px; }
-      .statbar { padding: 0 16px; gap: 12px; }
-      .showcase3d { height: 165vh; }
-      .showcase3d .s3d-text h2 { font-size: clamp(40px, 14vw, 72px); }
+      .factstrip { padding: 40px 18px; }
+      .showcase3d { height: 240vh; }
+      .showcase3d .s3d-cap h2 { font-size: clamp(40px, 13vw, 72px); }
+      .s3d-cap { padding-bottom: clamp(96px, 38vh, 176px); } /* lift captions clear of the bottom HUD, scaled to viewport height */
+      .s3d-hint { bottom: 150px; }
+      .s3d-hud { gap: 9px 10px; padding: 9px 11px; bottom: 18px; row-gap: 9px; max-width: calc(100% - 20px); }
+      .s3d-hud .countdown-time { font-size: 16px; }
       .section { padding: 40px 16px; }
       .video-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .fav-grid { grid-template-columns: 1fr; }
@@ -683,6 +732,9 @@
     /* Very small phones */
     @media (max-width: 380px) {
       .video-grid { grid-template-columns: 1fr; }
+      .country-photos { grid-template-columns: repeat(3, 1fr); max-width: 320px; }
+      .s3d-hud { max-width: calc(100% - 16px); }
+      .s3d-hud .countdown-label { display: none; } /* keep the timer; drop the label to fit */
     }
 
     /* Respect reduced-motion: kill all ambient/festive animation */
@@ -722,82 +774,7 @@
     <a href="/songcontest" target="_blank" class="live-pill"><svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg> Open iPlayer</a>
   </nav>
 
-  <!-- ───────── HERO ───────── -->
-  <header>
-    <div class="hero">
-      <div class="hero-card" id="hero-card">
-        <div class="hero-bokeh" aria-hidden="true" id="hero-bokeh"></div>
-        <div class="scrim"></div>
-
-        <!-- Flag (left) — heart-with-flag, set by JS to the featured country -->
-        <div class="hero-flagwrap" id="hero-flagwrap">
-          <img class="chev-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
-        </div>
-
-        <!-- Text (right) -->
-        <div class="hero-card-inner">
-          <div class="hero-eyebrow-row">
-            <span class="ro-chip">Entry <b id="hero-ro">05</b></span>
-            <span class="hero-eyebrow">Tune into the RBSC Live Stream</span>
-          </div>
-          <h1 class="hero-country poster" id="hero-country">Netherlands</h1>
-          <p class="hero-desc" id="hero-desc">
-            Support Cirya and the RPO (Robloxse Publieke Omroep) in this edition of
-            <strong>RBSC hosted by Switzerland</strong> — the Netherlands are participating
-            with <strong>Joost Klein — EUROPAPA</strong> (Robroadcasting Edition).
-          </p>
-          <div class="hero-actions">
-            <a href="#vote" class="btn btn-primary">Voting Information</a>
-            <a href="/songcontest" target="_blank" class="btn btn-ghost">▶ Watch on iPlayer</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Live info bar (dark broadcast strap) -->
-    <div class="livebar-band" id="tune">
-      <div class="livebar">
-        <div class="livebar-card">
-          <span class="offair"><span class="off-dot"></span> Off Air</span>
-          <a href="/songcontest" target="_blank" class="iplayer-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Open iPlayer
-          </a>
-          <div class="livebar-meta">Live shows <strong>Oct 10 – 17</strong><br>Host: SRB Network · <span id="host-loc">Zürich</span></div>
-        </div>
-        <div class="countdown">
-          <div>
-            <div class="countdown-label">Grand Final in</div>
-            <div class="countdown-time" id="countdown">—</div>
-          </div>
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- ───────── STATS BAR ───────── -->
-  <section class="statbar">
-    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Countries</div></div>
-    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Semi-Finals</div></div>
-    <div class="stat"><div class="stat-num">1</div><div class="stat-label">Grand Final</div></div>
-    <div class="stat"><div class="stat-num">Zürich</div><div class="stat-label">Host City 🇨🇭</div></div>
-  </section>
-
-  <!-- ───────── INTRO HOOK ───────── -->
-  <section class="section intro">
-    <div class="intro-inner">
-      <div class="section-kicker" style="display:inline-block">What is the RBSC?</div>
-      <h2 class="intro-title">Eight broadcasters. One stage in Zürich. One winner — decided by you.</h2>
-      <p class="intro-text">The Robroadcasting Song Contest is Cirya Noticias' music event of the year. Each country sends an artist and an original song, the continent tunes in live, and a public vote sends one of them to the top of the scoreboard. Watch every performance, back your favourites, and follow the points all the way to the gold <strong style="color:var(--cirya-blue)">douze points</strong>.</p>
-      <div class="intro-actions">
-        <a class="btn-solid" href="#vote">Watch &amp; vote</a>
-        <a class="btn-line" href="/rbsc-news">Latest news</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────── 3D SCROLLYTELLING SHOWCASE ───────── -->
+  <!-- ───────── CINEMATIC OPENER (full-screen 3D — the page opens here) ───────── -->
   <section class="showcase3d" id="showcase">
     <div class="s3d-sticky">
       <canvas id="bg3d"></canvas>
@@ -822,7 +799,91 @@
           <h2 class="poster">Seven nations.<br>One stage.</h2>
           <div class="country-photos" id="country-photos"></div>
         </div>
+        <div class="s3d-cap" data-act="outro">
+          <div class="s3d-kicker">October 17, 2026</div>
+          <h2 class="poster">The Grand Final.</h2>
+          <p>Zürich. One stage. Decided by you.</p>
+        </div>
         <span class="s3d-hint">↓ scroll the world</span>
+      </div>
+
+      <!-- Persistent EVENT HUD — sibling of the canvas so it survives the no-WebGL fallback -->
+      <div class="s3d-hud" id="event-hud">
+        <span class="offair"><span class="off-dot"></span> Off Air</span>
+        <div class="hud-cd">
+          <span class="countdown-label">Grand Final in</span>
+          <span class="countdown-time" id="countdown">—</span>
+        </div>
+        <div class="hud-actions">
+          <a href="/songcontest" target="_blank" class="iplayer-btn hud-iplayer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Open iPlayer
+          </a>
+          <a href="#vote" class="hud-vote">★ Vote</a>
+        </div>
+        <a href="#arrive" class="hud-skip">Skip into the site ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── HANDOFF FACT STRIP (the dark cinematic resolves into the daylight site) ───────── -->
+  <section class="factstrip" id="arrive">
+    <div class="factstrip-inner">
+      <div class="fs-meta">
+        <div class="fs-kicker">The broadcast</div>
+        <div class="fs-line">Live shows <strong>Oct 10 – 17</strong> · Host <strong>SRB Network</strong> · <span id="host-loc">Zürich</span></div>
+      </div>
+      <div class="fs-stats">
+        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Countries</div></div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Semi-Finals</div></div>
+        <div class="stat"><div class="stat-num">1</div><div class="stat-label">Grand Final</div></div>
+        <div class="stat"><div class="stat-num">Zürich</div><div class="stat-label">Host City 🇨🇭</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── INTRO HOOK (first calm beat on the daylight site) ───────── -->
+  <section class="section intro" id="learn">
+    <div class="intro-inner">
+      <div class="section-kicker" style="display:inline-block">What is the RBSC?</div>
+      <h2 class="intro-title">Eight broadcasters. One stage in Zürich. One winner — decided by you.</h2>
+      <p class="intro-text">The Robroadcasting Song Contest is Cirya Noticias' music event of the year. Each country sends an artist and an original song, the continent tunes in live, and a public vote sends one of them to the top of the scoreboard. Watch every performance, back your favourites, and follow the points all the way to the gold <strong style="color:var(--cirya-blue)">douze points</strong>.</p>
+      <div class="intro-actions">
+        <a class="btn-solid" href="#vote">Watch &amp; vote</a>
+        <a class="btn-line" href="/rbsc-news">Latest news</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── FEATURED COUNTRY (former hero — now an in-flow section) ───────── -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-card" id="hero-card">
+        <div class="hero-bokeh" aria-hidden="true" id="hero-bokeh"></div>
+        <div class="scrim"></div>
+
+        <!-- Flag (left) — chevron flag, set by JS to the featured country -->
+        <div class="hero-flagwrap" id="hero-flagwrap">
+          <img class="chev-flag" id="hero-flag-img" src="/flags/netherlands.svg" alt="Netherlands flag">
+        </div>
+
+        <!-- Text (right) -->
+        <div class="hero-card-inner">
+          <div class="hero-eyebrow-row">
+            <span class="ro-chip">Entry <b id="hero-ro">05</b></span>
+            <span class="hero-eyebrow">Tune into the RBSC Live Stream</span>
+          </div>
+          <h1 class="hero-country poster" id="hero-country">Netherlands</h1>
+          <p class="hero-desc" id="hero-desc">
+            Support Cirya and the RPO (Robloxse Publieke Omroep) in this edition of
+            <strong>RBSC hosted by Switzerland</strong> — the Netherlands are participating
+            with <strong>Joost Klein — EUROPAPA</strong> (Robroadcasting Edition).
+          </p>
+          <div class="hero-actions">
+            <a href="#vote" class="btn btn-primary">Voting Information</a>
+            <a href="/songcontest" target="_blank" class="btn btn-ghost">▶ Watch on iPlayer</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1035,7 +1096,8 @@
       + `<span class="${cls}-emoji" style="display:none;font-size:1.3em;line-height:1">${emoji}</span>`
       + `</span>`;
   }
-  const TILE_GRADS = ['linear-gradient(135deg,#7C4DFF,#FF48BC,#0ED7FF,#7C4DFF)','linear-gradient(135deg,#0041E5,#00D7E2,#002BBA,#0041E5)','linear-gradient(135deg,#A51A23,#FF6B6B,#1F3D7F,#A51A23)','linear-gradient(135deg,#11998e,#38ef7d,#0041E5,#11998e)'];
+  // Flat solid brand colours for video-tile placeholders (no gradients)
+  const TILE_GRADS = ['#0041E5','#00D7E2','#A51A23','#002BBA'];
 
   // Our unique chevron flag is the mark (resembles the Cirya logo). Reused at any size.
   // Bare <img> so CSS can size it; falls back to the emoji flag if the SVG is missing.
@@ -1198,7 +1260,7 @@
       <div class="video-tile${p.votingDisabled ? ' tile-blocked' : ''}" id="tile-${p.id}" onclick='openModalById("${p.id}")'>
         ${p.videoUrl && !isYouTube(p.videoUrl)
           ? `<video src="${esc(p.videoUrl)}" muted loop playsinline preload="metadata" onmouseover="this.play()" onmouseout="this.pause()"></video>`
-          : `<div class="tile-poster" style="background-image:${TILE_GRADS[i%4]}"></div>`}
+          : `<div class="tile-poster" style="background:${TILE_GRADS[i%4]}"></div>`}
         <div class="tile-scrim"></div>
         <span class="tile-ro">${String(i+1).padStart(2,'0')}</span>
         ${p.votingDisabled ? '<span class="tile-badge">Not aired</span>' : '<span class="tile-crown">★ 12 pts</span>'}
@@ -1544,6 +1606,7 @@
     // Caption acts
     const caps = {}; section.querySelectorAll('.s3d-cap').forEach(el => caps[el.dataset.act] = el);
     let curAct = '', curCountry = -1;
+    const hud = document.getElementById('event-hud');
     function showAct(a){ if (a===curAct) return; curAct=a; Object.keys(caps).forEach(k => caps[k].classList.toggle('show', k===a)); }
 
     // Finale: real stock landmark photos for every nation
@@ -1574,9 +1637,9 @@
       // Starfield: gentle drift, always present (the "space" backdrop)
       stars.rotation.y = t * 0.01; stars.rotation.x = my * 0.05;
 
-      // Act opacities (globe → trophy → die/table → globe+photos)
+      // Act opacities (globe → trophy → die/table → globe+photos → outro)
       const introVis   = 1 - seg(p, 0.20, 0.30);
-      const galleryVis = seg(p, 0.66, 0.74);
+      const galleryVis = seg(p, 0.66, 0.74) * (1 - seg(p, 0.90, 1.0)); // fades in for the finale, recedes into the outro
       const gOp = Math.max(introVis, galleryVis);                  // globe: opening + finale
       const tOp = seg(p, 0.20, 0.30) * (1 - seg(p, 0.38, 0.46));   // trophy
       const dOp = seg(p, 0.42, 0.48) * (1 - seg(p, 0.66, 0.72));   // die + table
@@ -1591,7 +1654,8 @@
         globe.rotation.x = 0.12 + my * 0.12;
         clouds.rotation.y = t * 0.09; // clouds drift faster than the surface
         const opening = p < 0.5;
-        globe.scale.setScalar(opening ? lerp(0.95, 1.18, seg(p,0,0.20)) : lerp(1.05, 1.0, galleryVis));
+        globe.scale.setScalar(opening ? lerp(0.95, 1.18, seg(p,0,0.20)) : lerp(1.05, 1.0, seg(p,0.66,0.74)));
+        globe.position.z = opening ? 0 : -seg(p, 0.88, 1.0) * 2.2; // recede into the outro
         // markers + ambient arcs (audiences connecting)
         const mOp = (opening ? seg(p,0.05,0.16) : galleryVis) * gOp;
         markerMats.forEach((m,i)=> m.opacity = mOp * (0.6 + 0.4*Math.sin(t*3 + i)) );
@@ -1636,7 +1700,11 @@
           document.getElementById('draw-title').textContent = landed ? 'Switzerland.' : 'The die decides.';
           document.getElementById('draw-sub').textContent = landed ? 'Host nation — Zürich, October 17.' : 'Which nation takes the stage…';
         }
-      } else showAct('gallery');
+      } else if (p < 0.88) showAct('gallery');
+      else showAct('outro');
+
+      // HUD cross-fades out as the film ends so it doesn't collide with the content handoff
+      if (hud) { const h = 1 - seg(p, 0.90, 1.0); hud.style.opacity = h.toFixed(3); hud.style.pointerEvents = h < 0.05 ? 'none' : 'auto'; hud.style.visibility = h < 0.05 ? 'hidden' : 'visible'; }
 
       // ── Camera: drops down over the table during the draw, free otherwise ──
       camera.position.x = mx * 0.6;
@@ -1655,7 +1723,7 @@
   function scrollReveal(){
     if (REDUCE || !('IntersectionObserver' in window)) return;
     // Only sections below the hero — above-the-fold stays static (no flash)
-    const groups = ['#countries .section-head', '.country-chip',
+    const groups = ['.factstrip .fs-meta', '.factstrip .stat', '#countries .section-head', '.country-chip',
       '#vote .section-head', '.video-tile', '#favourites .section-head', '.fav',
       '#howto .section-head', '.howto-step', '#host .section-head', '.host-card',
       '#schedule .section-head', '.tl-item', '.news-inner > div', '.news-card', '.brand-left', '.brand-logo'];
@@ -1686,6 +1754,25 @@
       card.addEventListener('pointerleave', () => { card.style.transition = 'transform 0.4s ease'; card.style.transform = ''; });
     });
   }
+
+  // ── Always open inside the cinematic (don't let the browser restore mid-page) ──
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+
+  // ── Immersive nav: dark-glass over the cinematic, solid once you reach the content ──
+  (function navTheme(){
+    const showcase = document.getElementById('showcase');
+    if (!showcase) return;
+    function upd(){
+      const overFilm = window.scrollY < (showcase.offsetHeight - window.innerHeight - 4);
+      document.body.classList.toggle('cine-top', overFilm);
+    }
+    upd();
+    window.addEventListener('scroll', upd, { passive: true });
+    window.addEventListener('resize', upd, { passive: true });
+    if (window.__lenis) window.__lenis.on('scroll', upd);
+  })();
 
   init().then(() => { scrollReveal(); init3DTilt(); }).catch(() => { scrollReveal(); init3DTilt(); });
 </script>
