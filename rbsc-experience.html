@@ -434,6 +434,7 @@ addEventListener('resize', ()=>{
   camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
   composer.setSize(innerWidth, innerHeight); bloom.setSize(innerWidth, innerHeight);
+  if (bokeh) bokeh.setSize(innerWidth, innerHeight);
 }, {passive:true});
 let _last = performance.now()*0.001, _elapsed = 0, _paused = false;
 document.addEventListener('visibilitychange', ()=>{ _paused = document.hidden; _last = performance.now()*0.001; });
@@ -474,7 +475,7 @@ RANK.forEach((r,i)=>{
   const el = document.createElement('div');
   el.className = 'rbsc-panel' + (i===0?' lead':'');
   el.innerHTML = `<div class="place">${i+1}</div>
-    <div class="flag"><img loading="lazy" src="https://flagcdn.com/w80/${r.code}.png" alt="${r.c}" onerror="this.parentNode.style.background='#16203c';this.remove()"></div>
+    <div class="flag" title="${r.c}"><img loading="lazy" src="https://flagcdn.com/w80/${r.code}.png" alt="${r.c} flag" onerror="this.style.display='none';this.parentNode.style.background='#16203c'"></div>
     <div class="who"><div class="name">${r.c}</div><div class="meta">${r.meta}</div></div>
     <div class="pts">${r.pts>0?r.pts:'TBA'}<small>points</small></div>`;
   rankWrap.appendChild(el);
@@ -547,7 +548,8 @@ beginBtn.textContent = '▶  Begin the broadcast';
 beginBtn.disabled = false; beginBtn.classList.add('ready');
 beginBtn.addEventListener('click', ()=>{ gate.classList.add('hide'); tl.play(); });
 $('#skip').addEventListener('click', ()=>{ tl.progress(0.999); });
-if (REDUCE){ /* respect reduced-motion: jump near the end so content is visible without the long ride */ }
+// respect reduced-motion: skip the long ride, land on the standings + entry immediately
+if (REDUCE){ tl.progress(1); gate.classList.add('hide'); }
 
 } catch (err){
   console.error('[rbsc-experience] init failed:', err);
