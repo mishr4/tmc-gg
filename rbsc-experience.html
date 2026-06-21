@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>RBSC 2026 — The Broadcast</title>
+<meta name="description" content="The RoBroadcasting Song Contest 2026 — a cinematic broadcast opening. Zürich, October 17.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://threejs.org" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#FFD24A; --gold-soft:#f6e3a8; --silver:#cdd6ea; --blue:#0041E5; --cyan:#00D7E2;
+    --ink:#04060f; --line:rgba(255,255,255,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#04060f;overflow:hidden}
+  body{
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:#fff; -webkit-font-smoothing:antialiased; position:relative;
+  }
+  #bg{position:fixed; inset:0; width:100%; height:100%; display:block; z-index:0}
+
+  /* ── cinematic overlay (broadcast graphics) ── */
+  #stage{position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden}
+  .vignette{position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(120% 100% at 50% 42%, transparent 45%, rgba(2,3,10,0.55) 100%);}
+
+  /* lower-third caption block */
+  .cap{position:absolute; left:0; right:0; bottom:11vh; text-align:center; padding:0 24px;
+    opacity:0; transform:translateY(18px); transition:opacity .8s ease, transform .8s ease;}
+  .cap.show{opacity:1; transform:none}
+  .cap .eyebrow{display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:800;
+    letter-spacing:.32em; text-transform:uppercase; color:var(--gold);}
+  .cap .eyebrow::before,.cap .eyebrow::after{content:''; width:34px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold))}
+  .cap .eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .cap h1{font-family:'Archivo',sans-serif; font-weight:900; line-height:.96; letter-spacing:-.02em;
+    font-size:clamp(34px,6vw,80px); margin-top:16px; text-shadow:0 8px 60px rgba(0,0,0,.6);}
+  .cap h1 .glint{color:var(--gold)}
+  .cap .sub{font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:600;
+    font-size:clamp(15px,2.1vw,22px); color:var(--silver); margin-top:14px; letter-spacing:.01em;}
+
+  /* top brand bar */
+  .topbar{position:absolute; top:0; left:0; right:0; display:flex; align-items:center;
+    justify-content:space-between; padding:22px 30px; opacity:0; transition:opacity 1s ease .4s}
+  .topbar.show{opacity:1}
+  .wordmark{font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:18px; letter-spacing:.02em}
+  .wordmark b{color:var(--gold)}
+  .live{display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:800;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--silver)}
+  .live .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px var(--gold)}
+
+  /* ── ranking (glassmorphism broadcast panels) ── */
+  #ranking{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:10px; padding:90px 20px 16vh; opacity:0; visibility:hidden}
+  #ranking.show{opacity:1; visibility:visible}
+  #ranking .rank-head{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(26px,4vw,46px);
+    letter-spacing:-.02em; margin-bottom:14px; opacity:0; transform:translateY(14px)}
+  #ranking .rank-head .glint{color:var(--gold)}
+  .rbsc-panel{width:min(560px,92vw); display:grid; grid-template-columns:54px 56px 1fr auto;
+    align-items:center; gap:16px; padding:13px 20px; border-radius:16px;
+    background:rgba(255,255,255,0.055); backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.12); box-shadow:0 18px 50px -28px rgba(0,0,0,.8);
+    opacity:0; transform:translateY(26px)}
+  .rbsc-panel.lead{border-color:rgba(255,210,74,.55);
+    background:linear-gradient(100deg, rgba(255,210,74,0.14), rgba(255,255,255,0.05));
+    box-shadow:0 22px 60px -26px rgba(255,210,74,.35)}
+  .rbsc-panel .place{font-family:'Archivo',sans-serif; font-weight:900; font-size:30px;
+    text-align:center; color:var(--silver)}
+  .rbsc-panel.lead .place{color:var(--gold)}
+  .rbsc-panel .flag{width:56px; height:38px; border-radius:6px; overflow:hidden; background:#0a0e1c;
+    box-shadow:0 4px 14px rgba(0,0,0,.5); display:flex}
+  .rbsc-panel .flag img{width:100%; height:100%; object-fit:cover}
+  .rbsc-panel .who .name{font-weight:800; font-size:18px; letter-spacing:-.01em}
+  .rbsc-panel .who .meta{font-size:12px; color:var(--silver); opacity:.8; margin-top:2px}
+  .rbsc-panel .pts{font-family:'Archivo',sans-serif; font-weight:900; font-size:24px; color:#fff}
+  .rbsc-panel .pts small{display:block; font-family:'Plus Jakarta Sans'; font-weight:700; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--silver); opacity:.7; text-align:right}
+
+  /* controls */
+  .skip{position:absolute; top:20px; right:24px; z-index:5; pointer-events:auto;
+    display:flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:#fff;
+    font:inherit; font-size:13px; font-weight:700; cursor:pointer; opacity:0; transition:opacity .6s, background .2s}
+  .skip.show{opacity:.85} .skip:hover{opacity:1; background:rgba(255,255,255,0.14)}
+  .enter{position:absolute; left:50%; bottom:7vh; transform:translateX(-50%); z-index:6; pointer-events:auto;
+    display:inline-flex; align-items:center; gap:10px; padding:15px 30px; border-radius:999px;
+    text-decoration:none; color:var(--ink); font-weight:800; font-size:16px;
+    background:linear-gradient(180deg,#ffe6a0,var(--gold)); box-shadow:0 16px 40px -14px rgba(255,210,74,.6);
+    opacity:0; visibility:hidden; transition:opacity .7s, transform .25s}
+  .enter.show{opacity:1; visibility:visible} .enter:hover{transform:translateX(-50%) translateY(-2px)}
+
+  /* gate / loader */
+  #gate{position:fixed; inset:0; z-index:20; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:26px; text-align:center; padding:24px;
+    background:radial-gradient(120% 90% at 50% 35%, #0b1430, #04060f 70%); transition:opacity 1s ease}
+  #gate.hide{opacity:0; pointer-events:none}
+  #gate .badge{font-size:12px; font-weight:800; letter-spacing:.34em; text-transform:uppercase; color:var(--gold)}
+  #gate h2{font-family:'Archivo',sans-serif; font-weight:900; font-size:clamp(40px,8vw,92px); line-height:.94; letter-spacing:-.03em}
+  #gate h2 .glint{color:var(--gold)}
+  #gate .tag{font-family:'Playfair Display',serif; font-style:italic; color:var(--silver); font-size:clamp(16px,2.4vw,22px)}
+  #begin{pointer-events:auto; display:inline-flex; align-items:center; gap:12px; margin-top:6px;
+    padding:17px 38px; border-radius:999px; border:none; cursor:pointer;
+    font:inherit; font-weight:800; font-size:17px; color:var(--ink);
+    background:linear-gradient(180deg,#ffe6a0,var(--gold)); box-shadow:0 18px 46px -14px rgba(255,210,74,.6);
+    opacity:.5; transition:opacity .4s, transform .2s}
+  #begin.ready{opacity:1} #begin.ready:hover{transform:translateY(-2px)}
+  #begin[disabled]{cursor:progress}
+  #gate .status{font-size:13px; color:var(--silver); letter-spacing:.1em; min-height:18px}
+  #gate .fallback{display:none; pointer-events:auto}
+  #gate.failed #begin{display:none}
+  #gate.failed .fallback{display:inline-flex; align-items:center; gap:10px; padding:15px 30px; border-radius:999px;
+    text-decoration:none; color:var(--ink); font-weight:800; background:linear-gradient(180deg,#ffe6a0,var(--gold))}
+
+  @media (max-width:600px){
+    .cap{bottom:13vh}
+    .rbsc-panel{grid-template-columns:40px 46px 1fr auto; gap:11px; padding:11px 14px}
+    .rbsc-panel .place{font-size:24px} .rbsc-panel .flag{width:46px;height:31px}
+    .rbsc-panel .who .name{font-size:15px} .rbsc-panel .who .meta{display:none}
+    .rbsc-panel .pts{font-size:19px}
+  }
+  @media (prefers-reduced-motion: reduce){ .cap{transition:none} }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+    "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="vignette" id="vignette" style="opacity:.0"></div>
+
+<div id="stage">
+  <div class="topbar" id="topbar">
+    <span class="wordmark">RoBroadcasting <b>Song Contest</b></span>
+    <span class="live"><span class="dot"></span> Zürich · MMXXVI</span>
+  </div>
+
+  <div class="cap" data-act="earth">
+    <span class="eyebrow">RBSC 2026</span>
+    <h1>A world<br>tunes <span class="glint">in.</span></h1>
+    <div class="sub">Seven nations. One stage. Echoes across Europe.</div>
+  </div>
+  <div class="cap" data-act="trophy">
+    <span class="eyebrow">The Prize</span>
+    <h1>The <span class="glint">Crystal Crown.</span></h1>
+    <div class="sub">Lifted by one nation on the 17th of October.</div>
+  </div>
+  <div class="cap" data-act="dice">
+    <span class="eyebrow">The Draw</span>
+    <h1 id="dice-title">The host is <span class="glint">cast.</span></h1>
+    <div class="sub" id="dice-sub">Seven flags. One falls face-up.</div>
+  </div>
+  <div class="cap" data-act="country">
+    <span class="eyebrow">Host Nation</span>
+    <h1><span class="glint">Switzerland</span></h1>
+    <div class="sub">Zürich · Aurora Arena · October 17, 2026</div>
+  </div>
+
+  <div id="ranking">
+    <div class="rank-head" id="rank-head">The <span class="glint">Standings</span></div>
+    <!-- panels injected -->
+  </div>
+
+  <button class="skip" id="skip">Skip ⏭</button>
+  <a class="enter" id="enter" href="/rbsc">Enter the contest →</a>
+</div>
+
+<div id="gate">
+  <span class="badge">RoBroadcasting Song Contest</span>
+  <h2>RBSC <span class="glint">2026</span></h2>
+  <div class="tag">The Broadcast — a cinematic opening</div>
+  <button id="begin" disabled>Preparing the broadcast…</button>
+  <a class="fallback" href="/rbsc">Enter the contest →</a>
+  <div class="status" id="status"></div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { BokehPass }       from 'three/addons/postprocessing/BokehPass.js';
+import { OutputPass }      from 'three/addons/postprocessing/OutputPass.js';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import gsap from 'gsap';
+
+const $ = s => document.querySelector(s);
+const gate = $('#gate'), beginBtn = $('#begin'), statusEl = $('#status');
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = matchMedia('(max-width:1023px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+function fail(msg){ gate.classList.add('failed'); statusEl.textContent = msg || 'Could not start the 3D broadcast.'; }
+// Safety net: if WebGL/modules never come up, show the fallback link.
+const bootTimer = setTimeout(()=>{ if(!window.__rbscBooted) fail('Taking too long — you can enter the site directly.'); }, 12000);
+
+try {
+
+const canvas = $('#bg');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isMobile, alpha:false, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, isMobile?1.5:2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.02;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 200);
+camera.position.set(0, 5, 34);
+const lookTarget = new THREE.Vector3(0,0,0);
+
+// ── Image-based lighting (procedural, zero-download) ──
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
+scene.environment = envRT.texture;
+
+// ── Lights ── neutral white sun (so the planet reads true, never a coloured wash)
+const sun = new THREE.DirectionalLight(0xffffff, 1.7); sun.position.set(-6, 3, 6); scene.add(sun);
+scene.add(new THREE.AmbientLight(0x223a66, 0.35));
+const rim = new THREE.DirectionalLight(0x99bbff, 0.5); rim.position.set(6,-2,-6); scene.add(rim);
+
+// ── Composer / post ──
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight),
+  isMobile?0.7:0.85, isMobile?0.6:0.8, isMobile?0.84:0.86);
+composer.addPass(bloom);
+let bokeh = null;
+if (!isMobile && innerWidth >= 1024){
+  bokeh = new BokehPass(scene, camera, { focus: 9.0, aperture: 0.00012, maxblur: 0.009 });
+  composer.addPass(bokeh);
+}
+composer.addPass(new OutputPass());
+
+// ── Starfield + soft nebula ──
+const starGeo = new THREE.BufferGeometry();
+const starN = isMobile?500:1100, sp = new Float32Array(starN*3), sc = new Float32Array(starN*3);
+const colA = new THREE.Color(0xbfd4ff), colB = new THREE.Color(0xffe9b0);
+for (let i=0;i<starN;i++){
+  const r=40+Math.random()*70, u=Math.random()*2-1, a=Math.random()*Math.PI*2, s=Math.sqrt(1-u*u);
+  sp[i*3]=r*s*Math.cos(a); sp[i*3+1]=r*u; sp[i*3+2]=r*s*Math.sin(a);
+  const c = Math.random()<0.85?colA:colB; sc[i*3]=c.r; sc[i*3+1]=c.g; sc[i*3+2]=c.b;
+}
+starGeo.setAttribute('position', new THREE.BufferAttribute(sp,3));
+starGeo.setAttribute('color', new THREE.BufferAttribute(sc,3));
+const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size:0.18, sizeAttenuation:true, vertexColors:true, transparent:true, opacity:0.9, depthWrite:false }));
+scene.add(stars);
+// nebula: a few huge faint sprites in brand blue/gold
+const nebTex = radialTex(['rgba(120,150,255,0.9)','rgba(60,80,180,0.25)','rgba(0,0,0,0)']);
+[[ -28,10,-50,0x2a4cff,40],[34,-14,-60,0x6a4cff,52],[10,26,-70,0x1a2a80,60]].forEach(([x,y,z,col,sz])=>{
+  const m = new THREE.Sprite(new THREE.SpriteMaterial({ map:nebTex, color:col, transparent:true, opacity:0.22, depthWrite:false, blending:THREE.AdditiveBlending }));
+  m.position.set(x,y,z); m.scale.setScalar(sz); scene.add(m);
+});
+
+// ── Earth ──
+const R = 2;
+const earthGroup = new THREE.Group(); scene.add(earthGroup);
+const earthMat = new THREE.MeshStandardMaterial({ color:0x12325f, metalness:0.0, roughness:0.78, emissive:0xffd9a0, emissiveIntensity:0.0 });
+// city-lights only on the night side (graceful no-op if the shader chunk name shifts)
+const sunViewDir = { value: new THREE.Vector3() };
+earthMat.onBeforeCompile = (sh)=>{
+  sh.uniforms.uSunViewDir = sunViewDir;
+  sh.fragmentShader = 'uniform vec3 uSunViewDir;\n' + sh.fragmentShader.replace(
+    '#include <emissivemap_fragment>',
+    '#include <emissivemap_fragment>\n  float _night = smoothstep(0.12, -0.30, dot(normalize(vNormal), normalize(uSunViewDir)));\n  totalEmissiveRadiance *= _night;'
+  );
+};
+const earth = new THREE.Mesh(new THREE.SphereGeometry(R, isMobile?40:72, isMobile?40:72), earthMat);
+earthGroup.add(earth);
+
+// clouds (procedural canvas — the CDN cloud texture is gone)
+const cloudMat = new THREE.MeshStandardMaterial({ map:makeCloudTex(), alphaMap:makeCloudTex(true), color:0xffffff, transparent:true, opacity:0.0, depthWrite:false, roughness:1 });
+const clouds = new THREE.Mesh(new THREE.SphereGeometry(R*1.012, isMobile?32:48, isMobile?32:48), cloudMat);
+earthGroup.add(clouds);
+
+// atmosphere fresnel rim
+const atmoMat = new THREE.ShaderMaterial({
+  transparent:true, side:THREE.BackSide, depthWrite:false, blending:THREE.AdditiveBlending,
+  uniforms:{ uColor:{value:new THREE.Color(0x4d86ff)}, uOpacity:{value:0} },
+  vertexShader:'varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+  fragmentShader:'varying vec3 vN; uniform vec3 uColor; uniform float uOpacity; void main(){ float i=pow(0.74-abs(vN.z),3.0); gl_FragColor=vec4(uColor, max(0.0,i)*uOpacity); }'
+});
+earthGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.16, 48, 48), atmoMat));
+
+// ── Countries: markers + connection arcs ──
+const ll = (lat,lng,r)=>{ const ph=(90-lat)*Math.PI/180, th=(lng+180)*Math.PI/180; return new THREE.Vector3(-r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th)); };
+const COUNTRIES = [
+  { c:'Switzerland', code:'ch', lat:47.0, lng:8.2, host:true },
+  { c:'Netherlands', code:'nl', lat:52.4, lng:4.9 },
+  { c:'Austria',     code:'at', lat:48.2, lng:16.4 },
+  { c:'Sweden',      code:'se', lat:59.3, lng:18.1 },
+  { c:'Australia',   code:'au', lat:-33.9, lng:151.2 },
+  { c:'Estonia',     code:'ee', lat:59.4, lng:24.75 },
+  { c:'Finland',     code:'fi', lat:60.2, lng:24.9 },
+];
+const markerMats = []; const markers = [];
+COUNTRIES.forEach(co=>{
+  const col = co.host?0xFFD24A:0x67e8ff;
+  const m = new THREE.MeshBasicMaterial({ color:col, transparent:true, opacity:0 });
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(co.host?0.05:0.034, 14, 14), m);
+  const pos = ll(co.lat, co.lng, R*1.01); dot.position.copy(pos);
+  earthGroup.add(dot); markerMats.push(m);
+  const ringMat = new THREE.MeshBasicMaterial({ color:col, transparent:true, opacity:0, side:THREE.DoubleSide });
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.06,0.085,28), ringMat);
+  ring.position.copy(pos); ring.lookAt(pos.clone().multiplyScalar(2));
+  earthGroup.add(ring); markerMats.push(ringMat);
+  markers.push({ co, pos, dot, ring, ringMat });
+});
+const hostMarker = markers.find(m=>m.co.host);
+
+const host = COUNTRIES[0];
+const arcDraw = { value: 0 };
+const arcs = [];
+COUNTRIES.slice(1).forEach((co,i)=>{
+  const s = ll(host.lat,host.lng,R*1.01), e = ll(co.lat,co.lng,R*1.01);
+  const mid = s.clone().add(e).multiplyScalar(0.5).normalize().multiplyScalar(R*(1.12 + s.distanceTo(e)*0.16));
+  const pts = new THREE.QuadraticBezierCurve3(s,mid,e).getPoints(isMobile?24:60);
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  const ln = new THREE.Line(g, new THREE.LineBasicMaterial({ color:0x67e8ff, transparent:true, opacity:0 }));
+  ln.userData = { count:pts.length, idx:i }; g.setDrawRange(0,0);
+  earthGroup.add(ln); arcs.push(ln);
+});
+
+// ── Trophy: crystal crown + gold ──
+const trophy = new THREE.Group(); trophy.position.set(0,0.15,2.7); trophy.scale.setScalar(0.001); trophy.visible=false; scene.add(trophy);
+const goldMat = new THREE.MeshStandardMaterial({ color:0xFFD24A, metalness:1.0, roughness:0.22, envMapIntensity:1.3 });
+const crystalMat = new THREE.MeshPhysicalMaterial({ color:0xcfe6ff, metalness:0, roughness:0.03, transmission:1.0, ior:1.7, thickness:0.9, clearcoat:1, clearcoatRoughness:0.05, envMapIntensity:1.4, transparent:true });
+const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.62,0), crystalMat); gem.position.y=0.62; gem.scale.y=1.5; trophy.add(gem);
+const collar = new THREE.Mesh(new THREE.TorusGeometry(0.30,0.05,18,40), goldMat); collar.position.y=0.16; collar.rotation.x=Math.PI/2; trophy.add(collar);
+trophy.add(new THREE.Mesh(new THREE.CylinderGeometry(0.085,0.085,0.5,24), goldMat)).position.y=-0.16;
+const tbase = new THREE.Mesh(new THREE.CylinderGeometry(0.36,0.44,0.12,40), goldMat); tbase.position.y=-0.46; trophy.add(tbase);
+const tplinth = new THREE.Mesh(new THREE.CylinderGeometry(0.46,0.5,0.08,40), new THREE.MeshStandardMaterial({color:0x0a0e1c, metalness:0.5, roughness:0.4})); tplinth.position.y=-0.54; trophy.add(tplinth);
+// sparkle particles around the trophy
+const spN=isMobile?60:120, sg=new THREE.BufferGeometry(), spp=new Float32Array(spN*3);
+for(let i=0;i<spN;i++){ const r=0.9+Math.random()*1.1, u=Math.random()*2-1, a=Math.random()*6.28, s=Math.sqrt(1-u*u); spp[i*3]=r*s*Math.cos(a); spp[i*3+1]=u*r*0.9+0.3; spp[i*3+2]=r*s*Math.sin(a);}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));
+const sparkMat=new THREE.PointsMaterial({ map:radialTex(['#fff','rgba(255,225,150,.6)','rgba(0,0,0,0)']), color:0xffe9b0, size:0.09, transparent:true, opacity:0, depthWrite:false, blending:THREE.AdditiveBlending });
+const sparks=new THREE.Points(sg,sparkMat); trophy.add(sparks);
+// lens flare on a light by the trophy
+const flareLight = new THREE.PointLight(0xfff0c0, 0, 30); flareLight.position.set(0.9,1.1,1.2); trophy.add(flareLight);
+const lf = new Lensflare();
+lf.addElement(new LensflareElement(radialTex(['rgba(255,240,200,1)','rgba(255,210,120,.5)','rgba(0,0,0,0)']), 360, 0, new THREE.Color(0xffe6a0)));
+lf.addElement(new LensflareElement(radialTex(['rgba(255,255,255,.9)','rgba(0,0,0,0)']), 70, 0.6));
+lf.addElement(new LensflareElement(radialTex(['rgba(160,200,255,.9)','rgba(0,0,0,0)']), 120, 0.9));
+flareLight.add(lf);
+
+// ── Dice ── glossy cube, flag faces, lands on host (Switzerland on +Y)
+const dice = new THREE.Group(); dice.position.set(0,0.25,2.85); dice.scale.setScalar(0.001); dice.visible=false; scene.add(dice);
+const FACE = ['Netherlands','Sweden','Estonia','Austria','Switzerland','Finland']; // [+x,-x,+y,-y,+z,-z] -> +z(index4)=host, faces the camera at rest
+const dieMats = FACE.map(name => new THREE.MeshPhysicalMaterial({ map:flagTex(name), roughness:0.32, metalness:0, clearcoat:0.55, clearcoatRoughness:0.18, transparent:true, opacity:0, envMapIntensity:0.7 }));
+const die = new THREE.Mesh(new THREE.BoxGeometry(1.15,1.15,1.15), dieMats); dice.add(die);
+const dieEdge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.16,1.16,1.16)), new THREE.LineBasicMaterial({color:0xFFD24A, transparent:true, opacity:0}));
+die.add(dieEdge);
+const diceProg = { value: 0 };
+function updateDice(p){
+  const e = p*p*(3-2*p);
+  die.rotation.x = (1-e)*Math.PI*6;
+  die.rotation.y = (1-e)*Math.PI*4;
+  die.rotation.z = (1-e)*Math.PI;
+  die.position.y = Math.abs(Math.sin(p*Math.PI*3))*(1-e)*0.9;
+  if (p>0.82){ const j=Math.sin(performance.now()*0.02)*0.012*(1-e); die.rotation.x+=j; die.rotation.z+=j*0.6; }
+}
+
+// ── Europe-front orientation for the fly-to-country (computed, not guessed) ──
+const flyRotX = 0.38;
+let flyRotY = 0; { let best=-Infinity; const pl = ll(host.lat,host.lng,R); for(let a=0;a<6.2832;a+=0.01){ const v=pl.clone().applyEuler(new THREE.Euler(flyRotX,a,0)); if(v.z>best){best=v.z; flyRotY=a;} } }
+const hostWorld = ll(host.lat,host.lng,R*1.01).applyEuler(new THREE.Euler(flyRotX, flyRotY, 0));
+let flyMode = false;
+
+// ── helpers: procedural textures ──
+function radialTex(stops){
+  const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,0,64,64,64); const n=stops.length;
+  stops.forEach((s,i)=>g.addColorStop(i/(n-1), s)); x.fillStyle=g; x.fillRect(0,0,128,128);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
+}
+function makeCloudTex(alpha){
+  const w=isMobile?512:1024, h=w/2, c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d');
+  x.clearRect(0,0,w,h);
+  const blobs=isMobile?90:180;
+  for(let i=0;i<blobs;i++){
+    const cx=Math.random()*w, cy=(0.12+Math.random()*0.76)*h, rad=(8+Math.random()*42)*(w/1024);
+    const a=0.05+Math.random()*0.16; const g=x.createRadialGradient(cx,cy,0,cx,cy,rad);
+    g.addColorStop(0,`rgba(255,255,255,${a})`); g.addColorStop(1,'rgba(255,255,255,0)');
+    x.fillStyle=g; x.beginPath(); x.arc(cx,cy,rad,0,6.2832); x.fill();
+  }
+  const t=new THREE.CanvasTexture(c); t.colorSpace = alpha?THREE.NoColorSpace:THREE.SRGBColorSpace; t.wrapS=THREE.RepeatWrapping; return t;
+}
+function flagTex(name){
+  const c=document.createElement('canvas'); const W=isMobile?128:256, H=W; c.width=W; c.height=H; const x=c.getContext('2d');
+  const cross=(bg,cr)=>{ x.fillStyle=bg; x.fillRect(0,0,W,H); x.fillStyle=cr; const t=W*0.16, ox=W*0.34; x.fillRect(ox-t/2,0,t,H); x.fillRect(0,H/2-t/2,W,t); };
+  const bands=(cols)=>{ const n=cols.length; cols.forEach((col,i)=>{ x.fillStyle=col; x.fillRect(0,i*H/n,W,H/n+1); }); };
+  switch(name){
+    case 'Switzerland': x.fillStyle='#D52B1E'; x.fillRect(0,0,W,H); x.fillStyle='#edf0f5'; { const t=W*0.18,a=W*0.34; x.fillRect(W/2-t/2,H/2-a/2,t,a); x.fillRect(W/2-a/2,H/2-t/2,a,t);} break;
+    case 'Netherlands': bands(['#AE1C28','#edf0f5','#21468B']); break;
+    case 'Austria': bands(['#ED2939','#edf0f5','#ED2939']); break;
+    case 'Estonia': bands(['#0072CE','#111','#edf0f5']); break;
+    case 'Sweden': cross('#006AA7','#FECC00'); break;
+    case 'Finland': cross('#edf0f5','#003580'); break;
+    default: x.fillStyle='#0a0e1c'; x.fillRect(0,0,W,H);
+  }
+  x.strokeStyle='rgba(255,255,255,0.5)'; x.lineWidth=Math.max(3,W*0.02); x.strokeRect(x.lineWidth/2,x.lineWidth/2,W-x.lineWidth,H-x.lineWidth);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
+}
+
+// ── async textures (PBR earth) ──
+const TBASE='https://threejs.org/examples/textures/planets/';
+const tl_ = new THREE.TextureLoader().setCrossOrigin('anonymous');
+const loadTex = (file, srgb)=> tl_.loadAsync(TBASE+file).then(t=>{ t.colorSpace = srgb?THREE.SRGBColorSpace:THREE.NoColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t; }).catch(()=>null);
+
+statusEl.textContent = 'Loading the planet…';
+const [dayMap, nightMap, normMap, specMap] = await Promise.all([
+  loadTex('earth_atmos_2048.jpg', true),
+  loadTex('earth_lights_2048.png', true),
+  loadTex('earth_normal_2048.jpg', false),
+  loadTex('earth_specular_2048.jpg', false),
+]);
+if (dayMap){ earthMat.map=dayMap; earthMat.color.set(0xffffff); }
+if (nightMap){ earthMat.emissiveMap=nightMap; earthMat.emissive.set(0xffe2b0); earthMat.emissiveIntensity=1.8; }
+if (normMap){ earthMat.normalMap=normMap; earthMat.normalScale.set(0.8,0.8); }
+if (specMap){ earthMat.roughnessMap=specMap; earthMat.roughness=1.0; } // oceans (bright in spec) read smoother under IBL
+earthMat.needsUpdate = true;
+
+// ── resize ──
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight); bloom.setSize(innerWidth, innerHeight);
+}, {passive:true});
+let _last = performance.now()*0.001, _elapsed = 0, _paused = false;
+document.addEventListener('visibilitychange', ()=>{ _paused = document.hidden; _last = performance.now()*0.001; });
+
+// ── render loop ──
+function animate(){
+  requestAnimationFrame(animate);
+  const now = performance.now()*0.001; let dt = now - _last; _last = now;
+  if (_paused) return;
+  dt = Math.min(dt, 0.05); _elapsed += dt; const t = _elapsed;
+  if (!flyMode){ earthGroup.rotation.y += dt*0.025; }
+  clouds.rotation.y += dt*0.012; clouds.rotation.x = 0.0;
+  stars.rotation.y += dt*0.004;
+  // night-side city lights need sun direction in view space
+  sunViewDir.value.copy(sun.position).normalize().transformDirection(camera.matrixWorldInverse);
+  // host marker pulse + glow ring
+  markers.forEach(m=>{ if(m.co.host){ const s=1+0.18*(0.5+0.5*Math.sin(t*2.4)); m.ring.scale.setScalar(s); } });
+  sparks.rotation.y += dt*0.4;
+  camera.lookAt(lookTarget);
+  composer.render();
+}
+
+// ── GSAP broadcast timeline ──
+const setCap = (act)=> document.querySelectorAll('.cap').forEach(c=> c.classList.toggle('show', c.dataset.act===act));
+
+// Build the ranking panels BEFORE the timeline, so the '.rbsc-panel' stagger tween resolves real targets.
+const RANK = [
+  { c:'Netherlands', code:'nl', pts:312, meta:'Joost Klein · “Europapa”' },
+  { c:'Austria',     code:'at', pts:264, meta:'JJ · “Shapeshifter”' },
+  { c:'Australia',   code:'au', pts:240, meta:'Delta Goodrem · “Lost Without You”' },
+  { c:'Sweden',      code:'se', pts:198, meta:'Honey. · “Dreams”' },
+  { c:'Switzerland', code:'ch', pts:150, meta:'Luca Hänni · “Love Me Better” · Host' },
+  { c:'Estonia',     code:'ee', pts:0,   meta:'ABU Television · TBA' },
+  { c:'Finland',     code:'fi', pts:0,   meta:'REV · TBA' },
+];
+const rankWrap = $('#ranking');
+RANK.forEach((r,i)=>{
+  const el = document.createElement('div');
+  el.className = 'rbsc-panel' + (i===0?' lead':'');
+  el.innerHTML = `<div class="place">${i+1}</div>
+    <div class="flag"><img loading="lazy" src="https://flagcdn.com/w80/${r.code}.png" alt="${r.c}" onerror="this.parentNode.style.background='#16203c';this.remove()"></div>
+    <div class="who"><div class="name">${r.c}</div><div class="meta">${r.meta}</div></div>
+    <div class="pts">${r.pts>0?r.pts:'TBA'}<small>points</small></div>`;
+  rankWrap.appendChild(el);
+});
+
+const tl = gsap.timeline({ paused:true, defaults:{ ease:'power2.inOut' }, onComplete:finish });
+
+// ACT 1 — approach + arcs
+tl.addLabel('earth', 0)
+  .call(()=>{ setCap('earth'); $('#topbar').classList.add('show'); $('#skip').classList.add('show'); }, null, 'earth')
+  .to(camera.position, { x:0, y:1.3, z:7.2, duration:7, ease:'power3.inOut' }, 'earth')
+  .to(atmoMat.uniforms.uOpacity, { value:0.9, duration:2.5 }, 'earth')
+  .to(cloudMat, { opacity:0.55, duration:3 }, 'earth+=1')
+  .to($('#vignette'), { opacity:0.55, duration:3 }, 'earth')
+  .to(arcDraw, { value:1, duration:4, ease:'power1.inOut',
+      onUpdate:()=>{ const f=arcDraw.value*arcs.length; arcs.forEach((ln,i)=>{ const fr=Math.max(0,Math.min(1,f-i)); ln.geometry.setDrawRange(0, Math.floor(2+fr*(ln.userData.count-2))); ln.material.opacity=fr*0.9; }); markerMats.forEach(m=>m.opacity=Math.min(1,arcDraw.value*1.4)); } }, 'earth+=1.6');
+
+// ACT 2 — crystal crown emerges
+tl.addLabel('trophy', '>+0.4')
+  .call(()=>{ setCap('trophy'); trophy.visible=true; }, null, 'trophy')
+  .to(camera.position, { x:1.4, y:0.7, z:6.0, duration:2.4 }, 'trophy')
+  .to(lookTarget, { x:0, y:0.2, z:2.7, duration:2.4 }, 'trophy')
+  .fromTo(trophy.scale, { x:0.001,y:0.001,z:0.001 }, { x:1,y:1,z:1, duration:1.8, ease:'back.out(1.5)' }, 'trophy+=0.3')
+  .to(trophy.rotation, { y: Math.PI*2, duration:7, ease:'none' }, 'trophy+=0.4')
+  .to(sparkMat, { opacity:0.95, duration:1.2 }, 'trophy+=0.6')
+  .to(flareLight, { intensity:2.4, duration:1, yoyo:true, repeat:1 }, 'trophy+=1.4')
+  .to(camera.position, { x:-1.2, z:5.6, duration:3.5, ease:'sine.inOut' }, 'trophy+=2.2');
+
+// ACT 3 — the draw (dice) then fly to host country
+tl.addLabel('dice', '>-0.5')
+  .call(()=>{ setCap('dice'); dice.visible=true; flyMode=true; }, null, 'dice')
+  .to([sparkMat], { opacity:0, duration:0.6 }, 'dice')
+  .to(trophy.scale, { x:0.001,y:0.001,z:0.001, duration:0.8, ease:'back.in(1.4)', onComplete:()=>trophy.visible=false }, 'dice')
+  .to(camera.position, { x:0, y:0.4, z:5.6, duration:1.2 }, 'dice')
+  .to(lookTarget, { x:0, y:0.25, z:2.85, duration:1.2 }, 'dice')
+  .to(dieMats.concat([dieEdge.material]), { opacity:1, duration:0.6 }, 'dice+=0.2')
+  .fromTo(dice.scale, { x:0.001,y:0.001,z:0.001 }, { x:1,y:1,z:1, duration:1.0, ease:'back.out(1.6)' }, 'dice+=0.2')
+  .to(earthGroup.position, { z:-2.8, duration:1.4, ease:'power2.inOut' }, 'dice')  // sit the cube against dark space (legible faces)
+  .to(earthGroup.rotation, { x:flyRotX, y:flyRotY, duration:3.2, ease:'power2.inOut' }, 'dice+=0.2')
+  .to(diceProg, { value:1, duration:3.4, ease:'power3.out', onUpdate:()=>updateDice(diceProg.value) }, 'dice+=0.4')
+  .call(()=>{ $('#dice-title').innerHTML='Host nation — <span class="glint">Switzerland</span>'; $('#dice-sub').textContent='The road leads to Zürich.'; }, null, 'dice+=3.0')
+  .to(dieMats.concat([dieEdge.material]), { opacity:0, duration:0.8 }, 'dice+=4.0')
+  // fly to the country
+  .addLabel('country', '>-0.2')
+  .call(()=>setCap('country'), null, 'country')
+  .to(earthGroup.position, { z:0, duration:1.8, ease:'power2.inOut' }, 'country')  // bring the globe back for the fly-in
+  .to(camera.position, { x:hostWorld.x*2.5, y:hostWorld.y*2.5, z:hostWorld.z*2.5, duration:3.2, ease:'power3.inOut' }, 'country')
+  .to(lookTarget, { x:hostWorld.x, y:hostWorld.y, z:hostWorld.z, duration:3.2, ease:'power3.inOut' }, 'country')
+  .to(hostMarker.ringMat, { opacity:1, duration:1 }, 'country+=0.6')
+  .to(hostMarker.ring.scale, { x:2.4,y:2.4,z:2.4, duration:2.2, ease:'power2.out' }, 'country+=0.8');
+
+// ACT 4 — ranking
+tl.addLabel('rank', '>+0.6')
+  .call(()=>{ setCap(''); $('#ranking').classList.add('show'); }, null, 'rank')
+  .to(camera.position, { x:hostWorld.x*3.0, y:hostWorld.y*2.7+0.5, z:hostWorld.z*3.0, duration:5, ease:'sine.inOut' }, 'rank')
+  .to('#rank-head', { opacity:1, y:0, duration:0.6 }, 'rank+=0.2')
+  .to('.rbsc-panel', { opacity:1, y:0, duration:0.55, stagger:0.13, ease:'back.out(1.3)' }, 'rank+=0.4')
+  .to({}, { duration:2.2 });
+
+function finish(){ $('#skip').classList.remove('show'); $('#enter').classList.add('show'); }
+
+// boot
+window.__rbscBooted = true; clearTimeout(bootTimer);
+// verification hook (RAF is frozen in headless preview; seek the timeline + render a frame)
+window.__rbscDebug = { tl, scene, camera, dice, die, dieMats, render(){ sunViewDir.value.copy(sun.position).normalize().transformDirection(camera.matrixWorldInverse); camera.lookAt(lookTarget); composer.render(); } };
+composer.render();           // first frame
+animate();
+statusEl.textContent = '';
+beginBtn.textContent = '▶  Begin the broadcast';
+beginBtn.disabled = false; beginBtn.classList.add('ready');
+beginBtn.addEventListener('click', ()=>{ gate.classList.add('hide'); tl.play(); });
+$('#skip').addEventListener('click', ()=>{ tl.progress(0.999); });
+if (REDUCE){ /* respect reduced-motion: jump near the end so content is visible without the long ride */ }
+
+} catch (err){
+  console.error('[rbsc-experience] init failed:', err);
+  clearTimeout(bootTimer); fail('3D could not start in this browser.');
+}
+</script>
+</body>
+</html>
