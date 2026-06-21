@@ -27,8 +27,8 @@
       --flag-blue: #1F3D7F;
       --gold: #FFD24A;
       --glow: rgba(0,215,226,.45);
-      --aurora: linear-gradient(135deg,#00D7E2 0%,#0041E5 38%,#002BBA 60%,#FF48BC 100%);
-      --aurora-soft: linear-gradient(135deg, rgba(0,215,226,.16), rgba(255,72,188,.16));
+      --aurora: linear-gradient(135deg,#00D7E2 0%,#0041E5 38%,#002BBA 60%,#FFD24A 100%);
+      --aurora-soft: linear-gradient(135deg, rgba(0,215,226,.16), rgba(255,210,74,.16));
       --radius: 24px;
     }
 
@@ -607,7 +607,7 @@
     .showcase3d.no3d .s3d-sticky { position: relative; height: auto; min-height: 80vh; padding: 120px 24px; }
     .showcase3d.no3d .s3d-cap { position: relative; opacity: 1; transform: none; }
     .showcase3d.no3d .s3d-cap:not([data-act="intro"]) { display: none; }
-    .showcase3d.no3d::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 45%, rgba(0,215,226,0.18), transparent 70%), radial-gradient(50% 50% at 60% 60%, rgba(255,72,188,0.16), transparent 70%); }
+    .showcase3d.no3d::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 45%, rgba(0,215,226,0.18), transparent 70%); }
 
     /* ── Persistent EVENT HUD (pinned to the bottom of the cinematic, survives fallback) ── */
     .s3d-hud {
@@ -1110,7 +1110,7 @@
   // CSS confetti burst (vote success only — never ambient)
   function burstConfetti(x, y) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const cols = ['#00D7E2','#0041E5','#FF48BC','#FFD24A'];
+    const cols = ['#00D7E2','#0041E5','#002BBA','#FFD24A'];
     const host = document.body;
     for (let i = 0; i < 16; i++) {
       const p = document.createElement('span');
@@ -1482,6 +1482,8 @@
     try { renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true }); }
     catch (e) { section.classList.add('no3d'); canvas.style.display='none'; return; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding; // flat brand hues render true
+    renderer.toneMapping = THREE.NoToneMapping;    // no ACES desaturation
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
@@ -1504,66 +1506,82 @@
       { c:'Finland', city:'Helsinki', b:'REV', lat:60.2, lng:24.9 },
     ];
 
-    // ── Globe ──
-    // ── Starfield backdrop (depth of space) ──
+    // Cirya chevron mark — 6 parallelograms in an 83×59 viewBox (single source of truth)
+    const CHEV_POLYS = [
+      [[83,43.6836],[34.9474,31.3232],[34.9474,17.4731],[83,29.8335]],
+      [[83,58.9727],[34.9474,45.5822],[34.9474,30.5779],[83,43.9684]],
+      [[83,30.5781],[34.9474,18.2177],[34.9474,4.3676],[83,16.728]],
+      [[0.0175781,13.125],[48.0474,25.7355],[48.0474,41.5197],[0.0175781,28.4225]],
+      [[0,28.3945],[48.0526,40.7549],[48.0526,54.6051],[0,42.2446]],
+      [[0,0],[48.0526,12.3604],[48.0526,26.2105],[0,13.8501]],
+    ];
+    function drawChevron(x, cx, cy, S, color){
+      x.fillStyle = color;
+      CHEV_POLYS.forEach(poly => { x.beginPath(); poly.forEach((pt,i)=>{ const px=cx+(pt[0]-41.5)*S, py=cy+(pt[1]-29.5)*S; i?x.lineTo(px,py):x.moveTo(px,py); }); x.closePath(); x.fill(); });
+    }
+    function chevron3D(color){
+      const shapes = CHEV_POLYS.map(poly => { const sh = new THREE.Shape(); poly.forEach((pt,i)=>{ const x=(pt[0]-41.5)/59, y=-(pt[1]-29.5)/59; i?sh.lineTo(x,y):sh.moveTo(x,y); }); sh.closePath(); return sh; });
+      const geo = new THREE.ExtrudeGeometry(shapes, { depth: 0.12, bevelEnabled: false }); geo.center();
+      return new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color, metalness: 0.2, roughness: 0.6, transparent: true, opacity: 0 }));
+    }
+    // Crisp solid disc texture for the travelling arc pulse (NormalBlending — no additive glow)
+    const DISC = (function(){ const cv=document.createElement('canvas'); cv.width=cv.height=64; const x=cv.getContext('2d'); x.beginPath(); x.arc(32,32,30,0,Math.PI*2); x.fillStyle='#fff'; x.fill(); const t=new THREE.CanvasTexture(cv); return t; })();
+
+    // ── Starfield: sparse, calm, broadcast-clean ──
     const starGeo = new THREE.BufferGeometry();
-    const starN = 2200, starPos = new Float32Array(starN*3);
+    const starN = 900, starPos = new Float32Array(starN*3);
     for (let i=0;i<starN;i++){ const rr=18+Math.random()*30, u=Math.random()*2-1, a=Math.random()*Math.PI*2, s=Math.sqrt(1-u*u); starPos[i*3]=rr*s*Math.cos(a); starPos[i*3+1]=rr*u; starPos[i*3+2]=rr*s*Math.sin(a); }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPos,3));
-    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x9fb6ff, size: 0.08, sizeAttenuation: true, transparent: true, opacity: 0.85 }));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, sizeAttenuation: true, transparent: true, opacity: 0.35 }));
     scene.add(stars);
 
-    // ── Photoreal Earth ──
+    // ── ACT 1: broadcast data-globe (UNLIT, so light can never tint the brand colours) ──
     const globe = new THREE.Group(); scene.add(globe);
-    const texLoader = new THREE.TextureLoader(); texLoader.setCrossOrigin('anonymous');
-    const TBASE = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/textures/planets/';
-    const tx = (f, cb) => texLoader.load(TBASE+f, (t)=>{ if(cb)cb(t); }, undefined, ()=>{});
-    const sphereMat = new THREE.MeshPhongMaterial({ color: 0x223355, specular: 0x333333, shininess: 14, transparent: true, opacity: 1 });
-    tx('earth_atmos_2048.jpg', t=>{ sphereMat.map=t; sphereMat.color.set(0xffffff); sphereMat.needsUpdate=true; });
-    tx('earth_specular_2048.jpg', t=>{ sphereMat.specularMap=t; sphereMat.specular.set(0x555555); sphereMat.needsUpdate=true; });
-    tx('earth_normal_2048.jpg', t=>{ sphereMat.normalMap=t; sphereMat.needsUpdate=true; });
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 64), sphereMat); globe.add(sphere);
+    // Flat navy body, sat just inside the cage so the cyan lines never z-fight
+    const sphereMat = new THREE.MeshBasicMaterial({ color: 0x002BBA, transparent: true, opacity: 0 });
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 48), sphereMat); sphere.scale.setScalar(0.997); globe.add(sphere);
+    // Sparse cyan graticule (12 meridians + 6 parallels) as one LineSegments
+    const gridMat = new THREE.LineBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0 });
+    const gridPts = [], LON = 12, LAT = 6, SEG = 48;
+    for (let i=0;i<LON;i++){ const lng=(i/LON)*360-180; for (let j=0;j<SEG;j++){ gridPts.push(ll(-90+(j/SEG)*180,lng,R), ll(-90+((j+1)/SEG)*180,lng,R)); } }
+    for (let i=1;i<=LAT;i++){ const lat=-90+(i/(LAT+1))*180; for (let j=0;j<SEG;j++){ gridPts.push(ll(lat,(j/SEG)*360-180,R), ll(lat,((j+1)/SEG)*360-180,R)); } }
+    const graticule = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gridPts), gridMat); globe.add(graticule);
 
-    // Clouds layer
-    const cloudMat = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, depthWrite: false });
-    const clouds = new THREE.Mesh(new THREE.SphereGeometry(R*1.015, 48, 48), cloudMat); globe.add(clouds);
-    tx('earth_clouds_1024.png', t=>{ cloudMat.map=t; cloudMat.alphaMap=t; cloudMat.needsUpdate=true; });
-
-    // Fresnel atmosphere glow
-    const atmoMat = new THREE.ShaderMaterial({
-      transparent: true, side: THREE.BackSide, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uOpacity: { value: 1 }, uColor: { value: new THREE.Color(0x3aa0ff) } },
-      vertexShader: 'varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-      fragmentShader: 'varying vec3 vN; uniform float uOpacity; uniform vec3 uColor; void main(){ float i=pow(0.72 - abs(vN.z), 3.0); gl_FragColor=vec4(uColor, max(0.0,i)*uOpacity); }'
-    });
-    globe.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.25, 48, 48), atmoMat));
-
-    // Country markers (glow dots) on the globe
-    const markerMats = [];
+    // Reticle markers: a ring + centre dot lying flat on the surface (host gets a 2nd gold ring)
+    const markerMats = []; let hostMarker = null;
     COUNTRIES.forEach(co => {
-      const m = new THREE.MeshBasicMaterial({ color: co.host ? 0xFFD24A : 0x00D7E2, transparent: true, opacity: 0 });
-      const dot = new THREE.Mesh(new THREE.SphereGeometry(co.host ? 0.055 : 0.04, 12, 12), m);
-      dot.position.copy(ll(co.lat, co.lng, R*1.01));
-      globe.add(dot); markerMats.push(m);
+      const col = co.host ? 0xFFD24A : 0x00D7E2;
+      const g = new THREE.Group();
+      const ringMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0, side: THREE.DoubleSide });
+      g.add(new THREE.Mesh(new THREE.RingGeometry(0.032, 0.052, 28), ringMat));
+      const dotMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0 });
+      const dot = new THREE.Mesh(new THREE.CircleGeometry(0.02, 18), dotMat); dot.position.z = 0.001; g.add(dot);
+      markerMats.push(ringMat, dotMat);
+      if (co.host) { const r2Mat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0, side: THREE.DoubleSide }); g.add(new THREE.Mesh(new THREE.RingGeometry(0.075, 0.09, 32), r2Mat)); markerMats.push(r2Mat); hostMarker = g; }
+      const pos = ll(co.lat, co.lng, R*1.002); g.position.copy(pos); g.lookAt(pos.clone().multiplyScalar(2));
+      globe.add(g);
     });
 
-    // Connection arcs from host → each country
+    // Signal-flow arcs from host → each country, with a travelling cyan pulse
     const host = COUNTRIES[0];
-    const arcs = [];
+    const arcs = [], arcPulses = [];
     COUNTRIES.slice(1).forEach(co => {
       const s = ll(host.lat, host.lng, R*1.01), e = ll(co.lat, co.lng, R*1.01);
       const mid = s.clone().add(e).multiplyScalar(0.5).normalize().multiplyScalar(R*(1.15 + s.distanceTo(e)*0.18));
       const pts = new THREE.QuadraticBezierCurve3(s, mid, e).getPoints(60);
       const g = new THREE.BufferGeometry().setFromPoints(pts);
       const ln = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0 }));
-      ln.userData.count = pts.length; g.setDrawRange(0, 0);
+      ln.userData.count = pts.length; ln.userData.pts = pts; g.setDrawRange(0, 0);
       globe.add(ln); arcs.push(ln);
+      const pMat = new THREE.SpriteMaterial({ map: DISC, color: 0x00D7E2, transparent: true, opacity: 0, depthWrite: false });
+      const pulse = new THREE.Sprite(pMat); pulse.scale.setScalar(0.08); pulse.position.copy(pts[0]); globe.add(pulse);
+      arcPulses.push({ sprite: pulse, mat: pMat, pts });
     });
 
-    // ── ACT 2: the trophy ──
+    // ── ACT 2: the trophy — flat editorial gold (not chrome) ──
     const trophy = new THREE.Group();
-    const goldMat = new THREE.MeshStandardMaterial({ color: 0xF6C544, metalness: 1, roughness: 0.22, transparent: true, opacity: 0 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: 0x241a04, metalness: 0.7, roughness: 0.4, transparent: true, opacity: 0 });
+    const goldMat = new THREE.MeshStandardMaterial({ color: 0xFFD24A, metalness: 0.25, roughness: 0.65, transparent: true, opacity: 0 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x0a0b22, metalness: 0.3, roughness: 0.6, transparent: true, opacity: 0 });
     const cup  = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.30, 0.82, 44, 1, true), goldMat); cup.position.y = 1.0; trophy.add(cup);
     const rim  = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.055, 16, 44), goldMat); rim.position.y = 1.41; rim.rotation.x = Math.PI/2; trophy.add(rim);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(0.14, 22, 22), goldMat); knob.position.y = 0.56; trophy.add(knob);
@@ -1571,6 +1589,8 @@
     const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.36, 0.11, 30), goldMat); foot.position.y = 0.15; trophy.add(foot);
     const base = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.18, 0.74), darkMat); base.position.y = 0.04; trophy.add(base);
     [[-1,1],[1,-1]].forEach(([sx,rz])=>{ const h = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.045, 12, 26, Math.PI), goldMat); h.position.set(sx*0.6, 1.05, 0); h.rotation.z = rz*Math.PI/2; trophy.add(h); });
+    const trophyChev = chevron3D(0xFFD24A); trophyChev.scale.setScalar(0.42); trophyChev.position.set(0, 0.04, 0.38); trophy.add(trophyChev);
+    const trophyMats = [goldMat, darkMat, trophyChev.material];
     trophy.position.y = -0.78; trophy.visible = false; scene.add(trophy);
 
     // ── ACT 3: the draw — a die that rolls on a table and lands on the host ──
@@ -1578,30 +1598,35 @@
     const FACE_ORDER = ['Austria','Sweden','Switzerland','Netherlands','Australia','Finland'];
     function faceTex(name, host){
       const cv = document.createElement('canvas'); cv.width = cv.height = 256; const x = cv.getContext('2d');
-      x.fillStyle = host ? '#0041E5' : '#0b1030'; x.fillRect(0,0,256,256);
-      x.strokeStyle = host ? '#FFD24A' : 'rgba(255,255,255,0.18)'; x.lineWidth = host ? 14 : 8; x.strokeRect(14,14,228,228);
+      x.fillStyle = host ? '#0041E5' : '#0a0b22'; x.fillRect(0,0,256,256);
+      x.strokeStyle = host ? '#FFD24A' : '#00D7E2'; x.lineWidth = host ? 12 : 6; x.strokeRect(13,13,230,230);
       x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle';
-      x.font = '700 ' + (name.length > 9 ? 30 : 38) + 'px "Plus Jakarta Sans", system-ui, sans-serif';
-      x.fillText(name, 128, host ? 110 : 128);
-      if (host){ x.fillStyle = '#FFD24A'; x.font = '800 26px "Plus Jakarta Sans", system-ui, sans-serif'; x.fillText('★ HOST ★', 128, 160); }
+      x.font = '800 ' + (name.length > 9 ? 30 : 38) + 'px "Plus Jakarta Sans", system-ui, sans-serif';
+      x.fillText(name, 128, host ? 104 : 128);
+      if (host){ drawChevron(x, 128, 168, 0.78, '#FFD24A'); }
       const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4; return tex;
     }
-    const dieMats = FACE_ORDER.map(n => new THREE.MeshStandardMaterial({ map: faceTex(n, n==='Switzerland'), metalness: 0.15, roughness: 0.5, transparent: true, opacity: 0 }));
+    const dieMats = FACE_ORDER.map(n => new THREE.MeshStandardMaterial({ map: faceTex(n, n==='Switzerland'), metalness: 0, roughness: 1, transparent: true, opacity: 0 }));
     const die = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.4, 1.4), dieMats); die.visible = false; scene.add(die);
+    const dieEdgeMat = new THREE.LineBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0 });
+    die.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.42, 1.42, 1.42)), dieEdgeMat));
     const dieRestY = -0.30;
+    // Re-bake faces once the brand font is ready so type never falls back to system-ui
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dieMats.forEach((m,i)=>{ m.map = faceTex(FACE_ORDER[i], FACE_ORDER[i]==='Switzerland'); m.needsUpdate = true; }); });
 
     // The table the die rolls on
-    const tableMat = new THREE.MeshStandardMaterial({ color: 0x0a1030, metalness: 0.25, roughness: 0.7, transparent: true, opacity: 0, side: THREE.DoubleSide });
+    const tableMat = new THREE.MeshStandardMaterial({ color: 0x0a0b22, metalness: 0.2, roughness: 0.8, transparent: true, opacity: 0, side: THREE.DoubleSide });
     const table = new THREE.Mesh(new THREE.CircleGeometry(6, 56), tableMat); table.rotation.x = -Math.PI/2; table.position.y = -1.0; table.visible = false; scene.add(table);
     const tableRingMat = new THREE.MeshBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0, side: THREE.DoubleSide });
     const tableRing = new THREE.Mesh(new THREE.RingGeometry(2.3, 2.42, 64), tableRingMat); tableRing.rotation.x = -Math.PI/2; tableRing.position.y = -0.99; tableRing.visible = false; scene.add(tableRing);
 
-    // Lights — a white "sun" for realistic Earth shading + brand rim lights
-    scene.add(new THREE.AmbientLight(0x223355, 0.45));
-    const sun = new THREE.DirectionalLight(0xfff4e6, 1.5); sun.position.set(-4, 2.5, 3); scene.add(sun);
-    const l1 = new THREE.PointLight(0x00D7E2, 1.1, 30); l1.position.set(5, 3, 5); scene.add(l1);
-    const l2 = new THREE.PointLight(0xFF48BC, 1.1, 30); l2.position.set(-5, -2, 4); scene.add(l2);
-    const l3 = new THREE.PointLight(0x0041E5, 0.9, 30); l3.position.set(0, 5, -3); scene.add(l3);
+    // ── OUTRO brand sign-off: one large chevron flies in beside the title ──
+    const outroChev = chevron3D(0xFFD24A); outroChev.scale.setScalar(1.5); outroChev.position.set(0, -0.1, 0); outroChev.visible = false; scene.add(outroChev);
+
+    // Lights — TWO white lights only; the globe/grid/markers/arcs are unlit, so only the
+    // matte die and the gold trophy receive light. No coloured lights → no muddy blend.
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(-3, 4, 5); scene.add(key);
 
     // Caption acts
     const caps = {}; section.querySelectorAll('.s3d-cap').forEach(el => caps[el.dataset.act] = el);
@@ -1648,25 +1673,33 @@
       globe.visible = gOp > 0.01;
       if (globe.visible) {
         sphereMat.opacity = gOp;
-        cloudMat.opacity = 0.45 * gOp;
-        atmoMat.uniforms.uOpacity.value = gOp;
+        gridMat.opacity = 0.9 * gOp;
         globe.rotation.y = t * 0.06;
-        globe.rotation.x = 0.12 + my * 0.12;
-        clouds.rotation.y = t * 0.09; // clouds drift faster than the surface
+        globe.rotation.x = 0.10 + my * 0.06; // locked-off feel (halved parallax)
         const opening = p < 0.5;
         globe.scale.setScalar(opening ? lerp(0.95, 1.18, seg(p,0,0.20)) : lerp(1.05, 1.0, seg(p,0.66,0.74)));
         globe.position.z = opening ? 0 : -seg(p, 0.88, 1.0) * 2.2; // recede into the outro
-        // markers + ambient arcs (audiences connecting)
+        // reticle markers (flat, no flicker) + host pulse
         const mOp = (opening ? seg(p,0.05,0.16) : galleryVis) * gOp;
-        markerMats.forEach((m,i)=> m.opacity = mOp * (0.6 + 0.4*Math.sin(t*3 + i)) );
+        markerMats.forEach(m => m.opacity = mOp);
+        if (hostMarker) hostMarker.scale.setScalar(1 + 0.13 * (0.5 + 0.5*Math.sin(t*2.2)));
+        // signal-flow arcs draw in, with a travelling pulse riding the head
         const af = opening ? seg(p, 0.06, 0.18) : 1;
-        arcs.forEach((ln,i)=>{ const f = clamp01(af*arcs.length - i); ln.geometry.setDrawRange(0, Math.floor(2 + f*(ln.userData.count-2))); ln.material.opacity = (f>0?0.7:0)*gOp; });
+        arcs.forEach((ln,i)=>{
+          const f = clamp01(af*arcs.length - i), cnt = ln.userData.count;
+          const drawn = Math.floor(2 + f*(cnt-2));
+          ln.geometry.setDrawRange(0, drawn);
+          ln.material.opacity = (f>0?0.85:0)*gOp;
+          const pu = arcPulses[i];
+          pu.sprite.position.copy(ln.userData.pts[Math.min(cnt-1, drawn)]);
+          pu.mat.opacity = (f>0 && f<0.985 ? 0.95 : 0) * gOp;
+        });
       }
 
       // ── Trophy ──
       trophy.visible = tOp > 0.01;
       if (trophy.visible) {
-        goldMat.opacity = tOp; darkMat.opacity = tOp;
+        trophyMats.forEach(m => m.opacity = tOp);
         trophy.rotation.y = t * 0.5;
         trophy.scale.setScalar(lerp(0.6, 1.15, seg(p,0.20,0.32)));
         trophy.position.y = -0.78 + Math.sin(t*1.4) * 0.04;
@@ -1676,7 +1709,7 @@
       const showDie = dOp > 0.01;
       die.visible = table.visible = tableRing.visible = showDie;
       if (showDie) {
-        dieMats.forEach(m => m.opacity = dOp);
+        dieMats.forEach(m => m.opacity = dOp); dieEdgeMat.opacity = 0.9 * dOp;
         tableMat.opacity = 0.85 * dOp; tableRingMat.opacity = 0.5 * dOp;
         const d = seg(p, 0.42, 0.66);
         const ease = d*d*(3 - 2*d);                 // smoothstep
@@ -1687,6 +1720,16 @@
         die.position.z = lerp(0.8, 0, ease);
         die.position.y = dieRestY + Math.abs(Math.sin(d*Math.PI*3)) * (1 - ease) * 1.3; // decaying bounce
         tableRing.rotation.z = t * 0.3;
+      }
+
+      // ── Outro: a compact gold chevron — the brand sign-off — rises below the title ──
+      const oOp = seg(p, 0.89, 0.97);
+      outroChev.visible = oOp > 0.01;
+      if (outroChev.visible) {
+        outroChev.material.opacity = oOp;
+        outroChev.position.set(0, lerp(-1.7, -1.32, oOp), 0.2);
+        outroChev.rotation.y = (1 - oOp) * 0.6 + my * 0.05;
+        outroChev.scale.setScalar(lerp(0.42, 0.52, oOp));
       }
 
       // ── Captions ──
@@ -1706,12 +1749,11 @@
       // HUD cross-fades out as the film ends so it doesn't collide with the content handoff
       if (hud) { const h = 1 - seg(p, 0.90, 1.0); hud.style.opacity = h.toFixed(3); hud.style.pointerEvents = h < 0.05 ? 'none' : 'auto'; hud.style.visibility = h < 0.05 ? 'hidden' : 'visible'; }
 
-      // ── Camera: drops down over the table during the draw, free otherwise ──
-      camera.position.x = mx * 0.6;
-      camera.position.y = -my * 0.4 + dOp * 1.5;
+      // ── Camera: drops down over the table during the draw, free otherwise (locked-off feel) ──
+      camera.position.x = mx * 0.3;
+      camera.position.y = -my * 0.2 + dOp * 1.5;
       camera.position.z = 4.4 - dOp * 0.3;
       camera.lookAt(0, -dOp * 0.5, 0);
-      l1.intensity = 1.0 + Math.sin(t*1.2)*0.3;
       renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }
