@@ -145,15 +145,16 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
   </a>
   <div class="nav-right">
     <a href="/stations" class="btn btn-outline btn-sm">Public Directory</a>
-    <div data-cirya-sso></div>
   </div>
 </nav>
 
 <!-- Auth gate (shown when not logged in) -->
 <div class="auth-gate" id="auth-gate">
   <h2>Staff Portal</h2>
-  <p>Sign in with MavionSSO to manage stations, media, and the public directory.</p>
-  <p style="color:var(--subtle);font-size:12px;margin-top:40px">Use the login button in the top-right corner.</p>
+  <p>Enter the staff passcode to manage stations, media, and the public directory.</p>
+  <input id="portal-pw" type="password" placeholder="Staff passcode" autocomplete="current-password" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.12);font-size:14px;font-family:inherit;margin-bottom:12px;box-sizing:border-box" onkeydown="if(event.key==='Enter')portalUnlock()">
+  <button class="login-hint" onclick="portalUnlock()">Enter Portal</button>
+  <p id="portal-err" style="color:#d33;font-size:13px;margin-top:12px;display:none">Incorrect passcode.</p>
 </div>
 
 <!-- Main shell (shown after auth) -->
@@ -274,17 +275,16 @@ const hiddenStations = JSON.parse(localStorage.getItem('tmc_hidden_stations') ||
 function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
-// ── Auth check (MavionSSO sets a cookie or token) ──
-function checkAuth() {
-  const ssoEl = document.querySelector('[data-cirya-sso]');
-  setTimeout(() => {
-    const hasUser = ssoEl && (ssoEl.querySelector('.cirya-sso-user, .cirya-sso-avatar, [data-user]') || ssoEl.textContent.includes('Sign Out') || ssoEl.textContent.includes('Logout'));
-    if (hasUser) {
-      document.getElementById('auth-gate').style.display = 'none';
-      document.getElementById('shell').style.display = 'flex';
-      loadAll();
-    }
-  }, 1500);
+// ── Auth (staff passcode; CiryaSSO was retired with the Cirya infra) ──
+function portalUnlock() {
+  const pw = (document.getElementById('portal-pw') || {}).value;
+  if (pw === 'Mavion2026') {
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('shell').style.display = 'flex';
+    loadAll();
+  } else {
+    const e = document.getElementById('portal-err'); if (e) e.style.display = 'block';
+  }
 }
 
 // Also allow manual bypass for development
@@ -464,8 +464,7 @@ async function skipTrack(id) {
   } catch (e) { toast('Error: ' + e.message); }
 }
 
-// ── Init ──
-checkAuth();
+// ── Init ── (portal stays gated until the staff passcode is entered, or ?staff=1)
 setInterval(loadNowPlaying, 15000);
 </script>
 </body>
