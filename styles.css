@@ -80,8 +80,9 @@ body {
 }
 
 .tmc-logo {
-    width: 101px;
-    height: auto;
+    height: 32px;
+    width: auto;
+    display: block;
 }
 
 .nav-right {
@@ -1126,8 +1127,9 @@ body {
 }
 
 .tmc-logo-footer {
-    width: 53px;
-    height: auto;
+    height: 24px;
+    width: auto;
+    display: block;
 }
 
 .footer-links {
