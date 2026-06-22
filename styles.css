@@ -1916,7 +1916,7 @@ body {
 /*            CIRYACAST PAGE               */
 /* ═══════════════════════════════════════ */
 
-/* Spacing overrides for MavionCast page */
+/* Spacing overrides for TMCast page */
 #page-ciryacast .card-section {
     margin-bottom: 48px;
 }
@@ -2204,7 +2204,7 @@ body {
     display: block;
 }
 
-/* ── MavionCast CTA Card ── */
+/* ── TMCast CTA Card ── */
 .cc-cta-card {
     background: linear-gradient(135deg, #4a1fbb 0%, #7C4DFF 40%, #b03aff 72%, #FF48BC 100%);
     color: #fff;
@@ -2287,7 +2287,7 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* ── MavionCast Responsive ── */
+/* ── TMCast Responsive ── */
 @media (max-width: 809px) {
     .cc-hero-section {
         padding-top: 76px;

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageTitles = {
         home: 'TMC — The Mavion Corporation | Mavion Media Network',
         services: 'Services — TMC | Mavion Media Network',
-        ciryacast: 'MavionCast Radio Hosting — TMC | Plans & Pricing',
+        ciryacast: 'TMCast Radio Hosting — TMC | Plans & Pricing',
         about: 'About — TMC | The Mavion Corporation',
         join: 'Careers — TMC | Mavion Media Network'
     };

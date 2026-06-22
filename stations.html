@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stations — TMC | MavionCast Radio Directory</title>
-<meta name="description" content="Browse and listen to live radio stations on the MavionCast network. Stream music, request songs, and discover new stations.">
+<title>Stations — TMC | TMCast Radio Directory</title>
+<meta name="description" content="Browse and listen to live radio stations on the TMCast network. Stream music, request songs, and discover new stations.">
 <meta property="og:title" content="Station Directory — TMC">
-<meta property="og:description" content="Browse and listen to live radio stations on the MavionCast network.">
+<meta property="og:description" content="Browse and listen to live radio stations on the TMCast network.">
 <meta property="og:image" content="https://tmc.gg/og-image.png">
 <meta property="og:url" content="https://tmc.gg/stations">
 <meta name="twitter:card" content="summary_large_image">
@@ -132,7 +132,7 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
 
 <div class="hero">
   <div class="hero-tag">Live Radio</div>
-  <h1>Browse <span id="station-count">—</span> stations<br><span>on MavionCast.</span></h1>
+  <h1>Browse <span id="station-count">—</span> stations<br><span>on TMCast.</span></h1>
   <p>Stream, request songs, and tune in to stations broadcasting on the TMC network.</p>
 </div>
 
@@ -297,7 +297,7 @@ async function load() {
       }
     }
   } catch {
-    document.getElementById('grid').innerHTML = '<div class="empty"><h3>Could not load stations</h3><p>MavionCast may be offline</p></div>';
+    document.getElementById('grid').innerHTML = '<div class="empty"><h3>Could not load stations</h3><p>TMCast may be offline</p></div>';
   }
 }
 
