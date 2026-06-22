@@ -19,7 +19,7 @@ the prompts at the bottom are copy-paste ready.
 | `index.html` | Main tmc.gg site **with the RBSC takeover bar** | `/` |
 | `index-default.html` | **Backup of the original main site** (pre-RBSC) — restore to revert | — |
 
-**Branding:** "Cirya Noticias" (news arm of The Mishra Corporation). Fonts:
+**Branding:** "Mavion News" (news arm of The Mavion Corporation). Fonts:
 Plus Jakarta Sans (UI), Archivo Black (big titles), Playfair Display (wordmark).
 Colours: cyan `#00D7E2`, blue `#0041E5`, navy `#002BBA`, flag-red `#A51A23`.
 Live stream link is always `tmc.gg/songcontest` (redirects to the YouTube live).
@@ -49,7 +49,7 @@ Each performance supports: `country, broadcaster, artist, song, videoUrl, host`
 ## Data right now
 
 Countries → broadcasters (flag slug):
-- Netherlands → Cirya · 🇳🇱 `netherlands`
+- Netherlands → Mavion · 🇳🇱 `netherlands`
 - Australia → UBC · 🇦🇺 `australia`
 - Sweden → Blue News Broadcast · 🇸🇪 `sweden`
 - United Kingdom → Northwest Radio Network · 🇬🇧 `united-kingdom` **(not aired, voting disabled)**
@@ -58,7 +58,7 @@ Countries → broadcasters (flag slug):
 - Finland → REV · 🇫🇮 `finland`
 - Switzerland → SRB Network *(HOST, Zurich)* · 🇨🇭 `switzerland`
 
-Also have flags for: Mexico, El Salvador, Cirya.
+Also have flags for: Mexico, El Salvador, Mavion.
 
 Schedule: Semi 1 — Sat 10 Oct 2026; Semi 2 — Sun 11 Oct 2026; Grand Final — Sat 17 Oct 2026 (9:00–10:30 AM). Earlier items (Drawing, Running Order, Turquoise Carpet) are TBA.
 

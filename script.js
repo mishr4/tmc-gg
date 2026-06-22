@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link[data-page]');
 
     const pageTitles = {
-        home: 'TMC — The Mishra Corporation | Cirya Media Network',
-        services: 'Services — TMC | Cirya Media Network',
-        ciryacast: 'CiryaCast Radio Hosting — TMC | Plans & Pricing',
-        about: 'About — TMC | The Mishra Corporation',
-        join: 'Careers — TMC | Cirya Media Network'
+        home: 'TMC — The Mavion Corporation | Mavion Media Network',
+        services: 'Services — TMC | Mavion Media Network',
+        ciryacast: 'MavionCast Radio Hosting — TMC | Plans & Pricing',
+        about: 'About — TMC | The Mavion Corporation',
+        join: 'Careers — TMC | Mavion Media Network'
     };
 
     function navigateTo(pageId) {

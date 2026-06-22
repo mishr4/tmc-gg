@@ -9,7 +9,7 @@
       <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Sitemap — The Mishra Corporation</title>
+        <title>Sitemap — The Mavion Corporation</title>
         <link rel="icon" href="/favicon-32.png"/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
@@ -90,7 +90,7 @@
             </span>
           </div>
           <div class="kicker">XML Sitemap</div>
-          <h1>The Mishra Corporation</h1>
+          <h1>The Mavion Corporation</h1>
           <p class="sub">This is the machine-readable map of tmc.gg that search engines use to discover our pages. Below is a friendlier view of the same data.</p>
           <div class="count">
             <span>📍</span>

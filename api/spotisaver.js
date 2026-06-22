@@ -110,7 +110,7 @@ function cors(req, res) {
   res.setHeader('Access-Control-Max-Age', '86400');
 }
 
-// --- Handler (auth handled by CiryaSSO on cast.tmc.gg) ---
+// --- Handler (auth handled by MavionSSO on cast.tmc.gg) ---
 
 module.exports = async function handler(req, res) {
   cors(req, res);
