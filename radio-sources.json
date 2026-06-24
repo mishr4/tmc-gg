@@ -1,0 +1,9 @@
+{
+  "_help": "Extra radio sources merged into tmc.gg/stations and the /radio player, alongside the built-in TMCast network (cast.tmc.gg). Edit the 'sources' array below. See '_examples' for the format. After editing, just redeploy — no code changes needed.",
+  "_examples": [
+    { "type": "azuracast", "base": "https://demo.azuracast.com" },
+    { "type": "azuracast", "base": "https://radio.example.org", "station": "main" },
+    { "type": "stream", "id": "lofi", "name": "Lofi Beats", "genre": "Lo-fi", "logo": "https://example.com/art.png", "stream": "https://stream.example.com/listen" }
+  ],
+  "sources": []
+}

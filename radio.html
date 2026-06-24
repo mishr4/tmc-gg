@@ -110,8 +110,8 @@
 
 <audio id="audio" preload="none"></audio>
 
+<script src="/radio-sources.js"></script>
 <script>
-const API = 'https://cast.tmc.gg';
 const id = new URLSearchParams(location.search).get('s') || new URLSearchParams(location.search).get('station');
 const audio = document.getElementById('audio');
 const $ = s => document.getElementById(s);
@@ -156,20 +156,21 @@ function render(s){
 async function load(){
   if (!id) return;
   try{
-    const res = await fetch(`${API}/api/nowplaying`, { cache:'no-store' });
-    const list = await res.json();
+    const list = await MavionRadio.loadStations();
     const s = list.find(x => String(x.station.id) === String(id));
     if (!s){ $('title').textContent = 'Station not found'; $('artist').innerHTML='<span class="errwrap">It may be hidden or offline. <a href="/stations">Back to stations</a>.</span>'; $('toggle').style.display='none'; return; }
+    const first = !station;
     render(s);
     $('status').textContent = '';
+    if (first) play();              // attempt autoplay once we have the stream URL
   }catch(e){
-    if (!station) $('status').textContent = 'Could not reach TMCast. Retrying…';
+    if (!station) $('status').textContent = 'Could not reach the stream. Retrying…';
   }
 }
 
 function play(){
-  if (!id) return;
-  if (!audio.src) audio.src = `${API}/listen/${id}/radio.mp3`;
+  if (!station || !station.listen_url) return;
+  if (!audio.src) audio.src = station.listen_url;
   $('toggle').classList.add('loading');
   audio.play().then(()=>{ started=true; }).catch(()=>{ $('toggle').classList.remove('loading','playing'); $('toggle').setAttribute('aria-label','Play'); $('status').textContent='Tap play to start the stream.'; });
 }
@@ -186,8 +187,6 @@ function reflectMute(){ const m = audio.muted || audio.volume===0; $('vol-on').s
 audio.volume = 0.8;
 load();
 setInterval(load, 15000);
-// attempt autoplay (most browsers will block until a tap; the play button covers that)
-window.addEventListener('load', ()=>{ if (id) play(); });
 </script>
 </body>
 </html>

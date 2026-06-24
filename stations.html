@@ -166,6 +166,7 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
 
 <audio id="audio" preload="none"></audio>
 
+<script src="/radio-sources.js"></script>
 <script>
 const API = 'https://cast.tmc.gg';
 let stations = [];
@@ -281,8 +282,8 @@ function copyUrl(id) {
 
 async function load() {
   try {
-    const res = await fetch(`${API}/api/nowplaying`);
-    stations = (await res.json()).filter(s => !hiddenStations.includes(s.station.id));
+    const all = await MavionRadio.loadStations();
+    stations = all.filter(s => !hiddenStations.includes(s.station.id));
     document.getElementById('station-count').textContent = stations.length;
     applyFilters();
 
