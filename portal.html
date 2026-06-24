@@ -342,7 +342,7 @@ function renderDashStations() {
       <div class="station-info"><h3>${esc(s.station.name)}</h3><p>${hasNp ? `${esc(np.artist)} — ${esc(np.title)}` : label} &middot; ${s.listeners.current} listeners</p></div>
       <span class="badge badge-${status}">${label}</span>
       <div class="station-actions">
-        <button class="btn btn-outline btn-sm" onclick="window.open('${API}/player/${s.station.id}','_blank')">Player</button>
+        <a class="btn btn-outline btn-sm" href="/radio?s=${s.station.id}" target="_blank" rel="noopener">&#9654; Listen</a>
       </div>
     </div>`;
   }).join('');
@@ -362,9 +362,7 @@ function renderStations() {
       <div class="station-info"><h3>${esc(s.station.name)}</h3><p>${esc(s.station.genre||'Radio')} ${s.station.location ? '&middot; '+esc(s.station.location) : ''}</p></div>
       <span class="badge badge-${status}">${label}</span>
       <div class="station-actions">
-        <button class="btn btn-green btn-sm" onclick="toggleAutoDJ('${s.station.id}',true)">Start DJ</button>
-        <button class="btn btn-outline btn-sm" onclick="toggleAutoDJ('${s.station.id}',false)">Stop</button>
-        <button class="btn btn-outline btn-sm" onclick="skipTrack('${s.station.id}')">Skip</button>
+        <a class="btn btn-green btn-sm" href="/radio?s=${s.station.id}" target="_blank" rel="noopener">&#9654; Listen</a>
         <button class="btn btn-outline btn-sm" onclick="openEditStation('${s.station.id}')">Edit</button>
         <button class="btn btn-danger btn-sm" onclick="deleteStation('${s.station.id}','${esc(s.station.name)}')">Del</button>
       </div>
@@ -444,23 +442,6 @@ async function deleteStation(id, name) {
     await fetch(`${API}/api/stations/${id}`, { method: 'DELETE' });
     toast('Station deleted');
     await loadNowPlaying();
-  } catch (e) { toast('Error: ' + e.message); }
-}
-
-// ── AutoDJ controls ──
-async function toggleAutoDJ(id, start) {
-  try {
-    await fetch(`${API}/api/stations/${id}/autodj/${start?'start':'stop'}`, { method: 'POST' });
-    toast(start ? 'AutoDJ started' : 'AutoDJ stopped');
-    setTimeout(loadNowPlaying, 1000);
-  } catch (e) { toast('Error: ' + e.message); }
-}
-
-async function skipTrack(id) {
-  try {
-    await fetch(`${API}/api/stations/${id}/autodj/skip`, { method: 'POST' });
-    toast('Skipped');
-    setTimeout(loadNowPlaying, 1000);
   } catch (e) { toast('Error: ' + e.message); }
 }
 

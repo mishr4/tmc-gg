@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Listen — TMC Radio</title>
+<meta name="description" content="Listen live on the TMCast radio network.">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cast.tmc.gg" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{ --accent:#7C4DFF; --pink:#FF48BC; }
+  html,body{height:100%}
+  body{font-family:'Instrument Sans',system-ui,sans-serif;color:#fff;background:#05060f;overflow:hidden;-webkit-font-smoothing:antialiased}
+
+  /* blurred album-art backdrop */
+  #bg{position:fixed;inset:-60px;background-size:cover;background-position:center;filter:blur(70px) saturate(150%) brightness(.55);transform:scale(1.15);transition:background-image .6s ease;z-index:0}
+  .scrim{position:fixed;inset:0;z-index:1;background:radial-gradient(120% 120% at 50% 10%, rgba(5,6,15,.35), rgba(5,6,15,.85) 70%, #05060f)}
+
+  .nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+  .nav a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;opacity:.85;transition:opacity .2s}
+  .nav a:hover{opacity:1}
+  .nav .logo img{height:26px;width:auto;display:block;opacity:.95}
+
+  main{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 24px 48px;gap:22px}
+  .art{width:min(340px,72vw);aspect-ratio:1;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--pink));box-shadow:0 40px 90px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06);position:relative}
+  .art img{width:100%;height:100%;object-fit:cover;display:block}
+  .art .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .art .ph svg{width:74px;height:74px;color:rgba(255,255,255,.85)}
+  .art.playing{animation:breathe 6s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+  .live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 12px #ff3b3b;animation:pulse 1.5s infinite}
+  .live.off .dot{background:#888;box-shadow:none;animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .station{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#c9b8ff}
+  h1.title{font-family:'Lexend',sans-serif;font-weight:700;font-size:clamp(24px,4.5vw,40px);line-height:1.12;letter-spacing:-.02em;max-width:680px;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+  .artist{font-size:17px;color:rgba(255,255,255,.7);max-width:600px}
+
+  .controls{display:flex;align-items:center;gap:22px;margin-top:6px}
+  .play{width:76px;height:76px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;color:#0a0a14;box-shadow:0 16px 40px -12px rgba(0,0,0,.6);transition:transform .15s}
+  .play:hover{transform:scale(1.05)}
+  .play:active{transform:scale(.97)}
+  .play svg{width:30px;height:30px}
+  .play .pause-i{display:none}
+  .play.playing .play-i{display:none}
+  .play.playing .pause-i{display:block}
+  .play.loading{pointer-events:none}
+  .play.loading svg{display:none}
+  .play.loading::after{content:'';width:26px;height:26px;border:3px solid rgba(0,0,0,.2);border-top-color:#0a0a14;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .vol{display:flex;align-items:center;gap:10px}
+  .vol button{background:none;border:none;color:#fff;cursor:pointer;opacity:.8;display:flex}
+  .vol button:hover{opacity:1}
+  .vol svg{width:20px;height:20px}
+  .vol input{width:110px;height:4px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.25);border-radius:2px;outline:none;cursor:pointer}
+  .vol input::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;cursor:pointer}
+  .vol input::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:#fff;cursor:pointer}
+
+  .meta-listeners{font-size:13px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:7px}
+  .status{min-height:18px;font-size:13px;color:rgba(255,255,255,.5)}
+  .errwrap{max-width:420px}
+  .errwrap a{color:#c9b8ff}
+
+  @media(max-width:640px){ .nav{padding:16px 18px} main{padding:80px 18px 40px;gap:18px} .play{width:68px;height:68px} .vol input{width:90px} }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div class="scrim"></div>
+
+<nav class="nav">
+  <a class="logo" href="/"><img src="/mavion-logo.png" alt="TMC"></a>
+  <a href="/stations">&larr; All stations</a>
+</nav>
+
+<main>
+  <div class="art" id="art">
+    <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+  </div>
+  <div class="live off" id="live"><span class="dot"></span><span id="live-label">Offline</span></div>
+  <div>
+    <div class="station" id="station-name">TMCast</div>
+    <h1 class="title" id="title">Loading…</h1>
+    <div class="artist" id="artist"></div>
+  </div>
+  <div class="controls">
+    <button class="play" id="toggle" aria-label="Play" onclick="togglePlay()">
+      <svg class="play-i" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"/></svg>
+      <svg class="pause-i" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+    </button>
+    <div class="vol">
+      <button id="mute" aria-label="Mute" onclick="toggleMute()">
+        <svg id="vol-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="currentColor" stroke="none"/><path d="M19 5a9 9 0 0 1 0 14"/><path d="M15.5 8.5a4 4 0 0 1 0 7"/></svg>
+        <svg id="vol-off" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="currentColor" stroke="none"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+      </button>
+      <input type="range" min="0" max="100" value="80" id="vol" oninput="setVolume(this.value)">
+    </div>
+  </div>
+  <div class="meta-listeners" id="listeners-wrap" style="display:none">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    <span id="listeners">0</span>&nbsp;listening
+  </div>
+  <div class="status" id="status"></div>
+</main>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+const API = 'https://cast.tmc.gg';
+const id = new URLSearchParams(location.search).get('s') || new URLSearchParams(location.search).get('station');
+const audio = document.getElementById('audio');
+const $ = s => document.getElementById(s);
+let started = false, station = null;
+
+function esc(s){ if(s==null) return ''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+if (!id) {
+  $('title').textContent = 'No station selected';
+  $('artist').innerHTML = '<span class="errwrap">Pick a station from the <a href="/stations" style="color:#c9b8ff">directory</a>.</span>';
+  $('toggle').style.display = 'none';
+}
+
+function setArt(url){
+  const art = $('art');
+  let img = art.querySelector('img');
+  if (url){
+    if (!img){ img = document.createElement('img'); art.prepend(img); }
+    if (img.getAttribute('src') !== url){ img.onerror = ()=>{ img.remove(); }; img.src = url; }
+    $('bg').style.backgroundImage = `url("${url}")`;
+  }
+}
+
+function render(s){
+  station = s;
+  const np = s.now_playing || {};
+  const live = !!s.live || (np.title && np.title !== 'Unknown');
+  $('station-name').textContent = s.station.name || 'TMCast';
+  document.title = (s.station.name ? s.station.name + ' — ' : '') + 'TMC Radio';
+  const hasNp = np.title && np.title !== 'Unknown';
+  $('title').textContent = hasNp ? np.title : (s.station.genre || 'Live radio');
+  $('artist').textContent = hasNp ? (np.artist || '') : (live ? 'Broadcasting live' : 'Currently offline');
+  setArt(np.artwork_url || s.station.logo_url || '');
+  const liveEl = $('live');
+  liveEl.classList.toggle('off', !live);
+  $('live-label').textContent = live ? 'Live' : 'Offline';
+  const lc = (s.listeners && s.listeners.current) || 0;
+  if (lc > 0){ $('listeners-wrap').style.display='flex'; $('listeners').textContent = lc; }
+  else { $('listeners-wrap').style.display='none'; }
+}
+
+async function load(){
+  if (!id) return;
+  try{
+    const res = await fetch(`${API}/api/nowplaying`, { cache:'no-store' });
+    const list = await res.json();
+    const s = list.find(x => String(x.station.id) === String(id));
+    if (!s){ $('title').textContent = 'Station not found'; $('artist').innerHTML='<span class="errwrap">It may be hidden or offline. <a href="/stations">Back to stations</a>.</span>'; $('toggle').style.display='none'; return; }
+    render(s);
+    $('status').textContent = '';
+  }catch(e){
+    if (!station) $('status').textContent = 'Could not reach TMCast. Retrying…';
+  }
+}
+
+function play(){
+  if (!id) return;
+  if (!audio.src) audio.src = `${API}/listen/${id}/radio.mp3`;
+  $('toggle').classList.add('loading');
+  audio.play().then(()=>{ started=true; }).catch(()=>{ $('toggle').classList.remove('loading','playing'); $('toggle').setAttribute('aria-label','Play'); $('status').textContent='Tap play to start the stream.'; });
+}
+function togglePlay(){ if (audio.paused) play(); else audio.pause(); }
+audio.addEventListener('playing', ()=>{ $('toggle').classList.remove('loading'); $('toggle').classList.add('playing'); $('toggle').setAttribute('aria-label','Pause'); $('art').classList.add('playing'); $('status').textContent=''; });
+audio.addEventListener('pause', ()=>{ $('toggle').classList.remove('loading','playing'); $('toggle').setAttribute('aria-label','Play'); $('art').classList.remove('playing'); });
+audio.addEventListener('waiting', ()=>{ if(!audio.paused) $('toggle').classList.add('loading'); });
+audio.addEventListener('error', ()=>{ if(audio.src){ $('toggle').classList.remove('loading','playing'); $('status').textContent='Stream unavailable right now.'; } });
+
+function setVolume(v){ audio.volume = v/100; audio.muted = false; reflectMute(); }
+function toggleMute(){ audio.muted = !audio.muted; reflectMute(); }
+function reflectMute(){ const m = audio.muted || audio.volume===0; $('vol-on').style.display = m?'none':'block'; $('vol-off').style.display = m?'block':'none'; }
+
+audio.volume = 0.8;
+load();
+setInterval(load, 15000);
+// attempt autoplay (most browsers will block until a tap; the play button covers that)
+window.addEventListener('load', ()=>{ if (id) play(); });
+</script>
+</body>
+</html>

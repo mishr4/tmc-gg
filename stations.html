@@ -207,7 +207,7 @@ function applyFilters() {
     const art = np?.artwork_url || s.station.logo_url || '';
     const hasNp = np && np.title && np.title !== 'Unknown';
     return `
-      <div class="card" onclick="playStation('${s.station.id}')">
+      <div class="card" onclick="location.href='/radio?s=${s.station.id}'">
         <div class="card-art">
           ${art ? `<img src="${esc(art)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
           <div class="card-art-placeholder" ${art ? 'style="display:none"' : ''}>
@@ -224,7 +224,7 @@ function applyFilters() {
             : `<div class="card-np">${s.live ? 'Broadcasting live' : 'Offline'}</div>`}
         </div>
         <div class="card-actions">
-          <button class="card-action" onclick="event.stopPropagation();playStation('${s.station.id}')">
+          <button class="card-action" onclick="event.stopPropagation();location.href='/radio?s=${s.station.id}'">
             <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"/></svg>Listen
           </button>
           <button class="card-action" onclick="event.stopPropagation();copyUrl('${s.station.id}')">
@@ -276,7 +276,7 @@ function stopPlayer() {
 function setVolume(v) { audio.volume = v / 100; }
 
 function copyUrl(id) {
-  navigator.clipboard.writeText(`${API}/player/${id}`);
+  navigator.clipboard.writeText(`https://tmc.gg/radio?s=${id}`);
 }
 
 async function load() {
