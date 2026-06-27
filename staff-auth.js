@@ -64,11 +64,13 @@
       ${logo()}
       <h2>Staff sign-in</h2>
       <p>Authorised staff only. Use the email an admin added.</p>
+      ${googleClientId ? '<div class="sa-google" id="sa-google"></div><div class="sa-or">or</div>' : ''}
       <div class="sa-field"><label>Email</label><input type="email" id="sa-email" autocomplete="username" required></div>
       <div class="sa-field"><label>Password</label><input type="password" id="sa-password" autocomplete="current-password" required></div>
       <button class="sa-btn" type="submit">Sign in</button>
       <div class="sa-err" id="sa-err">${msg || ''}</div>
     </form>`;
+    if (googleClientId) renderGoogle();
     const f = document.getElementById('sa-login');
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -135,6 +137,30 @@
     user = data;
     if (opts.adminOnly && data.role !== 'admin') return showDenied();
     done();
+  }
+
+  function renderGoogle() {
+    const host = document.getElementById('sa-google');
+    if (!host || !googleClientId) return;
+    function init() {
+      if (!(window.google && google.accounts && google.accounts.id)) return;
+      try {
+        google.accounts.id.initialize({ client_id: googleClientId, callback: onGoogleCred, auto_select: false, cancel_on_tap_outside: false, use_fedcm_for_prompt: true });
+        google.accounts.id.renderButton(host, { theme: 'outline', size: 'large', type: 'standard', text: 'signin_with', shape: 'pill', width: 300 });
+        google.accounts.id.prompt(); // Google One Tap
+      } catch (e) {}
+    }
+    if (window.google && window.google.accounts) return init();
+    let s = document.getElementById('gis-script');
+    if (s) { s.addEventListener('load', init); return; }
+    s = document.createElement('script'); s.id = 'gis-script'; s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.defer = true; s.onload = init;
+    document.head.appendChild(s);
+  }
+  async function onGoogleCred(resp) {
+    const err = document.getElementById('sa-err'); if (err) err.textContent = '';
+    const { status, data } = await api('/google', { credential: resp.credential });
+    if (status === 200 && data.ok) return done();
+    if (err) err.textContent = data.error || 'Google sign-in failed.';
   }
 
   window.StaffAuth = {
