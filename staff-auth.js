@@ -1,7 +1,7 @@
 /* TMC Staff SSO — front-end gate (Supabase Auth).
    Usage:  StaffAuth.guard({ adminOnly:false, onReady(user){ ... } })
 
-   Signs in with your existing Supabase project (Google / Discord OAuth + Google One Tap),
+   Signs in with your existing Supabase project (Google OAuth + Google One Tap),
    then checks the signed-in email against the tmc_staff allowlist (enforced by RLS).
    Only authorised, non-disabled staff reach onReady(). Admin pages pass adminOnly:true.
    StaffAuth.client() returns the shared Supabase client for the admin console. */
@@ -30,8 +30,6 @@
         font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:background .15s,border-color .15s}
       .sa-provider:hover{background:#fafafa;border-color:rgba(0,0,0,.28)}
       .sa-provider svg{width:18px;height:18px;flex:none}
-      .sa-discord-btn{background:#5865F2;border-color:#5865F2;color:#fff}
-      .sa-discord-btn:hover{background:#4a55d4;border-color:#4a55d4}
       .sa-google{display:flex;justify-content:center;min-height:42px;margin-bottom:10px}
       .sa-btn{width:100%;padding:13px;border:none;border-radius:12px;background:${ACCENT};color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
       .sa-btn:hover{opacity:.9}
@@ -67,7 +65,6 @@
   }
 
   const GOOGLE_ICON = '<svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45 24c0-1.6-.1-3.1-.4-4.6H24v9h11.8c-.5 2.7-2 5-4.3 6.6v5.5h7C42.6 36.7 45 30.9 45 24z"/><path fill="#34A853" d="M24 46c5.8 0 10.7-1.9 14.3-5.2l-7-5.5c-1.9 1.3-4.4 2.1-7.3 2.1-5.6 0-10.4-3.8-12.1-8.9H4.7v5.6C8.3 41.3 15.6 46 24 46z"/><path fill="#FBBC05" d="M11.9 28.5c-.4-1.3-.7-2.7-.7-4.1s.2-2.8.7-4.1v-5.6H4.7C3.2 17.6 2.4 20.7 2.4 24s.8 6.4 2.3 9.3l7.2-5.6z"/><path fill="#EA4335" d="M24 11.1c3.2 0 6 1.1 8.2 3.2l6.1-6.1C34.7 4.7 29.8 2.8 24 2.8 15.6 2.8 8.3 7.5 4.7 14.7l7.2 5.6C13.6 14.9 18.4 11.1 24 11.1z"/></svg>';
-  const DISCORD_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18 18 0 0 1 4.3 1.4 16.6 16.6 0 0 0-12.9 0A18 18 0 0 1 10.8 3.4L10.6 3a19.8 19.8 0 0 0-4.9 1.4C2.5 9 1.6 13.5 2 17.9a19.9 19.9 0 0 0 6.1 3l.8-1.4a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a13 13 0 0 1-2 1l.8 1.4a19.9 19.9 0 0 0 6.1-3c.5-5.1-.8-9.6-3.7-13.5zM9 15.3c-1 0-1.7-.9-1.7-2s.8-2 1.7-2 1.8.9 1.7 2c0 1.1-.8 2-1.7 2zm6 0c-1 0-1.7-.9-1.7-2s.8-2 1.7-2 1.8.9 1.7 2c0 1.1-.8 2-1.7 2z"/></svg>';
 
   function showLogin(msg) {
     injectStyles();
@@ -80,11 +77,9 @@
       <h2>Staff sign-in</h2>
       <p>Authorised staff only.</p>
       ${googleBtn}
-      <button class="sa-provider sa-discord-btn" id="sa-discord">${DISCORD_ICON}Continue with Discord</button>
       <div class="sa-err" id="sa-err">${msg || ''}</div>
     </div>`;
     const gr = document.getElementById('sa-google-redirect'); if (gr) gr.onclick = () => oauth('google');
-    document.getElementById('sa-discord').onclick = () => oauth('discord');
     if (cfg.googleClientId) renderOneTap();
   }
 
