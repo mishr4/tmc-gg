@@ -1,14 +1,16 @@
-/* TMC Staff SSO — front-end gate.
+/* TMC Staff SSO — front-end gate (Supabase Auth).
    Usage:  StaffAuth.guard({ adminOnly:false, onReady(user){ ... } })
-   Renders a login / forced-password-change overlay over the page, talks to /api/auth,
-   and only calls onReady() once the user is authenticated (and an admin, if adminOnly).
-   Session is a HttpOnly cookie set by the API; nothing sensitive is stored in JS. */
+
+   Signs in with your existing Supabase project (Google / Discord OAuth + Google One Tap),
+   then checks the signed-in email against the tmc_staff allowlist (enforced by RLS).
+   Only authorised, non-disabled staff reach onReady(). Admin pages pass adminOnly:true.
+   StaffAuth.client() returns the shared Supabase client for the admin console. */
 (function () {
   const ACCENT = '#7C4DFF';
+  const cfg = window.TMC_SUPABASE || {};
   let opts = {};
   let user = null;
-  let googleClientId = null;
-  let configLoaded = false;
+  let supa = null;
 
   function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
 
@@ -24,18 +26,17 @@
       .sa-card img{height:30px;width:auto;margin:0 auto 18px;display:block}
       .sa-card h2{font-family:'Lexend',sans-serif;font-size:21px;font-weight:700;color:#0a0a14;margin-bottom:4px}
       .sa-card p{font-size:13px;color:#777;margin-bottom:22px}
-      .sa-field{text-align:left;margin-bottom:14px}
-      .sa-field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#999;margin-bottom:6px}
-      .sa-field input{width:100%;padding:12px 14px;border:1px solid rgba(0,0,0,.12);border-radius:11px;font-size:14px;font-family:inherit;color:#0a0a14;outline:none;transition:border-color .15s,box-shadow .15s}
-      .sa-field input:focus{border-color:${ACCENT};box-shadow:0 0 0 3px rgba(124,77,255,.12)}
+      .sa-provider{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(0,0,0,.14);background:#fff;color:#0a0a14;
+        font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:background .15s,border-color .15s}
+      .sa-provider:hover{background:#fafafa;border-color:rgba(0,0,0,.28)}
+      .sa-provider svg{width:18px;height:18px;flex:none}
+      .sa-discord-btn{background:#5865F2;border-color:#5865F2;color:#fff}
+      .sa-discord-btn:hover{background:#4a55d4;border-color:#4a55d4}
+      .sa-google{display:flex;justify-content:center;min-height:42px;margin-bottom:10px}
       .sa-btn{width:100%;padding:13px;border:none;border-radius:12px;background:${ACCENT};color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
-      .sa-btn:hover{opacity:.9} .sa-btn:disabled{opacity:.55;cursor:progress}
+      .sa-btn:hover{opacity:.9}
       .sa-err{font-size:13px;color:#E5484D;margin-top:14px;min-height:16px;font-weight:500}
-      .sa-note{font-size:12px;color:#999;margin-top:16px}
-      .sa-hint{font-size:12px;color:#0a9d6c;background:rgba(16,185,129,.1);border-radius:8px;padding:8px 10px;margin-bottom:16px;text-align:left}
-      .sa-or{display:flex;align-items:center;gap:10px;margin:18px 0;color:#bbb;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-      .sa-or::before,.sa-or::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.1)}
-      .sa-google{display:flex;justify-content:center;min-height:42px}
+      .sa-muted{font-size:12px;color:#999;margin-top:16px;word-break:break-all}
     `;
     document.head.appendChild(s);
   }
@@ -47,76 +48,93 @@
   }
   function logo() { return '<img src="/mavion-logo.png" alt="TMC" onerror="this.style.display=\'none\'">'; }
 
-  async function api(path, body) {
-    const r = await fetch('/api/auth' + path, {
-      method: body ? 'POST' : 'GET', credentials: 'same-origin',
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
-      body: body ? JSON.stringify(body) : undefined
+  function loadScript(src, id) {
+    return new Promise((resolve, reject) => {
+      let s = id && document.getElementById(id);
+      if (s) { if (s.dataset.loaded) return resolve(); s.addEventListener('load', () => resolve()); s.addEventListener('error', reject); return; }
+      s = document.createElement('script'); if (id) s.id = id; s.src = src; s.async = true;
+      s.onload = () => { s.dataset.loaded = '1'; resolve(); }; s.onerror = reject;
+      document.head.appendChild(s);
     });
-    let data = {}; try { data = await r.json(); } catch {}
-    return { status: r.status, data };
   }
+
+  async function client() {
+    if (supa) return supa;
+    if (!cfg.url || !cfg.anonKey || cfg.anonKey.indexOf('PASTE_') === 0) throw new Error('Supabase is not configured (edit supabase-config.js).');
+    if (!(window.supabase && window.supabase.createClient)) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', 'supabase-js');
+    supa = window.supabase.createClient(cfg.url, cfg.anonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+    return supa;
+  }
+
+  const GOOGLE_ICON = '<svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45 24c0-1.6-.1-3.1-.4-4.6H24v9h11.8c-.5 2.7-2 5-4.3 6.6v5.5h7C42.6 36.7 45 30.9 45 24z"/><path fill="#34A853" d="M24 46c5.8 0 10.7-1.9 14.3-5.2l-7-5.5c-1.9 1.3-4.4 2.1-7.3 2.1-5.6 0-10.4-3.8-12.1-8.9H4.7v5.6C8.3 41.3 15.6 46 24 46z"/><path fill="#FBBC05" d="M11.9 28.5c-.4-1.3-.7-2.7-.7-4.1s.2-2.8.7-4.1v-5.6H4.7C3.2 17.6 2.4 20.7 2.4 24s.8 6.4 2.3 9.3l7.2-5.6z"/><path fill="#EA4335" d="M24 11.1c3.2 0 6 1.1 8.2 3.2l6.1-6.1C34.7 4.7 29.8 2.8 24 2.8 15.6 2.8 8.3 7.5 4.7 14.7l7.2 5.6C13.6 14.9 18.4 11.1 24 11.1z"/></svg>';
+  const DISCORD_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18 18 0 0 1 4.3 1.4 16.6 16.6 0 0 0-12.9 0A18 18 0 0 1 10.8 3.4L10.6 3a19.8 19.8 0 0 0-4.9 1.4C2.5 9 1.6 13.5 2 17.9a19.9 19.9 0 0 0 6.1 3l.8-1.4a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a13 13 0 0 1-2 1l.8 1.4a19.9 19.9 0 0 0 6.1-3c.5-5.1-.8-9.6-3.7-13.5zM9 15.3c-1 0-1.7-.9-1.7-2s.8-2 1.7-2 1.8.9 1.7 2c0 1.1-.8 2-1.7 2zm6 0c-1 0-1.7-.9-1.7-2s.8-2 1.7-2 1.8.9 1.7 2c0 1.1-.8 2-1.7 2z"/></svg>';
 
   function showLogin(msg) {
     injectStyles();
     const o = overlay(); o.classList.remove('hide');
-    o.innerHTML = `<form class="sa-card" id="sa-login">
+    const googleBtn = cfg.googleClientId
+      ? '<div class="sa-google" id="sa-google"></div>'
+      : `<button class="sa-provider" id="sa-google-redirect">${GOOGLE_ICON}Continue with Google</button>`;
+    o.innerHTML = `<div class="sa-card">
       ${logo()}
       <h2>Staff sign-in</h2>
-      <p>Authorised staff only. Use the email an admin added.</p>
-      ${googleClientId ? '<div class="sa-google" id="sa-google"></div><div class="sa-or">or</div>' : ''}
-      <div class="sa-field"><label>Email</label><input type="email" id="sa-email" autocomplete="username" required></div>
-      <div class="sa-field"><label>Password</label><input type="password" id="sa-password" autocomplete="current-password" required></div>
-      <button class="sa-btn" type="submit">Sign in</button>
+      <p>Authorised staff only.</p>
+      ${googleBtn}
+      <button class="sa-provider sa-discord-btn" id="sa-discord">${DISCORD_ICON}Continue with Discord</button>
       <div class="sa-err" id="sa-err">${msg || ''}</div>
-    </form>`;
-    if (googleClientId) renderGoogle();
-    const f = document.getElementById('sa-login');
-    f.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = f.querySelector('.sa-btn'); const err = document.getElementById('sa-err');
-      btn.disabled = true; err.textContent = '';
-      const { status, data } = await api('/login', { email: document.getElementById('sa-email').value, password: document.getElementById('sa-password').value });
-      btn.disabled = false;
-      if (status === 200 && data.ok) { if (data.mustChange) return showChange('Set a new password to finish signing in.'); return done(); }
-      err.textContent = data.error || 'Sign-in failed.';
-    });
+    </div>`;
+    const gr = document.getElementById('sa-google-redirect'); if (gr) gr.onclick = () => oauth('google');
+    document.getElementById('sa-discord').onclick = () => oauth('discord');
+    if (cfg.googleClientId) renderOneTap();
   }
 
-  function showChange(msg) {
-    injectStyles();
-    const o = overlay(); o.classList.remove('hide');
-    o.innerHTML = `<form class="sa-card" id="sa-change">
-      ${logo()}
-      <h2>Set a new password</h2>
-      <p>First-time sign-in — choose a password to continue.</p>
-      ${msg ? `<div class="sa-hint">${msg}</div>` : ''}
-      <div class="sa-field"><label>New password</label><input type="password" id="sa-new" autocomplete="new-password" minlength="8" required></div>
-      <div class="sa-field"><label>Confirm password</label><input type="password" id="sa-new2" autocomplete="new-password" minlength="8" required></div>
-      <button class="sa-btn" type="submit">Save &amp; continue</button>
-      <div class="sa-err" id="sa-err"></div>
-    </form>`;
-    const f = document.getElementById('sa-change');
-    f.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const err = document.getElementById('sa-err');
-      const p1 = document.getElementById('sa-new').value, p2 = document.getElementById('sa-new2').value;
-      if (p1.length < 8) { err.textContent = 'Password must be at least 8 characters.'; return; }
-      if (p1 !== p2) { err.textContent = 'Passwords do not match.'; return; }
-      const btn = f.querySelector('.sa-btn'); btn.disabled = true; err.textContent = '';
-      const { status, data } = await api('/change-password', { newPassword: p1 });
-      btn.disabled = false;
-      if (status === 200 && data.ok) return done();
-      err.textContent = data.error || 'Could not set password.';
-    });
+  async function oauth(provider) {
+    try {
+      const c = await client();
+      const { error } = await c.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + location.pathname } });
+      if (error) { const e = document.getElementById('sa-err'); if (e) e.textContent = error.message; }
+    } catch (err) { const e = document.getElementById('sa-err'); if (e) e.textContent = err.message; }
   }
 
-  function showDenied() {
+  // Google One Tap → Supabase signInWithIdToken (with a hashed nonce).
+  async function renderOneTap() {
+    const host = document.getElementById('sa-google'); if (!host || !cfg.googleClientId) return;
+    const rawNonce = b64url(crypto.getRandomValues(new Uint8Array(16)));
+    const hashedNonce = await sha256hex(rawNonce);
+    async function onCred(resp) {
+      const err = document.getElementById('sa-err'); if (err) err.textContent = '';
+      try {
+        const c = await client();
+        const { error } = await c.auth.signInWithIdToken({ provider: 'google', token: resp.credential, nonce: rawNonce });
+        if (error) { if (err) err.textContent = error.message; return; }
+        check();
+      } catch (e) { if (err) err.textContent = e.message; }
+    }
+    function init() {
+      if (!(window.google && google.accounts && google.accounts.id)) return;
+      try {
+        google.accounts.id.initialize({ client_id: cfg.googleClientId, callback: onCred, nonce: hashedNonce, use_fedcm_for_prompt: true, cancel_on_tap_outside: false });
+        google.accounts.id.renderButton(host, { theme: 'outline', size: 'large', type: 'standard', text: 'continue_with', shape: 'pill', width: 300 });
+        google.accounts.id.prompt(); // One Tap
+      } catch (e) {}
+    }
+    try { await loadScript('https://accounts.google.com/gsi/client', 'gis-script'); init(); } catch (e) {}
+  }
+
+  function b64url(bytes) { let s = ''; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  async function sha256hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function showDenied(email, roleProblem) {
     injectStyles();
     const o = overlay(); o.classList.remove('hide');
-    o.innerHTML = `<div class="sa-card">${logo()}<h2>No access</h2>
-      <p>Your account doesn’t have permission for this area.</p>
-      <button class="sa-btn" onclick="StaffAuth.logout()">Sign out</button></div>`;
+    o.innerHTML = `<div class="sa-card">${logo()}
+      <h2>${roleProblem ? 'No access' : 'Not authorised'}</h2>
+      <p>${roleProblem ? 'Your account doesn’t have permission for this area.' : 'This account isn’t on the staff list. Ask an admin to add it.'}</p>
+      ${email ? `<div class="sa-muted">${email}</div>` : ''}
+      <button class="sa-btn" style="margin-top:16px" onclick="StaffAuth.logout()">Sign out</button></div>`;
   }
 
   function done() {
@@ -124,48 +142,27 @@
     if (typeof opts.onReady === 'function') opts.onReady(user);
   }
 
-  async function loadConfig() {
-    if (configLoaded) return; configLoaded = true;
-    try { const { data } = await api('/config'); googleClientId = data.googleClientId || null; } catch {}
-  }
-
   async function check() {
-    await loadConfig();
-    const { data } = await api('/me');
-    if (!data.authenticated) return showLogin();
-    if (data.mustChange) return showChange();
-    user = data;
-    if (opts.adminOnly && data.role !== 'admin') return showDenied();
+    injectStyles();
+    let c;
+    try { c = await client(); } catch (e) { return showLogin(e.message); }
+    const { data: { session } } = await c.auth.getSession();
+    if (!session) return showLogin();
+    const email = (session.user && session.user.email) || '';
+    // allowlist check (RLS returns only the caller's own row unless they're an admin)
+    const { data: rows, error } = await c.from('tmc_staff').select('email,name,role,disabled').ilike('email', email).limit(1);
+    if (error) return showLogin('Could not verify access: ' + error.message);
+    const me = rows && rows[0];
+    if (!me || me.disabled) { await c.auth.signOut(); return showDenied(email, false); }
+    user = { email: me.email, name: me.name || (session.user.user_metadata && session.user.user_metadata.full_name) || me.email, role: me.role };
+    if (opts.adminOnly && me.role !== 'admin') return showDenied(email, true);
     done();
-  }
-
-  function renderGoogle() {
-    const host = document.getElementById('sa-google');
-    if (!host || !googleClientId) return;
-    function init() {
-      if (!(window.google && google.accounts && google.accounts.id)) return;
-      try {
-        google.accounts.id.initialize({ client_id: googleClientId, callback: onGoogleCred, auto_select: false, cancel_on_tap_outside: false, use_fedcm_for_prompt: true });
-        google.accounts.id.renderButton(host, { theme: 'outline', size: 'large', type: 'standard', text: 'signin_with', shape: 'pill', width: 300 });
-        google.accounts.id.prompt(); // Google One Tap
-      } catch (e) {}
-    }
-    if (window.google && window.google.accounts) return init();
-    let s = document.getElementById('gis-script');
-    if (s) { s.addEventListener('load', init); return; }
-    s = document.createElement('script'); s.id = 'gis-script'; s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.defer = true; s.onload = init;
-    document.head.appendChild(s);
-  }
-  async function onGoogleCred(resp) {
-    const err = document.getElementById('sa-err'); if (err) err.textContent = '';
-    const { status, data } = await api('/google', { credential: resp.credential });
-    if (status === 200 && data.ok) return done();
-    if (err) err.textContent = data.error || 'Google sign-in failed.';
   }
 
   window.StaffAuth = {
     guard(o) { opts = o || {}; if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check(); },
-    async logout() { try { await api('/logout', {}); } catch {} location.reload(); },
-    user() { return user; }
+    async logout() { try { const c = await client(); await c.auth.signOut(); } catch (e) {} location.reload(); },
+    user() { return user; },
+    async client() { return client(); }
   };
 })();
