@@ -23,6 +23,8 @@ const { neon } = require('@neondatabase/serverless');
 const DB_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL_UNPOOLED;
 const AUTH_SECRET = process.env.AUTH_SECRET || '';
 const SETUP_KEY = process.env.SETUP_KEY || '';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const OWNER_EMAIL = (process.env.OWNER_EMAIL || '').trim().toLowerCase();
 const TEMP_TTL_HOURS = parseInt(process.env.TEMP_PASSWORD_TTL_HOURS || '72', 10);
 const SESSION_HOURS = 8;
 const MAX_FAILS = 5;
@@ -143,6 +145,11 @@ module.exports = async function handler(req, res) {
       return send(res, 200, { authenticated: true, email: u.email, name: u.name, role: u.role, mustChange: !!u.must_change });
     }
 
+    // ── GET /config (public: which sign-in methods are available) ──
+    if (path === '/config' && method === 'GET') {
+      return send(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null });
+    }
+
     // ── POST /logout ──
     if (path === '/logout' && method === 'POST') { clearSessionCookie(res); return send(res, 200, { ok: true }); }
 
@@ -191,6 +198,59 @@ module.exports = async function handler(req, res) {
       const token = signToken({ email, role: u.role, scope: 'full', exp: Date.now() + SESSION_HOURS * 3600000 });
       setSessionCookie(res, token, SESSION_HOURS);
       return send(res, 200, { ok: true, mustChange: false, role: u.role });
+    }
+
+    // ── POST /google (Sign in with Google — gated to OWNER_EMAIL + approved staff) ──
+    if (path === '/google' && method === 'POST') {
+      const { credential } = await readBody(req);
+      if (!credential) return send(res, 400, { error: 'Missing Google credential.' });
+
+      // verify the ID token with Google (validates signature + expiry; returns claims)
+      let info;
+      try {
+        const gr = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(credential));
+        if (!gr.ok) throw new Error('bad token');
+        info = await gr.json();
+      } catch { await audit(null, 'google_fail', null, ip, null); return send(res, 401, { error: 'Google sign-in failed. Try again.' }); }
+
+      if (GOOGLE_CLIENT_ID && info.aud !== GOOGLE_CLIENT_ID) return send(res, 401, { error: 'Google sign-in is not allowed for this app.' });
+      const verified = info.email_verified === true || info.email_verified === 'true';
+      const email = normEmail(info.email);
+      if (!email || !verified) return send(res, 401, { error: 'Your Google email is not verified.' });
+
+      // rate-limit Google attempts per ip+email too (defends against a flood of denied accounts)
+      const gkey = `g|${ip}|${email}`;
+      const gar = await sql`SELECT count, locked_until FROM staff_attempts WHERE k = ${gkey}`;
+      if (gar[0] && gar[0].locked_until && new Date(gar[0].locked_until) > new Date()) {
+        return send(res, 429, { error: 'Too many attempts. Try again later.' });
+      }
+
+      let role;
+      if (OWNER_EMAIL && email === OWNER_EMAIL) {
+        // the owner is always allowed and is (re)provisioned as admin
+        await sql`INSERT INTO staff_users (email, name, role, must_change, password_hash)
+                  VALUES (${email}, ${info.name || 'Owner'}, 'admin', FALSE, NULL)
+                  ON CONFLICT (email) DO UPDATE SET role = 'admin', disabled = FALSE`;
+        role = 'admin';
+      } else {
+        const rows = await sql`SELECT role, disabled FROM staff_users WHERE email = ${email}`;
+        if (!rows[0] || rows[0].disabled) {
+          const cnt = (gar[0] ? gar[0].count : 0) + 1;
+          const locked = cnt >= MAX_FAILS ? new Date(Date.now() + LOCK_MINUTES * 60000).toISOString() : null;
+          await sql`INSERT INTO staff_attempts (k, count, locked_until) VALUES (${gkey}, ${cnt}, ${locked})
+                    ON CONFLICT (k) DO UPDATE SET count = ${cnt}, locked_until = ${locked}`;
+          await audit(email, 'google_denied', email, ip, null);
+          return send(res, 403, { error: 'This Google account isn’t authorised. Ask an admin to add it.' });
+        }
+        role = rows[0].role;
+      }
+
+      await sql`DELETE FROM staff_attempts WHERE k = ${gkey}`;
+      await sql`UPDATE staff_users SET last_login = now() WHERE email = ${email}`;
+      await audit(email, 'login_google', email, ip, null);
+      const token = signToken({ email, role, scope: 'full', exp: Date.now() + SESSION_HOURS * 3600000 });
+      setSessionCookie(res, token, SESSION_HOURS);
+      return send(res, 200, { ok: true, role });
     }
 
     // ── POST /change-password (first-login forced change, or voluntary) ──

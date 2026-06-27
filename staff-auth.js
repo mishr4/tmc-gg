@@ -7,6 +7,8 @@
   const ACCENT = '#7C4DFF';
   let opts = {};
   let user = null;
+  let googleClientId = null;
+  let configLoaded = false;
 
   function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
 
@@ -31,6 +33,9 @@
       .sa-err{font-size:13px;color:#E5484D;margin-top:14px;min-height:16px;font-weight:500}
       .sa-note{font-size:12px;color:#999;margin-top:16px}
       .sa-hint{font-size:12px;color:#0a9d6c;background:rgba(16,185,129,.1);border-radius:8px;padding:8px 10px;margin-bottom:16px;text-align:left}
+      .sa-or{display:flex;align-items:center;gap:10px;margin:18px 0;color:#bbb;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+      .sa-or::before,.sa-or::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.1)}
+      .sa-google{display:flex;justify-content:center;min-height:42px}
     `;
     document.head.appendChild(s);
   }
@@ -117,7 +122,13 @@
     if (typeof opts.onReady === 'function') opts.onReady(user);
   }
 
+  async function loadConfig() {
+    if (configLoaded) return; configLoaded = true;
+    try { const { data } = await api('/config'); googleClientId = data.googleClientId || null; } catch {}
+  }
+
   async function check() {
+    await loadConfig();
     const { data } = await api('/me');
     if (!data.authenticated) return showLogin();
     if (data.mustChange) return showChange();
