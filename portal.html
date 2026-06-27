@@ -144,16 +144,7 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
   </div>
 </nav>
 
-<!-- Auth gate (shown when not logged in) -->
-<div class="auth-gate" id="auth-gate">
-  <h2>Staff Portal</h2>
-  <p>Enter the staff passcode to manage stations, media, and the public directory.</p>
-  <input id="portal-pw" type="password" placeholder="Staff passcode" autocomplete="current-password" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.12);font-size:14px;font-family:inherit;margin-bottom:12px;box-sizing:border-box" onkeydown="if(event.key==='Enter')portalUnlock()">
-  <button class="login-hint" onclick="portalUnlock()">Enter Portal</button>
-  <p id="portal-err" style="color:#d33;font-size:13px;margin-top:12px;display:none">Incorrect passcode.</p>
-</div>
-
-<!-- Main shell (shown after auth) -->
+<!-- Main shell (revealed by StaffAuth after SSO sign-in) -->
 <div class="shell" id="shell" style="display:none">
   <aside class="sidebar">
     <div class="sidebar-section">Overview</div>
@@ -180,6 +171,14 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
     <button class="sidebar-item" onclick="window.open('/staffhub','_blank')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       StaffHub Download
+    </button>
+    <a class="sidebar-item" id="admin-link" href="/admin" style="display:none;text-decoration:none;color:inherit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      User Management
+    </a>
+    <button class="sidebar-item" onclick="StaffAuth.logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign out
     </button>
   </aside>
 
@@ -262,6 +261,7 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
 
 <div class="toast" id="toast"></div>
 
+<script src="/staff-auth.js"></script>
 <script>
 const API = 'https://cast.tmc.gg';
 let allStations = [];
@@ -270,24 +270,6 @@ const hiddenStations = JSON.parse(localStorage.getItem('tmc_hidden_stations') ||
 
 function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-
-function portalUnlock() {
-  const pw = (document.getElementById('portal-pw') || {}).value;
-  if (pw === 'Mavion2026') {
-    document.getElementById('auth-gate').style.display = 'none';
-    document.getElementById('shell').style.display = 'flex';
-    loadAll();
-  } else {
-    const e = document.getElementById('portal-err'); if (e) e.style.display = 'block';
-  }
-}
-
-// Also allow manual bypass for development
-if (location.search.includes('staff=1')) {
-  document.getElementById('auth-gate').style.display = 'none';
-  document.getElementById('shell').style.display = 'flex';
-  setTimeout(loadAll, 100);
-}
 
 function showView(id, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -434,7 +416,13 @@ async function deleteStation(id, name) {
   } catch (e) { toast('Error: ' + e.message); }
 }
 
-setInterval(loadNowPlaying, 15000);
+// ── SSO gate: only signed-in staff reach the portal ──
+StaffAuth.guard({ onReady(user) {
+  document.getElementById('shell').style.display = 'flex';
+  if (user && user.role === 'admin') { const a = document.getElementById('admin-link'); if (a) a.style.display = 'flex'; }
+  loadAll();
+  setInterval(loadNowPlaying, 15000);
+} });
 </script>
 </body>
 </html>

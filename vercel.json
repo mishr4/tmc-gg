@@ -6,7 +6,8 @@
     }
   },
   "rewrites": [
-    { "source": "/api/rbsc/:path*", "destination": "/api/rbsc" }
+    { "source": "/api/rbsc/:path*", "destination": "/api/rbsc" },
+    { "source": "/api/auth/:path*", "destination": "/api/auth" }
   ],
   "headers": [
     { "source": "/sitemap.xsl", "headers": [{ "key": "Content-Type", "value": "text/xsl; charset=utf-8" }] },
