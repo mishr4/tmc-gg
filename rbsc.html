@@ -71,7 +71,6 @@
     .poster { font-family: 'Archivo', sans-serif; font-weight: 900; }
     .script { font-family: 'Playfair Display', Georgia, serif; }
 
-    /* ─────────────────────────── NAV ─────────────────────────── */
     .nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -138,7 +137,6 @@
       50% { opacity: 0.7; transform: scale(1.15); box-shadow: 0 0 0 6px rgba(165,26,35,0); }
     }
 
-    /* ─────────────────────────── HERO ─────────────────────────── */
     .hero { max-width: 1480px; margin: 0 auto; padding: 48px 48px 28px; }
 
     .hero-card {
@@ -302,7 +300,6 @@
     .countdown-time { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; margin-top: 4px; display: flex; align-items: baseline; gap: 14px; }
     .countdown-time .cd-d { font-size: 24px; opacity: 0.78; }
 
-    /* ─────────────────── CHOOSE YOUR COUNTRY ─────────────────── */
     .section { max-width: 1480px; margin: 0 auto; padding: 64px 48px; }
     .section-head { margin-bottom: 36px; }
     .section-kicker {
@@ -344,7 +341,6 @@
     .chip-name { font-weight: 600; font-size: 15px; }
     .chip-artist { font-size: 12px; color: var(--muted); }
 
-    /* ─────────────────────── VIDEO GRID ─────────────────────── */
     .video-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -423,7 +419,6 @@
     }
     .video-tile.is-leader .tile-crown { display: inline-block; animation: pop 0.5s ease; }
 
-    /* ─────────────────────── SCHEDULE (timeline) ─────────────────────── */
     .timeline { position: relative; max-width: 760px; margin: 0; }
     .timeline::before {
       content: ''; position: absolute; left: 9px; top: 10px; bottom: 18px; width: 3px; border-radius: 2px;
@@ -459,7 +454,6 @@
     .tl-tag.live { background: rgba(0,65,229,0.1); color: var(--cirya-blue); }
     .tl-tag.final { background: var(--cirya-blue); color: #fff; }
 
-    /* ─────────────────────── BREAKING NEWS ─────────────────────── */
     .news {
       background: var(--ink);
       color: #fff;
@@ -501,7 +495,6 @@
     .news-card-title { font-weight: 600; font-size: 16px; line-height: 1.35; }
     .news-card svg { width: 22px; height: 22px; flex-shrink: 0; opacity: 0.6; }
 
-    /* ─────────────────────── BRAND FOOTER ─────────────────────── */
     /* Dark "stage" footer */
     .stage-foot {
       position: relative; margin-top: 24px; overflow: hidden;
@@ -524,7 +517,6 @@
     .footer-bar { position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.1); padding: 24px 48px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); }
     .footer-bar a { color: var(--cirya-cyan); text-decoration: none; font-weight: 600; }
 
-    /* ─────────────────────── STAT BAR (flat solid blocks) ─────────────────────── */
     .statbar { max-width: 1480px; margin: 36px auto 0; padding: 0 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     .stat { border-radius: 18px; padding: 26px 24px; color: #fff; }
     .stat:nth-child(1){ background: var(--cirya-cyan); color: #042b2e; }
@@ -534,7 +526,6 @@
     .stat-num { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 44px); line-height: 1; letter-spacing: -0.02em; }
     .stat-label { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 8px; opacity: 0.92; }
 
-    /* ─────────────────────── HOW TO VOTE ─────────────────────── */
     .howto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .howto-step { border: 1px solid var(--line); border-radius: 18px; padding: 28px; background: #fff; transition: transform .18s, box-shadow .18s; }
     .howto-step:hover { transform: translateY(-3px); box-shadow: 0 16px 40px -24px rgba(0,0,0,0.3); }
@@ -544,7 +535,6 @@
     .howto-step h3 { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 8px; }
     .howto-step p { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
 
-    /* ─────────────────────── HOST CARD ─────────────────────── */
     .host-card { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center; background: var(--ink); color: #fff; border-radius: 22px; padding: 40px 44px; }
     .host-card .chev-flag { width: 150px !important; height: auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.5)); }
     .host-city { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(30px, 4vw, 52px); letter-spacing: -0.03em; line-height: 1; }
@@ -553,7 +543,6 @@
     .host-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
     .host-tag { font-size: 12px; font-weight: 700; padding: 7px 13px; border-radius: 999px; background: rgba(255,255,255,0.08); color: #fff; }
 
-    /* ─────────────────────── INTRO HOOK ─────────────────────── */
     .intro { text-align: center; }
     .intro-inner { max-width: 760px; margin: 0 auto; }
     .intro-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 3.6vw, 42px); letter-spacing: -0.03em; line-height: 1.08; margin: 10px 0 16px; }
@@ -564,7 +553,6 @@
     .btn-line { border: 1.5px solid var(--line); color: var(--ink); font-weight: 700; font-size: 15px; padding: 13px 26px; border-radius: 999px; text-decoration: none; transition: all .18s; }
     .btn-line:hover { border-color: var(--ink); }
 
-    /* ─────────────────────── ONES TO WATCH ─────────────────────── */
     .fav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .fav { border: 1px solid var(--line); border-radius: 18px; padding: 24px; background: #fff; transition: transform .18s, box-shadow .18s; }
     .fav:hover { transform: translateY(-4px); box-shadow: 0 18px 44px -24px rgba(0,0,0,0.3); }
@@ -576,7 +564,6 @@
     .fav-song strong { color: var(--ink); font-weight: 700; }
     .fav-note { font-size: 13.5px; color: #4a4a52; line-height: 1.5; }
 
-    /* ─────────────────────── 3D SCROLLYTELLING SHOWCASE ─────────────────────── */
     .showcase3d { position: relative; height: 520vh; background: radial-gradient(120% 80% at 50% 0%, #0a1030, #05061c 60%, #03040f); }
     .showcase3d .s3d-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
     #bg3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
@@ -609,7 +596,6 @@
     .showcase3d.no3d .s3d-cap:not([data-act="intro"]) { display: none; }
     .showcase3d.no3d::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 45%, rgba(0,215,226,0.18), transparent 70%); }
 
-    /* ── Persistent EVENT HUD (pinned to the bottom of the cinematic, survives fallback) ── */
     .s3d-hud {
       position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
       z-index: 4; pointer-events: auto;
@@ -633,7 +619,6 @@
     .hud-vote:hover { transform: translateY(-2px); }
     .hud-skip { display: none; }
 
-    /* ── Handoff fact strip: last dark beat of the film → hard cut to the daylight site ── */
     .factstrip { background: #05061c; padding: 60px 48px; }
     .factstrip-inner { max-width: 1480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 36px; flex-wrap: wrap; }
     .fs-meta { min-width: 280px; flex: 1; }
@@ -642,7 +627,6 @@
     .fs-line strong { color: #fff; font-weight: 700; }
     .fs-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; flex: 1.4; min-width: 320px; }
 
-    /* ── No-WebGL / reduce-motion fallback: surface the HUD + a skip link ── */
     .showcase3d.no3d .s3d-sticky { flex-direction: column; gap: 22px; }
     .showcase3d.no3d .s3d-stage { height: auto; width: auto; flex: none; }
     .showcase3d.no3d .s3d-cap { position: relative; inset: auto; padding-bottom: 0; }
@@ -650,7 +634,6 @@
     .showcase3d.no3d .s3d-hint { display: none; }
     .showcase3d.no3d .hud-skip { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.72); text-decoration: underline; font-size: 13px; font-weight: 600; }
 
-    /* ─────────────────────── VOTE MODAL ─────────────────────── */
     .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,15,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 24px; }
     .modal.open { display: flex; }
     .modal-card { background: #fff; border-radius: var(--radius); max-width: 720px; width: 100%; overflow: hidden; box-shadow: 0 40px 100px -30px rgba(0,0,0,0.6); animation: pop 0.3s cubic-bezier(0.2,0.9,0.3,1.2); max-height: 92vh; overflow-y: auto; }
@@ -676,7 +659,6 @@
     .vote-msg.err { display: block; background: rgba(165,26,35,0.1); color: var(--flag-red); }
     .modal-x { position: absolute; top: 20px; right: 24px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1001; }
 
-    /* ─────────────────────── RESPONSIVE ─────────────────────── */
     /* Ultrawide — cap content width, keep centered */
     @media (min-width: 1900px) {
       .hero, .section, .news-inner, .news-cards, .brand { max-width: 1680px; }
@@ -754,7 +736,6 @@
 </head>
 <body>
 
-  <!-- ───────── NAV ───────── -->
   <nav class="nav">
     <div class="nav-left">
       <a href="/rbsc" class="nav-logo" aria-label="RBSC · Mavion">
@@ -780,7 +761,6 @@
     <a href="/songcontest" target="_blank" class="live-pill"><svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg> Open iPlayer</a>
   </nav>
 
-  <!-- ───────── CINEMATIC OPENER (full-screen 3D — the page opens here) ───────── -->
   <section class="showcase3d" id="showcase">
     <div class="s3d-sticky">
       <canvas id="bg3d"></canvas>
@@ -834,7 +814,6 @@
     </div>
   </section>
 
-  <!-- ───────── HANDOFF FACT STRIP (the dark cinematic resolves into the daylight site) ───────── -->
   <section class="factstrip" id="arrive">
     <div class="factstrip-inner">
       <div class="fs-meta">
@@ -850,7 +829,6 @@
     </div>
   </section>
 
-  <!-- ───────── INTRO HOOK (first calm beat on the daylight site) ───────── -->
   <section class="section intro" id="learn">
     <div class="intro-inner">
       <div class="section-kicker" style="display:inline-block">What is the RBSC?</div>
@@ -863,7 +841,6 @@
     </div>
   </section>
 
-  <!-- ───────── FEATURED COUNTRY (former hero — now an in-flow section) ───────── -->
   <section class="hero-section">
     <div class="hero">
       <div class="hero-card" id="hero-card">
@@ -896,7 +873,6 @@
     </div>
   </section>
 
-  <!-- ───────── CHOOSE COUNTRY ───────── -->
   <section class="section" id="countries">
     <div class="section-head">
       <div class="section-kicker">Pick a broadcaster</div>
@@ -906,7 +882,6 @@
     <div class="country-rail" id="country-rail"></div>
   </section>
 
-  <!-- ───────── VIDEO GRID ───────── -->
   <section class="section" id="vote" style="padding-top:0;">
     <div class="section-head">
       <div class="section-kicker">★ Live Scoreboard</div>
@@ -916,7 +891,6 @@
     <div class="video-grid" id="video-grid"></div>
   </section>
 
-  <!-- ───────── ONES TO WATCH ───────── -->
   <section class="section" id="favourites" style="padding-top:0;">
     <div class="section-head">
       <div class="section-kicker">Ones to watch</div>
@@ -942,7 +916,6 @@
     </div>
   </section>
 
-  <!-- ───────── HOW TO VOTE ───────── -->
   <section class="section" id="howto" style="padding-top:0;">
     <div class="section-head">
       <div class="section-kicker">Have your say</div>
@@ -968,7 +941,6 @@
     </div>
   </section>
 
-  <!-- ───────── HOST ───────── -->
   <section class="section" id="host" style="padding-top:0;">
     <div class="section-head">
       <div class="section-kicker">The host</div>
@@ -991,7 +963,6 @@
     </div>
   </section>
 
-  <!-- ───────── SCHEDULE ───────── -->
   <section class="section" id="schedule" style="padding-top:0;">
     <div class="section-head">
       <div class="section-kicker">RBSC 2026 · Zurich</div>
@@ -1001,7 +972,6 @@
     <div class="timeline" id="timeline"></div>
   </section>
 
-  <!-- ───────── NEWS ───────── -->
   <section class="news">
     <div class="news-inner">
       <div>
@@ -1030,7 +1000,6 @@
     </div>
   </section>
 
-  <!-- ───────── BRAND ───────── -->
   <footer class="stage-foot">
   <div class="stage-heart" id="stage-heart" aria-hidden="true"></div>
   <section class="brand">
@@ -1056,7 +1025,6 @@
   </div>
   </footer>
 
-  <!-- ───────── VOTE MODAL ───────── -->
   <div class="modal" id="modal">
     <button class="modal-x" onclick="closeModal()">✕</button>
     <div class="modal-card">
@@ -1462,7 +1430,6 @@
 
   const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── Eased momentum scrolling (Lenis) ──
   if (!REDUCE && typeof Lenis !== 'undefined') {
     const lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, touchMultiplier: 1.6 });
     function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
@@ -1480,7 +1447,6 @@
     window.__lenis = lenis;
   }
 
-  // ── 3D scrollytelling: Earth → connection arcs → the prize → roll through countries ──
   (function init3D(){
     const canvas = document.getElementById('bg3d');
     const section = document.getElementById('showcase');
@@ -1535,7 +1501,6 @@
     // Crisp solid disc texture for the travelling arc pulse (NormalBlending — no additive glow)
     const DISC = (function(){ const cv=document.createElement('canvas'); cv.width=cv.height=64; const x=cv.getContext('2d'); x.beginPath(); x.arc(32,32,30,0,Math.PI*2); x.fillStyle='#fff'; x.fill(); const t=new THREE.CanvasTexture(cv); return t; })();
 
-    // ── Starfield: sparse, calm, broadcast-clean ──
     const starGeo = new THREE.BufferGeometry();
     const starN = 900, starPos = new Float32Array(starN*3);
     for (let i=0;i<starN;i++){ const rr=18+Math.random()*30, u=Math.random()*2-1, a=Math.random()*Math.PI*2, s=Math.sqrt(1-u*u); starPos[i*3]=rr*s*Math.cos(a); starPos[i*3+1]=rr*u; starPos[i*3+2]=rr*s*Math.sin(a); }
@@ -1543,7 +1508,6 @@
     const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, sizeAttenuation: true, transparent: true, opacity: 0.35 }));
     scene.add(stars);
 
-    // ── ACT 1: broadcast data-globe (UNLIT, so light can never tint the brand colours) ──
     const globe = new THREE.Group(); scene.add(globe);
     // Flat navy body, sat just inside the cage so the cyan lines never z-fight
     const sphereMat = new THREE.MeshBasicMaterial({ color: 0x002BBA, transparent: true, opacity: 0 });
@@ -1586,7 +1550,6 @@
       arcPulses.push({ sprite: pulse, mat: pMat, pts });
     });
 
-    // ── ACT 2: the trophy — flat editorial gold (not chrome) ──
     const trophy = new THREE.Group();
     const goldMat = new THREE.MeshStandardMaterial({ color: 0xFFD24A, metalness: 0.25, roughness: 0.65, transparent: true, opacity: 0 });
     const darkMat = new THREE.MeshStandardMaterial({ color: 0x0a0b22, metalness: 0.3, roughness: 0.6, transparent: true, opacity: 0 });
@@ -1601,7 +1564,6 @@
     const trophyMats = [goldMat, darkMat, trophyChev.material];
     trophy.position.y = -0.78; trophy.visible = false; scene.add(trophy);
 
-    // ── ACT 3: the draw — a die that rolls on a table and lands on the host ──
     // Box material order is [+x,-x,+y,-y,+z,-z]; +y (index 2) is the face that lands up.
     const FACE_ORDER = ['Austria','Sweden','Switzerland','Netherlands','Australia','Finland'];
     function faceTex(name, host){
@@ -1628,7 +1590,6 @@
     const tableRingMat = new THREE.MeshBasicMaterial({ color: 0x00D7E2, transparent: true, opacity: 0, side: THREE.DoubleSide });
     const tableRing = new THREE.Mesh(new THREE.RingGeometry(2.3, 2.42, 64), tableRingMat); tableRing.rotation.x = -Math.PI/2; tableRing.position.y = -0.99; tableRing.visible = false; scene.add(tableRing);
 
-    // ── OUTRO brand sign-off: one large chevron flies in beside the title ──
     const outroChev = chevron3D(0xFFD24A); outroChev.scale.setScalar(1.5); outroChev.position.set(0, -0.1, 0); outroChev.visible = false; scene.add(outroChev);
 
     // Lights — TWO white lights only; the globe/grid/markers/arcs are unlit, so only the
@@ -1677,7 +1638,6 @@
       const tOp = seg(p, 0.20, 0.30) * (1 - seg(p, 0.38, 0.46));   // trophy
       const dOp = seg(p, 0.42, 0.48) * (1 - seg(p, 0.66, 0.72));   // die + table
 
-      // ── Globe (opening + finale) ──
       globe.visible = gOp > 0.01;
       if (globe.visible) {
         sphereMat.opacity = gOp;
@@ -1704,7 +1664,6 @@
         });
       }
 
-      // ── Trophy ──
       trophy.visible = tOp > 0.01;
       if (trophy.visible) {
         trophyMats.forEach(m => m.opacity = tOp);
@@ -1713,7 +1672,6 @@
         trophy.position.y = -0.78 + Math.sin(t*1.4) * 0.04;
       }
 
-      // ── The draw: die rolls across the table and lands on the host ──
       const showDie = dOp > 0.01;
       die.visible = table.visible = tableRing.visible = showDie;
       if (showDie) {
@@ -1730,7 +1688,6 @@
         tableRing.rotation.z = t * 0.3;
       }
 
-      // ── Outro: a compact gold chevron — the brand sign-off — rises below the title ──
       const oOp = seg(p, 0.89, 0.97);
       outroChev.visible = oOp > 0.01;
       if (outroChev.visible) {
@@ -1740,7 +1697,6 @@
         outroChev.scale.setScalar(lerp(0.42, 0.52, oOp));
       }
 
-      // ── Captions ──
       if (p < 0.20) showAct('intro');
       else if (p < 0.42) showAct('trophy');
       else if (p < 0.70) {
@@ -1757,7 +1713,6 @@
       // HUD cross-fades out as the film ends so it doesn't collide with the content handoff
       if (hud) { const h = 1 - seg(p, 0.90, 1.0); hud.style.opacity = h.toFixed(3); hud.style.pointerEvents = h < 0.05 ? 'none' : 'auto'; hud.style.visibility = h < 0.05 ? 'hidden' : 'visible'; }
 
-      // ── Camera: drops down over the table during the draw, free otherwise (locked-off feel) ──
       camera.position.x = mx * 0.3;
       camera.position.y = -my * 0.2 + dOp * 1.5;
       camera.position.z = 4.4 - dOp * 0.3;
@@ -1769,7 +1724,6 @@
     window.__three = { scene, globe, trophy, die, table, arcs, renderer, frame };
   })();
 
-  // ── Scroll-reveal entrance animations (below-the-fold only, run after render) ──
   function scrollReveal(){
     if (REDUCE || !('IntersectionObserver' in window)) return;
     // Only sections below the hero — above-the-fold stays static (no flash)
@@ -1789,7 +1743,6 @@
     els.forEach(el => io.observe(el));
   }
 
-  // ── Page-wide 3D: mouse-tilt on cards (desktop pointers only) ──
   function init3DTilt(){
     if (REDUCE || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     document.querySelectorAll('.video-tile, .fav, .host-card, .stat, .howto-step').forEach(card => {
@@ -1805,12 +1758,10 @@
     });
   }
 
-  // ── Always open inside the cinematic (don't let the browser restore mid-page) ──
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   window.addEventListener('load', () => window.scrollTo(0, 0));
 
-  // ── Immersive nav: dark-glass over the cinematic, solid once you reach the content ──
   (function navTheme(){
     const showcase = document.getElementById('showcase');
     if (!showcase) return;

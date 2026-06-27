@@ -15,7 +15,6 @@
 html{-webkit-font-smoothing:antialiased;background:linear-gradient(90deg,var(--bg),var(--bg2))}
 body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-height:1.5;min-height:100vh}
 
-/* ── Nav ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(254,246,240,0.92),rgba(253,242,253,0.92));backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-left{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text)}
 .nav-left svg{width:72px;height:auto}
@@ -25,13 +24,11 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
 .nav-right [data-cirya-sso] button,.nav-right [data-cirya-sso] a{background:transparent !important;color:var(--text) !important;border:1.5px solid rgba(0,0,0,0.1) !important;border-radius:10px !important;padding:7px 16px !important;font-size:12px !important;font-weight:600 !important;font-family:'Instrument Sans',sans-serif !important;box-shadow:none !important}
 .nav-right [data-cirya-sso] img{display:none !important}
 
-/* ── Auth gate ── */
 .auth-gate{max-width:400px;margin:160px auto;padding:0 20px;text-align:center}
 .auth-gate h2{font-family:'Lexend',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
 .auth-gate p{color:var(--muted);margin-bottom:24px;font-size:14px}
 .auth-gate .login-hint{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:var(--accent);color:#fff;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit}
 
-/* ── Layout ── */
 .shell{display:flex;min-height:100vh;padding-top:54px}
 .sidebar{width:220px;flex-shrink:0;padding:20px 16px;border-right:1px solid var(--border);position:fixed;top:54px;bottom:0;overflow-y:auto;background:rgba(254,246,240,0.5)}
 .sidebar-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--subtle);padding:16px 12px 6px}
@@ -42,7 +39,6 @@ body{font-family:'Instrument Sans','Inter',sans-serif;color:var(--text);line-hei
 .sidebar-item svg{width:16px;height:16px;flex-shrink:0}
 .content{flex:1;margin-left:220px;padding:24px 32px 60px}
 
-/* ── Cards & Components ── */
 .page-head{margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .page-head h1{font-family:'Lexend',sans-serif;font-size:22px;font-weight:700}
 .page-head p{font-size:13px;color:var(--muted);width:100%}
@@ -275,7 +271,6 @@ const hiddenStations = JSON.parse(localStorage.getItem('tmc_hidden_stations') ||
 function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
-// ── Auth (staff passcode; CiryaSSO was retired with the Cirya infra) ──
 function portalUnlock() {
   const pw = (document.getElementById('portal-pw') || {}).value;
   if (pw === 'Mavion2026') {
@@ -294,7 +289,6 @@ if (location.search.includes('staff=1')) {
   setTimeout(loadAll, 100);
 }
 
-// ── Views ──
 function showView(id, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + id)?.classList.add('active');
@@ -302,7 +296,6 @@ function showView(id, btn) {
   if (btn) btn.classList.add('active');
 }
 
-// ── Data loading ──
 async function loadAll() {
   await Promise.all([loadNowPlaying(), loadStats()]);
 }
@@ -328,7 +321,6 @@ async function loadStats() {
   } catch {}
 }
 
-// ── Dashboard live stations ──
 function renderDashStations() {
   const el = document.getElementById('dash-stations');
   if (!nowPlayingData.length) { el.innerHTML = '<p style="color:var(--muted);padding:12px">No stations found</p>'; return; }
@@ -348,7 +340,6 @@ function renderDashStations() {
   }).join('');
 }
 
-// ── Stations management ──
 function renderStations() {
   const el = document.getElementById('stations-list');
   if (!nowPlayingData.length) { el.innerHTML = '<p style="color:var(--muted);padding:12px">No stations</p>'; return; }
@@ -370,7 +361,6 @@ function renderStations() {
   }).join('');
 }
 
-// ── Directory (show/hide) ──
 function renderDirectory() {
   const el = document.getElementById('directory-list');
   if (!nowPlayingData.length) { el.innerHTML = '<p style="color:var(--muted);padding:12px">No stations to configure</p>'; return; }
@@ -400,7 +390,6 @@ function toggleVisibility(id, visible) {
   toast(visible ? 'Station now visible' : 'Station hidden');
 }
 
-// ── Station CRUD ──
 function openStationModal() {
   document.getElementById('station-modal-title').textContent = 'New Station';
   document.getElementById('edit-station-id').value = '';
@@ -445,7 +434,6 @@ async function deleteStation(id, name) {
   } catch (e) { toast('Error: ' + e.message); }
 }
 
-// ── Init ── (portal stays gated until the staff passcode is entered, or ?staff=1)
 setInterval(loadNowPlaying, 15000);
 </script>
 </body>

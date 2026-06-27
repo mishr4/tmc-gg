@@ -38,7 +38,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ── Pages / SPA ── */
 .page {
     display: none;
     width: 100%;
@@ -51,7 +50,6 @@ body {
     display: block;
 }
 
-/* ── Desktop Nav ── */
 .desktop-nav {
     position: fixed;
     top: 0;
@@ -125,7 +123,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ── Hero ── */
 .hero {
     padding-top: 160px;
     padding-bottom: 48px;
@@ -174,8 +171,6 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
-
-/* ══ Corporate Homepage ══ */
 
 /* MavionSSO — blend into nav */
 [data-cirya-sso] button,
@@ -400,7 +395,6 @@ body {
     .home-section, .home-numbers, .home-ticker { max-width: 100%; }
 }
 
-/* ── Page Header ── */
 .page-header {
     padding-top: 140px;
     padding-bottom: 40px;
@@ -422,7 +416,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ── Stats Bar ── */
 .stats-bar {
     display: flex;
     align-items: center;
@@ -461,7 +454,6 @@ body {
     background: rgba(0, 0, 0, 0.08);
 }
 
-/* ── Section Header ── */
 .section-header {
     display: flex;
     align-items: center;
@@ -489,7 +481,6 @@ body {
     opacity: 0.7;
 }
 
-/* ── Card sections ── */
 .card-section {
     display: flex;
     flex-direction: column;
@@ -556,7 +547,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ── Networks Grid (Home) ── */
 .networks-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -620,7 +610,6 @@ body {
     color: var(--text-muted);
 }
 
-/* ── Network Detail Cards ── */
 .network-detail-card .network-detail-header {
     display: flex;
     align-items: center;
@@ -664,7 +653,6 @@ body {
     color: var(--text-muted);
 }
 
-/* ── Highlight Card ── */
 .highlight-card {
     background: linear-gradient(135deg, #faf8ff, #fff5fb);
 }
@@ -697,7 +685,6 @@ body {
     height: auto;
 }
 
-/* ── Ops Grid ── */
 .ops-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -738,7 +725,6 @@ body {
     line-height: 1.4;
 }
 
-/* ── Leadership ── */
 .leadership-grid {
     display: flex;
     flex-direction: column;
@@ -782,7 +768,6 @@ body {
     color: var(--text-muted);
 }
 
-/* ── Perks Grid ── */
 .perks-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -818,7 +803,6 @@ body {
     font-weight: 500;
 }
 
-/* ── Role Cards ── */
 .role-card {
     transition: transform 0.2s;
 }
@@ -863,7 +847,6 @@ body {
     margin-top: 14px;
 }
 
-/* ── Roles ── */
 .roles-row {
     display: flex;
     flex-wrap: wrap;
@@ -881,7 +864,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ── Nodes List ── */
 .nodes-list {
     display: flex;
     flex-direction: column;
@@ -938,7 +920,6 @@ body {
     color: #e65100;
 }
 
-/* ── Privacy Pills ── */
 .privacy-pills {
     display: flex;
     flex-wrap: wrap;
@@ -955,7 +936,6 @@ body {
     color: #2e7d32;
 }
 
-/* ── Initiative Card ── */
 .initiative-card {
     position: relative;
     border-left: 4px solid var(--accent-pink);
@@ -974,7 +954,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* ── Hire Steps ── */
 .hire-steps {
     display: flex;
     flex-direction: column;
@@ -1021,7 +1000,6 @@ body {
     line-height: 1.4;
 }
 
-/* ── Role Card Link ── */
 .role-card-link {
     text-decoration: none;
     color: inherit;
@@ -1044,7 +1022,6 @@ body {
     color: #2e7d32;
 }
 
-/* ── CTA Card ── */
 .cta-card {
     text-align: center;
     padding: 40px 28px;
@@ -1107,7 +1084,6 @@ body {
     border-color: rgba(0, 0, 0, 0.3);
 }
 
-/* ── Desktop Footer ── */
 .desktop-footer {
     background: var(--card-bg);
     padding: 14px 0;
@@ -1132,7 +1108,6 @@ body {
     display: block;
 }
 
-/* ── Built by Mavion — work showcase ── */
 .work-grid { display: flex; flex-direction: column; gap: 18px; margin-top: 22px; }
 .work-card {
     --accent: #7C4DFF;
@@ -1212,7 +1187,6 @@ body {
     opacity: 0.6;
 }
 
-/* ── Mobile Tab Bar ── */
 .mobile-tabbar {
     display: none;
     position: fixed;
@@ -1259,7 +1233,6 @@ body {
     color: #000;
 }
 
-/* ── Responsive: Mobile (< 810px) ── */
 @media (max-width: 809px) {
     .desktop-nav {
         padding: 16px 0;
@@ -1381,7 +1354,6 @@ body {
     }
 }
 
-/* ── Responsive: Tablet (810px – 1199px) ── */
 @media (min-width: 810px) and (max-width: 1199px) {
     .page {
         padding: 0 48px;
@@ -1429,7 +1401,6 @@ body {
     }
 }
 
-/* ── Responsive: Desktop (1200px – 1599px) ── */
 @media (min-width: 1200px) and (max-width: 1599px) {
     .page {
         max-width: 1280px;
@@ -1489,7 +1460,6 @@ body {
     }
 }
 
-/* ── Responsive: Large Desktop (1600px+) ── */
 @media (min-width: 1600px) {
     .page {
         max-width: 1440px;
@@ -1616,7 +1586,6 @@ body {
     }
 }
 
-/* ── Pricing Cards ── */
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1785,7 +1754,6 @@ body {
     margin-top: 12px;
 }
 
-/* ── Service Hero Banner ── */
 .service-hero {
     background: linear-gradient(135deg, #7C4DFF 0%, #5225cc 40%, #FF48BC 100%);
     border-radius: var(--card-radius);
@@ -1835,7 +1803,6 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* ── FAQ Section ── */
 .faq-list {
     display: flex;
     flex-direction: column;
@@ -1885,7 +1852,6 @@ body {
     padding-left: 32px;
 }
 
-/* ── Service Feature Row ── */
 .service-features-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1926,7 +1892,6 @@ body {
     line-height: 1.4;
 }
 
-/* ── Pricing & Services responsive ── */
 @media (max-width: 809px) {
     .pricing-grid {
         grid-template-columns: 1fr;
@@ -1976,9 +1941,7 @@ body {
     }
 }
 
-/* ═══════════════════════════════════════ */
 /*            CIRYACAST PAGE               */
-/* ═══════════════════════════════════════ */
 
 /* Spacing overrides for TMCast page */
 #page-ciryacast .card-section {
@@ -1998,7 +1961,6 @@ body {
     margin-top: 16px;
 }
 
-/* ── Hero Section ── */
 .cc-hero-section {
     padding-top: 120px;
     margin-bottom: 16px;
@@ -2139,13 +2101,11 @@ body {
     vertical-align: bottom;
 }
 
-/* ── SF Icon SVG sizing ── */
 .service-feature-item .sf-icon svg {
     width: 22px;
     height: 22px;
 }
 
-/* ── How It Works ── */
 .cc-how-card {
     padding: 32px 36px;
 }
@@ -2223,7 +2183,6 @@ body {
     height: 20px;
 }
 
-/* ── FAQ Accordion ── */
 .faq-q {
     width: 100%;
     background: none;
@@ -2268,7 +2227,6 @@ body {
     display: block;
 }
 
-/* ── TMCast CTA Card ── */
 .cc-cta-card {
     background: linear-gradient(135deg, #4a1fbb 0%, #7C4DFF 40%, #b03aff 72%, #FF48BC 100%);
     color: #fff;
@@ -2351,7 +2309,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* ── TMCast Responsive ── */
 @media (max-width: 809px) {
     .cc-hero-section {
         padding-top: 76px;

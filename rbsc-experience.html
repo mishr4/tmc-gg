@@ -21,7 +21,6 @@
   }
   #bg{position:fixed; inset:0; width:100%; height:100%; display:block; z-index:0}
 
-  /* ── cinematic overlay (broadcast graphics) ── */
   #stage{position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden}
   .vignette{position:fixed; inset:0; z-index:1; pointer-events:none;
     background:radial-gradient(120% 100% at 50% 42%, transparent 45%, rgba(2,3,10,0.55) 100%);}
@@ -51,7 +50,6 @@
     letter-spacing:.18em; text-transform:uppercase; color:var(--silver)}
   .live .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px var(--gold)}
 
-  /* ── ranking (glassmorphism broadcast panels) ── */
   #ranking{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
     justify-content:center; gap:10px; padding:90px 20px 16vh; opacity:0; visibility:hidden}
   #ranking.show{opacity:1; visibility:visible}
@@ -217,17 +215,14 @@ const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 200)
 camera.position.set(0, 5, 34);
 const lookTarget = new THREE.Vector3(0,0,0);
 
-// ── Image-based lighting (procedural, zero-download) ──
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
 scene.environment = envRT.texture;
 
-// ── Lights ── neutral white sun (so the planet reads true, never a coloured wash)
 const sun = new THREE.DirectionalLight(0xffffff, 1.7); sun.position.set(-6, 3, 6); scene.add(sun);
 scene.add(new THREE.AmbientLight(0x223a66, 0.35));
 const rim = new THREE.DirectionalLight(0x99bbff, 0.5); rim.position.set(6,-2,-6); scene.add(rim);
 
-// ── Composer / post ──
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight),
@@ -240,7 +235,6 @@ if (!isMobile && innerWidth >= 1024){
 }
 composer.addPass(new OutputPass());
 
-// ── Starfield + soft nebula ──
 const starGeo = new THREE.BufferGeometry();
 const starN = isMobile?500:1100, sp = new Float32Array(starN*3), sc = new Float32Array(starN*3);
 const colA = new THREE.Color(0xbfd4ff), colB = new THREE.Color(0xffe9b0);
@@ -260,7 +254,6 @@ const nebTex = radialTex(['rgba(120,150,255,0.9)','rgba(60,80,180,0.25)','rgba(0
   m.position.set(x,y,z); m.scale.setScalar(sz); scene.add(m);
 });
 
-// ── Earth ──
 const R = 2;
 const earthGroup = new THREE.Group(); scene.add(earthGroup);
 const earthMat = new THREE.MeshStandardMaterial({ color:0x12325f, metalness:0.0, roughness:0.78, emissive:0xffd9a0, emissiveIntensity:0.0 });
@@ -290,7 +283,6 @@ const atmoMat = new THREE.ShaderMaterial({
 });
 earthGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.16, 48, 48), atmoMat));
 
-// ── Countries: markers + connection arcs ──
 const ll = (lat,lng,r)=>{ const ph=(90-lat)*Math.PI/180, th=(lng+180)*Math.PI/180; return new THREE.Vector3(-r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th)); };
 const COUNTRIES = [
   { c:'Switzerland', code:'ch', lat:47.0, lng:8.2, host:true },
@@ -329,7 +321,6 @@ COUNTRIES.slice(1).forEach((co,i)=>{
   earthGroup.add(ln); arcs.push(ln);
 });
 
-// ── Trophy: crystal crown + gold ──
 const trophy = new THREE.Group(); trophy.position.set(0,0.15,2.7); trophy.scale.setScalar(0.001); trophy.visible=false; scene.add(trophy);
 const goldMat = new THREE.MeshStandardMaterial({ color:0xFFD24A, metalness:1.0, roughness:0.22, envMapIntensity:1.3 });
 const crystalMat = new THREE.MeshPhysicalMaterial({ color:0xcfe6ff, metalness:0, roughness:0.03, transmission:1.0, ior:1.7, thickness:0.9, clearcoat:1, clearcoatRoughness:0.05, envMapIntensity:1.4, transparent:true });
@@ -352,7 +343,6 @@ lf.addElement(new LensflareElement(radialTex(['rgba(255,255,255,.9)','rgba(0,0,0
 lf.addElement(new LensflareElement(radialTex(['rgba(160,200,255,.9)','rgba(0,0,0,0)']), 120, 0.9));
 flareLight.add(lf);
 
-// ── Dice ── glossy cube, flag faces, lands on host (Switzerland on +Y)
 const dice = new THREE.Group(); dice.position.set(0,0.25,2.85); dice.scale.setScalar(0.001); dice.visible=false; scene.add(dice);
 const FACE = ['Netherlands','Sweden','Estonia','Austria','Switzerland','Finland']; // [+x,-x,+y,-y,+z,-z] -> +z(index4)=host, faces the camera at rest
 const dieMats = FACE.map(name => new THREE.MeshPhysicalMaterial({ map:flagTex(name), roughness:0.32, metalness:0, clearcoat:0.55, clearcoatRoughness:0.18, transparent:true, opacity:0, envMapIntensity:0.7 }));
@@ -369,13 +359,11 @@ function updateDice(p){
   if (p>0.82){ const j=Math.sin(performance.now()*0.02)*0.012*(1-e); die.rotation.x+=j; die.rotation.z+=j*0.6; }
 }
 
-// ── Europe-front orientation for the fly-to-country (computed, not guessed) ──
 const flyRotX = 0.38;
 let flyRotY = 0; { let best=-Infinity; const pl = ll(host.lat,host.lng,R); for(let a=0;a<6.2832;a+=0.01){ const v=pl.clone().applyEuler(new THREE.Euler(flyRotX,a,0)); if(v.z>best){best=v.z; flyRotY=a;} } }
 const hostWorld = ll(host.lat,host.lng,R*1.01).applyEuler(new THREE.Euler(flyRotX, flyRotY, 0));
 let flyMode = false;
 
-// ── helpers: procedural textures ──
 function radialTex(stops){
   const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d');
   const g=x.createRadialGradient(64,64,0,64,64,64); const n=stops.length;
@@ -411,7 +399,6 @@ function flagTex(name){
   const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
 }
 
-// ── async textures (PBR earth) ──
 const TBASE='https://threejs.org/examples/textures/planets/';
 const tl_ = new THREE.TextureLoader().setCrossOrigin('anonymous');
 const loadTex = (file, srgb)=> tl_.loadAsync(TBASE+file).then(t=>{ t.colorSpace = srgb?THREE.SRGBColorSpace:THREE.NoColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t; }).catch(()=>null);
@@ -429,7 +416,6 @@ if (normMap){ earthMat.normalMap=normMap; earthMat.normalScale.set(0.8,0.8); }
 if (specMap){ earthMat.roughnessMap=specMap; earthMat.roughness=1.0; } // oceans (bright in spec) read smoother under IBL
 earthMat.needsUpdate = true;
 
-// ── resize ──
 addEventListener('resize', ()=>{
   camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
@@ -439,7 +425,6 @@ addEventListener('resize', ()=>{
 let _last = performance.now()*0.001, _elapsed = 0, _paused = false;
 document.addEventListener('visibilitychange', ()=>{ _paused = document.hidden; _last = performance.now()*0.001; });
 
-// ── render loop ──
 function animate(){
   requestAnimationFrame(animate);
   const now = performance.now()*0.001; let dt = now - _last; _last = now;
@@ -457,7 +442,6 @@ function animate(){
   composer.render();
 }
 
-// ── GSAP broadcast timeline ──
 const setCap = (act)=> document.querySelectorAll('.cap').forEach(c=> c.classList.toggle('show', c.dataset.act===act));
 
 // Build the ranking panels BEFORE the timeline, so the '.rbsc-panel' stagger tween resolves real targets.
