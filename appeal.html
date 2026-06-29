@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Ban Appeal — Mavion</title>
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<meta property="og:title" content="Ban Appeal — Mavion">
+<meta property="og:description" content="Appeal a moderation action on the Mavion Discord.">
+<meta property="og:image" content="https://tmc.gg/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--accent:#7C4DFF;--text:#0a0a14;--muted:#777;--border:rgba(0,0,0,.12);--red:#E5484D;--green:#0a9d6c}
+  html{-webkit-font-smoothing:antialiased}
+  body{font-family:'Instrument Sans','Inter',system-ui,sans-serif;color:var(--text);min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(90deg,#fef6f0,#fdf2fd)}
+  .card{background:#fff;border-radius:20px;box-shadow:0 14px 60px -24px rgba(0,0,0,.28);border:1px solid rgba(0,0,0,.06);
+    width:100%;max-width:520px;padding:36px 34px}
+  .logo{height:30px;width:auto;display:block;margin-bottom:20px}
+  h1{font-family:'Lexend',sans-serif;font-size:25px;font-weight:700;margin-bottom:6px}
+  .lede{color:var(--muted);font-size:14px;margin-bottom:26px;line-height:1.5}
+  label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#999;margin:0 0 6px}
+  .field{margin-bottom:18px}
+  input,textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:14px;
+    font-family:inherit;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s;background:#fff}
+  input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,77,255,.12)}
+  textarea{min-height:130px;resize:vertical;line-height:1.5}
+  .hint{font-size:12px;color:var(--muted);margin-top:5px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  button{width:100%;padding:14px;border:none;border-radius:13px;background:var(--accent);color:#fff;
+    font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s;margin-top:4px}
+  button:hover{opacity:.92} button:disabled{opacity:.55;cursor:progress}
+  .msg{margin-top:16px;font-size:14px;font-weight:500;min-height:18px;text-align:center}
+  .msg.err{color:var(--red)} .msg.ok{color:var(--green)}
+  .done{text-align:center;padding:14px 0}
+  .done .big{font-size:46px;margin-bottom:10px}
+  .done h2{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
+  .done p{color:var(--muted);font-size:14px;line-height:1.6}
+  .foot{margin-top:22px;font-size:12px;color:#aaa;text-align:center}
+  .foot a{color:var(--muted);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="logo" src="/mavion-logo.png" alt="Mavion" onerror="this.style.display='none'">
+  <div id="form-wrap">
+    <h1>Ban appeal</h1>
+    <p class="lede">Were you banned or removed from the Mavion Discord and think it was a mistake? Fill this out and our staff team will review it.</p>
+    <form id="appeal-form">
+      <div class="field">
+        <label>Discord username</label>
+        <input type="text" id="username" maxlength="100" placeholder="yourname" required>
+      </div>
+      <div class="field">
+        <label>Discord user ID</label>
+        <input type="text" id="userId" maxlength="40" placeholder="e.g. 1521026603067379903" inputmode="numeric">
+        <div class="hint">Discord → Settings → Advanced → Developer Mode on, then right-click your name → Copy User ID.</div>
+      </div>
+      <div class="field">
+        <label>Why were you banned? (if known)</label>
+        <input type="text" id="reason" maxlength="300" placeholder="The reason given, if any">
+      </div>
+      <div class="field">
+        <label>Your appeal</label>
+        <textarea id="appeal" maxlength="1800" placeholder="Explain what happened and why you should be allowed back. Be honest — staff can see the logs." required></textarea>
+      </div>
+      <input type="text" id="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" id="submit">Submit appeal</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+  <div class="foot">Mavion · <a href="https://tmc.gg/">The Mavion Corporation</a></div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+$('appeal-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('submit'), msg = $('msg');
+  msg.className = 'msg'; msg.textContent = '';
+  const payload = {
+    username: $('username').value.trim(),
+    userId: $('userId').value.trim(),
+    reason: $('reason').value.trim(),
+    appeal: $('appeal').value.trim(),
+    website: $('website').value // honeypot
+  };
+  if (!payload.username || !payload.appeal) { msg.className = 'msg err'; msg.textContent = 'Username and appeal are required.'; return; }
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    const r = await fetch('/api/appeal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.ok) {
+      $('form-wrap').innerHTML = '<div class="done"><div class="big">✅</div><h2>Appeal submitted</h2><p>Thanks — your appeal has been sent to the staff team. If they decide to act on it, you’ll hear back in Discord. You can close this page.</p></div>';
+    } else {
+      msg.className = 'msg err'; msg.textContent = d.error || 'Something went wrong. Please try again later.';
+      btn.disabled = false; btn.textContent = 'Submit appeal';
+    }
+  } catch {
+    msg.className = 'msg err'; msg.textContent = 'Network error. Please try again.';
+    btn.disabled = false; btn.textContent = 'Submit appeal';
+  }
+});
+</script>
+</body>
+</html>
