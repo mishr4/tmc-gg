@@ -75,6 +75,35 @@
 </div>
 <script>
 const $ = (id) => document.getElementById(id);
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function fit(ctx,t,maxW){if(ctx.measureText(t).width<=maxW)return t;let s=t;while(s.length>1&&ctx.measureText(s+'…').width>maxW)s=s.slice(0,-1);return s+'…';}
+function ellipsize(ctx,lines,maxW){let last=lines[lines.length-1];while(ctx.measureText(last+'…').width>maxW&&last.length>1)last=last.slice(0,-1);lines[lines.length-1]=last+'…';return lines;}
+function wrapLines(ctx,text,maxW,maxLines){
+  const words=(text||'').replace(/\s+/g,' ').trim().split(' ').filter(Boolean);
+  const lines=[];let line='';
+  for(const w of words){const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){if(lines.length>=maxLines)return ellipsize(ctx,lines,maxW);lines.push(line);line=w;}
+    else line=test;}
+  if(line){if(lines.length>=maxLines)return ellipsize(ctx,lines,maxW);lines.push(line);}
+  return lines;
+}
+async function renderAppealCard(d){
+  try{await document.fonts.load('700 38px Lexend');await document.fonts.load('400 20px "Instrument Sans"');}catch(e){}
+  const W=800,H=420,cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+  rr(ctx,0,0,W,H,26);ctx.clip();
+  const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#7C4DFF');g.addColorStop(1,'#3A1A9E');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  const rg=ctx.createRadialGradient(W*0.85,60,10,W*0.85,60,360);rg.addColorStop(0,'rgba(255,255,255,0.14)');rg.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(255,255,255,0.75)';ctx.font='700 20px Lexend';ctx.fillText('📩 NEW BAN APPEAL',44,56);
+  ctx.fillStyle='#fff';ctx.font='700 38px Lexend';ctx.fillText(fit(ctx,d.username||'Unknown',700),44,106);
+  ctx.fillStyle='rgba(255,255,255,0.72)';ctx.font='400 18px "Instrument Sans"';ctx.fillText('ID: '+(d.userId||'—'),44,136);
+  ctx.fillStyle='rgba(255,255,255,0.9)';ctx.font='400 18px "Instrument Sans"';ctx.fillText(fit(ctx,'Stated reason: '+(d.reason||'—'),W-88),44,170);
+  ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(44,192);ctx.lineTo(W-44,192);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,0.6)';ctx.font='700 14px Lexend';ctx.fillText('APPEAL',44,220);
+  ctx.fillStyle='#fff';ctx.font='400 20px "Instrument Sans"';
+  wrapLines(ctx,d.appeal,W-88,6).forEach((ln,i)=>ctx.fillText(ln,44,252+i*30));
+  ctx.fillStyle='rgba(255,255,255,0.55)';ctx.font='400 15px "Instrument Sans"';ctx.fillText('tmc.gg/appeal',44,H-24);
+  return cv.toDataURL('image/png');
+}
 $('appeal-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = $('submit'), msg = $('msg');
@@ -88,6 +117,7 @@ $('appeal-form').addEventListener('submit', async (e) => {
   };
   if (!payload.username || !payload.appeal) { msg.className = 'msg err'; msg.textContent = 'Username and appeal are required.'; return; }
   btn.disabled = true; btn.textContent = 'Submitting…';
+  try { payload.image = await renderAppealCard(payload); } catch (e) { /* card optional */ }
   try {
     const r = await fetch('/api/appeal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const d = await r.json().catch(() => ({}));

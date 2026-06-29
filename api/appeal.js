@@ -4,7 +4,7 @@
 function readRaw(req) {
   return new Promise((resolve) => {
     let d = '';
-    req.on('data', (c) => { d += c; if (d.length > 1e6) req.destroy(); });
+    req.on('data', (c) => { d += c; if (d.length > 4500000) req.destroy(); });
     req.on('end', () => resolve(d));
     req.on('error', () => resolve(''));
   });
@@ -30,6 +30,13 @@ module.exports = async (req, res) => {
   if (!username || !appeal) return res.status(400).json({ error: 'Username and appeal are required.' });
   if (userId && !/^\d{5,25}$/.test(userId)) return res.status(400).json({ error: 'That Discord user ID doesn’t look right.' });
 
+  // optional pre-rendered card image (data URL from the browser)
+  let pngBuf = null;
+  const img = typeof body.image === 'string' ? body.image : '';
+  if (img.startsWith('data:image/png;base64,')) {
+    try { const b = Buffer.from(img.slice(img.indexOf(',') + 1), 'base64'); if (b.length > 0 && b.length < 6000000) pngBuf = b; } catch (e) {}
+  }
+
   const embed = {
     title: '📩 New Ban Appeal',
     color: 0x7c4dff,
@@ -43,11 +50,16 @@ module.exports = async (req, res) => {
   };
 
   try {
-    const r = await fetch(webhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: 'Mavion Appeals', embeds: [embed] })
-    });
+    let r;
+    if (pngBuf) {
+      embed.image = { url: 'attachment://appeal.png' };
+      const fd = new FormData();
+      fd.append('payload_json', JSON.stringify({ username: 'Mavion Appeals', embeds: [embed] }));
+      fd.append('files[0]', new Blob([pngBuf], { type: 'image/png' }), 'appeal.png');
+      r = await fetch(webhook, { method: 'POST', body: fd });
+    } else {
+      r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'Mavion Appeals', embeds: [embed] }) });
+    }
     if (!r.ok) return res.status(502).json({ error: 'Couldn’t submit right now. Try again later.' });
     return res.status(200).json({ ok: true });
   } catch {
