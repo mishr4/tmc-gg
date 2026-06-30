@@ -5,33 +5,34 @@
    ===================================================================== */
 
 :root {
-  --bg: #faf8f5;
-  --bg-soft: #f1ece6;
+  --bg: #f5f7fa;
+  --bg-soft: #e8edf4;
   --surface: #ffffff;
-  --surface-sunk: #f5f1ec;
+  --surface-sunk: #eef2f8;
 
-  --ink: #17131c;
-  --ink-2: #3c3744;
-  --muted: #67626f;
-  --faint: #9d99a4;
+  --ink: #0e1626;
+  --ink-2: #354155;
+  --muted: #5c6779;
+  --faint: #94a0b1;
 
-  --line: rgba(23, 19, 28, 0.13);
-  --line-soft: rgba(23, 19, 28, 0.08);
-  --shadow-xs: 0 1px 2px rgba(23, 19, 28, 0.05);
-  --shadow-sm: 0 1px 3px rgba(23, 19, 28, 0.06), 0 1px 2px rgba(23, 19, 28, 0.04);
-  --shadow: 0 8px 26px -14px rgba(23, 19, 28, 0.22);
-  --shadow-lg: 0 20px 50px -24px rgba(23, 19, 28, 0.30);
+  --line: rgba(14, 22, 38, 0.13);
+  --line-soft: rgba(14, 22, 38, 0.07);
+  --shadow-xs: 0 1px 2px rgba(14, 22, 38, 0.06);
+  --shadow-sm: 0 1px 3px rgba(14, 22, 38, 0.07), 0 1px 2px rgba(14, 22, 38, 0.05);
+  --shadow: 0 10px 28px -14px rgba(14, 22, 38, 0.24);
+  --shadow-lg: 0 22px 52px -24px rgba(14, 22, 38, 0.32);
 
-  --accent: #5b34d6;
-  --accent-strong: #4a299f;
-  --accent-wash: rgba(91, 52, 214, 0.07);
-  --accent-line: rgba(91, 52, 214, 0.22);
+  /* Mavion flag blue — refined for corporate use */
+  --accent: #1a4fd0;
+  --accent-strong: #11337f;
+  --accent-wash: rgba(26, 79, 208, 0.07);
+  --accent-line: rgba(26, 79, 208, 0.24);
 
   --ok: #1f8a52;
   --live: #cc2f27;
 
   /* category signal colours — small flat dots only, never gradients */
-  --c-radio: #5b34d6;
+  --c-radio: #1a4fd0;
   --c-cast: #b03a86;
   --c-rhl: #c2392f;
   --c-inline: #c25e1c;
@@ -130,10 +131,10 @@ p { color: var(--ink-2); }
 }
 .btn svg { width: 16px; height: 16px; }
 .btn:active { transform: translateY(1px); }
-.btn-primary { background: var(--ink); color: #fff; }
-.btn-primary:hover { background: #2c2735; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-strong); transform: translateY(-1px); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-.btn-ghost:hover { border-color: var(--ink); }
+.btn-ghost:hover { border-color: var(--ink); transform: translateY(-1px); }
 .btn-accent { background: var(--accent); color: #fff; }
 .btn-accent:hover { background: var(--accent-strong); }
 .btn-link { padding: 0; color: var(--accent-strong); font-weight: 600; gap: 6px; background: none; border: 0; }
@@ -205,6 +206,14 @@ p { color: var(--ink-2); }
 .hero h1 { max-width: 17ch; margin-top: 16px; }
 .hero .lede { margin-top: 18px; max-width: 56ch; }
 .hero-cta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+/* Staggered hero entrance */
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.hero .eyebrow { animation: rise .5s var(--ease) both; }
+.hero h1 { animation: rise .6s .06s var(--ease) both; }
+.hero .lede { animation: rise .6s .14s var(--ease) both; }
+.hero .hero-cta { animation: rise .6s .22s var(--ease) both; }
+.hero .note { animation: rise .6s .3s var(--ease) both; }
+.hero aside { animation: rise .65s .28s var(--ease) both; }
 
 /* Cards — flat */
 .card {
