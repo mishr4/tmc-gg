@@ -1,63 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 — TMC</title>
-<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-font-smoothing:antialiased;background:linear-gradient(90deg,#fef6f0 0%,#fdf2fd 100%);min-height:100vh}
-body{font-family:'Instrument Sans','Inter',sans-serif;color:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px;text-align:center}
-
-.code{font-family:'Lexend',sans-serif;font-size:clamp(80px,15vw,140px);font-weight:800;letter-spacing:-4px;line-height:1;background:linear-gradient(135deg,#7C4DFF,#FF48BC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
-h1{font-family:'Lexend',sans-serif;font-size:clamp(20px,4vw,32px);font-weight:600;margin-bottom:12px}
-p{font-size:15px;color:#777;max-width:400px;line-height:1.6;margin-bottom:32px}
-
-.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.btn{padding:10px 24px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;font-family:inherit;transition:all 0.15s;border:none;cursor:pointer}
-.btn-primary{background:#7C4DFF;color:#fff}
-.btn-primary:hover{opacity:0.85}
-.btn-outline{background:transparent;border:1.5px solid rgba(0,0,0,0.1);color:#000}
-.btn-outline:hover{border-color:#7C4DFF;color:#7C4DFF}
-
-.logo{margin-bottom:40px}
-.logo svg{width:80px;height:auto}
-
-.alert-card{margin-top:60px;max-width:480px;background:#fff;border-radius:16px;box-shadow:0 1px 21px rgba(0,0,0,0.07);padding:24px 28px;text-align:left;border-left:4px solid #FF48BC}
-.alert-card h3{font-family:'Lexend',sans-serif;font-size:14px;font-weight:600;margin-bottom:6px;color:#FF48BC}
-.alert-card p{font-size:13px;color:#555;margin:0;line-height:1.6}
-.alert-card a{color:#7C4DFF;font-weight:600;text-decoration:none}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Page not found — The Mavion Corporation</title>
+  <meta name="description" content="The page you're looking for can't be found. Find your way back to The Mavion Corporation, or browse our companies, newsroom and careers.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <meta name="theme-color" content="#faf8f5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+  <style>
+    .err { text-align: center; padding-block: clamp(40px, 7vw, 88px); }
+    .err-code { font-family: var(--ff-display); font-weight: 700; font-size: clamp(5rem, 17vw, 11rem); line-height: 0.86; letter-spacing: -0.05em; color: var(--ink); }
+    .err-code span { color: var(--accent); }
+    .err h1 { margin-top: 18px; }
+    .err .lede { margin: 16px auto 0; max-width: 48ch; }
+    .err .hero-cta { justify-content: center; margin-top: 28px; }
+    .err-wrap { max-width: 760px; }
+    .alert { display: flex; gap: 16px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--accent); border-radius: var(--r); padding: 22px 24px; text-align: left; }
+    .alert .ico { width: 40px; height: 40px; border-radius: var(--r-sm); display: grid; place-items: center; background: var(--surface-sunk); color: var(--ink); flex-shrink: 0; border: 1px solid var(--line-soft); }
+    .alert .ico svg { width: 20px; height: 20px; }
+    .alert h3 { font-size: 1rem; }
+    .alert p { font-size: 0.92rem; color: var(--ink-2); margin-top: 6px; }
+    .alert a { color: var(--accent-strong); font-weight: 600; }
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-<a href="/" class="logo">
-  <svg viewBox="0 0 101 36" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 3.66 22.711 L 3.66 13.799 L 0 13.799 L 0 8.951 L 3.66 8.951 L 3.66 3.088 L 9.248 3.088 L 9.248 8.951 L 14.601 8.951 L 14.601 13.799 L 9.248 13.799 L 9.248 21.851 C 9.248 23.61 9.957 24.235 11.964 24.235 C 12.948 24.235 13.853 24.118 14.679 23.923 L 14.679 28.652 C 13.459 29.004 12.121 29.161 10.665 29.161 C 5.785 29.161 3.66 27.245 3.66 22.711 Z M 47.845 15.831 L 47.845 28.887 L 42.256 28.887 L 42.256 17.199 C 42.256 14.658 41.312 13.447 39.108 13.447 C 36.589 13.447 35.094 14.932 35.094 17.59 L 35.094 28.887 L 29.506 28.887 L 29.506 17.199 C 29.506 14.658 28.522 13.447 26.318 13.447 C 23.838 13.447 22.343 14.971 22.343 17.59 L 22.343 28.887 L 16.755 28.887 L 16.755 8.951 L 22.225 8.951 L 22.225 11.844 C 23.327 9.772 25.649 8.404 28.443 8.404 C 31.276 8.404 33.48 9.733 34.425 12.118 C 35.487 9.811 38.085 8.404 41.115 8.404 C 45.365 8.404 47.845 11.14 47.845 15.831 Z M 49.926 18.919 C 49.926 12.704 54.137 8.404 60.433 8.404 C 64.369 8.404 67.675 10.124 69.288 12.978 L 65.117 15.909 C 64.015 14.228 62.44 13.447 60.591 13.447 C 57.6 13.447 55.593 15.597 55.593 18.919 C 55.593 22.242 57.6 24.392 60.591 24.392 C 62.44 24.392 64.015 23.61 65.117 21.929 L 69.288 24.822 C 67.675 27.753 64.369 29.434 60.433 29.434 C 54.137 29.434 49.926 25.095 49.926 18.919 Z" fill="#000" transform="translate(0 6.566)"/>
-    <rect x="72.099" y="15.269" width="5.842" height="7.024" rx="0" fill="#FF48BC"/>
-    <rect x="79.785" y="9.162" width="5.842" height="15.575" rx="0" fill="#7C4DFF"/>
-    <rect x="87.472" y="0" width="5.842" height="20.155" rx="0" fill="#0ED7FF"/>
-    <rect x="95.158" y="5.192" width="5.842" height="10.994" rx="0" fill="#FF2A2A"/>
-  </svg>
-</a>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="The Mavion Corporation — home"><img src="/mavion-logo.png" alt="The Mavion Corporation"></a>
+      <nav class="nav-menu" aria-label="Primary">
+        <a href="/about">About</a>
+        <a href="/companies">Companies</a>
+        <a href="/newsroom">Newsroom</a>
+        <a href="/careers">Careers</a>
+        <a href="/corporate">Corporate</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary" href="/contact">Contact</a>
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<div class="code">404</div>
-<h1>Page not found</h1>
-<p>The page you're looking for doesn't exist or has been moved. But since you're here — every dead link is a chance to help.</p>
+  <main id="main">
+    <section class="err">
+      <div class="wrap err-wrap">
+        <p class="eyebrow bare" style="justify-content:center">Error 404</p>
+        <div class="err-code" aria-hidden="true">4<span>0</span>4</div>
+        <h1>We can't find that page.</h1>
+        <p class="lede">The page you're looking for doesn't exist, may have moved, or the link was mistyped. Here are a few ways back into the site.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="/">Go to homepage</a>
+          <a class="btn btn-ghost btn-lg" href="/companies">Our companies</a>
+        </div>
+      </div>
+    </section>
 
-<div class="actions">
-  <a href="/" class="btn btn-primary">Back to TMC</a>
-  <a href="/stations" class="btn btn-outline">Browse Stations</a>
-</div>
+    <section class="section tight alt">
+      <div class="wrap err-wrap">
+        <p class="eyebrow muted">Popular destinations</p>
+        <div class="row-list mt-s">
+          <a class="row-item" href="/about"><span class="dot" style="background:var(--c-radio)"></span><span><span class="r-name">About Mavion</span><br><span class="r-desc">Who we are and what we build</span></span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="row-item" href="/companies"><span class="dot" style="background:var(--c-cast)"></span><span><span class="r-name">Companies</span><br><span class="r-desc">Mavion News, TMCast &amp; UnoNoticias</span></span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="row-item" href="/newsroom"><span class="dot" style="background:var(--c-news)"></span><span><span class="r-name">Newsroom</span><br><span class="r-desc">Announcements and milestones</span></span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="row-item" href="/careers"><span class="dot" style="background:var(--c-infra)"></span><span><span class="r-name">Careers</span><br><span class="r-desc">Open roles across the company</span></span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="row-item" href="/contact"><span class="dot" style="background:var(--c-impact)"></span><span><span class="r-name">Contact</span><br><span class="r-desc">Press, partnerships and general enquiries</span></span><span class="arr" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
 
-<div class="alert-card">
-  <h3>Missing Children Alert</h3>
-  <p>TMC repurposes 404 pages to display missing children alerts. If you have any information about a missing child, please contact the <a href="https://www.missingkids.org" target="_blank" rel="noopener">National Center for Missing & Exploited Children</a> at 1-800-THE-LOST (1-800-843-5678).</p>
-</div>
+    <section class="section">
+      <div class="wrap err-wrap">
+        <div class="alert">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <div>
+            <h3>Missing children alert</h3>
+            <p>Mavion repurposes its 404 pages to carry missing children alerts — a small use of a page that would otherwise go to waste. If you have information about a missing child, contact the <a href="https://www.missingkids.org" target="_blank" rel="noopener">National Center for Missing &amp; Exploited Children</a> at 1-800-THE-LOST (1-800-843-5678).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/mavion-logo.png" alt="The Mavion Corporation">
+          <p>A California-based media and technology company, operating media organizations, publishing platforms and broadcast technology through its subsidiaries.</p>
+          <div class="footer-social">
+            <a href="https://discord.gg/cirya" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.3 5.3A17.5 17.5 0 0 0 15 4l-.2.4a13 13 0 0 1 3.8 1.9 12.4 12.4 0 0 0-10.5 0A13 13 0 0 1 11.9 4.4L11.7 4A17.5 17.5 0 0 0 7.4 5.3C4.5 9.6 3.7 13.8 4.1 17.9A17.6 17.6 0 0 0 9.4 20.6l.4-.6a11.6 11.6 0 0 1-1.8-.9l.3-.2a8.9 8.9 0 0 0 7.6 0l.3.2a11.6 11.6 0 0 1-1.8.9l.4.6a17.6 17.6 0 0 0 5.3-2.7c.5-4.8-.8-9-3.5-12.6ZM9.6 15.4c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8Zm4.8 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8Z"/></svg></a>
+            <a href="mailto:tagnz@news.tmc.gg" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/corporate">Corporate</a><a href="/newsroom">Newsroom</a><a href="/careers">Careers</a><a href="/contact">Contact</a></div>
+        <div class="footer-col"><h4>Companies</h4><a href="https://mavion.tmc.gg" target="_blank" rel="noopener">Mavion News</a><a href="/tmcast">TMCast</a><a href="/notices/uno-construction">UnoNoticias</a><a href="/companies">All companies</a></div>
+        <div class="footer-col"><h4>Resources</h4><a href="/newsroom">Press &amp; media</a><a href="/partners">Partners</a><a href="https://mavion.tmc.gg/licensing" target="_blank" rel="noopener">ASCAP licensing</a><a href="https://cast.tmc.gg" target="_blank" rel="noopener">TMCast portal</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="mailto:tagnz@news.tmc.gg">tagnz@news.tmc.gg</a><a href="https://discord.gg/cirya" target="_blank" rel="noopener">Discord</a><span class="f-static">California, USA</span></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> The Mavion Corporation. All rights reserved.</span>
+        <span class="links"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/site.js" defer></script>
 </body>
 </html>

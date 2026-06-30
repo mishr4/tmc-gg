@@ -17,6 +17,11 @@
       "source": "/songcontest",
       "destination": "https://youtube.com/live/iE7edeygWks?feature=share",
       "permanent": false
+    },
+    {
+      "source": "/network",
+      "destination": "/companies",
+      "permanent": true
     }
   ]
 }
