@@ -285,10 +285,11 @@ a.card:hover, .card.interactive:hover { transform: translateY(-4px); border-colo
 .feature p { font-size: 0.94rem; color: var(--muted); }
 
 /* Corporate facts */
-.facts { display: grid; gap: 14px; }
-.facts .fact { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
-.facts dt { font-family: var(--ff-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
-.facts dd { font-family: var(--ff-display); font-weight: 500; font-size: 1rem; text-align: right; color: var(--ink); }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 26px; }
+.facts .fact { display: flex; flex-direction: column; gap: 5px; }
+.facts dt { font-family: var(--ff-text); font-size: 0.64rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--faint); }
+.facts dd { font-family: var(--ff-display); font-weight: 500; font-size: 1.06rem; color: var(--ink); line-height: 1.25; }
+@media (max-width: 460px) { .facts { grid-template-columns: 1fr; } }
 
 /* Company cards */
 .companies { display: flex; flex-direction: column; gap: 16px; }
