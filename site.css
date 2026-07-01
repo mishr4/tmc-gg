@@ -219,14 +219,15 @@ em, i, .italic { font-style: italic; }
 
 /* Announcement bar — breaking/live (red) */
 .announce { background: var(--raised); border-bottom: 1px solid var(--line); color: var(--ink-2); }
-.announce-inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 10px; }
-.announce-msg { font-size: 0.88rem; color: var(--muted); }
-.announce-actions { margin-left: auto; display: inline-flex; align-items: center; gap: 14px; }
+.announce-inner { display: flex; align-items: center; gap: 16px; flex-wrap: nowrap; padding-block: 10px; }
+.announce .badge-live { flex-shrink: 0; }
+.announce-msg { flex: 1 1 auto; min-width: 0; font-size: 0.88rem; color: var(--muted); }
+.announce-actions { flex-shrink: 0; display: inline-flex; align-items: center; gap: 14px; }
 .btn-sm { padding: 7px 14px; font-size: 0.8rem; font-family: var(--ff-mono); letter-spacing: 0.04em; }
 .announce .btn-sm { background: var(--accent); color: #08090b; border-radius: var(--r-sm); font-weight: 600; }
 .announce-live { font-size: 0.86rem; font-weight: 500; color: var(--muted); }
 .announce-live:hover { color: var(--ink); }
-@media (max-width: 640px) { .announce-actions { margin-left: 0; width: 100%; } .announce-msg { flex-basis: 100%; } }
+@media (max-width: 640px) { .announce-inner { flex-wrap: wrap; gap: 10px 16px; } .announce-actions { width: 100%; } .announce-msg { flex-basis: 100%; } }
 
 /* Hero */
 .hero { padding-block: clamp(56px, 8vw, 116px); border-bottom: 1px solid var(--line-soft); }
