@@ -86,6 +86,12 @@
         <priority>0.7</priority>
     </url>
     <url>
+        <loc>https://tmc.gg/brand</loc>
+        <lastmod>2026-06-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://tmc.gg/privacy</loc>
         <lastmod>2026-06-30</lastmod>
         <changefreq>yearly</changefreq>
