@@ -99,4 +99,30 @@
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
   });
+
+  /* Cookie consent — essential-only, remembered in localStorage */
+  (function () {
+    var KEY = 'tmc-cookie-consent';
+    try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
+    var bar = document.createElement('div');
+    bar.className = 'cookie';
+    bar.setAttribute('role', 'dialog');
+    bar.setAttribute('aria-label', 'Cookie notice');
+    bar.innerHTML =
+      '<p>We use only essential cookies to run this site and remember your preferences — nothing that tracks you across the web. Read our <a href="/cookies">Cookie Policy</a>.</p>'
+      + '<div class="cookie-actions">'
+      + '<button class="btn btn-ghost" type="button" data-consent="declined">Decline</button>'
+      + '<button class="btn btn-primary" type="button" data-consent="accepted">Accept</button>'
+      + '</div>';
+    document.body.appendChild(bar);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('in'); }); });
+    function choose(v) {
+      try { localStorage.setItem(KEY, v); } catch (e) {}
+      bar.classList.remove('in');
+      setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 460);
+    }
+    bar.querySelectorAll('button[data-consent]').forEach(function (b) {
+      b.addEventListener('click', function () { choose(b.getAttribute('data-consent')); });
+    });
+  })();
 })();
