@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Developer Docs — The Mavion Corporation</title>
+  <meta name="description" content="Developer and partner documentation for The Mavion Corporation — the Careers API, Sign in with Mavion (SSO), TMCast embeds, integrations, brand assets and support.">
+  <meta name="keywords" content="Mavion developers, Mavion API, careers API, Sign in with Mavion, TMCast embed, partner integrations">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tmc.gg/developers">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Developer Docs — The Mavion Corporation">
+  <meta property="og:description" content="APIs, embeds, SSO and integration guides for building with Mavion.">
+  <meta property="og:url" content="https://tmc.gg/developers">
+  <meta property="og:image" content="https://tmc.gg/og-image.png">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <meta name="theme-color" content="#08090b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="The Mavion Corporation — home"><img src="/mavion-logo.png" alt="The Mavion Corporation"></a>
+      <nav class="nav-menu" aria-label="Primary">
+        <a href="/about">About</a>
+        <a href="/companies">Companies</a>
+        <a href="/newsroom">Newsroom</a>
+        <a href="/careers">Careers</a>
+        <a href="/corporate">Corporate</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary" href="/contact">Contact</a>
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="legal-hero">
+      <div class="wrap">
+        <p class="eyebrow">Developers &amp; partners</p>
+        <h1>Build with Mavion.</h1>
+        <p class="legal-note">Quick references and integration guides for our public endpoints, sign-in, and embeds. Not sure where to start, or need something that isn't here? The fastest support is our <a href="https://discord.gg/cirya" target="_blank" rel="noopener">Discord</a>.</p>
+        <div class="hero-cta" style="margin-top:24px;">
+          <a class="btn btn-primary" href="https://discord.gg/cirya" target="_blank" rel="noopener">Get support on Discord</a>
+          <a class="btn btn-ghost" href="mailto:tagnz@news.tmc.gg?subject=Developer%20enquiry">Email the team</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap legal-layout">
+        <aside class="legal-toc" aria-label="On this page">
+          <p class="toc-label">Docs</p>
+          <nav>
+            <a href="#start">Getting started</a>
+            <a href="#careers-api">Careers API</a>
+            <a href="#sso">Sign in with Mavion</a>
+            <a href="#tmcast">TMCast embeds</a>
+            <a href="#partners">Partner integrations</a>
+            <a href="#brand">Brand &amp; assets</a>
+            <a href="#support">Support</a>
+          </nav>
+        </aside>
+
+        <div class="legal-body legal plain">
+          <h2 id="start">Getting started</h2>
+          <p>Most Mavion surfaces are static and fast, with a few public JSON endpoints you can call directly from the browser. There's no API key for the public endpoints below — just call them. Anything that needs onboarding (SSO return domains, TMCast provisioning, partner builds) starts with a message to us.</p>
+          <div class="param">
+            <dt>Corporate</dt><dd>tmc.gg</dd>
+            <dt>Mavion / News</dt><dd>mavion.tmc.gg</dd>
+            <dt>TMCast portal</dt><dd>cast.tmc.gg</dd>
+            <dt>Sign-in (SSO)</dt><dd>sso.tmc.gg</dd>
+            <dt>Support</dt><dd><a href="https://discord.gg/cirya" target="_blank" rel="noopener">discord.gg/cirya</a> · <a href="mailto:tagnz@news.tmc.gg">tagnz@news.tmc.gg</a></dd>
+          </div>
+
+          <h2 id="careers-api">Careers API</h2>
+          <p>The live list of open roles that powers our <a href="/careers">Careers page</a>. Public, read-only, CORS-enabled — call it straight from the browser.</p>
+          <div class="endpoint"><span class="method">GET</span> https://mavion.tmc.gg/api/careers</div>
+          <p><strong>Query parameters</strong></p>
+          <div class="param">
+            <dt>open</dt><dd><code>1</code> to return only currently-open roles. Omit for all roles.</dd>
+          </div>
+          <p><strong>Response</strong> — a JSON object. The useful part is <code>roles[]</code>; each role looks like:</p>
+          <div class="code"><pre><code>{
+  "updated_at": "2026-06-30T00:00:00Z",
+  "apply_url": "https://mavion.tmc.gg/careers",
+  "roles": [
+    {
+      "id": "video-producer",
+      "title": "Video Producer",
+      "department": "Content",
+      "blurb": "Short one-line description.",
+      "open": true,
+      "openings": 2,
+      "capacity": 4,
+      "filled": 2,
+      "apply_url": "https://mavion.tmc.gg/careers#video-producer"
+    }
+  ]
+}</code></pre></div>
+          <p><strong>Example</strong> — fetch and render open roles:</p>
+          <div class="code"><pre><code>const data = await fetch('https://mavion.tmc.gg/api/careers?open=1')
+  .then(r =&gt; r.json());
+
+data.roles
+  // "leadership" and "management" are group separators, not jobs
+  .filter(r =&gt; r.id !== 'leadership' &amp;&amp; r.id !== 'management')
+  .forEach(r =&gt; {
+    console.log(`${r.title} — ${r.department} (${r.openings} open)`);
+    // link applicants to r.apply_url
+  });</code></pre></div>
+          <div class="callout"><p><strong>Heads up:</strong> the feed includes two entries with ids <code>leadership</code> and <code>management</code> that act as department separators, not real roles — filter them out as shown.</p></div>
+
+          <h2 id="sso">Sign in with Mavion</h2>
+          <p>Let users sign in with their Mavion account (Discord or Google under the hood) via our shared SSO at <code>sso.tmc.gg</code>. The flow is a redirect round-trip: you send the user to the sign-in page with a <code>return</code> URL, and they come back to it with a signed identity payload attached.</p>
+          <p><strong>1. Send the user to sign in</strong></p>
+          <div class="code"><pre><code>const RETURN = encodeURIComponent(window.location.href);
+window.location.href = `https://sso.tmc.gg/?return=${RETURN}`;</code></pre></div>
+          <p><strong>2. Read the identity on return.</strong> After authenticating, the user is redirected back to your <code>return</code> URL with a base64 <code>cirya_sso</code> parameter. Decode it to JSON:</p>
+          <div class="code"><pre><code>const params = new URLSearchParams(window.location.search);
+const token = params.get('cirya_sso');
+if (token) {
+  const identity = JSON.parse(atob(token));
+  // identity contains the signed-in user's basic profile
+  console.log(identity);
+}</code></pre></div>
+          <div class="callout"><p>Building a partner sign-in? <a href="https://discord.gg/cirya" target="_blank" rel="noopener">Message us</a> to have your <code>return</code> domain allow-listed and to confirm the exact identity fields for your integration.</p></div>
+
+          <h2 id="tmcast">TMCast embeds</h2>
+          <p>Every TMCast station comes with an embeddable player you can drop onto any site. Your exact snippet — an <code>&lt;iframe&gt;</code> pointed at your station — is available in the TMCast dashboard at <a href="https://cast.tmc.gg" target="_blank" rel="noopener">cast.tmc.gg</a>. It looks like this:</p>
+          <div class="code"><pre><code>&lt;iframe
+  src="https://cast.tmc.gg/public/YOUR_STATION/embed"
+  width="400" height="150"
+  frameborder="0" loading="lazy"
+  title="YOUR_STATION on TMCast"&gt;&lt;/iframe&gt;</code></pre></div>
+          <p>TMCast is built on a managed AzuraCast stack, so standard stream and now-playing endpoints are available for your station too. For your station's exact URLs and mount points, check your dashboard or ask us. New to TMCast? See <a href="/tmcast">hosting &amp; pricing</a>.</p>
+
+          <h2 id="partners">Partner integrations</h2>
+          <p>We build for and integrate with partner networks — broadcasters, news platforms and community projects — the same way we do for SNO, Blox Network and UBC. If you're running a media project and want Mavion to build a feature, host your audio, or wire your platform into ours, that starts as a conversation, not a form.</p>
+          <p>Tell us what you're building and what you need, and we'll scope it. See <a href="/partners">our partners</a> for the kind of work we take on.</p>
+
+          <h2 id="brand">Brand &amp; assets</h2>
+          <p>When referencing Mavion or its companies, please use the correct names — The Mavion Corporation, Mavion News, TMCast, UnoNoticias — and don't alter or recolor the logo (the blue/cyan flag). For logo files, press assets, or approval on how you're representing us, email <a href="mailto:tagnz@news.tmc.gg?subject=Brand%20assets">tagnz@news.tmc.gg</a>. Usage is also covered by our <a href="/terms">Terms</a>.</p>
+
+          <h2 id="support">Support</h2>
+          <p>The quickest way to reach a human is our <a href="https://discord.gg/cirya" target="_blank" rel="noopener">Discord</a> — that's where we help with API questions, TMCast, SSO onboarding and integrations. For anything private or formal, email <a href="mailto:tagnz@news.tmc.gg?subject=Developer%20enquiry">tagnz@news.tmc.gg</a>. These endpoints are provided as-is under our <a href="/terms">Terms of Service</a>; we may change or version them, and we'll give notice of breaking changes where we can.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/mavion-logo.png" alt="The Mavion Corporation">
+          <p>A California-based media and technology company, operating media organizations, publishing platforms and broadcast technology through its subsidiaries.</p>
+          <div class="footer-social">
+            <a href="https://discord.gg/cirya" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.3 5.3A17.5 17.5 0 0 0 15 4l-.2.4a13 13 0 0 1 3.8 1.9 12.4 12.4 0 0 0-10.5 0A13 13 0 0 1 11.9 4.4L11.7 4A17.5 17.5 0 0 0 7.4 5.3C4.5 9.6 3.7 13.8 4.1 17.9A17.6 17.6 0 0 0 9.4 20.6l.4-.6a11.6 11.6 0 0 1-1.8-.9l.3-.2a8.9 8.9 0 0 0 7.6 0l.3.2a11.6 11.6 0 0 1-1.8.9l.4.6a17.6 17.6 0 0 0 5.3-2.7c.5-4.8-.8-9-3.5-12.6ZM9.6 15.4c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8Zm4.8 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8Z"/></svg></a>
+            <a href="mailto:tagnz@news.tmc.gg" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/corporate">Corporate</a><a href="/newsroom">Newsroom</a><a href="/careers">Careers</a><a href="/contact">Contact</a></div>
+        <div class="footer-col"><h4>Companies</h4><a href="https://mavion.tmc.gg" target="_blank" rel="noopener">Mavion News</a><a href="/tmcast">TMCast</a><a href="/notices/uno-construction">UnoNoticias</a><a href="/companies">All companies</a></div>
+        <div class="footer-col"><h4>Resources</h4><a href="/developers">Developer docs</a><a href="/newsroom">Press &amp; media</a><a href="/partners">Partners</a><a href="https://cast.tmc.gg" target="_blank" rel="noopener">TMCast portal</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/cookies">Cookie Policy</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> The Mavion Corporation. All rights reserved.</span>
+        <span class="links"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/cookies">Cookies</a></span>
+      </div>
+    </div>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>
