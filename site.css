@@ -477,7 +477,27 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .legal strong { color: var(--ink-2); font-weight: 600; }
 .legal ul { margin: 12px 0 0 20px; display: grid; gap: 8px; }
 .legal a { color: var(--accent); font-weight: 500; }
-.legal .updated { font-family: var(--ff-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-top: 0; }
+.legal .updated { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-top: 0; }
+
+/* Legal — premium reading layout with sticky TOC */
+.legal-hero { padding-block: clamp(44px, 6vw, 84px); border-bottom: 1px solid var(--line-soft); }
+.legal-meta { display: flex; gap: 10px 22px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+.legal-meta .updated, .legal-meta .read { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+.legal-note { margin-top: 18px; max-width: 60ch; font-size: 0.92rem; color: var(--muted); }
+.legal-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(30px, 5vw, 76px); align-items: start; }
+@media (max-width: 920px) { .legal-layout { grid-template-columns: 1fr; } .legal-toc { display: none; } }
+.legal-toc { position: sticky; top: 88px; align-self: start; }
+.legal-toc .toc-label { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
+.legal-toc nav { display: flex; flex-direction: column; border-left: 1px solid var(--line); }
+.legal-toc a { padding: 7px 0 7px 16px; margin-left: -1px; border-left: 2px solid transparent; font-size: 0.85rem; color: var(--muted); line-height: 1.35; transition: color .3s var(--ease), border-color .3s var(--ease); }
+.legal-toc a:hover { color: var(--ink); }
+.legal-toc a.active { color: var(--ink); border-left-color: var(--accent); }
+.legal-body { max-width: 720px; counter-reset: sec; }
+.legal-body > h2 { scroll-margin-top: 92px; display: flex; flex-direction: column; }
+.legal-body > h2::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; color: var(--faint); margin-bottom: 6px; }
+.callout { background: var(--glass); border: 1px solid var(--line-soft); border-left: 2px solid var(--accent); border-radius: var(--r); padding: 18px 22px; margin-top: 18px; }
+.callout p { color: var(--ink-2); font-size: 0.95rem; margin: 0; line-height: 1.65; }
+.callout strong { color: var(--ink); }
 
 /* Careers — departments & roles */
 .dept + .dept { margin-top: 36px; }

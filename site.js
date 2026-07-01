@@ -95,6 +95,25 @@
     });
   }
 
+  /* Legal TOC — highlight the section currently in view */
+  var toc = document.querySelector('.legal-toc');
+  if (toc && 'IntersectionObserver' in window) {
+    var links = {};
+    toc.querySelectorAll('a[href^="#"]').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    var heads = document.querySelectorAll('.legal-body > h2[id]');
+    if (heads.length) {
+      var tio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && links[e.target.id]) {
+            toc.querySelectorAll('a').forEach(function (l) { l.classList.remove('active'); });
+            links[e.target.id].classList.add('active');
+          }
+        });
+      }, { rootMargin: '-90px 0px -68% 0px', threshold: 0 });
+      heads.forEach(function (h) { tio.observe(h); });
+    }
+  }
+
   /* Current year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
