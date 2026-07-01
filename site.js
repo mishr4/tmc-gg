@@ -119,20 +119,28 @@
     el.textContent = new Date().getFullYear();
   });
 
-  /* Cookie consent — essential-only, remembered in localStorage.
-     Reopens from any [data-cookie-edit] control ("edit your preferences"). */
+  /* Cookie consent — granular categories, remembered in localStorage.
+     A slim banner on first visit; a full preferences modal from the
+     banner's "Customize" and any [data-cookie-edit] control. */
   (function () {
     var KEY = 'tmc-cookie-consent';
-    var bar = null;
-    function close(v) {
-      if (v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+    var CATS = [
+      { id: 'essential', name: 'Essential', locked: true, desc: 'Required for the site to work — security, delivery, and remembering this cookie choice.' },
+      { id: 'functional', name: 'Functional', locked: false, desc: 'Remembers preferences beyond the basics. Not currently used — your choice is saved in case we add it.' },
+      { id: 'analytics', name: 'Analytics', locked: false, desc: 'Anonymous usage statistics to help us improve. Not currently used — your choice is saved in case we add it.' }
+    ];
+    var bar = null, modal = null;
+
+    function read() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
+    function save(prefs) { prefs.essential = true; prefs.v = 1; try { localStorage.setItem(KEY, JSON.stringify(prefs)); } catch (e) {} }
+
+    function closeBar() {
       if (!bar) return;
-      var b = bar; bar = null;
-      b.classList.remove('in');
+      var b = bar; bar = null; b.classList.remove('in');
       setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); }, 560);
     }
-    function show() {
-      if (bar) return;
+    function showBar() {
+      if (bar || read()) return;
       bar = document.createElement('div');
       bar.className = 'cookie';
       bar.setAttribute('role', 'dialog');
@@ -140,21 +148,69 @@
       bar.innerHTML =
         '<p>We use only essential cookies to run this site and remember your preferences — nothing that tracks you across the web. Read our <a href="/cookies">Cookie Policy</a>.</p>'
         + '<div class="cookie-actions">'
-        + '<button class="btn btn-ghost" type="button" data-consent="declined">Decline</button>'
-        + '<button class="btn btn-primary" type="button" data-consent="accepted">Accept</button>'
+        + '<button class="btn btn-ghost" type="button" data-act="decline">Decline</button>'
+        + '<button class="btn btn-ghost" type="button" data-act="customize">Customize</button>'
+        + '<button class="btn btn-primary" type="button" data-act="accept">Accept all</button>'
         + '</div>';
       document.body.appendChild(bar);
       requestAnimationFrame(function () { requestAnimationFrame(function () { if (bar) bar.classList.add('in'); }); });
-      bar.querySelectorAll('button[data-consent]').forEach(function (b) {
-        b.addEventListener('click', function () { close(b.getAttribute('data-consent')); });
+      bar.addEventListener('click', function (e) {
+        var a = e.target.closest('button[data-act]'); if (!a) return;
+        var act = a.getAttribute('data-act');
+        if (act === 'accept') { save({ functional: true, analytics: true }); closeBar(); }
+        else if (act === 'decline') { save({ functional: false, analytics: false }); closeBar(); }
+        else if (act === 'customize') { openModal(); }
       });
     }
-    var stored;
-    try { stored = localStorage.getItem(KEY); } catch (e) { stored = 'blocked'; }
-    if (!stored) show();
+
+    function onKey(e) { if (e.key === 'Escape') closeModal(); }
+    function closeModal() {
+      if (!modal) return;
+      var m = modal; modal = null; m.classList.remove('in');
+      document.removeEventListener('keydown', onKey);
+      setTimeout(function () { if (m.parentNode) m.parentNode.removeChild(m); }, 400);
+    }
+    function openModal() {
+      if (modal) return;
+      var current = read() || {};
+      var rows = CATS.map(function (c) {
+        var on = c.locked || current[c.id] === true;
+        return '<div class="cm-row"><div><h3>' + c.name + (c.locked ? ' <span class="always">Always active</span>' : '') + '</h3><p>' + c.desc + '</p></div>'
+          + '<label class="switch"><input type="checkbox" data-cat="' + c.id + '"' + (on ? ' checked' : '') + (c.locked ? ' disabled' : '') + ' aria-label="' + c.name + ' cookies"><span class="track"></span><span class="thumb"></span></label></div>';
+      }).join('');
+      modal = document.createElement('div');
+      modal.className = 'cm-overlay';
+      modal.innerHTML =
+        '<div class="cm-card" role="dialog" aria-modal="true" aria-label="Cookie preferences">'
+        + '<div class="cm-head"><h2>Cookie preferences</h2><button class="cm-close" type="button" data-act="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'
+        + '<p class="cm-intro">We currently use only essential cookies. These options let you set your choice in case we ever add more — we\'ll always respect them. See our <a href="/cookies">Cookie Policy</a>.</p>'
+        + rows
+        + '<div class="cm-actions"><button class="btn btn-ghost" type="button" data-act="reject">Reject optional</button><button class="btn btn-ghost" type="button" data-act="save">Save choices</button><button class="btn btn-primary" type="button" data-act="accept">Accept all</button></div>'
+        + '</div>';
+      document.body.appendChild(modal);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { if (modal) modal.classList.add('in'); }); });
+      document.addEventListener('keydown', onKey);
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) { closeModal(); return; }
+        var a = e.target.closest('button[data-act]'); if (!a) return;
+        var act = a.getAttribute('data-act');
+        if (act === 'close') { closeModal(); return; }
+        var prefs = { functional: false, analytics: false };
+        if (act === 'accept') { prefs = { functional: true, analytics: true }; }
+        else if (act === 'save') {
+          modal.querySelectorAll('input[data-cat]').forEach(function (i) {
+            var id = i.getAttribute('data-cat');
+            if (id !== 'essential') prefs[id] = i.checked;
+          });
+        }
+        save(prefs); closeModal(); closeBar();
+      });
+    }
+
+    if (!read()) showBar();
     document.addEventListener('click', function (e) {
       var t = e.target.closest ? e.target.closest('[data-cookie-edit]') : null;
-      if (t) { e.preventDefault(); try { localStorage.removeItem(KEY); } catch (er) {} show(); }
+      if (t) { e.preventDefault(); openModal(); }
     });
   })();
 })();
