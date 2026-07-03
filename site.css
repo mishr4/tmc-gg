@@ -19,6 +19,20 @@
   font-display: swap;
   src: url('/fonts/fraunces-italic.ttf') format('truetype');
 }
+/* BR Firma (commercial) — resolves from the local install; drop woff2 files
+   into /fonts and add url() sources here to serve it to visitors. */
+@font-face {
+  font-family: 'BR Firma';
+  font-weight: 400;
+  font-display: swap;
+  src: local('BR Firma'), local('BR Firma Regular'), local('BRFirma-Regular');
+}
+@font-face {
+  font-family: 'BR Firma';
+  font-weight: 700;
+  font-display: swap;
+  src: local('BR Firma Bold'), local('BRFirma-Bold');
+}
 
 :root {
   /* surfaces — near-black, layered */
@@ -437,6 +451,9 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-social a { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--glass); border: 1px solid var(--line-soft); color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease); }
 .footer-social a:hover { color: var(--ink); border-color: rgba(255,255,255,0.28); }
 .footer-social svg { width: 17px; height: 17px; }
+.footer-badge { display: inline-block; margin-top: 18px; line-height: 0; }
+.footer-badge img { width: 42px; height: 42px; border-radius: 9px; border: 1px solid var(--line-soft); transition: transform .3s var(--ease), border-color .3s var(--ease); }
+.footer-badge:hover img { transform: translateY(-2px); border-color: rgba(255,255,255,0.28); }
 .footer-col h4 { font-family: var(--ff-mono); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
 .footer-col a, .footer-col .f-static { display: block; padding: 5px 0; font-size: 0.9rem; color: var(--muted); }
 .footer-col a { transition: color .25s var(--ease); }
@@ -641,3 +658,32 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .mt-s { margin-top: 12px; } .mt-m { margin-top: 24px; } .mt-l { margin-top: 40px; }
 .stack > * + * { margin-top: 14px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------------------------------------------------------------------
+   Provider notice band — red service notice (BR Firma + Material
+   Symbols Rounded). Deliberately its own voice, per the design comp.
+   --------------------------------------------------------------------- */
+.provider-notice { background: #9F0E11; color: #fff; padding: 34px 0 38px; }
+.provider-notice .pn-head { display: flex; align-items: center; gap: 13px; }
+.provider-notice .pn-head .material-symbols-rounded { font-size: 36px; line-height: 1; flex: none; }
+.provider-notice h2 {
+  font-family: 'BR Firma', 'Inter', system-ui, sans-serif; font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 1.9rem); letter-spacing: -0.01em; color: #fff;
+}
+.provider-notice p {
+  font-family: 'BR Firma', 'Inter', system-ui, sans-serif; font-weight: 400;
+  margin-top: 12px; font-size: 1.04rem; line-height: 1.5; max-width: 62rem; color: #fff;
+}
+.provider-notice .pn-actions { margin-top: 20px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.provider-notice .pn-btn {
+  display: inline-flex; align-items: center;
+  background: #fff; color: #9F0E11; border-radius: 4px; padding: 10px 19px;
+  font-family: 'BR Firma', 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 0.89rem;
+  transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+}
+.provider-notice .pn-btn:hover { transform: translateY(-1px); }
+.provider-notice .pn-link {
+  font-family: 'BR Firma', 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 0.89rem; color: #fff;
+  transition: opacity 0.25s var(--ease);
+}
+.provider-notice .pn-link:hover { opacity: 0.8; }
