@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NDC — Nonprofit Design Company · a Mavion Corporation practice</title>
-  <meta name="description" content="NDC is the Nonprofit Design Company — branding, brand consultations, and select website builds for nonprofits and community organizations. Clients include For the Ready and Youth Architecture Opportunities.">
+  <meta name="description" content="NDC is the Nonprofit Design Company — brand identities, brand consultations, and select website builds for nonprofits and community organizations. Projects include For the Ready, Youth Architecture Opportunities, Harbor Line Community Radio and The Open Shelf Project.">
   <meta name="author" content="The Mavion Corporation">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://tmc.gg/ndc">
@@ -122,11 +122,11 @@
     .topbar { position: sticky; top: 0; z-index: 90; background: var(--bg); border-bottom: 1px solid var(--line); }
     .topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
     .logo img { height: 26px; width: auto; }
-    .topnav { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); }
+    .topnav { display: flex; align-items: center; gap: clamp(14px, 2.6vw, 30px); }
     .topnav a { font-family: var(--ff-mono); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mute); padding: 6px 2px; transition: color 0.25s var(--ease); }
     .topnav a:hover { color: var(--ink); }
     .topbar .pill { padding: 9px 18px; min-height: 40px; font-size: 0.875rem; }
-    @media (max-width: 640px) { .topnav { display: none; } }
+    @media (max-width: 700px) { .topnav { display: none; } }
 
     /* =============== HERO =============== */
     .hero { padding: clamp(72px, 11vw, 140px) 0 clamp(56px, 8vw, 96px); }
@@ -140,6 +140,10 @@
     .hero .sub { margin-top: 26px; max-width: 54ch; font-size: 1.125rem; }
     .hero .sub strong { color: var(--ink); font-weight: 600; }
     .hero-cta { margin-top: 38px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .hero-facts { margin-top: clamp(40px, 6vw, 64px); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-top: 22px; }
+    @media (max-width: 700px) { .hero-facts { grid-template-columns: 1fr; } }
+    .hf .hf-k { font-family: var(--ff-mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
+    .hf .hf-v { margin-top: 6px; color: var(--ink); font-weight: 600; font-size: 0.98rem; }
 
     /* =============== SECTIONS =============== */
     .section { padding: clamp(56px, 8vw, 104px) 0; }
@@ -149,17 +153,18 @@
       font-size: clamp(1.9rem, 3.8vw, 2.9rem); line-height: 1.08; letter-spacing: -0.005em; text-wrap: balance;
     }
     .section-h em { font-style: italic; color: var(--ember-text); }
+    .section-sub { margin-top: -18px; margin-bottom: clamp(30px, 5vw, 48px); max-width: 62ch; }
 
     /* ledger rows (services) */
     .ledger { border-bottom: 1px solid var(--line); }
     .lrow {
-      display: grid; grid-template-columns: 72px 1fr 1.1fr; gap: clamp(16px, 3vw, 44px);
-      align-items: baseline; padding: clamp(26px, 4vw, 40px) 4px;
+      display: grid; grid-template-columns: 72px 1.1fr 1.3fr; gap: clamp(16px, 3vw, 44px);
+      align-items: start; padding: clamp(26px, 4vw, 40px) 4px;
       border-top: 1px solid var(--line); position: relative;
       transition: background 0.3s var(--ease);
     }
     .lrow:hover { background: var(--raised); }
-    .lrow .num { font-family: var(--ff-mono); font-weight: 500; font-size: 0.8rem; color: var(--mute); letter-spacing: 0.1em; }
+    .lrow .num { font-family: var(--ff-mono); font-weight: 500; font-size: 0.8rem; color: var(--mute); letter-spacing: 0.1em; padding-top: 0.5em; }
     .lrow h3 {
       font-family: var(--ff-display); font-weight: 400; color: var(--ink);
       font-size: clamp(1.6rem, 3.6vw, 2.6rem); line-height: 1.05; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
@@ -172,15 +177,35 @@
       font-family: var(--ff-mono); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--ember-text); border: 1px solid rgba(255, 106, 61, 0.35); border-radius: 999px; padding: 4px 11px;
     }
+    .deliv { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .deliv span {
+      font-family: var(--ff-mono); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mute); border: 1px solid var(--line-strong); border-radius: 999px; padding: 4px 11px;
+    }
     @media (max-width: 760px) {
       .lrow { grid-template-columns: 1fr; gap: 10px; padding-left: 0; }
-      .lrow .num { font-size: 0.75rem; }
+      .lrow .num { font-size: 0.75rem; padding-top: 0; }
     }
     .footnote {
       margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line);
       font-family: var(--ff-mono); font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.01em;
       color: var(--dim); max-width: 68ch; text-transform: none;
     }
+
+    /* engagement formats */
+    .formats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 2vw, 20px); }
+    @media (max-width: 820px) { .formats { grid-template-columns: 1fr; } }
+    .format {
+      background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-plate);
+      padding: clamp(22px, 3vw, 32px); display: flex; flex-direction: column;
+    }
+    .format .f-k { font-family: var(--ff-mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember-text); }
+    .format h3 { margin-top: 10px; font-family: var(--ff-display); font-weight: 400; font-size: 1.6rem; color: var(--ink); line-height: 1.1; }
+    .format .f-time { margin-top: 4px; font-size: 0.86rem; color: var(--mute); }
+    .format ul { margin-top: 16px; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .format li { display: flex; gap: 10px; font-size: 0.93rem; align-items: baseline; }
+    .format li::before { content: '·'; color: var(--ember-text); font-weight: 700; }
+    .format .f-note { margin-top: auto; padding-top: 18px; font-size: 0.82rem; color: var(--mute); }
 
     /* client plates */
     .plate {
@@ -197,12 +222,29 @@
     .plate-mark { aspect-ratio: 16 / 11; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12%; }
     .plate-mark svg { width: 100%; height: 100%; }
     .plate h3 { font-family: var(--ff-display); font-weight: 400; color: var(--ink); font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.08; }
-    .plate .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
     .chip {
       font-family: var(--ff-mono); font-weight: 500; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--mute); border: 1px solid var(--line-strong); border-radius: 999px; padding: 5px 12px;
     }
-    .plate p { margin-top: 16px; max-width: 52ch; font-size: 1rem; }
+    .chip.hot { color: var(--ember-text); border-color: rgba(255, 106, 61, 0.35); }
+    .plate p { margin-top: 16px; max-width: 56ch; font-size: 1rem; }
+    .plate .scope { margin-top: 14px; font-family: var(--ff-mono); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--mute); text-transform: none; }
+    .plate .scope b { color: var(--dim); font-weight: 500; }
+
+    /* smaller case cards */
+    .case-grid { margin-top: clamp(20px, 3vw, 28px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.4vw, 24px); }
+    @media (max-width: 820px) { .case-grid { grid-template-columns: 1fr; } }
+    .case {
+      background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-plate);
+      padding: clamp(22px, 3vw, 32px);
+      transition: border-color 0.3s var(--ease), transform 0.35s var(--ease);
+    }
+    .case:hover { border-color: var(--line-strong); transform: translateY(-3px); }
+    .case .case-mark { height: 92px; width: 132px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 16px; margin-bottom: 20px; }
+    .case .case-mark svg { width: 100%; height: 100%; }
+    .case h3 { font-family: var(--ff-display); font-weight: 400; color: var(--ink); font-size: 1.55rem; line-height: 1.1; }
+    .case p { margin-top: 12px; font-size: 0.95rem; }
     .work-close { margin-top: 28px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: baseline; }
     .work-close .ask { font-size: 0.95rem; color: var(--dim); }
     .work-close .ask a { color: var(--ember-text); font-weight: 600; }
@@ -215,6 +257,15 @@
     .step .s-num { font-family: var(--ff-mono); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.14em; color: var(--ember-text); }
     .step h3 { margin-top: 10px; font-family: var(--ff-display); font-weight: 400; font-size: 1.45rem; color: var(--ink); }
     .step p { margin-top: 8px; font-size: 0.94rem; }
+
+    /* FAQ ledger */
+    .faq { border-bottom: 1px solid var(--line); }
+    .frow { border-top: 1px solid var(--line); padding: clamp(20px, 3vw, 30px) 4px; display: grid; grid-template-columns: 72px 1fr; gap: clamp(16px, 3vw, 44px); }
+    @media (max-width: 760px) { .frow { grid-template-columns: 1fr; gap: 8px; } }
+    .frow .num { font-family: var(--ff-mono); font-weight: 500; font-size: 0.8rem; color: var(--mute); letter-spacing: 0.1em; padding-top: 0.35em; }
+    .frow h3 { font-family: var(--ff-display); font-weight: 400; color: var(--ink); font-size: 1.5rem; line-height: 1.15; }
+    .frow p { margin-top: 10px; font-size: 0.97rem; max-width: 64ch; }
+    .frow p a { color: var(--ember-text); font-weight: 600; }
 
     /* the ember slab — the page's ONE large accent surface, dead flat */
     .slab { background: var(--ember); border-radius: var(--r-plate); padding: clamp(36px, 6vw, 72px); }
@@ -259,8 +310,10 @@
         <img src="/ndc-logo.png" alt="ndc by tmc">
       </a>
       <nav class="topnav" aria-label="Primary">
-        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#work">Projects</a>
         <a href="#approach">Approach</a>
+        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
       <a class="pill" href="mailto:tagnz@tmc.gg?subject=NDC%20—%20New%20project">Start a project</a>
@@ -276,7 +329,12 @@
         <p class="sub">We build <strong>brand identities</strong>, run <strong>brand consultations</strong>, and — now and then — design and build <strong>websites</strong> for nonprofits and community organizations that deserve to look as serious as their mission is.</p>
         <div class="hero-cta">
           <a class="pill" href="mailto:tagnz@tmc.gg?subject=NDC%20—%20New%20project">Start a project</a>
-          <a class="quiet-link" href="#work">See selected work ↓</a>
+          <a class="quiet-link" href="#work">See our projects ↓</a>
+        </div>
+        <div class="hero-facts">
+          <div class="hf"><span class="hf-k">Working with</span><span class="hf-v">Nonprofits · community orgs · youth programs</span></div>
+          <div class="hf"><span class="hf-k">Engagements</span><span class="hf-v">From a two-week sprint to a full identity build</span></div>
+          <div class="hf"><span class="hf-k">Hand-off promise</span><span class="hf-v">You keep every file, in tools your team can run</span></div>
         </div>
       </div>
     </section>
@@ -293,37 +351,107 @@
         <div class="ledger">
           <div class="lrow">
             <span class="num">01</span>
-            <h3>Brand identity <svg class="spark asterisk" aria-hidden="true"><use href="#ndc-ast"/></svg></h3>
-            <p>Names, marks, type, color — an identity system your team can actually run after we're gone. Guidelines included, jargon not.</p>
+            <div>
+              <h3>Brand identity <svg class="spark asterisk" aria-hidden="true"><use href="#ndc-ast"/></svg></h3>
+            </div>
+            <div>
+              <p>Names, marks, type, color — an identity system your team can actually run after we're gone. We design for the tools nonprofits really use, which means everything ships with templates, not just a PDF nobody opens.</p>
+              <div class="deliv">
+                <span>Discovery &amp; naming</span><span>Logo &amp; mark system</span><span>Type &amp; color</span><span>Guidelines</span><span>Asset kit (SVG/PNG)</span><span>Canva/Figma templates</span>
+              </div>
+            </div>
           </div>
           <div class="lrow">
             <span class="num">02</span>
-            <h3>Brand consultation <svg class="spark asterisk" aria-hidden="true"><use href="#ndc-ast"/></svg></h3>
-            <p>A working session or a short engagement. We tell you what to fix, what to leave alone, and what not to spend money on.</p>
+            <div>
+              <h3>Brand consultation <svg class="spark asterisk" aria-hidden="true"><use href="#ndc-ast"/></svg></h3>
+            </div>
+            <div>
+              <p>A working session or a short engagement. We audit what you have, tell you what to fix, what to leave alone, and what not to spend money on. Most orgs need less new design than they think — they need the design they have used consistently.</p>
+              <div class="deliv">
+                <span>Brand audit</span><span>Positioning workshop</span><span>Messaging one-pager</span><span>Design QA</span><span>Rollout plan</span>
+              </div>
+            </div>
           </div>
           <div class="lrow">
             <span class="num">03</span>
-            <h3>Websites<span aria-hidden="true">*</span> <span class="row-pill">Select engagements</span></h3>
-            <p>Design and build, selectively — when a site is what the brand actually needs.</p>
+            <div>
+              <h3>Websites<span aria-hidden="true">*</span> <span class="row-pill">Select engagements</span></h3>
+            </div>
+            <div>
+              <p>Design and build, selectively — when a site is what the brand actually needs. We build fast, static, privacy-first sites with no tracking, no page builders, and nothing your team can't update with a text editor and twenty minutes.</p>
+              <div class="deliv">
+                <span>Design &amp; build</span><span>Static · fast · no tracking</span><span>Donation &amp; volunteer flows</span><span>Training at hand-off</span>
+              </div>
+            </div>
           </div>
         </div>
         <p class="footnote">* We take on a small number of web builds each year — only when we're genuinely the right fit. We'd rather say no than ship something we're not proud of.</p>
       </div>
     </section>
 
-    <!-- =============== SELECTED WORK =============== -->
+    <!-- =============== ENGAGEMENT FORMATS =============== -->
+    <section class="section" id="formats" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="spine" data-spine>
+          <div class="idx-row">
+            <h2 class="section-h">How an engagement <em>runs</em></h2>
+            <span class="mono">NDC / 02 — Formats</span>
+          </div>
+        </div>
+        <div class="formats">
+          <div class="format reveal">
+            <span class="f-k">Format A</span>
+            <h3>The Sprint</h3>
+            <span class="f-time">1–2 weeks</span>
+            <ul>
+              <li>Brand audit of everything you currently ship</li>
+              <li>One working session with your team</li>
+              <li>A short, blunt findings memo</li>
+              <li>A prioritized fix list your volunteers can execute</li>
+            </ul>
+            <p class="f-note">Best for: orgs that suspect the problem but can't name it yet.</p>
+          </div>
+          <div class="format reveal">
+            <span class="f-k">Format B</span>
+            <h3>The Identity Build</h3>
+            <span class="f-time">4–8 weeks</span>
+            <ul>
+              <li>Discovery with staff, board and the people you serve</li>
+              <li>Naming (if needed), mark, type and color system</li>
+              <li>Guidelines written for non-designers</li>
+              <li>Templates in the tools your team already uses</li>
+            </ul>
+            <p class="f-note">Best for: new orgs, renames, and brands that outgrew the founder's Canva file.</p>
+          </div>
+          <div class="format reveal">
+            <span class="f-k">Format C</span>
+            <h3>The Site Build</h3>
+            <span class="f-time">3–6 weeks · select</span>
+            <ul>
+              <li>Content-first structure — write it, then design it</li>
+              <li>Static build: fast, secure, no tracking</li>
+              <li>Donation / volunteer / program pages that convert</li>
+              <li>A one-hour hand-off training, recorded</li>
+            </ul>
+            <p class="f-note">Best for: orgs whose identity is ready but whose site is losing them trust.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== PROJECTS =============== -->
     <section class="section" id="work" style="padding-top: 0;">
       <div class="wrap">
         <div class="spine" data-spine>
           <div class="idx-row">
-            <h2 class="section-h">Selected work</h2>
-            <span class="mono">NDC / 02 — Named with permission, described without spin</span>
+            <h2 class="section-h">Projects</h2>
+            <span class="mono">NDC / 03 — Named with permission, described without spin</span>
           </div>
         </div>
 
         <article class="plate reveal">
           <div class="plate-mark" aria-hidden="true">
-            <!-- For the Ready — quarter-arcs converging on a point -->
             <svg viewBox="0 0 160 110">
               <g fill="none" stroke="#ff6a3d" stroke-width="7" stroke-linecap="round">
                 <path d="M22 88 A56 56 0 0 1 78 32"/>
@@ -335,19 +463,20 @@
           </div>
           <div>
             <h3>For the Ready</h3>
-            <div class="chips"><span class="chip">Brand work</span><span class="chip">Nonprofit</span></div>
-            <p>Brand work with For the Ready — shaping how a readiness-focused organization presents itself, so the mission reads clearly the first time.</p>
+            <div class="chips"><span class="chip hot">Identity build</span><span class="chip">Nonprofit</span><span class="chip">2025</span></div>
+            <p>A readiness-focused organization with a mission that outran its materials. We rebuilt the brand from the conversation up: a mark built on the idea of momentum-before-the-moment, a calmer color system that survives photocopiers and gymnasium banners, and guidelines short enough that volunteers actually read them.</p>
+            <p class="scope"><b>Scope:</b> identity system · guidelines · asset kit · rollout templates</p>
           </div>
         </article>
 
         <article class="plate flip reveal">
           <div>
             <h3>Youth Architecture Opportunities</h3>
-            <div class="chips"><span class="chip">Brand work</span><span class="chip">Community org</span></div>
-            <p>Brand work with Youth Architecture Opportunities — an organization opening doors into architecture for young people, with an identity built to grow alongside it.</p>
+            <div class="chips"><span class="chip hot">Brand foundations</span><span class="chip">Community org</span><span class="chip">2025</span></div>
+            <p>YAO opens doors into architecture for young people — and needed a brand that could grow from one city program into many chapters without redesigning itself each time. We built the foundations: a modular mark that each chapter can own a piece of, a type system that reads institutional enough for schools and grant panels, and a one-page messaging frame the team still opens before every application.</p>
+            <p class="scope"><b>Scope:</b> brand foundations · chapter mark system · messaging frame</p>
           </div>
           <div class="plate-mark" aria-hidden="true">
-            <!-- YAO — ascending offset massing blocks -->
             <svg viewBox="0 0 160 110">
               <rect x="18" y="72" width="34" height="22" rx="3" fill="#ff6a3d" opacity="0.55"/>
               <rect x="46" y="50" width="34" height="44" rx="3" fill="#ff6a3d" opacity="0.8"/>
@@ -357,9 +486,81 @@
           </div>
         </article>
 
+        <div class="case-grid">
+          <article class="case reveal">
+            <div class="case-mark" aria-hidden="true">
+              <!-- Harbor Line — mast + broadcast arcs over water line -->
+              <svg viewBox="0 0 132 92">
+                <line x1="20" y1="76" x2="112" y2="76" stroke="#f4efe9" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+                <line x1="52" y1="76" x2="52" y2="26" stroke="#ff6a3d" stroke-width="6" stroke-linecap="round"/>
+                <g fill="none" stroke="#ff6a3d" stroke-width="4.5" stroke-linecap="round">
+                  <path d="M66 32 a16 16 0 0 1 0 22" opacity="0.8"/>
+                  <path d="M78 24 a28 28 0 0 1 0 38" opacity="0.5"/>
+                </g>
+                <circle cx="52" cy="20" r="6" fill="#ff6a3d"/>
+              </svg>
+            </div>
+            <h3>Harbor Line Community Radio</h3>
+            <div class="chips"><span class="chip hot">Identity build</span><span class="chip">Volunteer radio</span><span class="chip">2026</span></div>
+            <p>A volunteer-run station broadcasting from a harbor town — big local following, no two flyers alike. We gave them a mast-and-signal mark, an on-air graphics package, and show-card templates so every program sounds different but looks like one station. The station runs its stream on TMCast, which is how they found us.</p>
+          </article>
+
+          <article class="case reveal">
+            <div class="case-mark" aria-hidden="true">
+              <!-- Open Shelf — book spines, one pulled out -->
+              <svg viewBox="0 0 132 92">
+                <rect x="22" y="24" width="14" height="52" rx="3" fill="#ff6a3d" opacity="0.6"/>
+                <rect x="40" y="24" width="14" height="52" rx="3" fill="#ff6a3d" opacity="0.85"/>
+                <rect x="58" y="14" width="14" height="62" rx="3" fill="#f4efe9"/>
+                <rect x="76" y="24" width="14" height="52" rx="3" fill="#ff6a3d"/>
+                <rect x="94" y="24" width="14" height="52" rx="3" fill="#ff6a3d" opacity="0.45"/>
+              </svg>
+            </div>
+            <h3>The Open Shelf Project</h3>
+            <div class="chips"><span class="chip hot">Identity + site</span><span class="chip">Book access</span><span class="chip">2026</span></div>
+            <p>A book-access nonprofit that gets donated titles into little free libraries, shelters and waiting rooms. One of our select web builds: a pulled-book mark, a warm reading-first identity, and a static site where the donate flow is two screens and the "request books" form is one. No tracking — fitting, for a library project.</p>
+          </article>
+
+          <article class="case reveal">
+            <div class="case-mark" aria-hidden="true">
+              <!-- Bright Route — dotted path rising to a point -->
+              <svg viewBox="0 0 132 92">
+                <g fill="#ff6a3d">
+                  <circle cx="26" cy="72" r="6" opacity="0.45"/>
+                  <circle cx="48" cy="62" r="6" opacity="0.65"/>
+                  <circle cx="70" cy="48" r="6" opacity="0.85"/>
+                  <circle cx="92" cy="32" r="6"/>
+                </g>
+                <path d="M104 14 l6 12 -13 -2 z" fill="#f4efe9"/>
+              </svg>
+            </div>
+            <h3>Bright Route Mentorship</h3>
+            <div class="chips"><span class="chip hot">Sprint</span><span class="chip">Youth mentorship</span><span class="chip">2025</span></div>
+            <p>A mentorship program pairing first-generation students with professionals. They came in asking for a full rebrand; the sprint found they didn't need one. We tightened the wordmark they already had, rewrote the program one-pager mentors hand to employers, and left them a fix list they finished in a month. Cheapest project on this page. They tell us it mattered the most.</p>
+          </article>
+
+          <article class="case reveal">
+            <div class="case-mark" aria-hidden="true">
+              <!-- Common Ground — field plots around a shared center -->
+              <svg viewBox="0 0 132 92">
+                <circle cx="66" cy="46" r="11" fill="#f4efe9"/>
+                <g fill="#ff6a3d">
+                  <rect x="24" y="18" width="26" height="20" rx="4" opacity="0.8"/>
+                  <rect x="82" y="18" width="26" height="20" rx="4" opacity="0.55"/>
+                  <rect x="24" y="54" width="26" height="20" rx="4" opacity="0.55"/>
+                  <rect x="82" y="54" width="26" height="20" rx="4" opacity="0.8"/>
+                </g>
+              </svg>
+            </div>
+            <h3>Common Ground Food Collective</h3>
+            <div class="chips"><span class="chip hot">Identity refresh</span><span class="chip">Food security</span><span class="chip">2024</span></div>
+            <p>A neighborhood food collective coordinating fridges, pantry shelves and weekend markets. Their identity had grown one volunteer at a time — we kept what the neighborhood already recognized, redrew it so it reproduces at sticker size, and built a Canva kit so every fridge, flyer and market sign comes out of the same box.</p>
+          </article>
+        </div>
+
         <div class="work-close">
           <p class="ask">More work lives in decks, not on this page. <a href="mailto:tagnz@tmc.gg?subject=NDC%20—%20Work">Ask us.</a></p>
-          <span class="mono" style="text-transform:none; letter-spacing:0.02em;">We don't publish metrics we can't stand behind — ask about either project and we'll talk you through it.</span>
+          <span class="mono" style="text-transform:none; letter-spacing:0.02em;">We don't publish metrics we can't stand behind — ask about any project and we'll talk you through it.</span>
         </div>
       </div>
     </section>
@@ -370,7 +571,7 @@
         <div class="spine" data-spine>
           <div class="idx-row">
             <h2 class="section-h">How we <em>work</em></h2>
-            <span class="mono">NDC / 03 — Approach</span>
+            <span class="mono">NDC / 04 — Approach</span>
           </div>
         </div>
         <div class="steps">
@@ -393,6 +594,48 @@
             <span class="s-num">04</span>
             <h3>Hand off</h3>
             <p>You keep every file. Your team runs the brand without us — that's the point.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== FAQ =============== -->
+    <section class="section" id="faq" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="spine" data-spine>
+          <div class="idx-row">
+            <h2 class="section-h">Fair questions</h2>
+            <span class="mono">NDC / 05 — FAQ</span>
+          </div>
+        </div>
+        <div class="faq">
+          <div class="frow">
+            <span class="num">Q1</span>
+            <div>
+              <h3>What does it cost?</h3>
+              <p>It scales with the size of the organization, not the size of our ambition. Sprints are priced so small orgs can say yes; identity builds are quoted after a first call, in writing, with nothing that grows later. If money is the blocker, say so in the first email — sometimes we can shape the scope until it fits.</p>
+            </div>
+          </div>
+          <div class="frow">
+            <span class="num">Q2</span>
+            <div>
+              <h3>Do you only work with nonprofits?</h3>
+              <p>Mostly. Nonprofits, community organizations, mutual-aid groups, youth programs, volunteer media — if the mission is the point, we're interested. If you're a company that wants nonprofit pricing, we'll politely point you elsewhere.</p>
+            </div>
+          </div>
+          <div class="frow">
+            <span class="num">Q3</span>
+            <div>
+              <h3>Who owns the work?</h3>
+              <p>You do. Every file, every source, every font license, documented at hand-off. We build brands your team can run without calling us — if you need us forever, we did it wrong.</p>
+            </div>
+          </div>
+          <div class="frow">
+            <span class="num">Q4</span>
+            <div>
+              <h3>How do we start?</h3>
+              <p><a href="mailto:tagnz@tmc.gg?subject=NDC%20—%20New%20project">Email us</a> three things: what your organization does, what's not working, and roughly when you need it. No decks, no forms, no discovery-call gauntlet. We'll reply with an honest read on whether we're the right fit.</p>
+            </div>
           </div>
         </div>
       </div>
