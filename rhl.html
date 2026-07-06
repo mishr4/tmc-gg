@@ -250,7 +250,7 @@
   var CHANNELS = [
     { name: 'CA now',  thumb: IMG + 'tjdk8Ikb0FN9J5NH4HqVfst4.png?scale-down-to=1024',    chip: IMG + 'u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512', chipLeft: 7,  youtube: '', video: '', watch: '' },
     { name: 'LUCiD',   thumb: IMG + 'XHQSij3kFdEl8iVWDzJUXiQwyE.jpg?scale-down-to=1024',   chip: IMG + 'yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512', chipLeft: 18, youtube: '', video: '', watch: '' },
-    { name: 'RHL now', thumb: IMG + 'kiTq65WFcZ1bwBC6OZoXSrQC90.png?scale-down-to=1024',   chip: IMG + 'ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512', chipLeft: 0,  youtube: '', video: '', watch: '' },
+    { name: 'RHL now', thumb: IMG + 'kiTq65WFcZ1bwBC6OZoXSrQC90.png?scale-down-to=1024',   chip: IMG + 'ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512', chipLeft: 0,  tv: '/rhl-tv', youtube: '', video: '', watch: '' },
     { name: 'rdy',     thumb: IMG + 'zt4gfbi0P4JUgXJrKTmRUBUxE.png?scale-down-to=1024',    chip: IMG + 'K0sAW1J78mUAR1ujBtcCJH76k.png?scale-down-to=512',   chipLeft: 3,  youtube: '', video: '', watch: '' }
   ];
 
@@ -292,7 +292,8 @@
     chip.style.left = ch.chipLeft + 'px';
     card.appendChild(thumb); card.appendChild(chip);
     card.addEventListener('click', function () {
-      if (ch.video) openPlayer(ch.video);
+      if (ch.tv) openPlayerUrl(ch.tv);
+      else if (ch.video) openPlayer(ch.video);
       else if (ch.watch) window.open(ch.watch, '_blank', 'noopener');
     });
     strip.appendChild(card);
@@ -374,7 +375,10 @@
   var player = document.getElementById('player'),
       pframe = document.getElementById('pframe');
   function openPlayer(videoId) {
-    pframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1';
+    openPlayerUrl('https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1');
+  }
+  function openPlayerUrl(url) {
+    pframe.src = url;
     player.classList.add('open');
   }
   function closePlayer() {

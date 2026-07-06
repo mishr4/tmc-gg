@@ -1,0 +1,21 @@
+{
+  "name": "RHL now",
+  "watermark": "https://framerusercontent.com/images/6byy49KaYBaYnXuVHu1F8fvk1z4.png?width=825&height=168",
+  "structure": {
+    "commercialsPerBreak": 2,
+    "identAfterBreak": true
+  },
+  "programs": [
+    { "title": "Big Buck Bunny", "src": "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4", "duration": 596.5 },
+    { "title": "Elephants Dream", "src": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4", "duration": 653.8 },
+    { "title": "Tears of Steel", "src": "https://archive.org/download/Tears-of-Steel/tears_of_steel_720p.mp4", "duration": 734.2 },
+    { "title": "Sintel", "src": "https://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4", "duration": 888.0 }
+  ],
+  "commercials": [
+    { "title": "Commercial break", "src": "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4", "duration": 10.0 },
+    { "title": "Commercial break", "src": "https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_1MB.mp4", "duration": 10.0 }
+  ],
+  "idents": [
+    { "title": "RHL now ident", "src": "https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_1MB.mp4", "duration": 10.0 }
+  ]
+}

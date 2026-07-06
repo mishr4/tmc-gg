@@ -89,6 +89,18 @@ Single family: **Instrument Sans** (400 / 500 / 600). Sizes in use:
   (no API key) → `{ videos: [{id, title, published, thumbnail, views}] }`, cached 5 min.
   When a channel has a `youtube` id, its card auto-shows the latest video and opens it in the player.
 - Stories are a JS `STORIES` array (currently demo/fake content) feeding both the grid and ticker.
+- **RHL now linear channel** (`/rhl-tv` + `rhl-channel.json`): a serverless "ErsatzTV-style"
+  broadcast. The manifest has three folders — `programs`, `commercials`, `idents` — each item
+  `{ title, src, duration }` (direct MP4/HLS URLs from any file host; durations in seconds).
+  Every viewer's player builds the same day-seeded shuffled rundown
+  (program → N commercials → ident → next program) and positions itself by wall clock (UTC),
+  so everyone watches the same thing at the same time: no seeking, drift auto-corrected,
+  broken files skipped ("Signal interrupted — retuning…"). Watermark bug top-right, Live chip
+  top-left, hover info bar (Now/Next), TAP FOR SOUND (streams start muted), fullscreen.
+  The RHL now card on /rhl opens it in the player overlay (`tv: '/rhl-tv'` in CHANNELS).
+  To go real: upload files to a host, replace the placeholder URLs/durations in
+  `rhl-channel.json`, done. CSP note: `media-src 'self' https: blob:` in vercel.json enables
+  external video.
 
 ## Reusable prompt
 
