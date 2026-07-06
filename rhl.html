@@ -24,15 +24,15 @@
   img { display: block; }
   a { color: inherit; text-decoration: none; }
 
-  /* fixed 1200x1273 canvas, exactly like the original; scaled to fit narrower screens */
+  /* fixed 1200px canvas, exactly like the original; scaled to fit narrower screens */
   #stage { position: relative; margin: 0 auto; }
   .canvas {
-    position: relative; width: 1200px; height: 1273px; background: #fff;
+    position: relative; width: 1200px; height: 1945px; background: #fff;
     transform-origin: top left; overflow: hidden;
   }
 
   /* ---------- header (116px) ---------- */
-  .header { position: absolute; top: 0; left: 0; right: 0; height: 116px; animation: dropIn .55s cubic-bezier(.22,1.2,.36,1) both; }
+  .header { position: absolute; top: 0; left: 0; right: 0; height: 116px; z-index: 2; animation: dropIn .55s cubic-bezier(.22,1.2,.36,1) both; }
   @keyframes dropIn { from { opacity: .001; transform: translateY(-150px); } to { opacity: 1; transform: translateY(0); } }
   .bar-top { position: absolute; top: 0; left: 0; right: 0; height: 69px; background: #12161f; }
   .logo { position: absolute; top: 50%; left: 41px; transform: translateY(-50%); }
@@ -94,15 +94,11 @@
   }
   .scroller::-webkit-scrollbar { display: none; }
   .scroller.dragging { cursor: grabbing; }
-  .strip { width: 1444px; height: 204px; display: flex; align-items: center; gap: 10px; perspective: 1200px; }
-  .card { position: relative; flex: 1 0 0; height: 100%; border-radius: 8px; overflow: hidden; animation: cardFlip .5s cubic-bezier(.22,1.1,.36,1) both; }
+  .strip { height: 204px; display: flex; align-items: center; gap: 10px; perspective: 1200px; }
+  .card { position: relative; flex: none; width: 353.5px; height: 100%; border-radius: 8px; overflow: hidden; background: #0d1118; animation: cardFlip .5s cubic-bezier(.22,1.1,.36,1) both; }
   @keyframes cardFlip { from { transform: rotateX(-180deg); } to { transform: rotateX(0); } }
   .card .thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; }
   .card .chip { position: absolute; bottom: 15px; width: 56px; height: 39px; object-fit: contain; pointer-events: none; }
-  .card:nth-child(1) .chip { left: 7px; }
-  .card:nth-child(2) .chip { left: 18px; }
-  .card:nth-child(3) .chip { left: 0; }
-  .card:nth-child(4) .chip { left: 3px; }
 
   .qr { position: absolute; bottom: 22px; left: 23px; width: 490px; height: 177px; background: #5d39fa; overflow: hidden; }
   .qr-tile { position: absolute; top: 0; bottom: 0; left: 0; width: 177px; background: #fff; }
@@ -113,8 +109,45 @@
   .qr-t2 { top: 47%; left: 303px; transform: translateY(-50%); }
   .qr-t3 { bottom: 46px; left: 196px; }
 
+  /* ---------- stories section (appended below the original canvas) ---------- */
+  .stories { position: absolute; top: 1273px; left: 0; right: 0; height: 672px; background: #12161f; overflow: hidden; }
+  .ticker { position: absolute; top: 0; left: 0; right: 0; height: 40px; background: #00bbfe; display: flex; align-items: stretch; overflow: hidden; }
+  .ttag {
+    flex: none; display: flex; align-items: center; padding: 0 16px;
+    background: #fe0000; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .08em;
+  }
+  .tviewport { flex: 1; overflow: hidden; display: flex; align-items: center; }
+  .ttrack { display: inline-flex; gap: 56px; white-space: nowrap; padding-left: 24px; animation: tickerMove 36s linear infinite; }
+  .ticker:hover .ttrack { animation-play-state: paused; }
+  @keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ttrack span { font-size: 13px; font-weight: 500; color: #12161f; }
+  .stories > .label { position: absolute; top: 84px; left: 56px; }
+  .storygrid {
+    position: absolute; top: 126px; left: 52px; right: 52px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px 22px;
+  }
+  .story { cursor: pointer; }
+  .sthumb { position: relative; height: 160px; border-radius: 8px; overflow: hidden; }
+  .sthumb .chip { position: absolute; bottom: 12px; left: 12px; width: 56px; height: 39px; object-fit: contain; }
+  .story h3 { margin-top: 13px; font-size: 15px; font-weight: 500; line-height: 1.35; color: #fff; transition: color .2s; }
+  .story:hover h3 { color: #00bbfe; }
+  .smeta { margin-top: 8px; display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.55); }
+  .smeta .sdot { width: 6px; height: 6px; border-radius: 269px; }
+
+  /* ---------- player overlay ---------- */
+  #player { position: fixed; inset: 0; z-index: 90; background: rgba(13,17,24,.92); display: none; align-items: center; justify-content: center; }
+  #player.open { display: flex; }
+  .pbox { position: relative; width: min(1020px, 86vw); aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
+  .pbox iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .pclose {
+    position: absolute; top: -42px; right: 0; background: none; border: 0; cursor: pointer;
+    color: #fff; font-size: 20px; font-family: inherit; line-height: 1; padding: 8px;
+  }
+  .pwrap { position: relative; }
+
   @media (prefers-reduced-motion: reduce) {
     .header, .logo img, .card { animation: none; }
+    .ttrack { animation: none; }
   }
 </style>
 </head>
@@ -137,7 +170,7 @@
       <div class="hairline"></div>
       <div class="bar-sub">
         <div class="live"><span class="dot"></span><span>Live</span></div>
-        <a class="nav-link nav-read" href="/newsroom">Read</a>
+        <a class="nav-link nav-read" href="#stories">Read</a>
         <a class="nav-link nav-listen" href="/radio">Listen</a>
         <a class="nav-link nav-watch" href="#live">Watch</a>
         <div class="vsep"></div>
@@ -157,34 +190,17 @@
       <div class="programs">
         <p class="label">Programs (4)</p>
         <div class="row" data-drag>
-          <span class="circle c1"><img src="https://framerusercontent.com/images/kS6O5ObfGEDRPcze5SEY7i4A6Ho.png?scale-down-to=512" alt=""></span>
-          <span class="circle c2"><img src="https://framerusercontent.com/images/u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512" alt=""></span>
-          <span class="circle c3"><img src="https://framerusercontent.com/images/yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512" alt=""></span>
-          <span class="circle c4"><img src="https://framerusercontent.com/images/gBhT53P6uCu46zzgSlLlZG15cz4.png" alt=""></span>
+          <span class="circle c1"><img src="https://framerusercontent.com/images/kS6O5ObfGEDRPcze5SEY7i4A6Ho.png?scale-down-to=512" alt="rhl now"></span>
+          <span class="circle c2"><img src="https://framerusercontent.com/images/u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512" alt="CA now"></span>
+          <span class="circle c3"><img src="https://framerusercontent.com/images/yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512" alt="LUCiD"></span>
+          <span class="circle c4"><img src="https://framerusercontent.com/images/gBhT53P6uCu46zzgSlLlZG15cz4.png" alt="2C"></span>
         </div>
       </div>
 
       <div class="livewrap" id="live">
         <p class="label">Live Now</p>
         <div class="scroller" data-drag>
-          <div class="strip">
-            <div class="card">
-              <img class="thumb" src="https://framerusercontent.com/images/tjdk8Ikb0FN9J5NH4HqVfst4.png?scale-down-to=1024" alt="">
-              <img class="chip" src="https://framerusercontent.com/images/u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512" alt="">
-            </div>
-            <div class="card">
-              <img class="thumb" src="https://framerusercontent.com/images/XHQSij3kFdEl8iVWDzJUXiQwyE.jpg?scale-down-to=1024" alt="">
-              <img class="chip" src="https://framerusercontent.com/images/yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512" alt="">
-            </div>
-            <div class="card">
-              <img class="thumb" src="https://framerusercontent.com/images/kiTq65WFcZ1bwBC6OZoXSrQC90.png?scale-down-to=1024" alt="">
-              <img class="chip" src="https://framerusercontent.com/images/ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512" alt="">
-            </div>
-            <div class="card">
-              <img class="thumb" src="https://framerusercontent.com/images/zt4gfbi0P4JUgXJrKTmRUBUxE.png?scale-down-to=1024" alt="">
-              <img class="chip" src="https://framerusercontent.com/images/K0sAW1J78mUAR1ujBtcCJH76k.png?scale-down-to=512" alt="">
-            </div>
-          </div>
+          <div class="strip" id="strip"></div>
         </div>
       </div>
 
@@ -199,26 +215,136 @@
       </div>
     </div>
 
+    <div class="stories" id="stories">
+      <div class="ticker" aria-label="Breaking news ticker">
+        <span class="ttag">BREAKING</span>
+        <div class="tviewport"><div class="ttrack" id="ttrack"></div></div>
+      </div>
+      <p class="label">Top Stories (6)</p>
+      <div class="storygrid" id="storygrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="player" role="dialog" aria-modal="true" aria-label="Video player">
+  <div class="pwrap">
+    <button class="pclose" id="pclose" aria-label="Close player">✕</button>
+    <div class="pbox"><iframe id="pframe" title="RHL Now 24 player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
   </div>
 </div>
 
 <script>
 (function () {
+  var IMG = 'https://framerusercontent.com/images/';
+
+  /* ============================================================
+     CHANNELS — add a channel by adding one object here.
+     thumb/chip: image URLs shown on the card.
+     youtube:   a YouTube channel id ("UC…"). When set, the card
+                auto-loads the channel's latest video via /api/rhl-yt
+                (thumbnail + title) and clicking it opens the player.
+     video:     a fixed YouTube video/stream id — used if youtube is empty.
+     watch:     fallback URL to open in a new tab if neither is set.
+     ============================================================ */
+  var CHANNELS = [
+    { name: 'CA now',  thumb: IMG + 'tjdk8Ikb0FN9J5NH4HqVfst4.png?scale-down-to=1024',    chip: IMG + 'u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512', chipLeft: 7,  youtube: '', video: '', watch: '' },
+    { name: 'LUCiD',   thumb: IMG + 'XHQSij3kFdEl8iVWDzJUXiQwyE.jpg?scale-down-to=1024',   chip: IMG + 'yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512', chipLeft: 18, youtube: '', video: '', watch: '' },
+    { name: 'rhl now', thumb: IMG + 'kiTq65WFcZ1bwBC6OZoXSrQC90.png?scale-down-to=1024',   chip: IMG + 'ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512', chipLeft: 0,  youtube: '', video: '', watch: '' },
+    { name: 'rdy',     thumb: IMG + 'zt4gfbi0P4JUgXJrKTmRUBUxE.png?scale-down-to=1024',    chip: IMG + 'K0sAW1J78mUAR1ujBtcCJH76k.png?scale-down-to=512',   chipLeft: 3,  youtube: '', video: '', watch: '' }
+  ];
+
+  /* Demo stories — replace with real coverage when ready. */
+  var STORIES = [
+    { cat: 'rhl now', color: '#5c38fa', bg: '#5c38fa', chip: IMG + 'kS6O5ObfGEDRPcze5SEY7i4A6Ho.png?scale-down-to=512', time: '24m ago', title: 'RHL expands 24-hour coverage to three new regions' },
+    { cat: 'CA now',  color: '#00bbfe', bg: '#00bbfe', chip: IMG + 'u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512', time: '1h ago',  title: 'State budget talks head into a final week of negotiations' },
+    { cat: 'LUCiD',   color: '#9aa3b2', bg: '#2b2b2b', chip: IMG + 'yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512', time: '2h ago',  title: 'LUCiD’s new series follows the coastline at first light' },
+    { cat: '2C',      color: '#a80000', bg: '#a80000', chip: IMG + 'gBhT53P6uCu46zzgSlLlZG15cz4.png',                    time: '4h ago',  title: '2C debuts a late-night desk with rotating community hosts' },
+    { cat: 'Network', color: '#ffffff', bg: '#5d39fa', chip: IMG + 'ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512', time: '6h ago',  title: 'Inside the control room: how RHL keeps a live hour on air' },
+    { cat: 'Network', color: '#ffffff', bg: '#0d1118', chip: IMG + 'x5hF37T5SEMVtOfoZLgpxCPxew.png?width=600&height=230', time: '8h ago', title: 'Viewer mailbag: your questions shape the weekend rundown' }
+  ];
+
   var canvas = document.getElementById('canvas'),
       stage = document.getElementById('stage'),
       scale = 1;
 
-  /* scale the 1200px canvas down on narrower screens — layout never reflows */
+  /* ---------- scale the canvas to fit narrower screens ---------- */
   function fit() {
     scale = Math.min(1, document.documentElement.clientWidth / 1200);
     canvas.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
-    stage.style.width = Math.round(1200 * Math.min(scale, 1)) + 'px';
-    stage.style.height = Math.round(1273 * scale) + 'px';
+    stage.style.width = Math.round(1200 * scale) + 'px';
+    stage.style.height = Math.round(canvas.offsetHeight * scale) + 'px';
   }
   window.addEventListener('resize', fit);
+
+  /* ---------- live strip from config ---------- */
+  var strip = document.getElementById('strip');
+  strip.style.width = (CHANNELS.length * 353.5 + (CHANNELS.length - 1) * 10) + 'px';
+  CHANNELS.forEach(function (ch) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', 'Watch ' + ch.name);
+    var thumb = document.createElement('img');
+    thumb.className = 'thumb'; thumb.alt = ''; thumb.src = ch.thumb;
+    var chip = document.createElement('img');
+    chip.className = 'chip'; chip.alt = ch.name; chip.src = ch.chip;
+    chip.style.left = ch.chipLeft + 'px';
+    card.appendChild(thumb); card.appendChild(chip);
+    card.addEventListener('click', function () {
+      if (ch.video) openPlayer(ch.video);
+      else if (ch.watch) window.open(ch.watch, '_blank', 'noopener');
+    });
+    strip.appendChild(card);
+    ch._card = card; ch._thumb = thumb;
+  });
+
+  /* latest video per channel via the site's YouTube feed proxy */
+  CHANNELS.forEach(function (ch) {
+    if (!ch.youtube) return;
+    fetch('/api/rhl-yt?channel=' + encodeURIComponent(ch.youtube))
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data || !data.videos || !data.videos.length) return;
+        var v = data.videos[0];
+        ch.video = v.id;
+        if (v.thumbnail) ch._thumb.src = v.thumbnail;
+        ch._card.title = v.title;
+      })
+      .catch(function () {});
+  });
+
+  /* ---------- stories + ticker ---------- */
+  var grid = document.getElementById('storygrid');
+  STORIES.forEach(function (s) {
+    var el = document.createElement('article');
+    el.className = 'story';
+    el.innerHTML =
+      '<div class="sthumb" style="background:' + s.bg + '"><img class="chip" alt=""></div>' +
+      '<h3></h3>' +
+      '<div class="smeta"><span class="sdot" style="background:' + s.color + '"></span><span class="scat"></span><span>·</span><span class="stime"></span></div>';
+    el.querySelector('.chip').src = s.chip;
+    el.querySelector('h3').textContent = s.title;
+    el.querySelector('.scat').textContent = s.cat;
+    el.querySelector('.stime').textContent = s.time;
+    grid.appendChild(el);
+  });
+
+  var ttrack = document.getElementById('ttrack');
+  function tickerHTML() {
+    return STORIES.map(function (s) { return '<span></span>'; }).join('');
+  }
+  /* two copies of the headline run for a seamless loop */
+  for (var loop = 0; loop < 2; loop++) {
+    STORIES.forEach(function (s) {
+      var sp = document.createElement('span');
+      sp.textContent = s.title;
+      ttrack.appendChild(sp);
+    });
+  }
   fit();
 
-  /* drag to browse the strips */
+  /* ---------- drag to browse the strips ---------- */
   document.querySelectorAll('[data-drag]').forEach(function (el) {
     var down = false, moved = false, startX = 0, startLeft = 0;
     el.addEventListener('pointerdown', function (e) {
@@ -237,13 +363,27 @@
       el.addEventListener(t, function () { down = false; el.classList.remove('dragging'); });
     });
     el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
-    /* wheel also scrolls the strip horizontally */
     el.addEventListener('wheel', function (e) {
       if (el.scrollWidth > el.clientWidth && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         el.scrollLeft += e.deltaY; e.preventDefault();
       }
     }, { passive: false });
   });
+
+  /* ---------- player overlay ---------- */
+  var player = document.getElementById('player'),
+      pframe = document.getElementById('pframe');
+  function openPlayer(videoId) {
+    pframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1';
+    player.classList.add('open');
+  }
+  function closePlayer() {
+    player.classList.remove('open');
+    pframe.src = '';
+  }
+  document.getElementById('pclose').addEventListener('click', closePlayer);
+  player.addEventListener('click', function (e) { if (e.target === player) closePlayer(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePlayer(); });
 })();
 </script>
 </body>
