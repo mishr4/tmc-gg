@@ -3,35 +3,263 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RDY</title>
+<title>RDY OS</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
-  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
-  /* Fixed 1200x607 viewport for the embedded site, scaled to fit the window.
-     The inner page always lays out at exactly 1200x607 regardless of screen size. */
-  iframe {
-    position: fixed; top: 0; left: 0; border: 0;
-    width: 1200px; height: 607px;
-    transform-origin: top left;
-  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden;
+    font-family: Tahoma, "MS Sans Serif", Geneva, sans-serif; font-size: 11px;
+    -webkit-font-smoothing: none; }
+  body { background: #008080; }
+
+  /* ---------- desktop ---------- */
+  #desktop { position: fixed; inset: 0 0 30px 0; overflow: hidden; }
+  .icon { position: absolute; width: 76px; text-align: center; color: #fff; cursor: pointer; user-select: none; }
+  .icon .pic { font-size: 30px; line-height: 1; text-shadow: 1px 1px 0 rgba(0,0,0,.4); }
+  .icon .lbl { margin-top: 4px; padding: 1px 2px; text-shadow: 1px 1px 0 #000; }
+  .icon:active .lbl, .icon.sel .lbl { background: #000080; outline: 1px dotted #ffff00; }
+  #icoReady { left: 18px; top: 16px; }
+  #icoTmc   { left: 18px; top: 96px; }
+
+  /* ---------- window ---------- */
+  .window { position: absolute; background: #c0c0c0; padding: 3px;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff;
+    display: flex; flex-direction: column; }
+  .titlebar { height: 20px; flex: none; display: flex; align-items: center; gap: 4px;
+    background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font-weight: bold;
+    padding: 0 3px; cursor: default; user-select: none; touch-action: none; }
+  .titlebar .ticon { font-size: 12px; }
+  .titlebar .ttext { flex: 1; overflow: hidden; white-space: nowrap; }
+  .tbtn { width: 16px; height: 14px; flex: none; background: #c0c0c0; border: none; padding: 0;
+    font-family: inherit; font-size: 9px; font-weight: bold; line-height: 12px; cursor: pointer;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; }
+  .tbtn:active { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff; }
+  .win-content { flex: 1; position: relative; overflow: hidden; background: #fff; margin-top: 3px;
+    box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; }
+  /* the locked 1200x607 canvas */
+  #canvas { position: absolute; top: 0; left: 0; width: 1200px; height: 607px; transform-origin: top left; }
+  #canvas iframe { width: 1200px; height: 607px; border: 0; display: block; }
+  /* white patch over Framer's bottom-right badge (inside the canvas, so it scales with it) */
+  #badgeCover { position: absolute; right: 8px; bottom: 8px; width: 168px; height: 56px; background: #fff; }
+  #resizer { position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; touch-action: none;
+    background: repeating-linear-gradient(135deg, transparent 0 4px, #808080 4px 6px); }
+
+  /* ---------- taskbar ---------- */
+  #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 30px; background: #c0c0c0;
+    box-shadow: inset 0 1px #fff, 0 -1px #dfdfdf; display: flex; align-items: center; gap: 5px; padding: 3px 4px; z-index: 50; }
+  .bar-btn { height: 24px; display: inline-flex; align-items: center; gap: 5px; padding: 0 8px;
+    background: #c0c0c0; border: none; font-family: inherit; font-size: 11px; font-weight: bold; cursor: pointer;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; }
+  .bar-btn:active, .bar-btn.pressed { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080; }
+  #startLogo { display: inline-grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 1px; }
+  #startLogo i { display: block; }
+  #startLogo i:nth-child(1){ background:#f00; } #startLogo i:nth-child(2){ background:#0a0; }
+  #startLogo i:nth-child(3){ background:#00f; } #startLogo i:nth-child(4){ background:#ff0; }
+  #taskReady { min-width: 140px; justify-content: flex-start; font-weight: normal; }
+  #clock { margin-left: auto; height: 24px; display: flex; align-items: center; padding: 0 10px;
+    box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; }
+
+  /* ---------- start menu ---------- */
+  #startmenu { position: fixed; left: 4px; bottom: 32px; width: 190px; background: #c0c0c0; z-index: 60;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff;
+    padding: 3px; display: none; }
+  #startmenu.open { display: flex; }
+  #startmenu .side { width: 24px; background: #000080; color: #fff; writing-mode: vertical-rl;
+    transform: rotate(180deg); font-weight: bold; font-size: 14px; letter-spacing: 2px;
+    display: flex; align-items: center; padding: 8px 0; }
+  #startmenu ul { list-style: none; margin: 0; padding: 0; flex: 1; }
+  #startmenu li { padding: 7px 10px; display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  #startmenu li:hover { background: #000080; color: #fff; }
+  #startmenu li.sep { border-top: 1px solid #808080; border-bottom: 1px solid #fff; padding: 0; margin: 2px 4px; cursor: default; }
+  #startmenu li.sep:hover { background: none; }
+
+  /* ---------- shutdown ---------- */
+  #shutdown { position: fixed; inset: 0; background: #000; color: #ffb300; z-index: 100;
+    display: none; align-items: center; justify-content: center; text-align: center;
+    font-family: "Courier New", monospace; font-size: 22px; font-weight: bold; cursor: pointer; }
+  #shutdown.on { display: flex; }
+  #shutdown small { display: block; margin-top: 18px; font-size: 12px; color: #666; }
 </style>
 </head>
 <body>
-<iframe src="https://same-click-419588.framer.app/" title="Ready"></iframe>
+
+<div id="desktop">
+  <div class="icon" id="icoReady"><div class="pic">🖥️</div><div class="lbl">Ready</div></div>
+  <div class="icon" id="icoTmc"><div class="pic">🌐</div><div class="lbl">tmc.gg</div></div>
+
+  <div class="window" id="win">
+    <div class="titlebar" id="titlebar">
+      <span class="ticon">🖥️</span><span class="ttext">Ready</span>
+      <button class="tbtn" id="btnMin" aria-label="Minimize">—</button>
+      <button class="tbtn" id="btnMax" aria-label="Maximize">▢</button>
+      <button class="tbtn" id="btnClose" aria-label="Close">✕</button>
+    </div>
+    <div class="win-content" id="content">
+      <div id="canvas">
+        <iframe src="https://same-click-419588.framer.app/" title="Ready"></iframe>
+        <div id="badgeCover"></div>
+      </div>
+      <div id="resizer"></div>
+    </div>
+  </div>
+</div>
+
+<div id="startmenu">
+  <div class="side">RDY&nbsp;OS</div>
+  <ul>
+    <li id="smReady">🖥️ Ready</li>
+    <li id="smTmc">🌐 tmc.gg</li>
+    <li class="sep"></li>
+    <li id="smShut">⏻ Shut Down…</li>
+  </ul>
+</div>
+
+<div id="taskbar">
+  <button class="bar-btn" id="btnStart"><span id="startLogo"><i></i><i></i><i></i><i></i></span>Start</button>
+  <button class="bar-btn pressed" id="taskReady">🖥️ Ready</button>
+  <div id="clock">--:--</div>
+</div>
+
+<div id="shutdown">
+  It's now safe to turn off<br>your computer.
+  <small>(click anywhere to reboot)</small>
+</div>
+
 <script>
-  (function () {
-    var f = document.querySelector('iframe');
-    function fit() {
-      var s = Math.min(window.innerWidth / 1200, window.innerHeight / 607);
-      if (!s || !isFinite(s)) { requestAnimationFrame(fit); return; }
-      f.style.transform = 'translate(' + Math.round((window.innerWidth - 1200 * s) / 2) + 'px,' +
-                          Math.round((window.innerHeight - 607 * s) / 2) + 'px) scale(' + s + ')';
+(function () {
+  var win = document.getElementById('win'),
+      content = document.getElementById('content'),
+      canvas = document.getElementById('canvas'),
+      taskBtn = document.getElementById('taskReady'),
+      startMenu = document.getElementById('startmenu'),
+      desktop = document.getElementById('desktop');
+
+  /* ----- lock the site to 1200x607, scaled to the window content ----- */
+  function fit() {
+    var w = content.clientWidth, h = content.clientHeight;
+    if (!w || !h) return;
+    var s = Math.min(w / 1200, h / 607);
+    canvas.style.transform = 'translate(' + Math.round((w - 1200 * s) / 2) + 'px,' +
+                             Math.round((h - 607 * s) / 2) + 'px) scale(' + s + ')';
+  }
+  new ResizeObserver(fit).observe(content);
+
+  /* ----- initial window placement ----- */
+  var maximized = false, restoreRect = null;
+  function place() {
+    var dw = desktop.clientWidth, dh = desktop.clientHeight;
+    var s = Math.min((dw - 60) / 1200, (dh - 60) / 607) * 0.9;
+    var w = Math.max(360, Math.round(1200 * s) + 8),
+        h = Math.max(240, Math.round(607 * s) + 31);
+    win.style.width = w + 'px'; win.style.height = h + 'px';
+    win.style.left = Math.round((dw - w) / 2) + 'px';
+    win.style.top = Math.max(6, Math.round((dh - h) / 2)) + 'px';
+  }
+  place();
+  window.addEventListener('resize', function () { if (maximized) maxRect(); });
+
+  /* ----- dragging ----- */
+  var drag = null, titlebar = document.getElementById('titlebar');
+  titlebar.addEventListener('pointerdown', function (e) {
+    if (e.target.classList.contains('tbtn') || maximized) return;
+    drag = { x: e.clientX - win.offsetLeft, y: e.clientY - win.offsetTop };
+    canvas.style.pointerEvents = 'none';
+    titlebar.setPointerCapture(e.pointerId);
+  });
+  titlebar.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var x = e.clientX - drag.x, y = e.clientY - drag.y;
+    x = Math.min(Math.max(x, -win.offsetWidth + 60), desktop.clientWidth - 60);
+    y = Math.min(Math.max(y, 0), desktop.clientHeight - 24);
+    win.style.left = x + 'px'; win.style.top = y + 'px';
+  });
+  titlebar.addEventListener('pointerup', function () { drag = null; canvas.style.pointerEvents = ''; });
+
+  /* ----- resizing ----- */
+  var rs = null, resizer = document.getElementById('resizer');
+  resizer.addEventListener('pointerdown', function (e) {
+    if (maximized) return;
+    rs = { w: win.offsetWidth - e.clientX, h: win.offsetHeight - e.clientY };
+    canvas.style.pointerEvents = 'none';
+    resizer.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  resizer.addEventListener('pointermove', function (e) {
+    if (!rs) return;
+    win.style.width = Math.max(360, rs.w + e.clientX) + 'px';
+    win.style.height = Math.max(240, rs.h + e.clientY) + 'px';
+  });
+  resizer.addEventListener('pointerup', function () { rs = null; canvas.style.pointerEvents = ''; });
+
+  /* ----- title buttons ----- */
+  function maxRect() {
+    win.style.left = '0px'; win.style.top = '0px';
+    win.style.width = desktop.clientWidth + 'px';
+    win.style.height = desktop.clientHeight + 'px';
+  }
+  document.getElementById('btnMax').addEventListener('click', function () {
+    if (!maximized) {
+      restoreRect = { l: win.style.left, t: win.style.top, w: win.style.width, h: win.style.height };
+      maximized = true; maxRect(); this.textContent = '❐';
+    } else {
+      maximized = false;
+      win.style.left = restoreRect.l; win.style.top = restoreRect.t;
+      win.style.width = restoreRect.w; win.style.height = restoreRect.h;
+      this.textContent = '▢';
     }
-    window.addEventListener('resize', fit);
-    window.addEventListener('load', fit);
-    if (window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
-    fit();
-  })();
+  });
+  function showWin(v) {
+    win.style.display = v ? 'flex' : 'none';
+    taskBtn.style.display = v || win.dataset.min === '1' ? '' : 'none';
+    taskBtn.classList.toggle('pressed', v);
+  }
+  document.getElementById('btnMin').addEventListener('click', function () {
+    win.dataset.min = '1'; showWin(false);
+  });
+  document.getElementById('btnClose').addEventListener('click', function () {
+    win.dataset.min = ''; showWin(false); taskBtn.style.display = 'none';
+  });
+  taskBtn.addEventListener('click', function () {
+    var v = win.style.display === 'none'; win.dataset.min = ''; showWin(v);
+  });
+  function openReady() { win.dataset.min = ''; taskBtn.style.display = ''; showWin(true); }
+
+  /* ----- desktop icons ----- */
+  var icoReady = document.getElementById('icoReady');
+  icoReady.addEventListener('dblclick', openReady);
+  icoReady.addEventListener('click', function () { this.classList.add('sel'); });
+  document.getElementById('icoTmc').addEventListener('dblclick', function () { window.open('https://tmc.gg', '_blank'); });
+  desktop.addEventListener('click', function (e) {
+    if (!e.target.closest('.icon')) icoReady.classList.remove('sel');
+  });
+
+  /* ----- start menu ----- */
+  var btnStart = document.getElementById('btnStart');
+  btnStart.addEventListener('click', function (e) {
+    e.stopPropagation(); startMenu.classList.toggle('open');
+    btnStart.classList.toggle('pressed', startMenu.classList.contains('open'));
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#startmenu') && !e.target.closest('#btnStart')) {
+      startMenu.classList.remove('open'); btnStart.classList.remove('pressed');
+    }
+  });
+  document.getElementById('smReady').addEventListener('click', function () { startMenu.classList.remove('open'); btnStart.classList.remove('pressed'); openReady(); });
+  document.getElementById('smTmc').addEventListener('click', function () { startMenu.classList.remove('open'); btnStart.classList.remove('pressed'); window.open('https://tmc.gg', '_blank'); });
+  document.getElementById('smShut').addEventListener('click', function () {
+    startMenu.classList.remove('open'); btnStart.classList.remove('pressed');
+    document.getElementById('shutdown').classList.add('on');
+  });
+  document.getElementById('shutdown').addEventListener('click', function () { location.reload(); });
+
+  /* ----- clock ----- */
+  function tick() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('clock').textContent = h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+  }
+  tick(); setInterval(tick, 10000);
+})();
 </script>
 </body>
 </html>
