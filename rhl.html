@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHL Now 24 — News 24/7</title>
+<meta name="description" content="News 24 hours a day, 7 days a week. RHL Now 24 is the round-the-clock news service of RHL Now, part of The Mavion Corporation.">
+<link rel="icon" href="https://framerusercontent.com/images/olEbZxuoH5pKejdyaDSkL5i6QRA.png" media="(prefers-color-scheme: light)">
+<link rel="icon" href="https://framerusercontent.com/images/xXqMaDVEsTY7zCpnF1T55Dnaxlg.png" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="https://framerusercontent.com/images/NNZC6bnD4C6LnzxY6mIKmJo3s.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RHL Now 24">
+<meta property="og:description" content="News 24 hours a day, 7 days a week — from RHL Now, part of The Mavion Corporation.">
+<meta property="og:image" content="https://framerusercontent.com/images/wFM8dJhejqLmX0jNSu097ucdKs.png">
+<meta property="og:url" content="https://tmc.gg/rhl">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #12161f;
+    --navy-2: #0d1118;
+    --cyan: #00bbfe;
+    --purple: #5c38fa;
+    --purple-2: #5d39fa;
+    --red: #a80000;
+    --live: #fe0000;
+    --line: #323f4f;
+    --ink: #ffffff;
+    --ink-dim: rgba(255, 255, 255, 0.62);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--ink);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+  /* ---------- masthead ---------- */
+  .masthead { position: sticky; top: 0; z-index: 20; background: var(--navy); animation: dropIn .5s cubic-bezier(.2,.9,.3,1) both; }
+  @keyframes dropIn { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+  .bar-top { height: 69px; display: flex; align-items: center; justify-content: space-between; }
+  .logo img { height: 31px; width: auto; transition: opacity .2s; }
+  .logo:hover img { opacity: .85; }
+  .top-actions { display: flex; align-items: center; gap: 24px; }
+  .btn-subscribe {
+    background: var(--cyan); color: var(--navy);
+    font-size: 10px; font-weight: 600; letter-spacing: .08em;
+    padding: 8px 20px; border-radius: 2px;
+    transition: filter .2s, transform .2s;
+  }
+  .btn-subscribe:hover { filter: brightness(1.12); transform: translateY(-1px); }
+  .lang { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--ink-dim); transition: color .2s; }
+  .lang:hover { color: var(--ink); }
+  .lang img { width: 23px; height: 16px; object-fit: cover; border-radius: 1px; }
+  .bar-nav { border-top: 1px solid rgba(255,255,255,.9); }
+  .bar-nav .wrap { height: 52px; display: flex; align-items: center; justify-content: space-between; }
+  .live-pill { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; }
+  .live-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--live); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(254,0,0,.55); } 55% { box-shadow: 0 0 0 6px rgba(254,0,0,0); } }
+  .site-nav { display: flex; align-items: center; gap: 28px; }
+  .site-nav .sep { width: 1px; height: 26px; background: var(--line); }
+  .site-nav a { font-size: 11px; font-weight: 500; color: var(--ink); opacity: .85; transition: opacity .2s, color .2s; }
+  .site-nav a:hover { opacity: 1; color: var(--cyan); }
+
+  /* ---------- hero ---------- */
+  .hero { background: var(--cyan); overflow: hidden; }
+  .hero .wrap { min-height: 312px; display: flex; align-items: center; gap: 32px; }
+  .hero-copy { flex: 1 1 440px; padding: 48px 0; }
+  .hero-copy h1 {
+    font-size: clamp(28px, 3.4vw, 40px); font-weight: 600; line-height: 1.16;
+    color: #fff; max-width: 480px; text-wrap: balance;
+  }
+  .hero-copy p { margin-top: 14px; font-size: clamp(16px, 1.9vw, 22px); color: rgba(255,255,255,.92); }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 9px; margin-top: 26px;
+    background: var(--navy); color: #fff; font-size: 13px; font-weight: 600;
+    padding: 12px 22px; border-radius: 2px; transition: transform .2s, box-shadow .2s;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+  .hero-cta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--live); animation: pulse 1.6s ease-in-out infinite; }
+  .hero-art { flex: 1 1 380px; align-self: stretch; display: flex; align-items: center; min-width: 0; }
+  .hero-art img { width: 100%; height: 100%; max-height: 312px; object-fit: contain; }
+
+  /* ---------- sections ---------- */
+  section.block { padding: 56px 0 0; }
+  .block-label { font-size: 16px; color: var(--ink); opacity: .9; margin-bottom: 26px; }
+
+  /* programs */
+  .programs { display: flex; flex-wrap: wrap; gap: 44px; }
+  .program {
+    width: 105px; height: 105px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .25s;
+  }
+  .program:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 14px 30px rgba(0,0,0,.45); }
+  .program img { max-width: 70%; max-height: 62%; object-fit: contain; }
+  .program.p-purple { background: var(--purple); }
+  .program.p-dark { background: #2b2b2b; }
+  .program.p-red { background: var(--red); }
+  .program.p-purple.big img { max-width: 92%; max-height: 80%; }
+
+  /* live now */
+  .live-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .live-card { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 10; background: var(--navy-2); }
+  .live-card .thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.2,.9,.3,1); }
+  .live-card:hover .thumb { transform: scale(1.05); }
+  .live-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18,22,31,0) 55%, rgba(18,22,31,.72) 100%); pointer-events: none; }
+  .live-card .badge {
+    position: absolute; top: 10px; left: 10px; z-index: 2;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--live); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .08em;
+    padding: 4px 8px; border-radius: 2px;
+  }
+  .live-card .badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+  .live-card .chip { position: absolute; left: 12px; bottom: 12px; z-index: 2; width: 56px; height: 39px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+
+  /* promo */
+  .promo {
+    margin: 64px 0 0; background: var(--purple-2); border-radius: 8px; overflow: hidden;
+    display: flex; align-items: stretch; min-height: 177px;
+  }
+  .promo-tile { flex: 0 0 177px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .promo-tile img { width: 146px; height: 146px; object-fit: contain; }
+  .promo-copy { flex: 1; padding: 30px 34px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+  .promo-copy h2 { font-size: clamp(18px, 2.2vw, 24px); font-weight: 600; color: #fff; }
+  .promo-copy p { font-size: 15px; color: rgba(255,255,255,.85); max-width: 560px; }
+  .promo-copy a { margin-top: 8px; font-size: 13px; font-weight: 600; color: #fff; display: inline-flex; align-items: center; gap: 7px; transition: gap .2s; }
+  .promo-copy a:hover { gap: 12px; }
+
+  /* footer */
+  footer { margin-top: 72px; border-top: 1px solid var(--line); }
+  footer .wrap { padding: 26px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  footer p, footer a { font-size: 12px; color: var(--ink-dim); }
+  footer a:hover { color: var(--cyan); }
+  footer nav { display: flex; gap: 20px; }
+  main { padding-bottom: 8px; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .masthead { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .live-pill .dot, .hero-cta .dot { animation: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .wrap { padding: 0 24px; }
+    .hero .wrap { flex-direction: column; align-items: flex-start; gap: 0; }
+    .hero-copy { flex: 0 0 auto; padding: 40px 0 8px; }
+    .hero-art { flex: 0 0 auto; width: 100%; }
+    .hero-art img { max-height: 240px; margin: 0 auto; }
+    .live-grid { grid-template-columns: repeat(2, 1fr); }
+    .programs { gap: 28px; }
+  }
+  @media (max-width: 560px) {
+    .bar-top { height: 60px; }
+    .logo img { height: 26px; }
+    .top-actions { gap: 14px; }
+    .site-nav { gap: 18px; }
+    .site-nav .sep { display: none; }
+    .live-grid { grid-template-columns: 1fr; }
+    .program { width: 84px; height: 84px; }
+    .promo { flex-direction: column; }
+    .promo-tile { flex-basis: auto; padding: 22px 0; }
+    footer .wrap { padding: 22px 24px; }
+  }
+</style>
+</head>
+<body id="top">
+
+<header class="masthead">
+  <div class="wrap bar-top">
+    <a class="logo" href="#top" aria-label="RHL Now 24">
+      <img src="https://framerusercontent.com/images/6byy49KaYBaYnXuVHu1F8fvk1z4.png?width=825&height=168" alt="RHL Now 24" width="152" height="31">
+    </a>
+    <div class="top-actions">
+      <a class="btn-subscribe" href="/contact">SUBSCRIBE</a>
+      <a class="lang" href="#live" aria-label="Watch RHL Now 24">
+        <img src="https://framerusercontent.com/images/Xj16jzaabs7UjCgXjHWf3OQUI.png?width=1400&height=980" alt="">
+        Watch
+      </a>
+    </div>
+  </div>
+  <div class="bar-nav">
+    <div class="wrap">
+      <a class="live-pill" href="#live"><span class="dot"></span> Live</a>
+      <nav class="site-nav">
+        <a href="/newsroom">Read</a>
+        <a href="/radio">Listen</a>
+        <a href="#live">Watch</a>
+        <span class="sep" aria-hidden="true"></span>
+        <a href="https://tmc.gg">tmc.gg</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1>Connected between communities &amp; news.</h1>
+      <p>Inspire your community with RHL.</p>
+      <a class="hero-cta" href="#live"><span class="dot"></span> Watch live</a>
+    </div>
+    <div class="hero-art">
+      <img src="https://framerusercontent.com/images/32h7GuKXNycv1JCNkEP2l9ooMTQ.png?width=604&height=413" alt="RHL Now 24 studio graphics">
+    </div>
+  </div>
+</section>
+
+<main>
+  <section class="block reveal" id="programs">
+    <div class="wrap">
+      <p class="block-label">Programs (4)</p>
+      <div class="programs">
+        <span class="program p-purple" title="RHL program">
+          <img src="https://framerusercontent.com/images/kS6O5ObfGEDRPcze5SEY7i4A6Ho.png?scale-down-to=512" alt="Program logo">
+        </span>
+        <span class="program p-purple big" title="RHL program">
+          <img src="https://framerusercontent.com/images/u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512" alt="Program logo">
+        </span>
+        <span class="program p-dark" title="RHL program">
+          <img src="https://framerusercontent.com/images/yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512" alt="Program logo">
+        </span>
+        <span class="program p-red" title="RHL program">
+          <img src="https://framerusercontent.com/images/gBhT53P6uCu46zzgSlLlZG15cz4.png" alt="Program logo">
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal" id="live">
+    <div class="wrap">
+      <p class="block-label">Live Now</p>
+      <div class="live-grid">
+        <article class="live-card">
+          <img class="thumb" src="https://framerusercontent.com/images/tjdk8Ikb0FN9J5NH4HqVfst4.png?scale-down-to=1024" alt="Live broadcast" loading="lazy">
+          <span class="badge">LIVE</span>
+          <img class="chip" src="https://framerusercontent.com/images/u90HC26n4lYUGTrcC5bRuJ1r8mo.png?scale-down-to=512" alt="" loading="lazy">
+        </article>
+        <article class="live-card">
+          <img class="thumb" src="https://framerusercontent.com/images/XHQSij3kFdEl8iVWDzJUXiQwyE.jpg?scale-down-to=1024" alt="Live broadcast" loading="lazy">
+          <span class="badge">LIVE</span>
+          <img class="chip" src="https://framerusercontent.com/images/yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png?scale-down-to=512" alt="" loading="lazy">
+        </article>
+        <article class="live-card">
+          <img class="thumb" src="https://framerusercontent.com/images/kiTq65WFcZ1bwBC6OZoXSrQC90.png?scale-down-to=1024" alt="Live broadcast" loading="lazy">
+          <span class="badge">LIVE</span>
+          <img class="chip" src="https://framerusercontent.com/images/ciyjK870nlLiSKDxReXP4k3mMxk.png?scale-down-to=512" alt="" loading="lazy">
+        </article>
+        <article class="live-card">
+          <img class="thumb" src="https://framerusercontent.com/images/zt4gfbi0P4JUgXJrKTmRUBUxE.png?scale-down-to=1024" alt="Live broadcast" loading="lazy">
+          <span class="badge">LIVE</span>
+          <img class="chip" src="https://framerusercontent.com/images/K0sAW1J78mUAR1ujBtcCJH76k.png?scale-down-to=512" alt="" loading="lazy">
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="wrap">
+      <div class="promo">
+        <div class="promo-tile">
+          <img src="https://framerusercontent.com/images/NNZC6bnD4C6LnzxY6mIKmJo3s.png" alt="RHL Now">
+        </div>
+        <div class="promo-copy">
+          <h2>News that never sleeps.</h2>
+          <p>RHL Now 24 is the round-the-clock news service of RHL Now, the entertainment brand of The Mavion Corporation.</p>
+          <a href="/companies">More from the TMC family →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 RHL Now · Part of <a href="https://tmc.gg">The Mavion Corporation</a></p>
+    <nav>
+      <a href="/newsroom">Newsroom</a>
+      <a href="/companies">Companies</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>
