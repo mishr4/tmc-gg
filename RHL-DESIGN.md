@@ -18,7 +18,7 @@ Do not convert it to a fluid layout. New sections are **appended below** the ori
 | Navy    | `#12161f` | Header bars, main dark sections                  |
 | Navy-2  | `#0d1118` | Card fallback backgrounds, deep panels           |
 | Cyan    | `#00bbfe` | Hero band, SUBSCRIBE button, ticker, accents     |
-| Purple  | `#5c38fa` | Program circles (rhl now, CA now)                |
+| Purple  | `#5c38fa` | Program circles (RHL now, CA now)                |
 | Purple-2| `#5d39fa` | QR promo panel                                   |
 | Red     | `#a80000` | 2C program circle                                |
 | Live red| `#fe0000` | Live dot, BREAKING tag                           |
@@ -53,9 +53,9 @@ Single family: **Instrument Sans** (400 / 500 / 600). Sizes in use:
 - Wordmark: `framerusercontent.com/images/6byy49KaYBaYnXuVHu1F8fvk1z4.png`
 - YT chip icon: `Xj16jzaabs7UjCgXjHWf3OQUI.png`
 - Hero art: `32h7GuKXNycv1JCNkEP2l9ooMTQ.png`
-- Programs: rhl now `kS6O5ObfGEDRPcze5SEY7i4A6Ho.png` · CA now `u90HC26n4lYUGTrcC5bRuJ1r8mo.png`
+- Programs: RHL now `kS6O5ObfGEDRPcze5SEY7i4A6Ho.png` · CA now `u90HC26n4lYUGTrcC5bRuJ1r8mo.png`
   · LUCiD `yZ4iO4z9qFeGOLpEWQ8OTfcZ7fI.png` · 2C `gBhT53P6uCu46zzgSlLlZG15cz4.png`
-- Extra chips: rhl round `ciyjK870nlLiSKDxReXP4k3mMxk.png` · rdy `K0sAW1J78mUAR1ujBtcCJH76k.png`
+- Extra chips: RHL round `ciyjK870nlLiSKDxReXP4k3mMxk.png` · rdy `K0sAW1J78mUAR1ujBtcCJH76k.png`
 - QR: `YkRJlEnJqRHgUxIIhFEkOY7aAk.png` · small logo `x5hF37T5SEMVtOfoZLgpxCPxew.png`
 - Favicons: light `olEbZxuoH5pKejdyaDSkL5i6QRA.png` / dark `xXqMaDVEsTY7zCpnF1T55Dnaxlg.png`
   / touch `NNZC6bnD4C6LnzxY6mIKmJo3s.png` · OG `wFM8dJhejqLmX0jNSu097ucdKs.png`
