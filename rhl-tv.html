@@ -15,14 +15,15 @@
   html, body { width: 100%; height: 100%; background: #0d1118; overflow: hidden; }
   body { font-family: 'Instrument Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
-  video { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  #wrap { position: fixed; inset: 0; background: #0d1118; }
+  video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
 
   /* channel bug (watermark) */
-  .bug { position: fixed; top: 22px; right: 26px; height: 26px; opacity: .82; pointer-events: none; z-index: 5;
+  .bug { position: absolute; top: 22px; right: 26px; height: 26px; opacity: .82; pointer-events: none; z-index: 5;
          filter: drop-shadow(0 1px 4px rgba(0,0,0,.6)); }
 
   /* live chip — same vocabulary as /rhl */
-  .livechip { position: fixed; top: 22px; left: 26px; z-index: 5; display: flex; align-items: center; gap: 8px;
+  .livechip { position: absolute; top: 22px; left: 26px; z-index: 5; display: flex; align-items: center; gap: 8px;
               background: rgba(18,22,31,.72); padding: 6px 12px; border-radius: 2px; }
   .livechip .dot { width: 6px; height: 6px; border-radius: 269px; background: #fe0000; animation: pulse 1.6s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 55% { opacity: .45; } }
@@ -30,7 +31,7 @@
 
   /* unmute prompt — SUBSCRIBE-button styling */
   #unmute {
-    position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%); z-index: 6;
+    position: absolute; left: 50%; bottom: 88px; transform: translateX(-50%); z-index: 6;
     background: #00bbfe; color: #000; border: 0; cursor: pointer; font-family: inherit;
     font-size: 11px; font-weight: 500; padding: 10px 22px; border-radius: 2px; display: none;
   }
@@ -38,7 +39,7 @@
 
   /* info bar */
   .bar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; height: 52px;
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; height: 52px;
     background: rgba(18,22,31,.86); display: flex; align-items: center; gap: 18px; padding: 0 26px;
     transition: opacity .35s; opacity: 0;
   }
@@ -52,7 +53,7 @@
   }
   .bar button:hover { color: #00bbfe; }
 
-  #status { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 4;
+  #status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 4;
             color: rgba(255,255,255,.6); font-size: 13px; font-weight: 500; pointer-events: none; }
   #status:empty { display: none; }
 
@@ -61,16 +62,18 @@
 </head>
 <body>
 
-<video id="tv" playsinline autoplay muted></video>
-<img class="bug" id="bug" alt="" hidden>
-<div class="livechip"><span class="dot"></span><span>Live</span></div>
-<button id="unmute">TAP FOR SOUND</button>
-<div id="status">Tuning in…</div>
-<div class="bar" id="bar">
-  <span class="now" id="now"></span>
-  <span class="grow"></span>
-  <span class="next" id="next"></span>
-  <button id="fs">Fullscreen</button>
+<div id="wrap">
+  <video id="tv" playsinline autoplay muted disablepictureinpicture></video>
+  <img class="bug" id="bug" alt="" hidden>
+  <div class="livechip"><span class="dot"></span><span>Live</span></div>
+  <button id="unmute">TAP FOR SOUND</button>
+  <div id="status">Tuning in…</div>
+  <div class="bar" id="bar">
+    <span class="now" id="now"></span>
+    <span class="grow"></span>
+    <span class="next" id="next"></span>
+    <button id="fs">Fullscreen</button>
+  </div>
 </div>
 
 <script>
@@ -212,9 +215,17 @@
   tv.addEventListener('volumechange', updateMuteUI);
   tv.addEventListener('playing', updateMuteUI);
   unmuteBtn.addEventListener('click', function () { tv.muted = false; updateMuteUI(); });
-  document.getElementById('fs').addEventListener('click', function () {
+  /* fullscreen the wrapper so the watermark, Live chip and bar come along */
+  var wrap = document.getElementById('wrap'),
+      fsBtn = document.getElementById('fs');
+  function toggleFullscreen() {
     if (document.fullscreenElement) document.exitFullscreen();
-    else document.documentElement.requestFullscreen();
+    else wrap.requestFullscreen();
+  }
+  fsBtn.addEventListener('click', toggleFullscreen);
+  tv.addEventListener('dblclick', toggleFullscreen);
+  document.addEventListener('fullscreenchange', function () {
+    fsBtn.textContent = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
   });
   updateMuteUI();
 })();
