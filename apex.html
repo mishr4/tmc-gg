@@ -68,9 +68,20 @@ section{scroll-margin-top:84px}
   font-family:var(--cta);font-weight:900;font-size:15px;
   border-radius:999px;padding:14px 26px;border:0;cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
-  white-space:nowrap;
+  white-space:nowrap;position:relative;overflow:hidden;
 }
 .btn:active{transform:scale(.97)}
+.btn .arrow{transition:transform .25s ease}
+.btn:hover .arrow:not(.heart){transform:translateX(4px)}
+.btn:hover .heart{animation:heartbeat 1s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.28)}50%{transform:scale(1)}75%{transform:scale(1.12)}}
+.btn .ripple{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:rgba(255,255,255,.55);transform:scale(0);
+  animation:ripple .55s ease-out forwards;
+}
+.btn-dark .ripple{background:rgba(255,255,255,.28)}
+@keyframes ripple{to{transform:scale(2.8);opacity:0}}
 .btn-green{background:var(--green);color:var(--ink);box-shadow:0 16px 34px rgba(57,211,83,.26)}
 .btn-green:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(57,211,83,.38)}
 .btn-white{background:#fff;color:#245334;box-shadow:0 10px 26px rgba(8,36,20,.07)}
@@ -80,8 +91,12 @@ section{scroll-margin-top:84px}
 .btn-sm{padding:11px 22px;font-size:14px}
 .btn .arrow{width:19px;height:19px;flex:none}
 
-.menu-btn{display:none;background:none;border:0;cursor:pointer;padding:8px;margin-left:4px}
-.menu-btn svg{width:26px;height:26px;stroke:var(--heading)}
+.menu-btn{display:none;background:none;border:0;cursor:pointer;padding:10px 8px;margin-left:4px}
+.menu-btn .bar{display:block;width:24px;height:2.5px;border-radius:2px;background:var(--heading);transition:transform .3s ease,opacity .25s ease}
+.menu-btn .bar + .bar{margin-top:5.5px}
+.menu-btn.open .bar:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu-btn.open .bar:nth-child(2){opacity:0}
+.menu-btn.open .bar:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .mobile-menu{display:none}
 
 /* ---------- hero ---------- */
@@ -89,8 +104,17 @@ section{scroll-margin-top:84px}
 .hero::before,.hero::after{
   content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;
 }
-.hero::before{width:520px;height:520px;left:-140px;top:40px;background:rgba(57,211,83,.16)}
-.hero::after{width:560px;height:560px;right:-120px;top:-80px;background:rgba(57,211,83,.14)}
+.hero::before{width:520px;height:520px;left:-140px;top:40px;background:rgba(57,211,83,.16);animation:drift1 16s ease-in-out infinite alternate}
+.hero::after{width:560px;height:560px;right:-120px;top:-80px;background:rgba(57,211,83,.14);animation:drift2 20s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(70px,46px) scale(1.14)}}
+@keyframes drift2{to{transform:translate(-80px,60px) scale(1.08)}}
+.enter{animation:fadeUp .7s cubic-bezier(.22,.8,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.badge.enter{animation-delay:.05s}
+h1.enter{animation-delay:.15s}
+.lede.enter{animation-delay:.3s}
+.hero-ctas.enter{animation-delay:.45s}
+.hero-card.enter{animation-delay:.4s;animation-duration:.85s}
 .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
 
 .badge{
@@ -140,6 +164,8 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
 .card.blue{background:var(--tint-blue)}
 .card.yellow{background:var(--tint-yellow)}
 .card .icon{width:44px;height:44px;color:var(--accent);margin-bottom:44px}
+.card:hover .icon{animation:wiggle .6s ease}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}60%{transform:rotate(7deg)}}
 .card h3{font-size:26px;letter-spacing:-.01em;line-height:1.12;margin-bottom:14px}
 .card p{font-size:16px}
 
@@ -159,7 +185,14 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
   height:100%;width:0;min-width:12px;border-radius:999px;
   background:linear-gradient(90deg,var(--accent),var(--green));
   transition:width 1.4s cubic-bezier(.22,.8,.24,1);
+  position:relative;overflow:hidden;
 }
+.meter-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.55) 50%,transparent 75%);
+  transform:translateX(-100%);animation:shimmer 2.4s ease-in-out 1.6s infinite;
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
 .meter-labels{display:flex;justify-content:space-between;font-size:15px;margin-bottom:30px}
 .meter-labels strong{color:var(--heading)}
 .panel .btn{margin-top:auto}
@@ -214,14 +247,100 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
 .footer-bottom a{color:var(--heading)}
 .footer-bottom a:hover{color:var(--accent)}
 
+/* ---------- donate modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(8,36,20,.48);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;
+}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{
+  background:#fff;border-radius:28px;padding:38px 36px 32px;max-width:470px;width:100%;
+  position:relative;box-shadow:0 40px 90px rgba(8,36,20,.35);
+  max-height:calc(100vh - 40px);overflow:auto;
+  transform:translateY(30px) scale(.95);
+  transition:transform .4s cubic-bezier(.2,1.2,.35,1);
+}
+.modal-overlay.open .modal{transform:none}
+.modal h3{font-family:var(--display);font-size:30px;letter-spacing:-.02em;line-height:1.1;color:var(--heading);margin:6px 0 8px}
+.modal-sub{font-size:15px;margin-bottom:22px}
+.modal-close{
+  position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;border:0;
+  background:var(--tint-green);color:var(--heading);font-size:20px;line-height:1;cursor:pointer;
+  font-family:var(--text);font-weight:700;
+  transition:transform .25s ease,background .2s ease;
+}
+.modal-close:hover{transform:rotate(90deg);background:#dff4df}
+.gift-type{display:flex;background:var(--tint-green);border-radius:999px;padding:5px;margin-bottom:18px}
+.type-btn{
+  flex:1;border:0;border-radius:999px;padding:11px 0;cursor:pointer;
+  font-family:var(--text);font-weight:700;font-size:14px;color:var(--body);
+  background:transparent;transition:background .25s ease,color .25s ease,box-shadow .25s ease;
+}
+.type-btn.active{background:#fff;color:var(--heading);box-shadow:0 4px 14px rgba(8,36,20,.10)}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.amount-chip{
+  border:2px solid #e2f2e2;border-radius:16px;padding:14px 0;cursor:pointer;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);background:#fff;
+  transition:border-color .2s ease,transform .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.amount-chip:hover{border-color:var(--green);transform:translateY(-2px)}
+.amount-chip.active{
+  background:var(--green);border-color:var(--green);color:var(--ink);
+  box-shadow:0 10px 22px rgba(57,211,83,.35);animation:pop .3s ease;
+}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+.custom-amount{
+  display:flex;align-items:center;border:2px solid #e2f2e2;border-radius:16px;padding:0 0 0 14px;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);
+  transition:border-color .2s ease;
+}
+.custom-amount:focus-within{border-color:var(--green)}
+.custom-amount input{
+  width:100%;border:0;outline:none;background:none;padding:14px 10px 14px 2px;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);
+}
+.custom-amount input::placeholder{color:#a9c3ae;font-family:var(--text);font-weight:700}
+.custom-amount input::-webkit-outer-spin-button,.custom-amount input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.custom-amount input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.gift-line{
+  font-size:15px;background:var(--tint-green);border-radius:14px;padding:12px 16px;
+  margin-bottom:18px;color:var(--body);
+}
+.gift-line strong{color:var(--heading)}
+.gift-line.pop{animation:pop .3s ease}
+.modal .btn{width:100%}
+.modal-note{font-size:13px;margin-top:12px;text-align:center;opacity:.8}
+body.modal-open{overflow:hidden}
+
+/* ---------- toast & confetti ---------- */
+.toast{
+  position:fixed;left:50%;bottom:28px;z-index:300;
+  background:var(--ink);color:#fff;font-size:15px;padding:14px 24px;border-radius:999px;
+  box-shadow:0 18px 40px rgba(8,36,20,.32);
+  opacity:0;pointer-events:none;transform:translate(-50%,20px);
+  transition:opacity .3s ease,transform .3s ease;max-width:calc(100vw - 40px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;z-index:290;pointer-events:none;overflow:hidden}
+.confetti i{
+  position:absolute;width:9px;height:13px;border-radius:3px;opacity:0;
+  animation:confetti 1.5s cubic-bezier(.25,.6,.35,1) forwards;
+}
+@keyframes confetti{
+  0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}
+  50%{opacity:1;transform:translate(calc(var(--dx)*.65),var(--up)) rotate(calc(var(--rot)*.5))}
+  100%{opacity:0;transform:translate(var(--dx),var(--down)) rotate(var(--rot)) scale(.7)}
+}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
-  .badge .dot{animation:none}
-  .meter-fill{transition:none}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 }
 
 /* ---------- responsive ---------- */
@@ -282,11 +401,11 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
       </ul>
     </nav>
     <div class="nav-right">
-      <a class="btn btn-green btn-sm" href="#progress">Donate
+      <a class="btn btn-green btn-sm" href="#progress" data-donate>Donate
         <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
       </a>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
     </div>
   </div>
@@ -295,7 +414,7 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
     <a href="#community">Community</a>
     <a href="#progress">Progress</a>
     <a href="#updates">Updates</a>
-    <a class="btn btn-green" href="#progress">Donate
+    <a class="btn btn-green" href="#progress" data-donate>Donate
       <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
     </a>
   </nav>
@@ -306,25 +425,25 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="badge"><span class="dot"></span>Now growing a shared community home</span>
-        <h1>A joyful home for every culture to gather, learn, and celebrate.</h1>
-        <p class="lede">Apex Multicultural Community Center is building a permanent, welcoming place where neighbors can host traditions, share resources, and make belonging feel easy.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-green" href="#progress">Support the build
-            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
+        <span class="badge enter"><span class="dot"></span>Now growing a shared community home</span>
+        <h1 class="enter">A joyful home for every culture to gather, learn, and celebrate.</h1>
+        <p class="lede enter">Apex Multicultural Community Center is building a permanent, welcoming place where neighbors can host traditions, share resources, and make belonging feel easy.</p>
+        <div class="hero-ctas enter">
+          <a class="btn btn-green" href="#progress" data-donate>Support the build
+            <svg class="arrow heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
           </a>
           <a class="btn btn-white" href="#community">Meet the community
             <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 12h8m0 0-3-3m3 3-3 3" transform="rotate(90 12 12)"/></svg>
           </a>
         </div>
       </div>
-      <div class="hero-card reveal">
+      <div class="hero-card enter">
         <div class="hero-card-visual" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/><path d="M15 3.13a4 4 0 0 1 0 7.75"/></svg>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M9 7h2m-2 4h2m-2 4h2m6 6v-9h2a2 2 0 0 1 2 2v7"/></svg>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/></svg>
         </div>
-        <h3>40+ communities, one welcoming place</h3>
+        <h3><span class="count" data-count="40">40</span>+ communities, one welcoming place</h3>
         <p>Apex is raising funds, bringing partners together, and preparing the programs that make a center feel alive from day one.</p>
       </div>
     </div>
@@ -344,12 +463,12 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
           <h3>Room to gather</h3>
           <p>Flexible space for meetings, celebrations, classes, and community-led traditions.</p>
         </div>
-        <div class="card blue reveal">
+        <div class="card blue reveal" data-delay="120">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 15h2m4 0h2"/></svg>
           <h3>Programs with heart</h3>
           <p>Planning for workshops, language learning, intergenerational events, and cultural exchange.</p>
         </div>
-        <div class="card yellow reveal">
+        <div class="card yellow reveal" data-delay="240">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/></svg>
           <h3>Partners welcome</h3>
           <p>Donors, advisors, volunteers, and local organizations can help shape what comes next.</p>
@@ -371,7 +490,7 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
           <span><strong id="raisedLabel">$0</strong> raised</span>
           <span><strong>$2.4M</strong> goal</span>
         </div>
-        <a class="btn btn-green" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign">Donate or pledge
+        <a class="btn btn-green" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate or pledge
           <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
         </a>
       </div>
@@ -424,7 +543,7 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
       <div class="footer-col">
         <h4>Get involved</h4>
         <ul>
-          <li><a href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC">Donate to the campaign</a></li>
+          <li><a href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC" data-donate>Donate to the campaign</a></li>
           <li><a href="mailto:hello@apexmcc.org?subject=Volunteering%20or%20advising%20%E2%80%94%20Apex%20MCC">Volunteer or advise</a></li>
           <li><a href="mailto:hello@apexmcc.org?subject=Briefing%20request%20%E2%80%94%20Apex%20MCC">Request a briefing</a></li>
         </ul>
@@ -445,6 +564,35 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
   </div>
 </footer>
 
+<!-- donate modal -->
+<div class="modal-overlay" id="donateModal" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+  <div class="modal">
+    <button class="modal-close" id="donateClose" aria-label="Close">&times;</button>
+    <span class="eyebrow">Capital campaign</span>
+    <h3 id="donateTitle">Choose your gift</h3>
+    <p class="modal-sub">Every gift helps make the home real &mdash; pick what feels right.</p>
+    <div class="gift-type" role="group" aria-label="Gift type">
+      <button type="button" class="type-btn active" data-type="one-time gift">One-time gift</button>
+      <button type="button" class="type-btn" data-type="pledge">Pledge</button>
+    </div>
+    <div class="amounts" role="group" aria-label="Gift amount">
+      <button type="button" class="amount-chip" data-amount="25">$25</button>
+      <button type="button" class="amount-chip" data-amount="50">$50</button>
+      <button type="button" class="amount-chip active" data-amount="100">$100</button>
+      <button type="button" class="amount-chip" data-amount="250">$250</button>
+      <button type="button" class="amount-chip" data-amount="500">$500</button>
+      <label class="custom-amount">$<input type="number" id="customAmount" min="1" step="1" placeholder="Custom" aria-label="Custom amount"></label>
+    </div>
+    <p class="gift-line" id="giftLine">Your <strong>$100</strong> one-time gift helps make the home real.</p>
+    <button class="btn btn-green" id="donateContinue" type="button">Continue by email
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 6L2 7"/></svg>
+    </button>
+    <p class="modal-note">Opens your email app with everything filled in &mdash; send it and we&rsquo;ll take it from there. 💚</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
 (function(){
   "use strict";
@@ -463,10 +611,12 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
   var mobileMenu = document.getElementById('mobileMenu');
   var closeMenu = function(){
     mobileMenu.classList.remove('open');
+    menuBtn.classList.remove('open');
     menuBtn.setAttribute('aria-expanded','false');
   };
   menuBtn.addEventListener('click', function(){
     var open = mobileMenu.classList.toggle('open');
+    menuBtn.classList.toggle('open', open);
     menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
   mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
@@ -482,7 +632,15 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
   } else {
     var ro = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
-        if (en.isIntersecting){ en.target.classList.add('visible'); ro.unobserve(en.target); }
+        if (en.isIntersecting){
+          var d = en.target.getAttribute('data-delay');
+          if (d){
+            en.target.style.transitionDelay = d + 'ms';
+            setTimeout(function(){ en.target.style.transitionDelay = ''; }, Number(d) + 800);
+          }
+          en.target.classList.add('visible');
+          ro.unobserve(en.target);
+        }
       });
     }, {threshold:.15, rootMargin:'0px 0px -40px 0px'});
     revealEls.forEach(function(el){ ro.observe(el); });
@@ -541,13 +699,199 @@ h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margi
     }
     email.classList.remove('error');
     try { localStorage.setItem('apex-newsletter', val); } catch(_) {}
+    var formRect = form.getBoundingClientRect();
     form.style.display = 'none';
     note.className = 'form-note success';
     note.textContent = "You're on the list — we'll keep you posted. 🌱";
+    confettiBurst(formRect.left + formRect.width / 2, formRect.top + formRect.height / 2);
   });
   email.addEventListener('input', function(){
     email.classList.remove('error');
     if (!note.classList.contains('success')) note.textContent = '';
+  });
+
+  /* toast */
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  var showToast = function(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  };
+
+  /* confetti */
+  var CONFETTI_COLORS = ['#39d353','#16b83e','#b9f8bf','#ffd166','#7fd8f5','#fff8df'];
+  function confettiBurst(x, y){
+    if (reduced) return;
+    var box = document.createElement('div');
+    box.className = 'confetti';
+    box.setAttribute('aria-hidden','true');
+    for (var i = 0; i < 36; i++){
+      var p = document.createElement('i');
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      p.style.setProperty('--dx', (Math.random() - .5) * 340 + 'px');
+      p.style.setProperty('--up', -(40 + Math.random() * 160) + 'px');
+      p.style.setProperty('--down', (60 + Math.random() * 160) + 'px');
+      p.style.setProperty('--rot', (Math.random() - .5) * 720 + 'deg');
+      p.style.animationDelay = (Math.random() * .12) + 's';
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function(){ box.remove(); }, 1900);
+  }
+
+  /* button ripple */
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.btn');
+    if (!btn || reduced) return;
+    var rect = btn.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var r = document.createElement('span');
+    r.className = 'ripple';
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX ? e.clientX - rect.left : rect.width / 2) - size / 2 + 'px';
+    r.style.top = (e.clientY ? e.clientY - rect.top : rect.height / 2) - size / 2 + 'px';
+    btn.appendChild(r);
+    setTimeout(function(){ r.remove(); }, 600);
+  });
+
+  /* count-up */
+  var countEl = document.querySelector('.count');
+  if (countEl){
+    var target = Number(countEl.getAttribute('data-count')) || 0;
+    if (reduced){
+      countEl.textContent = target;
+    } else {
+      countEl.textContent = '0';
+      var t0 = null;
+      var DUR = 1300;
+      var tick = function(ts){
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / DUR);
+        k = 1 - Math.pow(1 - k, 3);
+        countEl.textContent = Math.round(target * k);
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      setTimeout(function(){ requestAnimationFrame(tick); }, 500);
+      /* safety net if rAF is throttled (hidden tab etc.) */
+      setTimeout(function(){ countEl.textContent = target; }, 500 + DUR + 400);
+    }
+  }
+
+  /* release entrance animations so hover/tilt transforms can take over */
+  document.querySelectorAll('.enter').forEach(function(el){
+    el.addEventListener('animationend', function(){ el.classList.remove('enter'); }, {once:true});
+  });
+
+  /* hero card tilt */
+  var heroCard = document.querySelector('.hero-card');
+  if (heroCard && !reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    heroCard.style.transition = 'transform .18s ease-out, box-shadow .3s ease';
+    heroCard.addEventListener('mousemove', function(e){
+      var r = heroCard.getBoundingClientRect();
+      var rx = ((e.clientY - r.top) / r.height - .5) * -7;
+      var ry = ((e.clientX - r.left) / r.width - .5) * 7;
+      heroCard.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    });
+    heroCard.addEventListener('mouseleave', function(){
+      heroCard.style.transform = '';
+    });
+  }
+
+  /* donate modal */
+  var modal = document.getElementById('donateModal');
+  var modalCard = modal.querySelector('.modal');
+  var closeBtn = document.getElementById('donateClose');
+  var typeBtns = Array.prototype.slice.call(modal.querySelectorAll('.type-btn'));
+  var chips = Array.prototype.slice.call(modal.querySelectorAll('.amount-chip'));
+  var customInput = document.getElementById('customAmount');
+  var giftLine = document.getElementById('giftLine');
+  var continueBtn = document.getElementById('donateContinue');
+  var lastFocus = null;
+
+  var giftType = 'one-time gift';
+  var giftAmount = 100;
+
+  var updateGiftLine = function(){
+    if (giftAmount > 0){
+      giftLine.innerHTML = 'Your <strong>$' + giftAmount.toLocaleString('en-US') + '</strong> ' + giftType + ' helps make the home real.';
+    } else {
+      giftLine.innerHTML = 'Pick an amount first — every gift counts. 💚';
+    }
+    giftLine.classList.remove('pop');
+    void giftLine.offsetWidth;
+    giftLine.classList.add('pop');
+  };
+
+  var openModal = function(){
+    lastFocus = document.activeElement;
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    closeMenu();
+    setTimeout(function(){ closeBtn.focus(); }, 320);
+  };
+  var closeModal = function(){
+    modal.classList.remove('open');
+    document.body.classList.remove('modal-open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  };
+
+  document.querySelectorAll('[data-donate]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      openModal();
+    });
+  });
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (!modalCard.contains(e.target)) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+
+  typeBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      typeBtns.forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      giftType = b.getAttribute('data-type');
+      updateGiftLine();
+    });
+  });
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      chips.forEach(function(x){ x.classList.remove('active'); });
+      c.classList.add('active');
+      customInput.value = '';
+      giftAmount = Number(c.getAttribute('data-amount'));
+      updateGiftLine();
+    });
+  });
+  customInput.addEventListener('input', function(){
+    chips.forEach(function(x){ x.classList.remove('active'); });
+    giftAmount = Math.max(0, Math.floor(Number(customInput.value) || 0));
+    updateGiftLine();
+  });
+
+  continueBtn.addEventListener('click', function(){
+    if (!(giftAmount > 0)){ updateGiftLine(); customInput.focus(); return; }
+    var rect = continueBtn.getBoundingClientRect();
+    confettiBurst(rect.left + rect.width / 2, rect.top);
+    showToast('Opening your email app… 💌');
+    var subject = (giftType === 'pledge' ? 'Pledge' : 'Donation') + ' — Apex MCC capital campaign';
+    var body = "Hi Apex team,\n\nI'd like to make a " + giftType + " of $" + giftAmount.toLocaleString('en-US') +
+      " to the capital campaign.\n\nName:\nPhone (optional):\n\nThank you!";
+    var href = 'mailto:hello@apexmcc.org?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    setTimeout(function(){
+      window.location.href = href;
+      setTimeout(closeModal, 400);
+    }, 700);
+  });
+
+  /* toast for plain mail links */
+  document.querySelectorAll('a[href^="mailto:"]:not([data-donate])').forEach(function(a){
+    a.addEventListener('click', function(){ showToast('Opening your email app… 💌'); });
   });
 })();
 </script>
