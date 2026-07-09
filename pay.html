@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>TMC Pay — Settlement Portal | The Mavion Corporation</title>
+  <meta name="description" content="TMC Pay is the official payment portal of The Mavion Corporation. Settle invoices and pay for TMCast hosting, NDC deposits and services. Secure checkout via Stripe.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tmc.gg/pay">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TMC Pay — Settlement Portal">
+  <meta property="og:description" content="Settle invoices and pay for TMC services. Secure checkout via Stripe.">
+  <meta property="og:url" content="https://tmc.gg/pay">
+  <meta property="og:site_name" content="The Mavion Corporation">
+  <meta property="og:image" content="https://tmc.gg/og-image.png">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue: #3b28cc; --black: #0a0a0a; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #fff; color: var(--black);
+      overflow-x: hidden; min-height: 100vh;
+      display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font-family: inherit; cursor: pointer; }
+    input { font-family: inherit; }
+    a { color: inherit; }
+
+    /* ---- TICKER ---- */
+    .ticker-bar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 200;
+      background: var(--black); color: #fff; padding: 8px 0;
+      font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .3em;
+      overflow: hidden; white-space: nowrap;
+    }
+    .ticker-track { display: inline-block; animation: ticker 40s linear infinite; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ---- NAV ---- */
+    .portal-nav { position: fixed; top: 30px; left: 0; width: 100%; z-index: 150; padding: 0 24px; }
+    .portal-nav .inner {
+      max-width: 1536px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 0; border-bottom: 1px solid var(--black);
+      background: rgba(255,255,255,.85); backdrop-filter: blur(10px);
+    }
+    .brand-mark { display: flex; align-items: baseline; gap: 8px; cursor: pointer; text-decoration: none; }
+    .brand-mark .tmc { font-size: 20px; font-weight: 800; letter-spacing: -.05em; }
+    .brand-mark .pay { font-size: 20px; font-weight: 800; letter-spacing: -.05em; color: var(--blue); }
+    .nav-links { display: flex; gap: 32px; margin-left: 48px; }
+    .nav-links button, .nav-links a {
+      background: none; border: 0; font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: -.02em; color: var(--black); text-decoration: none;
+    }
+    .nav-links button:hover, .nav-links a:hover { color: var(--blue); }
+    .nav-left { display: flex; align-items: center; }
+    .nav-search { position: relative; }
+    .nav-search input {
+      background: #f3f4f6; border: 1px solid transparent; outline: 0;
+      padding: 9px 16px; font-size: 10px; font-weight: 700; width: 190px;
+      text-transform: uppercase; letter-spacing: .05em; transition: all .2s;
+    }
+    .nav-search input:focus { border-color: var(--black); width: 250px; }
+    .search-results {
+      position: absolute; top: 100%; right: 0; width: 260px;
+      background: #fff; border: 1px solid var(--black); margin-top: 4px; z-index: 210;
+      max-height: 200px; overflow-y: auto; scrollbar-width: none;
+    }
+    .search-results:empty { display: none; }
+    .search-results .hit {
+      padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,.06);
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    }
+    .search-results .hit:hover { background: #f9fafb; }
+    .search-results .hit b { font-size: 11px; text-transform: uppercase; }
+    .search-results .hit span { font-size: 9px; color: #9ca3af; text-transform: uppercase; letter-spacing: .2em; }
+    .search-results .none { padding: 14px 16px; font-size: 11px; color: #9ca3af; text-transform: uppercase; }
+
+    /* ---- LAYOUT ---- */
+    .content { flex: 1; padding-top: 185px; }
+    .page { padding: 0 24px; max-width: 1536px; margin: 0 auto; width: 100%; }
+    .page.hidden { display: none; }
+    .page-transition { transition: opacity .4s ease-in-out; }
+    .opacity-0 { opacity: 0; }
+
+    /* ---- STATUS BANNER ---- */
+    .status-banner {
+      max-width: 1536px; margin: 0 auto 40px; padding: 20px 28px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .2em;
+      display: none; justify-content: space-between; align-items: center;
+    }
+    .status-banner.show { display: flex; }
+    .status-banner.good { background: var(--black); color: #4ade80; }
+    .status-banner.bad { background: #f3f4f6; color: var(--black); }
+    .status-banner button { background: none; border: 0; color: inherit; font-size: 14px; font-weight: 800; }
+
+    /* ---- HOME ---- */
+    .hero-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 48px; border-bottom: 1px solid var(--black); padding-bottom: 96px; }
+    .hero-main { grid-column: span 9; }
+    .hero-side { grid-column: span 3; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
+    h1.mega {
+      font-size: clamp(64px, 11vw, 168px); font-weight: 800;
+      line-height: .82; letter-spacing: -.06em; text-transform: uppercase; margin-bottom: 64px;
+    }
+    h1.mega .accent { color: var(--blue); }
+    .feature-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+    .feature-cards .num { color: var(--blue); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .25em; }
+    .feature-cards p { margin-top: 16px; font-size: 13px; font-weight: 700; line-height: 1.6; text-transform: uppercase; }
+    .side-box { background: var(--black); color: #fff; padding: 32px; }
+    .side-box h4 { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .25em; margin-bottom: 16px; }
+    .side-box .row {
+      display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.1);
+      padding-bottom: 5px; margin-bottom: 10px; font-size: 9px; text-transform: uppercase; letter-spacing: .1em;
+    }
+    .side-box .row:last-child { margin-bottom: 0; }
+    .ok { color: #4ade80; } .warn { color: #eab308; } .err { color: #f87171; }
+    .big-cta {
+      display: block; width: 100%; background: var(--blue); color: #fff; border: 0;
+      padding: 24px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .2em;
+      transition: background .2s; text-align: center; text-decoration: none;
+    }
+    .big-cta:hover { background: var(--black); }
+
+    /* ---- SECTION HEADINGS ---- */
+    h2.page-title {
+      font-size: clamp(52px, 7vw, 96px); font-weight: 800;
+      letter-spacing: -.06em; text-transform: uppercase; line-height: .9;
+    }
+    .title-rule { border-bottom: 1px solid var(--black); padding-bottom: 48px; margin-bottom: 72px; }
+    .title-rule .sub { margin-top: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .3em; color: #9ca3af; max-width: 560px; line-height: 2; }
+
+    /* ---- INVOICE FORM ---- */
+    .invoice-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 96px; padding-bottom: 128px; }
+    .field { margin-bottom: 40px; }
+    .field label { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .3em; color: var(--blue); margin-bottom: 12px; }
+    .field input {
+      width: 100%; border: 0; border-bottom: 2px solid var(--black); outline: 0;
+      font-size: 28px; font-weight: 800; padding: 8px 0; text-transform: uppercase;
+      background: transparent; border-radius: 0;
+    }
+    .field input:focus { border-color: var(--blue); }
+    .field input::placeholder { color: #d1d5db; }
+    .field .hint { margin-top: 10px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; color: #9ca3af; }
+    .amount-wrap { position: relative; }
+    .amount-wrap .cur { position: absolute; left: 0; top: 14px; font-size: 28px; font-weight: 800; color: #9ca3af; }
+    .amount-wrap input { padding-left: 36px; }
+    .pay-submit {
+      background: var(--black); color: #fff; border: 0; padding: 26px 64px;
+      font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .25em;
+      transition: background .2s;
+    }
+    .pay-submit:hover { background: var(--blue); }
+    .pay-submit:disabled { background: #d1d5db; cursor: not-allowed; }
+    .form-error { margin-top: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: #dc2626; min-height: 14px; }
+
+    /* ---- SERVICES ---- */
+    .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; padding-bottom: 128px; }
+    .service-card { border-top: 1px solid var(--black); padding-top: 32px; display: flex; flex-direction: column; }
+    .service-card .id { font-size: 9px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: .25em; font-style: italic; margin-bottom: 16px; }
+    .service-card h3 { font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -.03em; margin-bottom: 12px; }
+    .service-card:hover h3 { color: var(--blue); }
+    .service-card .desc { font-size: 13px; font-weight: 500; line-height: 1.7; color: #4b5563; margin-bottom: 28px; flex: 1; }
+    .service-card .buy-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,.1); padding-top: 20px; }
+    .service-card .price { font-size: 22px; font-weight: 800; letter-spacing: -.03em; }
+    .service-card .price small { font-size: 10px; font-weight: 800; color: #9ca3af; letter-spacing: .15em; }
+    .service-card .buy {
+      background: var(--black); color: #fff; border: 0; padding: 14px 32px;
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .2em; transition: background .2s;
+    }
+    .service-card .buy:hover { background: var(--blue); }
+    .service-card .buy:disabled { background: #d1d5db; cursor: not-allowed; }
+
+    /* ---- PROTOCOL / HELP ---- */
+    .protocol-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; padding-bottom: 128px; }
+    .protocol-card { padding: 56px; }
+    .protocol-card.light { background: #f9fafb; }
+    .protocol-card.dark { background: var(--black); color: #fff; }
+    .protocol-card h4 { font-size: 26px; font-weight: 800; text-transform: uppercase; margin-bottom: 28px; }
+    .protocol-card.dark h4 { color: var(--blue); }
+    .protocol-card p { font-size: 13px; font-weight: 500; line-height: 1.8; color: #4b5563; margin-bottom: 40px; }
+    .protocol-card.dark p { color: #9ca3af; }
+    .protocol-card .tag { border-top: 1px solid var(--black); padding-top: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .25em; }
+    .protocol-card.dark .tag { border-color: rgba(255,255,255,.2); color: var(--blue); }
+
+    /* ---- FOOTER ---- */
+    footer { background: var(--black); color: #fff; padding: 96px 24px 48px; margin-top: auto; }
+    footer .inner { max-width: 1536px; margin: 0 auto; }
+    footer .top {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 72px; margin-bottom: 48px; flex-wrap: wrap; gap: 48px;
+    }
+    footer .about { max-width: 380px; }
+    footer .about .mark { font-size: 22px; font-weight: 800; letter-spacing: -.05em; margin-bottom: 24px; }
+    footer .about .mark span { color: var(--blue); }
+    footer .about p { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; line-height: 2; color: #6b7280; }
+    footer .cols { display: flex; gap: 96px; }
+    footer h6 { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4em; color: var(--blue); margin-bottom: 20px; }
+    footer ul { list-style: none; }
+    footer li { margin-bottom: 10px; }
+    footer li button, footer li a { background: none; border: 0; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #9ca3af; text-decoration: none; }
+    footer li button:hover, footer li a:hover { color: #fff; }
+    footer .bottom {
+      display: flex; justify-content: space-between; flex-wrap: gap;
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .4em; color: #374151; flex-wrap: wrap; gap: 12px;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 1100px) {
+      .nav-links { display: none; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-main, .hero-side { grid-column: span 1; }
+      .invoice-grid { grid-template-columns: 1fr; gap: 48px; }
+    }
+    @media (max-width: 760px) {
+      .feature-cards, .service-grid, .protocol-grid { grid-template-columns: 1fr; }
+      .nav-search input { width: 130px; } .nav-search input:focus { width: 160px; }
+      .content { padding-top: 160px; }
+      .protocol-card { padding: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP TELEMETRY -->
+  <div class="ticker-bar" aria-hidden="true">
+    <div class="ticker-track" id="ticker-track">
+      TMC PAY • GATEWAY: STRIPE • PCI-DSS: DELEGATED • USD ACCEPTED • CARDS + APPLE PAY + GOOGLE PAY • 3DS: ENFORCED • SETTLEMENT: T+2 • TMCAST: LIVE • MAVION NEWS: PUBLISHING •&nbsp;
+    </div>
+  </div>
+
+  <!-- MAIN INTERFACE HEADER -->
+  <nav class="portal-nav">
+    <div class="inner">
+      <div class="nav-left">
+        <a class="brand-mark" href="#home"><span class="tmc">TMC</span><span class="pay">/ PAY</span></a>
+        <div class="nav-links">
+          <button onclick="showPage('invoice')">Invoices</button>
+          <button onclick="showPage('services')">Services</button>
+          <button onclick="showPage('protocol')">Protocol</button>
+          <a href="/contact">Support</a>
+          <a href="/" style="color:var(--blue)">TMC.GG</a>
+        </div>
+      </div>
+      <form class="nav-search" onsubmit="performSearch(event)">
+        <input id="search-input" type="text" placeholder="QUERY LEDGER..." autocomplete="off" aria-label="Search the portal">
+        <div class="search-results" id="search-results"></div>
+      </form>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <!-- CHECKOUT RETURN BANNERS -->
+    <div class="page" style="padding-bottom:0">
+      <div id="banner-success" class="status-banner good">
+        <span>&#10003; Payment confirmed — a receipt has been sent to your email.</span>
+        <button onclick="this.parentElement.classList.remove('show')" aria-label="Dismiss">&times;</button>
+      </div>
+      <div id="banner-canceled" class="status-banner bad">
+        <span>Checkout abandoned — no charge was made.</span>
+        <button onclick="this.parentElement.classList.remove('show')" aria-label="Dismiss">&times;</button>
+      </div>
+    </div>
+
+    <!-- HOME (PAGE 1) -->
+    <main id="home-page" class="page page-transition">
+      <section class="hero-grid">
+        <div class="hero-main">
+          <h1 class="mega">Settle <br><span class="accent">Anything.</span></h1>
+          <div class="feature-cards">
+            <div>
+              <span class="num">01 / Invoices</span>
+              <p>Settle any TMC, TMCast or NDC invoice by reference number. Funds clear in seconds.</p>
+            </div>
+            <div>
+              <span class="num">02 / Services</span>
+              <p>Station hosting, onboarding, project deposits and support passes — fixed pricing, no calls.</p>
+            </div>
+            <div>
+              <span class="num">03 / Security</span>
+              <p>Card data never touches our servers. Checkout is executed end-to-end by Stripe.</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="side-box">
+            <h4>Gateway Health</h4>
+            <div class="row"><span>STRIPE API</span><span id="gw-stripe" class="warn">CHECKING</span></div>
+            <div class="row"><span>3D-SECURE</span><span class="ok">ENFORCED</span></div>
+            <div class="row"><span>WALLET PAY</span><span class="ok">READY</span></div>
+          </div>
+          <button class="big-cta" onclick="showPage('invoice')">Pay an Invoice &rarr;</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- INVOICE (PAGE 2) -->
+    <main id="invoice-page" class="page page-transition hidden">
+      <div class="title-rule">
+        <h2 class="page-title">Invoice.</h2>
+        <p class="sub">Enter the reference printed on your TMC invoice and the amount due. You will be redirected to secure checkout.</p>
+      </div>
+      <div class="invoice-grid">
+        <form onsubmit="payInvoice(event)">
+          <div class="field">
+            <label for="inv-ref">Invoice Reference</label>
+            <input id="inv-ref" type="text" placeholder="TMC-2026-0001" maxlength="60" required>
+            <p class="hint">Found in the top-right of your invoice or statement email.</p>
+          </div>
+          <div class="field">
+            <label for="inv-amount">Amount Due (USD)</label>
+            <div class="amount-wrap">
+              <span class="cur">$</span>
+              <input id="inv-amount" type="number" placeholder="0.00" min="1" max="5000" step="0.01" required>
+            </div>
+            <p class="hint">Minimum $1.00 — maximum $5,000.00 per transaction.</p>
+          </div>
+          <div class="field">
+            <label for="inv-email">Receipt Email (Optional)</label>
+            <input id="inv-email" type="email" placeholder="YOU@DOMAIN.COM" maxlength="200" style="text-transform:none">
+          </div>
+          <button id="inv-submit" type="submit" class="pay-submit">Proceed to Checkout</button>
+          <p class="form-error" id="inv-error"></p>
+        </form>
+        <div class="side-box" style="align-self:start">
+          <h4>Transaction Protocol</h4>
+          <div class="row"><span>PROCESSOR</span><span>STRIPE</span></div>
+          <div class="row"><span>CURRENCY</span><span>USD</span></div>
+          <div class="row"><span>METHODS</span><span>CARD / WALLET</span></div>
+          <div class="row"><span>RECEIPT</span><span>INSTANT</span></div>
+          <div class="row"><span>CARD STORAGE</span><span class="ok">NONE</span></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- SERVICES (PAGE 3) -->
+    <main id="services-page" class="page page-transition hidden">
+      <div class="title-rule">
+        <h2 class="page-title">Services.</h2>
+        <p class="sub">Fixed-price catalog. One click, one charge — nothing recurring, nothing hidden.</p>
+      </div>
+      <div class="service-grid">
+        <div class="service-card">
+          <p class="id">SKU: TMCAST-HOST-30</p>
+          <h3>TMCast Station Hosting</h3>
+          <p class="desc">One month of managed station hosting on the TMCast network — stream relay, AutoDJ, and metadata API included.</p>
+          <div class="buy-row"><span class="price">$10<small> / 1 MO</small></span><button class="buy" onclick="payItem('tmcast-hosting', this)">Pay</button></div>
+        </div>
+        <div class="service-card">
+          <p class="id">SKU: TMCAST-SETUP</p>
+          <h3>Station Setup &amp; Onboarding</h3>
+          <p class="desc">Full station provisioning: encoder configuration, stream endpoints, artwork, and a guided onboarding session.</p>
+          <div class="buy-row"><span class="price">$25<small> / ONE-TIME</small></span><button class="buy" onclick="payItem('tmcast-setup', this)">Pay</button></div>
+        </div>
+        <div class="service-card">
+          <p class="id">SKU: NDC-DEPOSIT</p>
+          <h3>NDC Project Deposit</h3>
+          <p class="desc">Standard deposit to open an NDC engagement. Applied in full against your first invoice.</p>
+          <div class="buy-row"><span class="price">$50<small> / DEPOSIT</small></span><button class="buy" onclick="payItem('ndc-deposit', this)">Pay</button></div>
+        </div>
+        <div class="service-card">
+          <p class="id">SKU: PRIORITY-PASS</p>
+          <h3>Priority Support Pass</h3>
+          <p class="desc">Jump the queue. Your tickets are routed to the front of the support line for 30 days.</p>
+          <div class="buy-row"><span class="price">$5<small> / 30 DAYS</small></span><button class="buy" onclick="payItem('priority-pass', this)">Pay</button></div>
+        </div>
+      </div>
+      <p class="form-error" id="svc-error" style="padding-bottom:64px"></p>
+    </main>
+
+    <!-- PROTOCOL (PAGE 4) -->
+    <main id="protocol-page" class="page page-transition hidden">
+      <div class="title-rule">
+        <h2 class="page-title">Protocol.</h2>
+      </div>
+      <div class="protocol-grid">
+        <div class="protocol-card light">
+          <h4>Zero Card Custody</h4>
+          <p>TMC Pay never sees, stores, or transmits your card number. When you press pay, you are handed directly to Stripe — the same PCI-DSS Level 1 processor used by Amazon and Google. We receive a confirmation, nothing more.</p>
+          <div class="tag">Protocol: Delegated Trust</div>
+        </div>
+        <div class="protocol-card dark">
+          <h4>Refunds &amp; Disputes</h4>
+          <p>Wrong amount? Duplicate charge? Write to us within 14 days with your receipt and we reverse it — no forms, no fights. Disputes are answered by a human within two business days.</p>
+          <div class="tag">Protocol: Human Resolution</div>
+        </div>
+        <div class="protocol-card dark">
+          <h4>Zero Retention</h4>
+          <p>Your email is used once — to send the receipt. It is not added to a list, sold, or profiled. The ledger records the reference, the amount, and the timestamp. That is the entire record.</p>
+          <div class="tag">Protocol: Zero Footprint</div>
+        </div>
+        <div class="protocol-card light">
+          <h4>Need a Hand?</h4>
+          <p>Lost your invoice reference, need a custom amount above the limit, or want to pay by another method? The support desk can generate a private checkout link for any arrangement.</p>
+          <div class="tag"><a href="/contact" style="text-decoration:none;color:var(--blue)">Contact Support &rarr;</a></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="inner">
+      <div class="top">
+        <div class="about">
+          <div class="mark">TMC<span> / PAY</span></div>
+          <p>TMC Pay is the official settlement portal of The Mavion Corporation, a privately held media and technology parent company based in California.</p>
+        </div>
+        <div class="cols">
+          <div>
+            <h6>Portal</h6>
+            <ul>
+              <li><button onclick="showPage('home')">Home</button></li>
+              <li><button onclick="showPage('invoice')">Invoices</button></li>
+              <li><button onclick="showPage('services')">Services</button></li>
+            </ul>
+          </div>
+          <div>
+            <h6>Corporate</h6>
+            <ul>
+              <li><a href="/">TMC.GG</a></li>
+              <li><a href="/companies">Companies</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6>Legal</h6>
+            <ul>
+              <li><button onclick="showPage('protocol')">Protocol</button></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <p>&copy; 2026 THE MAVION CORPORATION. SETTLED BY DESIGN.</p>
+        <p id="footer-status">GATEWAY: CHECKING</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- NAVIGATION SYSTEM (hash-based pages, same as the original cirya portal) ---
+    const PAGES = ['home', 'invoice', 'services', 'protocol'];
+    function navigate() {
+      const hash = window.location.hash.replace('#', '') || 'home';
+      const target = PAGES.includes(hash) ? hash : 'home';
+      PAGES.forEach(id => {
+        const el = document.getElementById(id + '-page');
+        el.classList.add('hidden', 'opacity-0');
+      });
+      const active = document.getElementById(target + '-page');
+      active.classList.remove('hidden');
+      setTimeout(() => active.classList.remove('opacity-0'), 50);
+      window.scrollTo(0, 0);
+    }
+    function showPage(id) { window.location.hash = id; if ((window.location.hash.replace('#','') || 'home') === id) navigate(); }
+    window.addEventListener('hashchange', navigate);
+    window.addEventListener('DOMContentLoaded', navigate);
+
+    // Duplicate ticker content so the loop is seamless
+    const track = document.getElementById('ticker-track');
+    track.innerHTML += track.innerHTML;
+
+    // --- CHECKOUT RETURN BANNERS ---
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'success') document.getElementById('banner-success').classList.add('show');
+    if (params.get('status') === 'canceled') document.getElementById('banner-canceled').classList.add('show');
+
+    // --- GATEWAY HEALTH ---
+    let gatewayReady = false;
+    fetch('/api/pay').then(r => r.json()).then(d => {
+      gatewayReady = !!d.ready;
+      setGateway(gatewayReady ? 'ONLINE' : 'OFFLINE', gatewayReady ? 'ok' : 'err');
+    }).catch(() => setGateway('OFFLINE', 'err'));
+    function setGateway(text, cls) {
+      const el = document.getElementById('gw-stripe');
+      el.textContent = text; el.className = cls;
+      document.getElementById('footer-status').textContent = 'GATEWAY: ' + text;
+    }
+
+    // --- CHECKOUT ---
+    async function createCheckout(payload, errEl, btn) {
+      const err = document.getElementById(errEl);
+      err.textContent = '';
+      if (!gatewayReady) { err.textContent = 'Gateway offline — payments are not enabled yet. Contact support to settle manually.'; return; }
+      const label = btn.textContent;
+      btn.disabled = true; btn.textContent = 'CONNECTING...';
+      try {
+        const r = await fetch('/api/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const d = await r.json();
+        if (r.ok && d.url) { window.location.href = d.url; return; }
+        err.textContent = 'Checkout failed: ' + (d.detail || d.error || 'unknown error');
+      } catch (e) {
+        err.textContent = 'Network error — try again.';
+      }
+      btn.disabled = false; btn.textContent = label;
+    }
+
+    function payInvoice(e) {
+      e.preventDefault();
+      const ref = document.getElementById('inv-ref').value.trim();
+      const dollars = parseFloat(document.getElementById('inv-amount').value);
+      const email = document.getElementById('inv-email').value.trim();
+      const err = document.getElementById('inv-error');
+      if (!ref) { err.textContent = 'Enter an invoice reference.'; return; }
+      if (!isFinite(dollars) || dollars < 1 || dollars > 5000) { err.textContent = 'Amount must be between $1.00 and $5,000.00.'; return; }
+      createCheckout({ kind: 'invoice', invoice: ref, amount: Math.round(dollars * 100), email }, 'inv-error', document.getElementById('inv-submit'));
+    }
+
+    function payItem(item, btn) {
+      createCheckout({ kind: 'item', item }, 'svc-error', btn);
+    }
+
+    // --- SEARCH ENGINE ---
+    const SEARCH_DB = [
+      { title: 'Pay an Invoice', type: 'Invoices', link: 'invoice' },
+      { title: 'TMCast Station Hosting', type: 'Services', link: 'services' },
+      { title: 'Station Setup & Onboarding', type: 'Services', link: 'services' },
+      { title: 'NDC Project Deposit', type: 'Services', link: 'services' },
+      { title: 'Priority Support Pass', type: 'Services', link: 'services' },
+      { title: 'Refunds & Disputes', type: 'Protocol', link: 'protocol' },
+      { title: 'Zero Card Custody', type: 'Protocol', link: 'protocol' },
+      { title: 'Gateway Health', type: 'Status', link: 'home' },
+    ];
+    const resultsDiv = document.getElementById('search-results');
+    function performSearch(e) {
+      e.preventDefault();
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      resultsDiv.innerHTML = '';
+      if (!q) return;
+      const hits = SEARCH_DB.filter(i => i.title.toLowerCase().includes(q) || i.type.toLowerCase().includes(q));
+      if (!hits.length) { resultsDiv.innerHTML = '<p class="none">No data matches query</p>'; return; }
+      hits.forEach(i => {
+        const div = document.createElement('div');
+        div.className = 'hit';
+        div.innerHTML = '<b></b><span></span>';
+        div.querySelector('b').textContent = i.title;
+        div.querySelector('span').textContent = i.type;
+        div.addEventListener('click', () => { showPage(i.link); resultsDiv.innerHTML = ''; document.getElementById('search-input').value = ''; });
+        resultsDiv.appendChild(div);
+      });
+    }
+    document.getElementById('search-input').addEventListener('input', performSearch);
+    document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search')) resultsDiv.innerHTML = ''; });
+  </script>
+</body>
+</html>
