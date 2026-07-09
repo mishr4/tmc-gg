@@ -1,4 +1,4 @@
-/*  Seehed CustomerSupport — a self-contained FAQ chat widget for tmc.gg.
+/*  SeehedCustomerSupport — a self-contained FAQ chat widget for tmc.gg.
  *  Injects its own styles + DOM; no dependencies. Add with:
  *    <script src="/seehed-support.js" defer></script>
  *  Canned FAQ (no server) with a "typing…" beat for a human feel.
@@ -110,19 +110,19 @@
   root.id = 'seehed-support';
   root.setAttribute('data-open', 'false');
   root.innerHTML =
-    '<span class="sh-nudge" id="sh-nudge">Need a hand? Ask Seehed.</span>'
-    + '<button class="sh-launch" id="sh-launch" aria-label="Open Seehed customer support">'
+    '<span class="sh-nudge" id="sh-nudge">Need a hand? Chat with us.</span>'
+    + '<button class="sh-launch" id="sh-launch" aria-label="Open SeehedCustomerSupport">'
     + '<img src="' + AVATAR + '" alt=""><span class="sh-on"></span></button>'
-    + '<div class="sh-panel" role="dialog" aria-label="Seehed CustomerSupport">'
+    + '<div class="sh-panel" role="dialog" aria-label="SeehedCustomerSupport">'
     + '<div class="sh-head">'
     + '<img class="sh-av" src="' + AVATAR + '" alt="">'
-    + '<div class="sh-id"><div class="sh-name">Seehed CustomerSupport</div>'
+    + '<div class="sh-id"><div class="sh-name">SeehedCustomerSupport</div>'
     + '<div class="sh-status" id="sh-status"><span class="sh-live"></span>Online</div></div>'
     + '<button class="sh-close" id="sh-close" aria-label="Close support">×</button></div>'
     + '<div class="sh-log" id="sh-log" role="log" aria-live="polite"></div>'
     + '<div class="sh-chips" id="sh-chips"></div>'
     + '<form class="sh-input" id="sh-form"><input id="sh-in" type="text" placeholder="Ask a question…" autocomplete="off" aria-label="Ask a question"><button type="submit" aria-label="Send">→</button></form>'
-    + '<div class="sh-foot">Seehed CustomerSupport · TMC</div>'
+    + '<div class="sh-foot">SeehedCustomerSupport · TMC</div>'
     + '</div>';
 
   function mount() {
@@ -191,7 +191,7 @@
       nudge.classList.remove('show');
       if (!greeted) {
         greeted = true;
-        botSay("Hi — I'm <b>Seehed</b>, TMC's support assistant. Pick a question below, or type your own.");
+        botSay("Hi — I'm <b>SeehedCustomerSupport</b>, TMC's support assistant. Pick a question below, or type your own.");
         renderChips();
       }
       setTimeout(function () { root.querySelector('#sh-in').focus(); }, 60);
