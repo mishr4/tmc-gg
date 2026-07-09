@@ -1,7 +1,7 @@
 // api/pay.js — TMC Pay: create Stripe Checkout sessions for invoices + fixed services.
 // Set STRIPE_SECRET_KEY in the Vercel env to enable (sk_live_... or sk_test_...).
 // Prices for catalog items live HERE (server-side) so the client can't tamper with them.
-//   GET  → { ok, ready }
+//   GET  → { ok, ready }   (ready = key set AND the Stripe account can actually charge)
 //   POST { kind: "item", item: "<catalog id>", email? }            → { url }
 //   POST { kind: "invoice", invoice, amount (USD cents), email? }  → { url }
 
@@ -19,7 +19,18 @@ module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   const key = process.env.STRIPE_SECRET_KEY;
 
-  if (req.method === 'GET') return res.end(JSON.stringify({ ok: true, ready: !!key }));
+  if (req.method === 'GET') {
+    if (!key) return res.end(JSON.stringify({ ok: true, ready: false }));
+    try {
+      const acct = await fetch('https://api.stripe.com/v1/account', {
+        headers: { Authorization: 'Bearer ' + key },
+      });
+      const data = await acct.json().catch(() => ({}));
+      return res.end(JSON.stringify({ ok: true, ready: acct.ok && !!data.charges_enabled }));
+    } catch (e) {
+      return res.end(JSON.stringify({ ok: true, ready: false }));
+    }
+  }
   if (req.method !== 'POST') { res.statusCode = 405; return res.end(JSON.stringify({ error: 'method_not_allowed' })); }
   if (!key) { res.statusCode = 501; return res.end(JSON.stringify({ error: 'not_configured' })); }
 
