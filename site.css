@@ -449,8 +449,11 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-mark img { height: 26px; width: auto; }
 .footer-mark span { font-weight: 600; color: var(--ink); font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; }
 .footer-col a[href^="tel"] { white-space: nowrap; }
-.footer-col a[href^="mailto"], .footer-col a[href^="tel"] { color: var(--ink-2); font-weight: 500; }
-.footer-col a[href^="mailto"]:hover, .footer-col a[href^="tel"]:hover { color: var(--accent-hover); }
+.footer-touch p { font-size: 0.86rem; color: var(--muted); line-height: 1.65; padding: 0 0 8px; max-width: 24ch; }
+.footer-touch .f-cta { color: var(--accent); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.footer-touch .f-cta:hover { color: var(--accent-hover); }
+.footer-touch .f-cta .arr { transition: transform .35s var(--ease); }
+.footer-touch .f-cta:hover .arr { transform: translateX(4px); }
 .footer-brand p { font-size: 0.88rem; color: var(--muted); max-width: 34ch; line-height: 1.7; }
 .footer-social { display: flex; gap: 10px; margin-top: 22px; }
 .footer-social a { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--glass); border: 1px solid var(--line-soft); color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
