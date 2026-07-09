@@ -16,18 +16,33 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  /* Mobile nav toggle */
+  /* Nav menu — hamburger-driven full-screen overlay on every viewport */
   var toggle = document.querySelector('.nav-toggle');
   if (header && toggle) {
-    toggle.addEventListener('click', function () {
-      var open = header.classList.toggle('open');
+    var navMenu = header.querySelector('.nav-menu');
+    // enrich the overlay with quick actions + contact (markup stays minimal per page)
+    if (navMenu && !navMenu.querySelector('.menu-foot')) {
+      var foot = document.createElement('div');
+      foot.className = 'menu-foot';
+      foot.innerHTML = '<a class="mf-pay" href="/pay">Pay online <span aria-hidden="true">→</span></a>'
+        + '<div class="mf-links"><a href="/developers">Developers</a>'
+        + '<a href="https://cast.tmc.gg" target="_blank" rel="noopener">TMCast portal</a>'
+        + '<a href="mailto:tagnz@tmc.gg">tagnz@tmc.gg</a></div>';
+      navMenu.appendChild(foot);
+    }
+    var setNav = function (open) {
+      header.classList.toggle('open', open);
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('menu-open', open);
+    };
+    toggle.addEventListener('click', function () {
+      setNav(!header.classList.contains('open'));
     });
     header.querySelectorAll('.nav-menu a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        header.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
+      a.addEventListener('click', function () { setNav(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && header.classList.contains('open')) { setNav(false); toggle.focus(); }
     });
   }
 
