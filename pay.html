@@ -53,13 +53,49 @@
     .amount-wrap input { padding-left: 30px; }
     .form-note { margin-top: 14px; font-size: 0.85rem; color: var(--live); min-height: 1.2em; }
 
-    .svc-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line-soft); padding-block: 18px; }
-    .svc-row:first-of-type { border-top: 0; padding-top: 4px; }
-    .svc-row h3 { font-size: 1.02rem; margin-bottom: 3px; }
-    .svc-row p { font-size: 0.88rem; color: var(--muted); max-width: 44ch; }
-    .svc-price { font-weight: 600; color: var(--ink); white-space: nowrap; }
-    .svc-price small { color: var(--faint); font-weight: 400; }
-    .svc-right { display: flex; align-items: center; gap: 18px; }
+    /* payment method pills (hero) */
+    .paypills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .paypills span { font-size: 0.8rem; color: var(--muted); border: 1px solid var(--line); background: var(--glass); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap; }
+
+    /* consumer pricing cards */
+    .plans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); align-items: stretch; }
+    .price-card {
+      position: relative; display: flex; flex-direction: column;
+      background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-lg);
+      padding: 26px 24px 22px; transition: transform .4s var(--ease), border-color .4s var(--ease);
+    }
+    .price-card:hover { transform: translateY(-4px); border-color: var(--line); }
+    .price-card.featured { border-color: var(--accent-line); }
+    .pc-pop {
+      position: absolute; top: -12px; left: 20px; background: var(--accent); color: #08090b;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+      border-radius: var(--r-pill); padding: 4px 11px;
+    }
+    .pc-name { font-size: 1.08rem; margin-bottom: 4px; }
+    .pc-for { font-size: 0.86rem; color: var(--faint); line-height: 1.5; min-height: 2.6em; }
+    .pc-price { font-family: var(--ff-display); font-weight: 500; font-size: 2.3rem; color: var(--ink); letter-spacing: -0.02em; margin-top: 14px; }
+    .pc-price small { font-family: var(--ff-text); font-size: 0.85rem; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+    .pc-feat { list-style: none; margin: 16px 0 22px; display: grid; gap: 9px; flex: 1; align-content: start; }
+    .pc-feat li { display: flex; gap: 9px; align-items: flex-start; font-size: 0.88rem; color: var(--muted); }
+    .pc-feat svg { width: 15px; height: 15px; color: var(--ok); flex: none; margin-top: 3px; }
+    .pc-cta { width: 100%; justify-content: center; }
+    .pc-alt { margin-top: 11px; text-align: center; font-size: 0.82rem; color: var(--faint); }
+    .pc-alt button { background: none; border: 0; padding: 0; font-size: inherit; color: var(--accent); }
+    .pc-alt button:hover { color: var(--accent-hover); }
+    .pc-alt button[disabled] { color: var(--faint); cursor: default; }
+    @media (max-width: 1020px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .plans-grid { grid-template-columns: 1fr; } }
+
+    /* invoice how-it-works steps */
+    .steps { display: grid; gap: 18px; }
+    .step { display: flex; gap: 14px; align-items: flex-start; }
+    .step .n {
+      width: 28px; height: 28px; flex: none; display: grid; place-items: center;
+      background: var(--accent-wash); color: var(--accent); border-radius: 999px;
+      font-size: 0.85rem; font-weight: 700;
+    }
+    .step h3 { font-size: 0.98rem; margin-bottom: 2px; }
+    .step p { font-size: 0.88rem; color: var(--muted); }
 
     .trust-row { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: clamp(22px, 3vw, 34px); }
     .trust-row span { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
@@ -96,8 +132,11 @@
     <section class="hero">
       <div class="wrap">
         <p class="eyebrow">Payments</p>
-        <h1>Make a payment.</h1>
-        <p class="lede">Settle an invoice or pay for a TMC service. Checkout is handled end-to-end by Stripe — your card details never reach our servers.</p>
+        <h1>Pay online. Done in a minute.</h1>
+        <p class="lede">Plans, services and invoices — checkout is handled end-to-end by Stripe, and your card details never reach our servers. No account needed.</p>
+        <div class="paypills" aria-label="Accepted payment methods">
+          <span>💳 Card</span><span> Apple Pay</span><span>Google Pay</span><span>Cash App</span><span>Link</span><span>Amazon Pay</span><span>Bank (ACH)</span>
+        </div>
       </div>
     </section>
 
@@ -114,14 +153,81 @@
         <div id="gateway-note" class="pay-banner plain">
           <span>Online payments are temporarily unavailable. Email <a href="mailto:tagnz@tmc.gg" style="color:var(--accent)">tagnz@tmc.gg</a> and we'll arrange it directly.</span>
         </div>
-        <div id="gateway-note" class="pay-banner plain gateway-note">
-          <span>Online payments are temporarily unavailable. Email <a href="mailto:tagnz@tmc.gg" style="color:var(--accent)">tagnz@tmc.gg</a> and we'll arrange it directly.</span>
+
+        <div class="section-head reveal">
+          <p class="eyebrow muted">Plans &amp; services</p>
+          <h2>Pick a plan. That's it.</h2>
+          <p>One click to secure checkout — subscribe or pay once, cancel anytime.</p>
         </div>
 
+        <div class="plans-grid">
+          <article class="price-card featured reveal">
+            <span class="pc-pop">Most popular</span>
+            <h3 class="pc-name">TMCast Hosting</h3>
+            <p class="pc-for">Your own internet radio station, fully managed on the TMCast network.</p>
+            <div class="pc-price">$10 <small>/ month</small></div>
+            <ul class="pc-feat">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>24/7 stream relay + AutoDJ</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Metadata &amp; now-playing API</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Cancel anytime, no lock-in</li>
+            </ul>
+            <button class="btn btn-primary btn-lg pc-cta" onclick="payItem('tmcast-hosting-monthly', this)">Subscribe</button>
+            <p class="pc-alt">or <button type="button" onclick="payItem('tmcast-hosting', this)">pay once for one month — $10</button></p>
+          </article>
+
+          <article class="price-card reveal">
+            <h3 class="pc-name">Station Setup</h3>
+            <p class="pc-for">We build your station for you, end to end.</p>
+            <div class="pc-price">$25 <small>one-time</small></div>
+            <ul class="pc-feat">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Encoder &amp; endpoint configuration</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Artwork &amp; station branding</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Guided onboarding session</li>
+            </ul>
+            <button class="btn btn-ghost btn-lg pc-cta" onclick="payItem('tmcast-setup', this)">Buy setup</button>
+          </article>
+
+          <article class="price-card reveal">
+            <h3 class="pc-name">Priority Support</h3>
+            <p class="pc-for">Skip the queue on every ticket for 30 days.</p>
+            <div class="pc-price">$5 <small>/ 30 days</small></div>
+            <ul class="pc-feat">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Front of the support line</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Covers all TMC services</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Active immediately</li>
+            </ul>
+            <button class="btn btn-ghost btn-lg pc-cta" onclick="payItem('priority-pass', this)">Get priority</button>
+          </article>
+
+          <article class="price-card reveal">
+            <h3 class="pc-name">NDC Deposit</h3>
+            <p class="pc-for">Start a web or design project with NDC.</p>
+            <div class="pc-price">$50 <small>deposit</small></div>
+            <ul class="pc-feat">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Opens your engagement</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Credited in full to your first invoice</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Scoping call included</li>
+            </ul>
+            <button class="btn btn-ghost btn-lg pc-cta" onclick="payItem('ndc-deposit', this)">Pay deposit</button>
+          </article>
+        </div>
+        <p class="form-note" id="svc-error" role="alert"></p>
+
+        <div class="trust-row">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Checkout processed by Stripe</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Card details never touch our servers</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Instant email receipt</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg>Refunds within 14 days — just reply to your receipt</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tight">
+      <div class="wrap">
         <div class="split">
           <div class="card pad-lg">
             <p class="eyebrow muted">Invoice</p>
-            <h2 style="margin-top:12px">Pay an invoice.</h2>
+            <h2 style="margin-top:12px">Have an invoice?</h2>
             <p class="mt-s" style="color:var(--muted); margin-bottom:26px">Use the reference from your invoice or statement email.</p>
             <form class="pay-form" onsubmit="payInvoice(event)">
               <div class="field">
@@ -146,45 +252,23 @@
           </div>
 
           <div>
-            <p class="eyebrow muted">Services</p>
-            <h2 style="margin-top:12px; margin-bottom:22px">Fixed-price services.</h2>
-            <div class="svc-row">
-              <div>
-                <h3>TMCast station hosting</h3>
-                <p>Managed hosting on the TMCast network — stream relay, AutoDJ and metadata API included. Subscribe and it renews monthly (cancel anytime), or pay for a single month.</p>
+            <p class="eyebrow muted">How it works</p>
+            <h2 style="margin-top:12px; margin-bottom:26px">Three steps, no account.</h2>
+            <div class="steps">
+              <div class="step">
+                <span class="n">1</span>
+                <div><h3>Enter your reference</h3><p>It's in the top corner of your invoice or in the email we sent you.</p></div>
               </div>
-              <div class="svc-right"><span class="svc-price">$10 <small>/ month</small></span><button class="btn btn-ghost" onclick="payItem('tmcast-hosting', this)">Pay once</button><button class="btn btn-primary" onclick="payItem('tmcast-hosting-monthly', this)">Subscribe</button></div>
-            </div>
-            <div class="svc-row">
-              <div>
-                <h3>Station setup &amp; onboarding</h3>
-                <p>Full provisioning: encoder configuration, stream endpoints, artwork and a guided onboarding session.</p>
+              <div class="step">
+                <span class="n">2</span>
+                <div><h3>Pay how you like</h3><p>Card, Apple Pay, Google Pay, Cash App and more — on Stripe's secure checkout.</p></div>
               </div>
-              <div class="svc-right"><span class="svc-price">$25 <small>one-time</small></span><button class="btn btn-ghost" onclick="payItem('tmcast-setup', this)">Pay</button></div>
-            </div>
-            <div class="svc-row">
-              <div>
-                <h3>NDC project deposit</h3>
-                <p>Standard deposit to open an NDC engagement, applied in full against your first invoice.</p>
+              <div class="step">
+                <span class="n">3</span>
+                <div><h3>Get your receipt</h3><p>Instantly by email. Need a refund? Just reply to it within 14 days.</p></div>
               </div>
-              <div class="svc-right"><span class="svc-price">$50 <small>deposit</small></span><button class="btn btn-ghost" onclick="payItem('ndc-deposit', this)">Pay</button></div>
             </div>
-            <div class="svc-row">
-              <div>
-                <h3>Priority support pass</h3>
-                <p>Your tickets are routed to the front of the support queue for 30 days.</p>
-              </div>
-              <div class="svc-right"><span class="svc-price">$5 <small>/ 30 days</small></span><button class="btn btn-ghost" onclick="payItem('priority-pass', this)">Pay</button></div>
-            </div>
-            <p class="form-note" id="svc-error" role="alert"></p>
           </div>
-        </div>
-
-        <div class="trust-row">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Checkout processed by Stripe</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Card details never touch our servers</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Instant email receipt</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg>Refunds within 14 days — just reply to your receipt</span>
         </div>
       </div>
     </section>
