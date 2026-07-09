@@ -60,8 +60,9 @@
   ].join('\n');
 
   var SUPPORT_EMAIL = 'tagnz@tmc.gg';
-  // Optional Web3Forms access key → escalations land in the inbox directly (else falls back
-  // to opening the visitor's mail app). Grab a free key at web3forms.com (enter tagnz@tmc.gg).
+  // Escalations ("Get more help") are sent by the Resend function at /api/support (set
+  // RESEND_API_KEY in Vercel). If that's not configured, the widget falls back to Web3Forms
+  // (paste a free key below), then to opening the visitor's mail app.
   var SUPPORT_FORM_KEY = '';
   // Server-side AI (Groq via the Vercel /api/seehed function — key stays secret, no big
   // download, an actually-capable 8B model). Set GROQ_API_KEY in Vercel to enable.
@@ -385,15 +386,22 @@
     }
     function sendSupport(email, message) {
       var subject = 'Seehed support request — ' + email;
-      if (SUPPORT_FORM_KEY) {
+      function mailtoFallback() {
+        var href = 'mailto:' + SUPPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Reply to: ' + email + '\n\n' + message);
+        try { window.location.href = href; } catch (e2) {}
+        return false;
+      }
+      function web3() {
+        if (!SUPPORT_FORM_KEY) return Promise.resolve(mailtoFallback());
         return fetch('https://api.web3forms.com/submit', {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({ access_key: SUPPORT_FORM_KEY, subject: subject, from_name: 'Seehed CustomerSupport', email: email, message: message })
-        }).then(function (r) { return r.ok; }).catch(function () { return false; });
+        }).then(function (r) { return r.ok ? true : mailtoFallback(); }).catch(function () { return mailtoFallback(); });
       }
-      var href = 'mailto:' + SUPPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Reply to: ' + email + '\n\n' + message);
-      try { window.location.href = href; } catch (e2) {}
-      return Promise.resolve(false);
+      // 1) Resend via our own /api/support (key stays server-side); 2) Web3Forms; 3) mailto.
+      return fetch('/api/support', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, message: message }) })
+        .then(function (r) { return r.ok ? true : web3(); })
+        .catch(function () { return web3(); });
     }
 
     function handleQuery(text) {
