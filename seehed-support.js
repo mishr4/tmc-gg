@@ -216,19 +216,19 @@
   root.id = 'seehed-support';
   root.setAttribute('data-open', 'false');
   root.innerHTML =
-    '<span class="sh-nudge" id="sh-nudge">Need a hand? Chat with us.</span>'
-    + '<button class="sh-launch" id="sh-launch" aria-label="Open Seehed CustomerSupport">'
-    + '<img src="' + AVATAR + '" alt=""><span class="sh-on"></span></button>'
-    + '<div class="sh-panel" role="dialog" aria-label="Seehed CustomerSupport">'
+    '<span class="sh-nudge" id="sh-nudge" aria-hidden="true">Need a hand? Chat with us.</span>'
+    + '<button class="sh-launch" id="sh-launch" aria-label="Open Seehed support chat" aria-haspopup="dialog" aria-expanded="false">'
+    + '<img src="' + AVATAR + '" alt=""><span class="sh-on" aria-hidden="true"></span></button>'
+    + '<div class="sh-panel" role="dialog" aria-modal="true" aria-labelledby="sh-name" tabindex="-1">'
     + '<div class="sh-head">'
     + '<img class="sh-av" src="' + AVATAR + '" alt="">'
-    + '<div class="sh-id"><div class="sh-name">Seehed CustomerSupport</div>'
-    + '<div class="sh-status" id="sh-status"><span class="sh-live"></span>Online</div></div>'
-    + '<button class="sh-close" id="sh-close" aria-label="Close support">×</button></div>'
-    + '<div class="sh-log" id="sh-log" role="log" aria-live="polite"></div>'
-    + '<div class="sh-chips" id="sh-chips"></div>'
-    + '<form class="sh-input" id="sh-form"><input id="sh-in" type="text" placeholder="Ask a question…" autocomplete="off" aria-label="Ask a question"><button type="submit" aria-label="Send">→</button></form>'
-    + '<div class="sh-foot">Seehed CustomerSupport · TMC</div>'
+    + '<div class="sh-id"><div class="sh-name" id="sh-name">Seehed CustomerSupport</div>'
+    + '<div class="sh-status" id="sh-status"><span class="sh-live" aria-hidden="true"></span>Online</div></div>'
+    + '<button class="sh-close" id="sh-close" aria-label="Close support chat">×</button></div>'
+    + '<div class="sh-log" id="sh-log" role="log" aria-live="polite" aria-label="Conversation with Seehed"></div>'
+    + '<div class="sh-chips" id="sh-chips" aria-label="Suggested questions"></div>'
+    + '<form class="sh-input" id="sh-form"><input id="sh-in" type="text" placeholder="Ask a question…" autocomplete="off" aria-label="Type your message to Seehed"><button type="submit" aria-label="Send message">→</button></form>'
+    + '<div class="sh-foot" aria-hidden="true">Seehed CustomerSupport · TMC</div>'
     + '</div>';
 
   function mount() {
@@ -303,6 +303,7 @@
 
     function open() {
       root.setAttribute('data-open', 'true');
+      launch.setAttribute('aria-expanded', 'true');
       nudge.classList.remove('show');
       probeHosted();
       if (!greeted) {
@@ -312,11 +313,22 @@
       }
       setTimeout(function () { root.querySelector('#sh-in').focus(); }, 60);
     }
-    function close() { root.setAttribute('data-open', 'false'); launch.focus(); }
+    function close() { root.setAttribute('data-open', 'false'); launch.setAttribute('aria-expanded', 'false'); launch.focus(); }
 
     launch.addEventListener('click', open);
     root.querySelector('#sh-close').addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root.getAttribute('data-open') === 'true') close(); });
+
+    // Focus trap — keep keyboard/screen-reader focus inside the dialog while open (ADA).
+    root.querySelector('.sh-panel').addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var f = this.querySelectorAll('button, a[href], input, textarea, [tabindex]:not([tabindex="-1"])');
+      f = Array.prototype.filter.call(f, function (el) { return el.offsetParent !== null && !el.disabled; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
 
     // ── On-device AI (WebLLM, no API) — opt-in, WebGPU only, graceful fallback ──
     var ai = { status: (window.isSecureContext && navigator.gpu) ? 'idle' : 'unsupported', engine: null, history: [] };
@@ -386,12 +398,24 @@
         .then(function (d) { hosted.ready = !!(d && d.ready); })
         .catch(function () { hosted.ready = false; });
     }
+    // What page is the visitor on? Sent to the server so Seehed can answer
+    // "what's this page?" and tailor help to where they are.
+    function pageContext() {
+      var h1 = document.querySelector('main h1') || document.querySelector('h1');
+      var desc = document.querySelector('meta[name="description"]');
+      return {
+        path: location.pathname,
+        title: (document.title || '').slice(0, 140),
+        heading: h1 ? (h1.textContent || '').trim().slice(0, 140) : '',
+        description: desc ? (desc.getAttribute('content') || '').slice(0, 320) : ''
+      };
+    }
     function hostedAI(text) {
       hosted.history.push({ role: 'user', content: text });
       if (hosted.history.length > 8) hosted.history = hosted.history.slice(-8);
       setStatus('typing');
       var typing = row('bot', '<div class="sh-bubble sh-typing"><span></span><span></span><span></span></div>');
-      fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: hosted.history }) })
+      fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: hosted.history, page: pageContext() }) })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
         .then(function (d) {
           typing.remove(); setStatus('online');
@@ -426,6 +450,17 @@
         return 'It\'s <a href="mailto:tagnz@tmc.gg">tagnz@tmc.gg</a> — a human usually replies within a day. Our <a href="https://discord.gg/cirya" target="_blank" rel="noopener">Discord</a> works too.';
       if (/phone\s+number|call\s+(you|support|us)|what'?s\s+(the|your)\s+(phone|number)/.test(t))
         return 'You can call <a href="tel:+12023500343,806">+1 (202) 350-0343 ext. 806</a> — or email <a href="mailto:tagnz@tmc.gg">tagnz@tmc.gg</a> if that\'s easier.';
+      if (/^(lol|lmao+|lmfao|haha+|hah|hehe+|rofl|😂)[\s!.]*$/.test(t))
+        return "Haha — glad you're enjoying it! Anything I can help you with?";
+      if (/who\s+(are|r)\s+(you|u)|what\s+are\s+you|your\s+name|are\s+you\s+(a\s+)?(bot|ai|real|human)/.test(t))
+        return "I'm Seehed, TMC's support assistant — yep, an AI, but a genuinely helpful one. I can answer questions, help you buy a plan, or hand you to a human. What's up?";
+      if (/what\s+can\s+(you|u)\s+(do|help)|how\s+can\s+(you|u)\s+help|what\s+do\s+(you|u)\s+do|help\s+me|^help[\s!.?]*$/.test(t))
+        return "Plenty! I can explain TMC and its brands, walk you through plans and pricing, start a checkout for hosting or an invoice, and connect you with a human. Where should we start?";
+      if (/\b(this|the)\s+(page|site)\b|where\s+am\s+i|what\s+(is|am)\s+i\s+(looking|on)/.test(t) && !hosted.ready) {
+        var h = document.querySelector('main h1') || document.querySelector('h1');
+        return h ? 'You\'re on the "' + esc(h.textContent.trim()) + '" page. Want me to point you somewhere, or help with something on it?'
+                 : "You're on tmc.gg. What are you trying to find? I can point you the right way.";
+      }
       return null;
     }
 

@@ -254,10 +254,9 @@ body.menu-open { overflow: hidden; }
 }
 .nav-toggle:hover { border-color: rgba(255, 255, 255, 0.3); background: var(--glass-2); }
 .nav-toggle svg { width: 20px; height: 20px; }
-.nav-toggle line { transition: transform .3s var(--ease), opacity .25s var(--ease); transform-origin: 12px 12px; }
-.site-header.open .nav-toggle line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.site-header.open .nav-toggle line:nth-child(2) { opacity: 0; }
-.site-header.open .nav-toggle line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.nav-toggle .ico-close { display: none; }
+.site-header.open .nav-toggle .ico-menu { display: none; }
+.site-header.open .nav-toggle .ico-close { display: block; }
 
 @media (max-width: 880px) {
   .nav-actions .btn { display: none; }

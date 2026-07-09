@@ -19,6 +19,11 @@
   /* Nav menu — hamburger-driven full-screen overlay on every viewport */
   var toggle = document.querySelector('.nav-toggle');
   if (header && toggle) {
+    // swap between a hamburger and a clean X icon (reliable across browsers,
+    // unlike rotating individual SVG lines) — injected so page markup stays as-is
+    toggle.innerHTML =
+      '<svg class="ico-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
+      + '<svg class="ico-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
     var navMenu = header.querySelector('.nav-menu');
     // enrich the overlay with quick actions + contact (markup stays minimal per page)
     if (navMenu && !navMenu.querySelector('.menu-foot')) {
