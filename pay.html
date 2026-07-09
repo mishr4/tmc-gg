@@ -68,6 +68,18 @@
     .gateway-note { display: none; margin-bottom: clamp(22px, 3vw, 34px); }
     .gateway-note.show { display: flex; }
 
+    /* Demo watermark — huge, diagonal, non-interactive */
+    .demo-watermark {
+      position: fixed; inset: 0; z-index: 60; pointer-events: none;
+      display: grid; place-items: center; overflow: hidden; user-select: none;
+    }
+    .demo-watermark span {
+      font-weight: 800; font-size: clamp(140px, 30vw, 480px); line-height: 1;
+      letter-spacing: 0.06em; transform: rotate(-22deg);
+      color: rgba(255, 255, 255, 0.05);
+      -webkit-text-stroke: 2px rgba(255, 255, 255, 0.07);
+    }
+
     @media (max-width: 720px) {
       .svc-row { flex-direction: column; align-items: flex-start; }
       .svc-right { width: 100%; justify-content: space-between; }
@@ -76,6 +88,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="demo-watermark" aria-hidden="true"><span>DEMO</span></div>
   <header class="site-header">
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="The Mavion Corporation — home"><img src="/mavion-logo.png" alt="The Mavion Corporation"></a>
@@ -231,21 +244,38 @@
   </footer>
 
   <script>
+    // DEMO MODE — no real charges; flip to false once STRIPE_SECRET_KEY is live in Vercel.
+    const DEMO = true;
+    if (!DEMO) document.querySelector('.demo-watermark').remove();
+
     // Checkout return banners
     const params = new URLSearchParams(window.location.search);
-    if (params.get('status') === 'success') document.getElementById('banner-success').classList.add('show');
+    if (params.get('status') === 'success') {
+      const b = document.getElementById('banner-success');
+      if (params.get('demo') === '1') b.querySelector('span').textContent = 'Demo payment "confirmed" — this was a simulation, nothing was charged.';
+      b.classList.add('show');
+    }
     if (params.get('status') === 'canceled') document.getElementById('banner-canceled').classList.add('show');
 
     // Gateway availability — if the Stripe key isn't configured, say so honestly
     let gatewayReady = false;
-    fetch('/api/pay').then(r => r.json()).then(d => {
-      gatewayReady = !!d.ready;
-      if (!gatewayReady) document.getElementById('gateway-note').classList.add('show');
-    }).catch(() => document.getElementById('gateway-note').classList.add('show'));
+    if (!DEMO) {
+      fetch('/api/pay').then(r => r.json()).then(d => {
+        gatewayReady = !!d.ready;
+        if (!gatewayReady) document.getElementById('gateway-note').classList.add('show');
+      }).catch(() => document.getElementById('gateway-note').classList.add('show'));
+    }
 
     async function createCheckout(payload, errEl, btn) {
       const err = document.getElementById(errEl);
       err.textContent = '';
+      if (DEMO) {
+        btn.disabled = true;
+        const label = btn.textContent;
+        btn.textContent = 'Connecting…';
+        setTimeout(() => { window.location.href = '/pay?status=success&demo=1'; }, 900);
+        return;
+      }
       if (!gatewayReady) { err.textContent = 'Online payments are unavailable right now — please email tagnz@tmc.gg instead.'; return; }
       const label = btn.textContent;
       btn.disabled = true; btn.textContent = 'Connecting…';
