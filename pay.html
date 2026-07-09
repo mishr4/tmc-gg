@@ -65,9 +65,6 @@
     .trust-row span { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
     .trust-row svg { width: 15px; height: 15px; color: var(--ok); flex: none; }
 
-    .gateway-note { display: none; margin-bottom: clamp(22px, 3vw, 34px); }
-    .gateway-note.show { display: flex; }
-
     /* Demo watermark — huge, diagonal, non-interactive */
     .demo-watermark {
       position: fixed; inset: 0; z-index: 60; pointer-events: none;
@@ -244,9 +241,11 @@
   </footer>
 
   <script>
-    // DEMO MODE — no real charges; flip to false once STRIPE_SECRET_KEY is live in Vercel.
-    const DEMO = true;
-    if (!DEMO) document.querySelector('.demo-watermark').remove();
+    // Demo mode is automatic: the page asks /api/pay whether STRIPE_SECRET_KEY is
+    // configured. Not configured (or unreachable) → DEMO watermark + simulated
+    // checkout. Configured → watermark removed, real Stripe Checkout.
+    const readyPromise = fetch('/api/pay').then(r => r.json()).then(d => !!d.ready).catch(() => false);
+    readyPromise.then(ready => { if (ready) document.querySelector('.demo-watermark').remove(); });
 
     // Checkout return banners
     const params = new URLSearchParams(window.location.search);
@@ -257,26 +256,16 @@
     }
     if (params.get('status') === 'canceled') document.getElementById('banner-canceled').classList.add('show');
 
-    // Gateway availability — if the Stripe key isn't configured, say so honestly
-    let gatewayReady = false;
-    if (!DEMO) {
-      fetch('/api/pay').then(r => r.json()).then(d => {
-        gatewayReady = !!d.ready;
-        if (!gatewayReady) document.getElementById('gateway-note').classList.add('show');
-      }).catch(() => document.getElementById('gateway-note').classList.add('show'));
-    }
-
     async function createCheckout(payload, errEl, btn) {
       const err = document.getElementById(errEl);
       err.textContent = '';
-      if (DEMO) {
+      const ready = await readyPromise;
+      if (!ready) {
         btn.disabled = true;
-        const label = btn.textContent;
         btn.textContent = 'Connecting…';
         setTimeout(() => { window.location.href = '/pay?status=success&demo=1'; }, 900);
         return;
       }
-      if (!gatewayReady) { err.textContent = 'Online payments are unavailable right now — please email tagnz@tmc.gg instead.'; return; }
       const label = btn.textContent;
       btn.disabled = true; btn.textContent = 'Connecting…';
       try {
