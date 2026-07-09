@@ -449,12 +449,16 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-mark img { height: 26px; width: auto; }
 .footer-mark span { font-weight: 600; color: var(--ink); font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; }
 .footer-col a[href^="tel"] { white-space: nowrap; }
+.footer-col a[href^="mailto"], .footer-col a[href^="tel"] { color: var(--ink-2); font-weight: 500; }
+.footer-col a[href^="mailto"]:hover, .footer-col a[href^="tel"]:hover { color: var(--accent-hover); }
 .footer-brand p { font-size: 0.88rem; color: var(--muted); max-width: 34ch; line-height: 1.7; }
 .footer-social { display: flex; gap: 10px; margin-top: 22px; }
 .footer-social a { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--glass); border: 1px solid var(--line-soft); color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
 .footer-social a:hover { color: var(--ink); border-color: rgba(255,255,255,0.28); transform: translateY(-1px); }
 .footer-social svg { width: 16px; height: 16px; }
-.footer-badge { display: inline-block; margin-top: 24px; line-height: 0; }
+.footer-status { display: flex; align-items: center; gap: 9px; width: fit-content; margin-top: 22px; padding: 8px 14px; border-radius: var(--r-pill); background: var(--glass); border: 1px solid var(--line-soft); font-size: 0.8rem; font-weight: 600; color: var(--ink-2); }
+.footer-status .fs-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--ok); box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.14); }
+.footer-badge { display: block; width: fit-content; margin-top: 18px; line-height: 0; }
 .footer-badge img { height: 40px; width: auto; border-radius: 8px; border: 0; box-shadow: 0 6px 18px -6px rgba(213, 0, 0, 0.45); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
 .footer-badge:hover img { transform: translateY(-2px); box-shadow: 0 10px 22px -6px rgba(213, 0, 0, 0.55); }
 .footer-col h4 { font-family: var(--ff-mono); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
