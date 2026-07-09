@@ -31,14 +31,34 @@
       a: "We're based in California, USA, and operate online worldwide." }
   ];
 
-  // ── Plans Seehed can sell in-chat (checkout happens on Stripe via /api/pay) ──
-  var PLANS = [
-    { id: 'tmcast-hosting-monthly', label: 'TMCast Hosting — $10/month', note: 'Subscription — renews monthly, cancel anytime', k: ['tmcast', 'hosting', 'host', 'radio', 'station', 'stream'] },
-    { id: 'tmcast-hosting', label: 'TMCast Hosting — $10 one-time', note: 'One month, no auto-renew', k: ['tmcast', 'hosting', 'host', 'radio', 'station', 'stream'] },
-    { id: 'tmcast-setup', label: 'Station Setup — $25 one-time', note: 'Full provisioning + guided onboarding', k: ['tmcast', 'setup', 'onboarding', 'station'] },
-    { id: 'priority-pass', label: 'Priority Support — $5 / 30 days', note: 'Your tickets jump the queue', k: ['priority', 'pass', 'fast', 'queue'] },
-    { id: 'ndc-deposit', label: 'NDC Project Deposit — $50', note: 'Applied in full against your first invoice', k: ['ndc', 'project', 'deposit', 'web', 'site'] }
-  ];
+  // ── Products Seehed can sell in-chat (checkout happens on Stripe via /api/pay).
+  // Two-step: pick a product, then how to pay — so the bubble stays small. ──
+  var PRODUCTS = {
+    tmcast: {
+      name: 'TMCast Hosting', from: 'from $10/mo',
+      k: ['tmcast', 'hosting', 'host', 'radio', 'station', 'stream', 'broadcast'],
+      variants: [
+        { id: 'tmcast-hosting-monthly', label: 'Subscribe — $10/month', note: 'Renews monthly · cancel anytime', vk: ['month', 'subscribe', 'subscription', 'recurring'] },
+        { id: 'tmcast-hosting', label: 'Pay once — $10', note: 'One month · no auto-renew', vk: ['once', 'one-time', 'one time', 'single'] }
+      ],
+      addon: { id: 'tmcast-setup', text: 'Want us to set it up for you? Add Station Setup — $25' }
+    },
+    setup: {
+      name: 'Station Setup', from: '$25 one-time',
+      k: ['setup', 'onboarding', 'provision', 'configure'],
+      variants: [{ id: 'tmcast-setup', label: 'Buy Station Setup — $25', note: 'Encoder config, endpoints, artwork + guided session', vk: [] }]
+    },
+    priority: {
+      name: 'Priority Support', from: '$5 / 30 days',
+      k: ['priority', 'pass', 'queue', 'faster support'],
+      variants: [{ id: 'priority-pass', label: 'Get Priority — $5 / 30 days', note: 'Front of the queue on every ticket', vk: [] }]
+    },
+    ndc: {
+      name: 'NDC Project', from: '$50 deposit',
+      k: ['ndc', 'deposit', 'web project', 'website project', 'design project'],
+      variants: [{ id: 'ndc-deposit', label: 'Pay deposit — $50', note: 'Credited in full to your first invoice', vk: [] }]
+    }
+  };
 
   // ── On-device AI (no API): WebLLM runs a small model in the browser via WebGPU. ──
   // Opt-in: nothing downloads until the visitor turns it on. Swap the model id for a
@@ -149,15 +169,18 @@
     + '.sh-ai-load:hover{background:#6ba0ff}.sh-ai-load[disabled]{opacity:.6;cursor:default}'
     + '.sh-ai-load:focus-visible{outline:2px solid #fafafa;outline-offset:2px}'
 
-    /* plan picker (payment buttons inside a bot bubble) */
+    /* plan picker (payment buttons inside a bot bubble) — compact, no scrolling */
     + '.sh-bubble.sh-plans{max-width:288px;width:100%}'
     + '.sh-plan{display:block;width:100%;text-align:left;font:inherit;background:#0e1320;border:1px solid rgba(76,141,255,.35);'
-    + 'border-radius:11px;padding:9px 12px;margin-top:8px;cursor:pointer;transition:.14s}'
+    + 'border-radius:10px;padding:7px 11px;margin-top:6px;cursor:pointer;transition:.14s}'
     + '.sh-plan:hover{border-color:#4c8dff;background:#14203a}'
     + '.sh-plan:focus-visible{outline:2px solid #4c8dff;outline-offset:1px}'
     + '.sh-plan[disabled]{opacity:.55;cursor:default}'
-    + '.sh-plan .sh-plan-l{display:block;font-size:13.5px;font-weight:600;color:#cfe0ff}'
-    + '.sh-plan .sh-plan-n{display:block;font-size:11.5px;color:#9a9ca2;margin-top:1px}'
+    + '.sh-plan .sh-plan-l{display:block;font-size:13px;font-weight:600;color:#cfe0ff}'
+    + '.sh-plan .sh-plan-n{display:block;font-size:11px;color:#9a9ca2;margin-top:1px}'
+    + '.sh-plan.sh-plan-addon{background:transparent;border-style:dashed;border-color:rgba(255,255,255,.16)}'
+    + '.sh-plan.sh-plan-addon:hover{border-color:#4c8dff}'
+    + '.sh-plan.sh-plan-addon .sh-plan-n{color:#8fb4ff}'
 
     /* "Get more help" chip + escalation email form */
     + '.sh-help-chip{border-color:rgba(76,141,255,.5);color:#8fb4ff}'
@@ -255,7 +278,7 @@
       });
       var shop = document.createElement('button');
       shop.className = 'sh-chip sh-help-chip'; shop.type = 'button'; shop.textContent = 'Buy a plan';
-      shop.addEventListener('click', function () { userMsg('I want to buy a plan'); showPlans(PLANS); });
+      shop.addEventListener('click', function () { userMsg('I want to buy a plan'); showProductChoices(); });
       chips.appendChild(shop);
       var help = document.createElement('button');
       help.className = 'sh-chip sh-help-chip'; help.type = 'button'; help.textContent = 'Get more help';
@@ -380,46 +403,123 @@
       botSay("I'm not sure about that one — tap <b>Get more help</b> below to reach a person, or email <a href=\"mailto:tagnz@tmc.gg\">tagnz@tmc.gg</a>.");
     }
 
-    // ── In-chat purchases: intent → plan picker bubble → Stripe Checkout ──
-    function buyIntent(text) {
-      var t = text.toLowerCase();
-      var buy = /(buy|purchase|subscribe|subscription|order|sign\s?up|upgrade|pay\s?for|get\s+(a|the|tmcast|hosting|priority|setup)|checkout)/.test(t);
-      var price = /(how much|price|pricing|cost|per month|monthly)/.test(t);
-      var prod = /(tmcast|hosting|host|station|radio|priority|pass|ndc|deposit|setup|plan|service)/.test(t);
-      if (!(buy || price) || !prod) return null;
-      var hits = PLANS.filter(function (p) {
-        return p.k.some(function (k) { return t.indexOf(k) !== -1; });
-      });
-      return hits.length ? hits : PLANS;
+    // ── In-chat purchases with conversation memory. The bot remembers the last
+    // product you mentioned, so "let me purchase" after "tmcast" just works. ──
+    var convo = { product: null, offered: false };
+
+    var BUY_RE = /(buy|purchase|subscribe|subscription|order|sign\s?up|upgrade|pay|checkout|i want|i'?ll take|give me|how much|price|pricing|cost)/;
+
+    function detectProduct(t) {
+      for (var key in PRODUCTS) {
+        var hit = PRODUCTS[key].k.some(function (k) { return t.indexOf(k) !== -1; });
+        if (hit) return key;
+      }
+      return null;
     }
 
-    function showPlans(plans, intro) {
+    function detectVariant(t, product) {
+      var vs = PRODUCTS[product].variants;
+      for (var i = 0; i < vs.length; i++) {
+        if (vs[i].vk.some(function (k) { return t.indexOf(k) !== -1; })) return vs[i];
+      }
+      return null;
+    }
+
+    function purchaseFlow(text) {
+      var t = text.toLowerCase();
+      var prod = detectProduct(t);
+      if (prod) convo.product = prod;
+      var buying = BUY_RE.test(t) || /\bplans?\b/.test(t);
+      // not shopping — unless we just offered the menu and they name a product ("tmcast")
+      if (!buying && !(convo.offered && prod)) return false;
+      if (buying && /invoice/.test(t)) {
+        botSay('Sure — pay any invoice at <a href="/pay">tmc.gg/pay</a>: enter the reference from your invoice, choose how to pay, done.');
+        return true;
+      }
+
+      if (convo.product) {
+        // "monthly please" / "one time" straight after the offer → skip the menu
+        var v = detectVariant(t, convo.product);
+        var p = PRODUCTS[convo.product];
+        if (v) { showVariants(p, 'You got it — ' + p.name + ', ' + v.label + '. Tap to confirm:', [v]); return true; }
+        showVariants(p);
+        return true;
+      }
+      showProductChoices();
+      return true;
+    }
+
+    function planBubble() {
+      var wrap = row('bot', '<div class="sh-bubble sh-plans"></div>').querySelector('.sh-bubble');
+      return wrap;
+    }
+
+    function withTyping(fn) {
       setStatus('typing');
       var typing = row('bot', '<div class="sh-bubble sh-typing"><span></span><span></span><span></span></div>');
-      setTimeout(function () {
-        typing.remove(); setStatus('online');
-        var wrap = row('bot', '<div class="sh-bubble sh-plans"></div>').querySelector('.sh-bubble');
+      setTimeout(function () { typing.remove(); setStatus('online'); fn(); scrollDown(); }, 650);
+    }
+
+    function planButton(wrap, label, note, onClick) {
+      var b = document.createElement('button');
+      b.className = 'sh-plan'; b.type = 'button';
+      b.innerHTML = '<span class="sh-plan-l"></span>' + (note ? '<span class="sh-plan-n"></span>' : '');
+      b.querySelector('.sh-plan-l').textContent = label;
+      if (note) b.querySelector('.sh-plan-n').textContent = note;
+      b.addEventListener('click', function () { onClick(b, wrap); });
+      wrap.appendChild(b);
+      return b;
+    }
+
+    function showProductChoices() {
+      convo.offered = true;
+      withTyping(function () {
+        var wrap = planBubble();
         var t = document.createElement('div');
         t.className = 'sh-form-t';
-        t.textContent = intro || 'Yes! Which plan would you like? Pick one and I’ll take you to secure checkout (Stripe):';
+        t.textContent = 'Happy to help! What would you like?';
         wrap.appendChild(t);
-        plans.forEach(function (p) {
-          var b = document.createElement('button');
-          b.className = 'sh-plan'; b.type = 'button';
-          b.innerHTML = '<span class="sh-plan-l"></span><span class="sh-plan-n"></span>';
-          b.querySelector('.sh-plan-l').textContent = p.label;
-          b.querySelector('.sh-plan-n').textContent = p.note;
-          b.addEventListener('click', function () { startCheckout(p, b, wrap); });
-          wrap.appendChild(b);
+        Object.keys(PRODUCTS).forEach(function (key) {
+          var p = PRODUCTS[key];
+          planButton(wrap, p.name + ' · ' + p.from, null, function () {
+            convo.product = key;
+            userMsg(p.name);
+            showVariants(p);
+          });
         });
-        scrollDown();
-      }, 700);
+      });
+    }
+
+    function showVariants(p, intro, only) {
+      convo.offered = true;
+      withTyping(function () {
+        var wrap = planBubble();
+        var t = document.createElement('div');
+        t.className = 'sh-form-t';
+        t.textContent = intro || (p.variants.length > 1
+          ? 'Yes! ' + p.name + ' — how would you like to pay?'
+          : 'Yes! ' + p.name + ' — tap below and I’ll take you to secure checkout:');
+        wrap.appendChild(t);
+        (only || p.variants).forEach(function (v) {
+          planButton(wrap, v.label, v.note, function (btn) { startCheckout(v, btn, wrap); });
+        });
+        if (p.addon) {
+          var a = document.createElement('button');
+          a.className = 'sh-plan sh-plan-addon'; a.type = 'button';
+          a.innerHTML = '<span class="sh-plan-n"></span>';
+          a.querySelector('.sh-plan-n').textContent = p.addon.text;
+          a.addEventListener('click', function () { startCheckout({ id: p.addon.id, note: p.addon.text }, a, wrap); });
+          wrap.appendChild(a);
+        }
+      });
     }
 
     function startCheckout(plan, btn, wrap) {
       var all = wrap.querySelectorAll('.sh-plan');
       for (var i = 0; i < all.length; i++) all[i].disabled = true;
-      btn.querySelector('.sh-plan-n').textContent = 'Opening secure checkout…';
+      var noteEl = btn.querySelector('.sh-plan-n') || btn.querySelector('.sh-plan-l');
+      var prevText = noteEl.textContent;
+      noteEl.textContent = 'Opening secure checkout…';
       fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -432,7 +532,7 @@
         })
         .catch(function () {
           for (var i = 0; i < all.length; i++) all[i].disabled = false;
-          btn.querySelector('.sh-plan-n').textContent = plan.note;
+          noteEl.textContent = prevText;
           botMsg("Hmm, checkout didn't open — try again in a moment, or head to <a href=\"/pay\">tmc.gg/pay</a> and pay there.");
         });
     }
@@ -486,8 +586,7 @@
     }
 
     function handleQuery(text) {
-      var plans = buyIntent(text);
-      if (plans) return showPlans(plans);                          // purchases: buttons beat prose
+      if (purchaseFlow(text)) return;                              // purchases: buttons beat prose
       if (hosted.ready) return hostedAI(text);                     // Groq (8B) — the good path, preferred
       if (ai.status === 'ready') return aiAnswer(text);            // in-browser model (only if enabled + loaded)
       if (ai.status === 'loading') return botSay('One sec — still loading the model, then ask me again.');
