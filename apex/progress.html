@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress — Apex Multicultural Community Center</title>
+<meta name="description" content="Follow the Apex capital campaign: a $2.4M goal, exactly where every dollar goes, six honest milestones on the road to opening in 2027, and every way to give.">
+<meta property="og:title" content="Progress — Apex Multicultural Community Center">
+<meta property="og:description" content="The honest picture of the Apex capital campaign: $2.4M goal, where every dollar goes, and the road to opening day in 2027.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tmc.gg/apex/progress">
+<meta name="theme-color" content="#f7fff5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23082414'/%3E%3Cpath d='M10 46 L28 22 L40 38 H46 L36 25 L42 17 L58 46 Z' fill='%2339D353'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Apex Display';src:url('/fonts/apex-display.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Apex Text';src:url('/fonts/apex-text.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Apex CTA';src:url('/fonts/apex-cta.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
+
+:root{
+  --bg:#f7fff5;
+  --ink:#082414;
+  --heading:#123b22;
+  --body:#4c6854;
+  --nav-muted:#2e5d3b;
+  --accent:#16b83e;
+  --green:#39d353;
+  --green-soft:#b9f8bf;
+  --tint-green:#effff0;
+  --tint-blue:#e8faff;
+  --tint-yellow:#fff8df;
+  --card-radius:28px;
+  --display:'Apex Display','Arial Rounded MT Bold',ui-rounded,system-ui,sans-serif;
+  --text:'Apex Text','Segoe UI',system-ui,sans-serif;
+  --cta:'Apex CTA','Apex Text','Segoe UI',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--text);font-weight:700;color:var(--body);
+  background:var(--bg);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:var(--green);color:var(--ink)}
+img,svg{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+section{scroll-margin-top:84px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---------- header ---------- */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,255,245,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:box-shadow .3s ease;
+}
+.site-header.scrolled{box-shadow:0 8px 30px rgba(8,36,20,.08)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.logo svg{width:84px;height:auto}
+.logo span{font-family:var(--display);font-size:24px;color:var(--heading)}
+.nav-links{display:flex;align-items:center;gap:34px;list-style:none}
+.nav-links a{font-size:14px;color:var(--nav-muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:14px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--cta);font-weight:900;font-size:15px;
+  border-radius:999px;padding:14px 26px;border:0;cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+  white-space:nowrap;position:relative;overflow:hidden;
+}
+.btn:active{transform:scale(.97)}
+.btn .arrow{transition:transform .25s ease}
+.btn:hover .arrow:not(.heart){transform:translateX(4px)}
+.btn:hover .heart{animation:heartbeat 1s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.28)}50%{transform:scale(1)}75%{transform:scale(1.12)}}
+.btn .ripple{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:rgba(255,255,255,.55);transform:scale(0);
+  animation:ripple .55s ease-out forwards;
+}
+.btn-dark .ripple{background:rgba(255,255,255,.28)}
+@keyframes ripple{to{transform:scale(2.8);opacity:0}}
+.btn-green{background:var(--green);color:var(--ink);box-shadow:0 16px 34px rgba(57,211,83,.26)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(57,211,83,.38)}
+.btn-white{background:#fff;color:#245334;box-shadow:0 10px 26px rgba(8,36,20,.07)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(8,36,20,.12)}
+.btn-dark{background:var(--heading);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);background:var(--ink);box-shadow:0 14px 30px rgba(8,36,20,.28)}
+.btn-sm{padding:11px 22px;font-size:14px}
+.btn .arrow{width:19px;height:19px;flex:none}
+
+.menu-btn{display:none;background:none;border:0;cursor:pointer;padding:10px 8px;margin-left:4px}
+.menu-btn .bar{display:block;width:24px;height:2.5px;border-radius:2px;background:var(--heading);transition:transform .3s ease,opacity .25s ease}
+.menu-btn .bar + .bar{margin-top:5.5px}
+.menu-btn.open .bar:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu-btn.open .bar:nth-child(2){opacity:0}
+.menu-btn.open .bar:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.mobile-menu{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:84px 0 110px;overflow:hidden}
+.hero::before,.hero::after{
+  content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;
+}
+.hero::before{width:520px;height:520px;left:-140px;top:40px;background:rgba(57,211,83,.16);animation:drift1 16s ease-in-out infinite alternate}
+.hero::after{width:560px;height:560px;right:-120px;top:-80px;background:rgba(57,211,83,.14);animation:drift2 20s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(70px,46px) scale(1.14)}}
+@keyframes drift2{to{transform:translate(-80px,60px) scale(1.08)}}
+.enter{animation:fadeUp .7s cubic-bezier(.22,.8,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.hero .eyebrow.enter{animation-delay:.05s}
+h1.enter{animation-delay:.15s}
+.lede.enter{animation-delay:.3s}
+.meter-panel.enter{animation-delay:.45s;animation-duration:.85s}
+
+.hero-inner{position:relative;max-width:780px;margin:0 auto;text-align:center}
+
+h1,h2,h3{font-family:var(--display);font-weight:700;color:var(--heading)}
+h1{font-size:clamp(42px,6.2vw,68px);line-height:1.02;letter-spacing:-.04em;margin-bottom:28px}
+.hero .lede{font-size:17px;max-width:580px;margin:0 auto 42px}
+
+.eyebrow{
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);
+  display:block;margin-bottom:16px;
+}
+
+/* ---------- campaign meter panel ---------- */
+.meter-panel{
+  background:#fff;border-radius:var(--card-radius);padding:38px 40px 40px;
+  box-shadow:0 30px 60px rgba(8,36,20,.10);text-align:left;
+}
+.meter-kicker{font-size:14px;color:var(--accent);margin-bottom:16px}
+.meter{background:#dff4df;border-radius:999px;height:16px;overflow:hidden;margin-bottom:14px}
+.meter-fill{
+  height:100%;width:0;min-width:14px;border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--green));
+  transition:width 1.4s cubic-bezier(.22,.8,.24,1);
+  position:relative;overflow:hidden;
+}
+.meter-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.55) 50%,transparent 75%);
+  transform:translateX(-100%);animation:shimmer 2.4s ease-in-out 1.6s infinite;
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.meter-labels{display:flex;justify-content:space-between;font-size:15px;margin-bottom:28px}
+.meter-labels strong{color:var(--heading)}
+.meter-panel .btn{width:100%;font-size:16px;padding:16px 28px}
+.panel-note{font-size:13px;margin-top:14px;text-align:center;opacity:.85}
+.panel-note a{color:var(--accent)}
+.panel-note a:hover{text-decoration:underline}
+
+/* ---------- section heads ---------- */
+.section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+.section-head h2{font-size:clamp(32px,4.4vw,48px);letter-spacing:-.035em;line-height:1.08;margin-bottom:18px}
+.section-head p{font-size:17px}
+
+/* ---------- where the money goes ---------- */
+.breakdown{background:#fff;padding:110px 0;border-radius:48px 48px 0 0;position:relative}
+.fund-list{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+.fund-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:10px}
+.fund-head h3{font-size:22px;letter-spacing:-.01em;line-height:1.2}
+.fund-amt{font-family:var(--cta);font-weight:900;font-size:18px;color:var(--heading);white-space:nowrap}
+.fund-pct{font-family:var(--text);font-weight:700;font-size:14px;color:var(--accent);margin-left:8px}
+.fund-bar{background:#eaf7ea;border-radius:999px;height:14px;overflow:hidden;margin-bottom:10px}
+.fund-fill{
+  height:100%;width:0;min-width:8px;border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--green));
+  transition:width 1.2s cubic-bezier(.22,.8,.24,1);
+}
+.fund-row p{font-size:15px}
+.fund-total{max-width:820px;margin:44px auto 0;text-align:center;font-size:15px}
+.fund-total strong{color:var(--heading)}
+
+/* ---------- milestones timeline ---------- */
+.milestones{
+  background:linear-gradient(180deg,#fff 0%,var(--bg) 30%,#e9fbe6 100%);
+  padding:110px 0 120px;
+}
+.timeline{position:relative;max-width:680px;margin:0 auto}
+.tl-list{list-style:none;display:flex;flex-direction:column;gap:36px}
+.timeline::before{
+  content:"";position:absolute;left:15px;top:12px;bottom:12px;width:3px;border-radius:3px;
+  background:#dbf0da;
+}
+.tl-progress{
+  position:absolute;left:15px;top:12px;bottom:12px;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--green),var(--accent));
+  transform:scaleY(0);transform-origin:top center;
+  transition:transform 1.8s cubic-bezier(.22,.8,.3,1) .2s;
+}
+.timeline.drawn .tl-progress{transform:scaleY(1)}
+.tl-item{position:relative;padding-left:58px}
+.tl-dot{
+  position:absolute;left:6px;top:5px;width:21px;height:21px;border-radius:50%;
+  background:#fff;border:3px solid var(--green-soft);
+}
+.tl-item.now .tl-dot{
+  background:var(--green);border-color:var(--green);
+  box-shadow:0 0 0 6px rgba(57,211,83,.22);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.8)}}
+.tl-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.tl-head h3{font-size:22px;letter-spacing:-.01em;line-height:1.2}
+.pill{
+  font-family:var(--text);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border-radius:999px;padding:4px 12px;white-space:nowrap;
+}
+.pill-now{background:var(--green);color:var(--ink)}
+.pill-next{background:var(--tint-blue);color:#0f7ba6}
+.pill-later{background:var(--tint-yellow);color:#93761a}
+.tl-item p{font-size:15px;max-width:540px}
+
+/* ---------- ways to give ---------- */
+.give{background:#fff;padding:110px 0 80px;border-radius:48px 48px 0 0;position:relative}
+.give-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.give-card{
+  border-radius:24px;padding:32px 26px;display:flex;flex-direction:column;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.give-card:hover{transform:translateY(-6px);box-shadow:0 24px 48px rgba(8,36,20,.10)}
+.give-card.green{background:var(--tint-green)}
+.give-card.blue{background:var(--tint-blue)}
+.give-card.yellow{background:var(--tint-yellow)}
+.give-card .icon{width:40px;height:40px;color:var(--accent);margin-bottom:32px}
+.give-card:hover .icon{animation:wiggle .6s ease}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}60%{transform:rotate(7deg)}}
+.give-card h3{font-size:22px;letter-spacing:-.01em;line-height:1.15;margin-bottom:10px}
+.give-card p{font-size:15px;margin-bottom:24px}
+.give-link{
+  margin-top:auto;display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--cta);font-weight:900;font-size:14px;color:var(--heading);
+}
+.give-link svg{width:17px;height:17px;flex:none;transition:transform .25s ease}
+.give-card:hover .give-link svg{transform:translateX(4px)}
+
+/* ---------- FAQ ---------- */
+.faq-sec{background:#fff;padding:30px 0 120px}
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.faq-item{background:var(--tint-green);border-radius:20px;transition:box-shadow .25s ease}
+.faq-item.open{box-shadow:0 16px 36px rgba(8,36,20,.08)}
+.faq-q{margin:0}
+.faq-btn{
+  width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;
+  text-align:left;background:none;border:0;cursor:pointer;padding:22px 24px;
+  font-family:var(--display);font-weight:700;font-size:19px;line-height:1.3;color:var(--heading);
+}
+.faq-btn .chev{flex:none;width:22px;height:22px;color:var(--accent);transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.22,.8,.3,1)}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-a-inner{overflow:hidden}
+.faq-a-inner p{padding:0 24px 24px;font-size:15px}
+.faq-a-inner a{color:var(--accent)}
+.faq-a-inner a:hover{text-decoration:underline}
+
+/* ---------- CTA band ---------- */
+.cta-band{background:var(--green);padding:96px 0;text-align:center}
+.cta-band h2{font-size:clamp(34px,4.6vw,52px);letter-spacing:-.03em;line-height:1.06;color:var(--ink);margin-bottom:16px}
+.cta-band p{color:rgba(8,36,20,.74);font-size:18px;max-width:540px;margin:0 auto 32px}
+.cta-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.cta-band .btn-dark{background:var(--ink)}
+
+/* ---------- footer ---------- */
+.site-footer{background:#fff;padding:84px 0 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;padding-bottom:64px}
+.footer-brand .logo{margin-bottom:20px}
+.footer-brand p{font-size:15px;max-width:300px;margin-bottom:18px}
+.footer-brand a{color:var(--accent);font-size:15px}
+.footer-brand a:hover{text-decoration:underline}
+.footer-col h4{
+  font-family:var(--text);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--heading);margin-bottom:20px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.footer-col a{font-size:16px;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{
+  border-top:1px solid #eef5ec;padding:26px 0 34px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;
+}
+.footer-bottom a{color:var(--heading)}
+.footer-bottom a:hover{color:var(--accent)}
+
+/* ---------- donate modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(8,36,20,.48);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;
+}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{
+  background:#fff;border-radius:28px;padding:38px 36px 32px;max-width:470px;width:100%;
+  position:relative;box-shadow:0 40px 90px rgba(8,36,20,.35);
+  max-height:calc(100vh - 40px);overflow:auto;
+  transform:translateY(30px) scale(.95);
+  transition:transform .4s cubic-bezier(.2,1.2,.35,1);
+}
+.modal-overlay.open .modal{transform:none}
+.modal h3{font-family:var(--display);font-size:30px;letter-spacing:-.02em;line-height:1.1;color:var(--heading);margin:6px 0 8px}
+.modal-sub{font-size:15px;margin-bottom:22px}
+.modal-close{
+  position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;border:0;
+  background:var(--tint-green);color:var(--heading);font-size:20px;line-height:1;cursor:pointer;
+  font-family:var(--text);font-weight:700;
+  transition:transform .25s ease,background .2s ease;
+}
+.modal-close:hover{transform:rotate(90deg);background:#dff4df}
+.gift-type{display:flex;background:var(--tint-green);border-radius:999px;padding:5px;margin-bottom:18px}
+.type-btn{
+  flex:1;border:0;border-radius:999px;padding:11px 0;cursor:pointer;
+  font-family:var(--text);font-weight:700;font-size:14px;color:var(--body);
+  background:transparent;transition:background .25s ease,color .25s ease,box-shadow .25s ease;
+}
+.type-btn.active{background:#fff;color:var(--heading);box-shadow:0 4px 14px rgba(8,36,20,.10)}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.amount-chip{
+  border:2px solid #e2f2e2;border-radius:16px;padding:14px 0;cursor:pointer;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);background:#fff;
+  transition:border-color .2s ease,transform .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.amount-chip:hover{border-color:var(--green);transform:translateY(-2px)}
+.amount-chip.active{
+  background:var(--green);border-color:var(--green);color:var(--ink);
+  box-shadow:0 10px 22px rgba(57,211,83,.35);animation:pop .3s ease;
+}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+.custom-amount{
+  display:flex;align-items:center;border:2px solid #e2f2e2;border-radius:16px;padding:0 0 0 14px;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);
+  transition:border-color .2s ease;
+}
+.custom-amount:focus-within{border-color:var(--green)}
+.custom-amount input{
+  width:100%;border:0;outline:none;background:none;padding:14px 10px 14px 2px;
+  font-family:var(--cta);font-weight:900;font-size:16px;color:var(--heading);
+}
+.custom-amount input::placeholder{color:#a9c3ae;font-family:var(--text);font-weight:700}
+.custom-amount input::-webkit-outer-spin-button,.custom-amount input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.custom-amount input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.gift-line{
+  font-size:15px;background:var(--tint-green);border-radius:14px;padding:12px 16px;
+  margin-bottom:18px;color:var(--body);
+}
+.gift-line strong{color:var(--heading)}
+.gift-line.pop{animation:pop .3s ease}
+.modal .btn{width:100%}
+.modal-note{font-size:13px;margin-top:12px;text-align:center;opacity:.8}
+body.modal-open{overflow:hidden}
+
+/* ---------- toast & confetti ---------- */
+.toast{
+  position:fixed;left:50%;bottom:28px;z-index:300;
+  background:var(--ink);color:#fff;font-size:15px;padding:14px 24px;border-radius:999px;
+  box-shadow:0 18px 40px rgba(8,36,20,.32);
+  opacity:0;pointer-events:none;transform:translate(-50%,20px);
+  transition:opacity .3s ease,transform .3s ease;max-width:calc(100vw - 40px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;z-index:290;pointer-events:none;overflow:hidden}
+.confetti i{
+  position:absolute;width:9px;height:13px;border-radius:3px;opacity:0;
+  animation:confetti 1.5s cubic-bezier(.25,.6,.35,1) forwards;
+}
+@keyframes confetti{
+  0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}
+  50%{opacity:1;transform:translate(calc(var(--dx)*.65),var(--up)) rotate(calc(var(--rot)*.5))}
+  100%{opacity:0;transform:translate(var(--dx),var(--down)) rotate(var(--rot)) scale(.7)}
+}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .hero{padding:56px 0 80px}
+  .breakdown,.milestones,.give{padding:80px 0}
+  .give{padding-bottom:60px}
+  .faq-sec{padding:20px 0 90px}
+  .give-cards{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .nav-links{display:none}
+  .nav-right .btn{display:none}
+  .menu-btn{display:block}
+  .mobile-menu{
+    display:block;position:fixed;inset:72px 0 auto 0;z-index:99;
+    background:#fff;box-shadow:0 30px 60px rgba(8,36,20,.14);
+    padding:10px 24px 26px;border-radius:0 0 28px 28px;
+    transform:translateY(-115%);transition:transform .3s ease;
+  }
+  .mobile-menu.open{transform:none}
+  .mobile-menu a{
+    display:block;padding:15px 4px;font-size:17px;color:var(--heading);
+    border-bottom:1px solid #eef5ec;
+  }
+  .mobile-menu a:last-of-type{border-bottom:0}
+  .mobile-menu a.btn{display:inline-flex;width:100%;margin-top:14px;padding:14px 26px;border-bottom:0}
+  .footer-grid{grid-template-columns:1fr;gap:36px}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+  .meter-panel{padding:30px 22px 32px}
+  .give-cards{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+  .fund-head{flex-wrap:wrap}
+  .tl-item{padding-left:48px}
+  .timeline::before,.tl-progress{left:12px}
+  .tl-dot{left:3px}
+  .faq-btn{padding:18px;font-size:17px}
+  .faq-a-inner p{padding:0 18px 20px}
+  .cta-actions .btn{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <div class="wrap nav">
+    <a class="logo" href="/apex" aria-label="Apex home">
+      <svg viewBox="0 0 17470 2817" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="currentColor" d="M8889.48 2510H6542.94l374.48-525.48h869.76l-570.78-824.46L6259.06 2510h-730.84L6823.8 682.9c87.58-120.8 208.38-226.5 401.66-226.5 187.24 0 311.06 99.66 398.64 226.5zm1796.32-522.46H9601.63V2510h-622.12V1471.12h1775.79c169.1 0 271.8-87.58 271.8-229.52 0-138.92-105.7-226.5-271.8-226.5H8979.51l419.78-525.48h1286.51c585.9 0 963.4 295.96 963.4 755 0 453-371.5 742.92-963.4 742.92m1788.7-972.44v259.72h1597.6l-362.4 446.96h-1235.2v262.74h1718.4L13794.2 2510h-1944.8V489.62h2340.5l-404.7 525.48zm3870.7-525.48h803.3l-1044.9 987.54L17199.8 2510h-869.7l-694.6-655.34L14959 2510h-812.4l1099.3-1020.76-1060-999.62h869.7l658.4 619.1z"/>
+        <path fill="#3BC94E" d="M2173.37 778.558c27.92-27.922 73.2-27.922 101.12 0l50.56 50.558-639.94 639.934L1584 1367.93z"/>
+        <path fill="#3BC94E" d="M2860.33 1364.4a5.003 5.003 0 0 1 0 7.07l-94.05 94.04a5.003 5.003 0 0 1-7.07 0l-632.86-632.858a5.005 5.005 0 0 1 0-7.071l47.02-47.023c27.93-27.922 73.2-27.922 101.12 0z"/>
+        <path fill="currentColor" d="M219.383 2724 1535.38 969.333l987 1315.997h553.82l-827.98-1096.66L3070.72 92l1974 2632z"/>
+      </svg>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="/apex">Home</a></li>
+        <li><a href="/apex/community">Community</a></li>
+        <li><a href="/apex/progress" class="active" aria-current="page">Progress</a></li>
+        <li><a href="/apex/updates">Updates</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a class="btn btn-green btn-sm" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+    <a href="/apex">Home</a>
+    <a href="/apex/community">Community</a>
+    <a href="/apex/progress" aria-current="page">Progress</a>
+    <a href="/apex/updates">Updates</a>
+    <a class="btn btn-green" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
+    </a>
+  </nav>
+</header>
+
+<main>
+  <!-- hero + campaign meter -->
+  <section class="hero" id="campaign">
+    <div class="wrap">
+      <div class="hero-inner">
+        <span class="eyebrow enter">Capital campaign</span>
+        <h1 class="enter">Every gift helps make the home real.</h1>
+        <p class="lede enter">The campaign has just entered its quiet phase &mdash; the early chapter where friends, neighbors, and first believers set the pace. Here&rsquo;s the honest picture: where we are, where every dollar goes, and what happens next.</p>
+        <div class="meter-panel enter">
+          <p class="meter-kicker">The very first bar-moving gift could be yours. 🌱</p>
+          <div class="meter" role="progressbar" aria-label="Campaign progress" aria-valuemin="0" aria-valuemax="2400000" aria-valuenow="0">
+            <div class="meter-fill" id="meterFill"></div>
+          </div>
+          <div class="meter-labels">
+            <span><strong id="raisedLabel">$0</strong> raised</span>
+            <span><strong id="goalLabel">$2.4M</strong> goal</span>
+          </div>
+          <a class="btn btn-green" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate or pledge
+            <svg class="arrow heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
+          </a>
+          <p class="panel-note">Prefer a conversation first? <a href="mailto:hello@apexmcc.org?subject=Briefing%20request%20%E2%80%94%20Apex%20MCC">Request a briefing</a> &mdash; we love those.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- where the money goes -->
+  <section class="breakdown" id="breakdown">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Where the money goes</span>
+        <h2>Every dollar has a job.</h2>
+        <p>No mystery line items, no vague &ldquo;operations&rdquo; bucket. Four numbers that add up to exactly $2.4M.</p>
+      </div>
+      <div class="fund-list">
+        <div class="fund-row reveal">
+          <div class="fund-head">
+            <h3>Site &amp; building</h3>
+            <span class="fund-amt">$1.6M<span class="fund-pct">67%</span></span>
+          </div>
+          <div class="fund-bar" aria-hidden="true"><div class="fund-fill" data-pct="66.7"></div></div>
+          <p>A permanent home &mdash; the land and the walls that make everything else possible.</p>
+        </div>
+        <div class="fund-row reveal" data-delay="120">
+          <div class="fund-head">
+            <h3>Renovation &amp; accessibility</h3>
+            <span class="fund-amt">$450K<span class="fund-pct">19%</span></span>
+          </div>
+          <div class="fund-bar" aria-hidden="true"><div class="fund-fill" data-pct="18.75"></div></div>
+          <p>Ramps, kitchens, quiet rooms, and good acoustics, so every body and every tradition fits comfortably.</p>
+        </div>
+        <div class="fund-row reveal" data-delay="240">
+          <div class="fund-head">
+            <h3>First-year programs</h3>
+            <span class="fund-amt">$250K<span class="fund-pct">10%</span></span>
+          </div>
+          <div class="fund-bar" aria-hidden="true"><div class="fund-fill" data-pct="10.4"></div></div>
+          <p>Classes, celebrations, and staff, so the center feels alive from the very first week.</p>
+        </div>
+        <div class="fund-row reveal" data-delay="360">
+          <div class="fund-head">
+            <h3>Operating reserve</h3>
+            <span class="fund-amt">$100K<span class="fund-pct">4%</span></span>
+          </div>
+          <div class="fund-bar" aria-hidden="true"><div class="fund-fill" data-pct="4.2"></div></div>
+          <p>A rainy-day cushion, so the lights stay on even when fundraising has a slow season.</p>
+        </div>
+      </div>
+      <p class="fund-total reveal">$1.6M + $450K + $250K + $100K = <strong>$2.4M, to the dollar.</strong></p>
+    </div>
+  </section>
+
+  <!-- milestones -->
+  <section class="milestones" id="milestones">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Milestones</span>
+        <h2>The road to opening day.</h2>
+        <p>Six honest steps between today and the party. We&rsquo;ll mark them off right here as they happen.</p>
+      </div>
+      <div class="timeline" id="timeline">
+        <span class="tl-progress" aria-hidden="true"></span>
+        <ol class="tl-list">
+        <li class="tl-item now reveal">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Quiet-phase gifts &amp; pledges</h3><span class="pill pill-now">Now</span></div>
+          <p>Where we are today &mdash; early gifts and pledges from first believers set the pace for everything that follows.</p>
+        </li>
+        <li class="tl-item reveal" data-delay="100">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Confirm site &amp; community partners</h3><span class="pill pill-next">Next</span></div>
+          <p>Locking in the right building in the right neighborhood, alongside the partners who&rsquo;ll bring it to life.</p>
+        </li>
+        <li class="tl-item reveal" data-delay="200">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Design &amp; permits</h3><span class="pill pill-later">Later</span></div>
+          <p>Turning community wishlists into floor plans &mdash; and floor plans into stamped, approved drawings.</p>
+        </li>
+        <li class="tl-item reveal" data-delay="300">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Renovation &amp; build-out</h3><span class="pill pill-later">Later</span></div>
+          <p>Walls, ramps, kitchens, classrooms. The dusty, noisy, wonderful part.</p>
+        </li>
+        <li class="tl-item reveal" data-delay="400">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Soft opening with first programs</h3><span class="pill pill-later">Later &middot; aiming 2027</span></div>
+          <p>First classes, first celebrations, first cups of tea in a home that finally exists.</p>
+        </li>
+        <li class="tl-item reveal" data-delay="500">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-head"><h3>Grand opening celebration</h3><span class="pill pill-later">Later</span></div>
+          <p>The big one. 40+ communities, one very good day. You&rsquo;re already invited.</p>
+        </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ways to give -->
+  <section class="give" id="give">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Ways to give</span>
+        <h2>Give in the way that fits your life.</h2>
+        <p>Cash today, a pledge over time, a partnership, or your own two hands &mdash; it all builds the same home.</p>
+      </div>
+      <div class="give-cards">
+        <a class="give-card green reveal" href="mailto:hello@apexmcc.org?subject=Donation%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
+          <h3>One-time gift</h3>
+          <p>Make a gift today and watch the bar on this page move. Every dollar goes straight to the campaign.</p>
+          <span class="give-link">Give once
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="give-card blue reveal" data-delay="120" href="mailto:hello@apexmcc.org?subject=Pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 15h2m4 0h2"/></svg>
+          <h3>Multi-year pledge</h3>
+          <p>Spread a bigger gift across two or three years &mdash; the donate window has a pledge option built right in.</p>
+          <span class="give-link">Pledge over time
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="give-card yellow reveal" data-delay="240" href="mailto:hello@apexmcc.org?subject=Partnership%20briefing%20%E2%80%94%20Apex%20MCC">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/><path d="M15 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <h3>Partner &amp; sponsor</h3>
+          <p>Businesses, foundations, and community orgs: request a briefing and we&rsquo;ll walk you through the full plan.</p>
+          <span class="give-link">Request a briefing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="give-card green reveal" data-delay="360" href="mailto:hello@apexmcc.org?subject=Volunteering%20or%20in-kind%20support%20%E2%80%94%20Apex%20MCC">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/></svg>
+          <h3>In-kind &amp; volunteer</h3>
+          <p>Skills, materials, muscle, and time count too. Tell us what you can bring and we&rsquo;ll find it a place.</p>
+          <span class="give-link">Raise your hand
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- honest FAQ -->
+  <section class="faq-sec" id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Honest FAQ</span>
+        <h2>Fair questions, straight answers.</h2>
+        <p>The things people actually ask us &mdash; answered the way we&rsquo;d answer a friend.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <h3 class="faq-q">
+            <button class="faq-btn" id="faqQ1" aria-expanded="false" aria-controls="faqA1">Is my gift tax-deductible?
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div class="faq-a" id="faqA1" role="region" aria-labelledby="faqQ1">
+            <div class="faq-a-inner">
+              <p>Honest answer: our 501(c)(3) application is pending with the IRS. If it&rsquo;s approved &mdash; and we expect it will be &mdash; recognition is typically retroactive to our filing date, so gifts made now should qualify. We&rsquo;ll send proper receipts either way, and if anything changes we&rsquo;ll tell you straight. If timing matters for your taxes, email <a href="mailto:hello@apexmcc.org?subject=Tax%20question%20%E2%80%94%20Apex%20MCC">hello@apexmcc.org</a> and we&rsquo;ll walk you through exactly where things stand.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="80">
+          <h3 class="faq-q">
+            <button class="faq-btn" id="faqQ2" aria-expanded="false" aria-controls="faqA2">What exactly does $2.4M buy?
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div class="faq-a" id="faqA2" role="region" aria-labelledby="faqQ2">
+            <div class="faq-a-inner">
+              <p>The whole budget, in one breath: $1.6M secures the site and building, $450K makes it accessible and welcoming, $250K funds a full first year of programs, and $100K sits in reserve so we never open the doors on an empty tank. That&rsquo;s it &mdash; every dollar accounted for, no mystery line items.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="160">
+          <h3 class="faq-q">
+            <button class="faq-btn" id="faqQ3" aria-expanded="false" aria-controls="faqA3">When will the center open?
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div class="faq-a" id="faqA3" role="region" aria-labelledby="faqQ3">
+            <div class="faq-a-inner">
+              <p>We&rsquo;re aiming to open doors in 2027. Full honesty: that depends on how the quiet phase goes, how the site search lands, and how kind the permitting process is. We&rsquo;d rather open a little later than open unready &mdash; and we&rsquo;ll post every twist on the <a href="/apex/updates">Updates page</a> as it happens.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="240">
+          <h3 class="faq-q">
+            <button class="faq-btn" id="faqQ4" aria-expanded="false" aria-controls="faqA4">Can my organization partner?
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div class="faq-a" id="faqA4" role="region" aria-labelledby="faqQ4">
+            <div class="faq-a-inner">
+              <p>Yes, please. More than 40 communities are already part of the conversation, and there&rsquo;s room at the table for businesses, foundations, schools, and neighborhood groups. <a href="mailto:hello@apexmcc.org?subject=Partnership%20briefing%20%E2%80%94%20Apex%20MCC">Request a briefing</a> and we&rsquo;ll show you the plan, the numbers, and where you&rsquo;d fit.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="320">
+          <h3 class="faq-q">
+            <button class="faq-btn" id="faqQ5" aria-expanded="false" aria-controls="faqA5">How will you keep me posted?
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div class="faq-a" id="faqA5" role="region" aria-labelledby="faqQ5">
+            <div class="faq-a-inner">
+              <p>Two ways, both gentle: the <a href="/apex/updates">Updates page</a> carries every milestone as it happens, and the newsletter lands a few times a year &mdash; no noise, we promise. Your inbox stays yours; the good news still finds you.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2 class="reveal">Be one of the first gifts.</h2>
+      <p class="reveal" data-delay="100">Quiet phases are built on early believers. Years from now, when the doors are open and the music is loud, you&rsquo;ll get to say you were first.</p>
+      <div class="cta-actions reveal" data-delay="200">
+        <a class="btn btn-white" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate or pledge
+          <svg class="arrow heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
+        </a>
+        <a class="btn btn-dark" href="mailto:hello@apexmcc.org?subject=Briefing%20request%20%E2%80%94%20Apex%20MCC">Request a briefing
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="#top" aria-label="Apex home">
+          <span>APEX</span>
+        </a>
+        <p>Apex is creating a welcoming multicultural community center for gathering, learning, celebration, and shared belonging.</p>
+        <a href="mailto:hello@apexmcc.org">hello@apexmcc.org</a>
+      </div>
+      <div class="footer-col">
+        <h4>Get involved</h4>
+        <ul>
+          <li><a href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC" data-donate>Donate to the campaign</a></li>
+          <li><a href="mailto:hello@apexmcc.org?subject=Volunteering%20or%20advising%20%E2%80%94%20Apex%20MCC">Volunteer or advise</a></li>
+          <li><a href="mailto:hello@apexmcc.org?subject=Briefing%20request%20%E2%80%94%20Apex%20MCC">Request a briefing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/apex/community">Community</a></li>
+          <li><a href="/apex/progress">Progress</a></li>
+          <li><a href="/apex/updates">Updates</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Apex Multicultural Community Center. 501(c)(3) pending.</span>
+      <span>Designed with &lt;3 in California by <a href="https://tmc.gg" rel="noopener">The Mavion Corporation</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- donate modal -->
+<div class="modal-overlay" id="donateModal" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+  <div class="modal">
+    <button class="modal-close" id="donateClose" aria-label="Close">&times;</button>
+    <span class="eyebrow">Capital campaign</span>
+    <h3 id="donateTitle">Choose your gift</h3>
+    <p class="modal-sub">Every gift helps make the home real &mdash; pick what feels right.</p>
+    <div class="gift-type" role="group" aria-label="Gift type">
+      <button type="button" class="type-btn active" data-type="one-time gift">One-time gift</button>
+      <button type="button" class="type-btn" data-type="pledge">Pledge</button>
+    </div>
+    <div class="amounts" role="group" aria-label="Gift amount">
+      <button type="button" class="amount-chip" data-amount="25">$25</button>
+      <button type="button" class="amount-chip" data-amount="50">$50</button>
+      <button type="button" class="amount-chip active" data-amount="100">$100</button>
+      <button type="button" class="amount-chip" data-amount="250">$250</button>
+      <button type="button" class="amount-chip" data-amount="500">$500</button>
+      <label class="custom-amount">$<input type="number" id="customAmount" min="1" step="1" placeholder="Custom" aria-label="Custom amount"></label>
+    </div>
+    <p class="gift-line" id="giftLine">Your <strong>$100</strong> one-time gift helps make the home real.</p>
+    <button class="btn btn-green" id="donateContinue" type="button">Continue by email
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 6L2 7"/></svg>
+    </button>
+    <p class="modal-note">Opens your email app with everything filled in &mdash; send it and we&rsquo;ll take it from there. 💚</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* campaign figures — update RAISED as gifts come in */
+  var GOAL = 2400000;
+  var RAISED = 0;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* header scrolled state */
+  var header = document.querySelector('.site-header');
+  if (header){
+    var onScroll = function(){ header.classList.toggle('scrolled', window.scrollY > 8); };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+
+  /* mobile menu */
+  var menuBtn = document.getElementById('menuBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var closeMenu = function(){
+    if (!menuBtn || !mobileMenu) return;
+    mobileMenu.classList.remove('open');
+    menuBtn.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded','false');
+  };
+  if (menuBtn && mobileMenu){
+    menuBtn.addEventListener('click', function(){
+      var open = mobileMenu.classList.toggle('open');
+      menuBtn.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+    document.addEventListener('click', function(e){
+      if (mobileMenu.classList.contains('open') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
+    });
+  }
+
+  /* reveal on scroll */
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reduced || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function(el){ el.classList.add('visible'); });
+  } else {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          var d = en.target.getAttribute('data-delay');
+          if (d){
+            en.target.style.transitionDelay = d + 'ms';
+            setTimeout(function(){ en.target.style.transitionDelay = ''; }, Number(d) + 800);
+          }
+          en.target.classList.add('visible');
+          ro.unobserve(en.target);
+        }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ ro.observe(el); });
+  }
+
+  /* campaign meter */
+  var fill = document.getElementById('meterFill');
+  var raisedLabel = document.getElementById('raisedLabel');
+  var goalLabel = document.getElementById('goalLabel');
+  var meter = document.querySelector('.meter');
+  var fmt = function(n){
+    if (n >= 1000000) return '$' + (Math.round(n/100000)/10) + 'M';
+    if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+    return '$' + n.toLocaleString('en-US');
+  };
+  if (raisedLabel) raisedLabel.textContent = fmt(RAISED);
+  if (goalLabel) goalLabel.textContent = fmt(GOAL);
+  if (meter) meter.setAttribute('aria-valuenow', String(RAISED));
+  if (fill && meter){
+    var pct = Math.min(100, RAISED / GOAL * 100);
+    var animateMeter = function(){ fill.style.width = pct + '%'; };
+    if (reduced || !('IntersectionObserver' in window)) {
+      animateMeter();
+    } else {
+      var mo = new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting){ requestAnimationFrame(animateMeter); mo.disconnect(); }
+      }, {threshold:.4});
+      mo.observe(meter);
+    }
+  }
+
+  /* funding breakdown bars */
+  var fundFills = document.querySelectorAll('.fund-fill');
+  if (fundFills.length){
+    var setBar = function(el){ el.style.width = (Number(el.getAttribute('data-pct')) || 0) + '%'; };
+    if (reduced || !('IntersectionObserver' in window)) {
+      fundFills.forEach(setBar);
+    } else {
+      var fo = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting){
+            var el = en.target;
+            setTimeout(function(){ requestAnimationFrame(function(){ setBar(el); }); }, 150);
+            fo.unobserve(el);
+          }
+        });
+      }, {threshold:.5});
+      fundFills.forEach(function(el){ fo.observe(el); });
+    }
+  }
+
+  /* timeline draw-in */
+  var timeline = document.getElementById('timeline');
+  if (timeline){
+    if (reduced || !('IntersectionObserver' in window)) {
+      timeline.classList.add('drawn');
+    } else {
+      var to = new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting){ timeline.classList.add('drawn'); to.disconnect(); }
+      }, {threshold:.15});
+      to.observe(timeline);
+    }
+  }
+
+  /* FAQ accordion — only one open at a time */
+  var faqItems = Array.prototype.slice.call(document.querySelectorAll('.faq-item'));
+  faqItems.forEach(function(item){
+    var btn = item.querySelector('.faq-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      var wasOpen = item.classList.contains('open');
+      faqItems.forEach(function(other){
+        other.classList.remove('open');
+        var b = other.querySelector('.faq-btn');
+        if (b) b.setAttribute('aria-expanded','false');
+      });
+      if (!wasOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  /* toast */
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  var showToast = function(msg){
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  };
+
+  /* confetti */
+  var CONFETTI_COLORS = ['#39d353','#16b83e','#b9f8bf','#ffd166','#7fd8f5','#fff8df'];
+  function confettiBurst(x, y){
+    if (reduced) return;
+    var box = document.createElement('div');
+    box.className = 'confetti';
+    box.setAttribute('aria-hidden','true');
+    for (var i = 0; i < 36; i++){
+      var p = document.createElement('i');
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      p.style.setProperty('--dx', (Math.random() - .5) * 340 + 'px');
+      p.style.setProperty('--up', -(40 + Math.random() * 160) + 'px');
+      p.style.setProperty('--down', (60 + Math.random() * 160) + 'px');
+      p.style.setProperty('--rot', (Math.random() - .5) * 720 + 'deg');
+      p.style.animationDelay = (Math.random() * .12) + 's';
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function(){ box.remove(); }, 1900);
+  }
+
+  /* button ripple */
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.btn');
+    if (!btn || reduced) return;
+    var rect = btn.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var r = document.createElement('span');
+    r.className = 'ripple';
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX ? e.clientX - rect.left : rect.width / 2) - size / 2 + 'px';
+    r.style.top = (e.clientY ? e.clientY - rect.top : rect.height / 2) - size / 2 + 'px';
+    btn.appendChild(r);
+    setTimeout(function(){ r.remove(); }, 600);
+  });
+
+  /* release entrance animations so hover transforms can take over */
+  document.querySelectorAll('.enter').forEach(function(el){
+    el.addEventListener('animationend', function(){ el.classList.remove('enter'); }, {once:true});
+  });
+
+  /* donate modal */
+  var modal = document.getElementById('donateModal');
+  var modalCard = modal ? modal.querySelector('.modal') : null;
+  var closeBtn = document.getElementById('donateClose');
+  var customInput = document.getElementById('customAmount');
+  var giftLine = document.getElementById('giftLine');
+  var continueBtn = document.getElementById('donateContinue');
+
+  if (modal && modalCard){
+    var typeBtns = Array.prototype.slice.call(modal.querySelectorAll('.type-btn'));
+    var chips = Array.prototype.slice.call(modal.querySelectorAll('.amount-chip'));
+    var lastFocus = null;
+
+    var giftType = 'one-time gift';
+    var giftAmount = 100;
+
+    var updateGiftLine = function(){
+      if (!giftLine) return;
+      if (giftAmount > 0){
+        giftLine.innerHTML = 'Your <strong>$' + giftAmount.toLocaleString('en-US') + '</strong> ' + giftType + ' helps make the home real.';
+      } else {
+        giftLine.innerHTML = 'Pick an amount first — every gift counts. 💚';
+      }
+      giftLine.classList.remove('pop');
+      void giftLine.offsetWidth;
+      giftLine.classList.add('pop');
+    };
+
+    var openModal = function(){
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      document.body.classList.add('modal-open');
+      closeMenu();
+      setTimeout(function(){ if (closeBtn) closeBtn.focus(); }, 320);
+    };
+    var closeModal = function(){
+      modal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+
+    document.querySelectorAll('[data-donate]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        openModal();
+      });
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (!modalCard.contains(e.target)) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+
+    typeBtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        typeBtns.forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        giftType = b.getAttribute('data-type');
+        updateGiftLine();
+      });
+    });
+    chips.forEach(function(c){
+      c.addEventListener('click', function(){
+        chips.forEach(function(x){ x.classList.remove('active'); });
+        c.classList.add('active');
+        if (customInput) customInput.value = '';
+        giftAmount = Number(c.getAttribute('data-amount'));
+        updateGiftLine();
+      });
+    });
+    if (customInput){
+      customInput.addEventListener('input', function(){
+        chips.forEach(function(x){ x.classList.remove('active'); });
+        giftAmount = Math.max(0, Math.floor(Number(customInput.value) || 0));
+        updateGiftLine();
+      });
+    }
+
+    if (continueBtn){
+      continueBtn.addEventListener('click', function(){
+        if (!(giftAmount > 0)){ updateGiftLine(); if (customInput) customInput.focus(); return; }
+        var rect = continueBtn.getBoundingClientRect();
+        confettiBurst(rect.left + rect.width / 2, rect.top);
+        showToast('Opening your email app… 💌');
+        var subject = (giftType === 'pledge' ? 'Pledge' : 'Donation') + ' — Apex MCC capital campaign';
+        var body = "Hi Apex team,\n\nI'd like to make a " + giftType + " of $" + giftAmount.toLocaleString('en-US') +
+          " to the capital campaign.\n\nName:\nPhone (optional):\n\nThank you!";
+        var href = 'mailto:hello@apexmcc.org?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        setTimeout(function(){
+          window.location.href = href;
+          setTimeout(closeModal, 400);
+        }, 700);
+      });
+    }
+  }
+
+  /* toast for plain mail links */
+  document.querySelectorAll('a[href^="mailto:"]:not([data-donate])').forEach(function(a){
+    a.addEventListener('click', function(){ showToast('Opening your email app… 💌'); });
+  });
+})();
+</script>
+</body>
+</html>

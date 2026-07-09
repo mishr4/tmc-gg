@@ -486,7 +486,7 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-touch .f-cta .arr { transition: transform .35s var(--ease); }
 .footer-touch .f-cta:hover .arr { transform: translateX(4px); }
 .footer-brand p { font-size: 0.88rem; color: var(--muted); max-width: 34ch; line-height: 1.7; }
-.footer-social { display: flex; gap: 10px; margin-top: 22px; }
+.footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .footer-social a { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--glass); border: 1px solid var(--line-soft); color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
 .footer-social a:hover { color: var(--ink); border-color: rgba(255,255,255,0.28); transform: translateY(-1px); }
 .footer-social svg { width: 16px; height: 16px; }

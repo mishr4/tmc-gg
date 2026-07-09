@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Apex Multicultural Community Center</title>
-<meta name="description" content="Apex is building a permanent multicultural community center for communities across the region.">
-<link rel="canonical" href="https://tmc.gg/apex">
+<title>Updates — Apex Multicultural Community Center</title>
+<meta name="description" content="Updates from Apex Multicultural Community Center — friendly notes about site progress, community planning, and ways to help. A few times a year, no noise.">
+<link rel="canonical" href="https://tmc.gg/apex/updates">
 <meta property="og:site_name" content="Apex Multicultural Community Center">
-<meta property="og:title" content="Apex Multicultural Community Center">
-<meta property="og:description" content="A joyful home for every culture to gather, learn, and celebrate. Apex is building a permanent multicultural community center.">
+<meta property="og:title" content="Updates — Apex Multicultural Community Center">
+<meta property="og:description" content="Follow the build with us — friendly notes about site progress, community planning, and ways to help. A few times a year, no noise.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://tmc.gg/apex">
+<meta property="og:url" content="https://tmc.gg/apex/updates">
 <meta name="theme-color" content="#082414">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23082414'/%3E%3Cpath d='M10 46 L28 22 L40 38 H46 L36 25 L42 17 L58 46 Z' fill='%2339D353'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,7 +126,7 @@ body.menu-open,body.modal-open{overflow:hidden}
 .mobile-menu{display:none}
 
 /* ---------- hero ---------- */
-.hero{position:relative;padding:88px 0 104px;overflow:hidden}
+.hero{position:relative;padding:80px 0 88px;overflow:hidden}
 .hero::before,.hero::after{
   content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;
 }
@@ -136,107 +136,89 @@ body.menu-open,body.modal-open{overflow:hidden}
 @keyframes drift2{to{transform:translate(-80px,60px) scale(1.07)}}
 .enter{animation:fadeUp .7s cubic-bezier(.22,.8,.3,1) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-.badge.enter{animation-delay:.05s}
+.eyebrow.enter{animation-delay:.05s}
 h1.enter{animation-delay:.15s}
 .lede.enter{animation-delay:.3s}
-.hero-ctas.enter{animation-delay:.45s}
-.hero-meta.enter{animation-delay:.55s}
-.hero-card.enter{animation-delay:.4s;animation-duration:.85s}
-.hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
-
-.badge{
-  display:inline-flex;align-items:center;gap:9px;
-  background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;
-  font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
-  margin-bottom:28px;
-}
-.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2.2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.8)}}
+.hero-inner{position:relative;max-width:760px;margin:0 auto;text-align:center}
 
 h1,h2,h3{font-family:var(--display);font-weight:800;color:var(--heading)}
 h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;margin-bottom:24px}
-.hero .lede{font-size:18px;max-width:440px;margin-bottom:32px}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:14px}
-.hero-meta{
-  list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;
-  font-size:13.5px;font-weight:500;color:var(--nav-muted);
-}
-.hero-meta li{display:flex;align-items:center;gap:7px}
-.hero-meta svg{width:15px;height:15px;color:var(--accent);flex:none}
+.hero .lede{font-size:18px;max-width:560px;margin:0 auto}
 
-.hero-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--card-radius);padding:24px 24px 28px;
-  box-shadow:0 24px 50px rgba(8,36,20,.08);
-}
-.hero-card-visual{
-  background:linear-gradient(135deg,var(--green) 0%,var(--green-soft) 100%);
-  border-radius:14px;height:164px;display:flex;align-items:center;justify-content:center;gap:26px;
-  margin-bottom:22px;color:var(--ink);
-}
-.hero-card-visual svg{width:44px;height:44px}
-.hero-card h3{font-size:24px;letter-spacing:-.015em;line-height:1.2;margin-bottom:10px}
-.hero-card p{font-size:15.5px}
-
-/* ---------- sections ---------- */
 .eyebrow{
   font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
   display:block;margin-bottom:14px;
 }
-.section-head{text-align:center;max-width:680px;margin:0 auto 56px}
-.section-head h2{font-size:clamp(29px,3.8vw,40px);letter-spacing:-.02em;line-height:1.12;margin-bottom:16px}
-.section-head p{font-size:17.5px}
 
-.community{background:#fff;padding:104px 0;border-top:1px solid var(--line)}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.card{
-  border-radius:var(--card-radius);padding:32px 28px 36px;border:1px solid var(--line);
-  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
-}
-.card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(8,36,20,.08);border-color:rgba(8,36,20,.12)}
-.card.green{background:var(--tint-green)}
-.card.blue{background:var(--tint-blue)}
-.card.yellow{background:var(--tint-yellow)}
-.card .icon{width:42px;height:42px;color:var(--accent);margin-bottom:36px}
-.card h3{font-size:21px;letter-spacing:-.01em;line-height:1.2;margin-bottom:12px}
-.card p{font-size:15.5px}
+/* ---------- updates section ---------- */
+.updates{background:#fff;padding:104px 0 112px;border-top:1px solid var(--line)}
 
-/* ---------- progress ---------- */
-.progress-section{
-  background:linear-gradient(180deg,#fff 0%,var(--bg) 34%,#eefbea 100%);
-  padding:104px 0 112px;
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:14px}
+.filter-chip{
+  border:1px solid var(--line);border-radius:999px;padding:10px 20px;cursor:pointer;
+  font-family:var(--text);font-weight:600;font-size:14px;color:var(--heading);background:#fff;
+  transition:border-color .2s ease,transform .2s ease,background .2s ease,box-shadow .2s ease,color .2s ease;
+  white-space:nowrap;
 }
-.progress-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:stretch}
-.panel{
-  background:#fff;border:1px solid var(--line);border-radius:var(--card-radius);padding:42px 40px 44px;
-  box-shadow:0 18px 44px rgba(8,36,20,.06);display:flex;flex-direction:column;
+.filter-chip:hover{border-color:var(--green);transform:translateY(-2px)}
+.filter-chip[aria-pressed="true"]{
+  background:var(--green);border-color:var(--green);color:var(--ink);
+  box-shadow:0 6px 16px rgba(57,211,83,.26);animation:pop .3s ease;
 }
-.panel h2{font-size:clamp(26px,3vw,33px);letter-spacing:-.018em;line-height:1.16;margin-bottom:28px}
-.meter{background:#e2f4e0;border-radius:999px;height:12px;overflow:hidden;margin-bottom:14px}
-.meter-fill{
-  height:100%;width:0;min-width:12px;border-radius:999px;
-  background:linear-gradient(90deg,var(--accent),var(--green));
-  transition:width 1.4s cubic-bezier(.22,.8,.24,1);
-  position:relative;overflow:hidden;
-}
-.meter-fill::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.55) 50%,transparent 75%);
-  transform:translateX(-100%);animation:shimmer 2.4s ease-in-out 1.6s infinite;
-}
-@keyframes shimmer{to{transform:translateX(100%)}}
-.meter-labels{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:30px}
-.meter-labels strong{color:var(--heading);font-weight:700;font-variant-numeric:tabular-nums}
-.panel .btn{margin-top:auto}
-.panel-campaign .btn{width:100%}
+.filter-note{text-align:center;font-size:14px;font-weight:500;min-height:22px;margin-bottom:36px}
 
-.steps{list-style:none;display:flex;flex-direction:column;gap:18px;margin-bottom:34px}
-.steps li{display:flex;gap:15px;align-items:flex-start;font-size:16.5px}
-.steps .num{
-  flex:none;width:30px;height:30px;border-radius:50%;
-  background:var(--tint-green);color:var(--accent);
-  font-family:var(--cta);font-weight:700;font-size:13.5px;
-  display:flex;align-items:center;justify-content:center;margin-top:2px;
+.note-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.note-meta time{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--body)}
+.tag{
+  display:inline-flex;align-items:center;border-radius:999px;padding:5px 13px;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--text);font-weight:600;
 }
+.tag-campaign{background:var(--tint-green);color:var(--accent)}
+.tag-community{background:var(--tint-blue);color:#0e7ea3}
+.tag-site{background:var(--tint-yellow);color:#9c7a12}
+.note-card.green .tag-campaign{background:#dff4df}
+.note-card.blue .tag-community{background:#d6f3fc}
+.note-card.yellow .tag-site{background:#fdefc0}
+
+.featured-card,.note-card{
+  border:1px solid var(--line);border-radius:var(--card-radius);
+  transition:opacity .32s ease,transform .32s ease,box-shadow .25s ease,border-color .25s ease;
+}
+.featured-card.is-hidden,.note-card.is-hidden{opacity:0;transform:scale(.94)}
+.featured-card.is-gone,.note-card.is-gone{display:none}
+
+.featured-card{
+  background:#fff;padding:44px 46px 42px;
+  box-shadow:0 18px 44px rgba(8,36,20,.06);margin-bottom:28px;
+}
+.featured-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(8,36,20,.08);border-color:rgba(8,36,20,.12)}
+.featured-card h2{font-size:clamp(26px,3.4vw,34px);letter-spacing:-.018em;line-height:1.14;margin-bottom:16px}
+.featured-card p{font-size:16.5px;max-width:820px;margin-bottom:16px}
+.featured-card p:last-of-type{margin-bottom:22px}
+.featured-card p a{color:var(--accent);font-weight:500}
+.featured-card p a:hover{text-decoration:underline}
+
+.text-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cta);font-weight:700;font-size:15px;color:var(--accent);
+  transition:color .2s ease;
+}
+.text-cta svg{width:18px;height:18px;flex:none;transition:transform .25s ease}
+.text-cta:hover{color:var(--heading)}
+.text-cta:hover svg{transform:translateX(4px)}
+
+.notes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.note-card{
+  padding:32px 30px 34px;display:flex;flex-direction:column;
+}
+.note-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(8,36,20,.08);border-color:rgba(8,36,20,.12)}
+.note-card.green{background:var(--tint-green)}
+.note-card.blue{background:var(--tint-blue)}
+.note-card.yellow{background:var(--tint-yellow)}
+.note-card h3{font-size:21px;letter-spacing:-.01em;line-height:1.2;margin-bottom:12px}
+.note-card p{font-size:15.5px;margin-bottom:22px}
+.note-card .text-cta{margin-top:auto;font-size:14px}
+.note-card .text-cta svg{width:16px;height:16px}
 
 /* ---------- newsletter ---------- */
 .newsletter{background:var(--green);padding:92px 0}
@@ -379,14 +361,12 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
 
 /* ---------- responsive ---------- */
 @media (max-width:960px){
-  .hero-grid{grid-template-columns:1fr;gap:44px}
-  .hero{padding:56px 0 76px}
-  .hero .lede{max-width:none}
-  .cards{grid-template-columns:1fr;max-width:520px;margin:0 auto}
-  .progress-grid{grid-template-columns:1fr}
+  .hero{padding:56px 0 72px}
+  .notes-grid{grid-template-columns:1fr;max-width:620px;margin:0 auto}
+  .featured-card{max-width:620px;margin-left:auto;margin-right:auto;padding:38px 34px}
   .newsletter-grid{grid-template-columns:1fr;gap:28px}
   .footer-grid{grid-template-columns:1fr 1fr}
-  .community,.progress-section{padding:76px 0}
+  .updates{padding:76px 0 84px}
 }
 @media (max-width:760px){
   :root{--nav-h:64px}
@@ -417,19 +397,19 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     border-bottom:0;font-size:15px;color:var(--ink);
   }
   .mobile-menu a.btn::after{content:none}
-  .hero{padding:44px 0 64px}
+  .hero{padding:44px 0 60px}
   h1{font-size:clamp(33px,9vw,42px);margin-bottom:20px}
-  .hero .lede{font-size:16.5px;margin-bottom:26px}
-  .hero-ctas .btn{flex:1 1 100%}
-  .hero-meta{gap:10px 18px;font-size:13px}
-  .hero-card{padding:20px 18px 24px}
-  .hero-card-visual{height:136px;gap:20px}
-  .hero-card-visual svg{width:38px;height:38px}
-  .section-head{margin-bottom:40px}
-  .community,.progress-section{padding:64px 0}
-  .card{padding:26px 22px 30px}
-  .card .icon{margin-bottom:26px}
-  .panel{padding:28px 22px 32px}
+  .hero .lede{font-size:16.5px}
+  .updates{padding:64px 0 72px}
+  .filters{
+    justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin:0 -20px 14px;padding:2px 20px 6px;
+  }
+  .filters::-webkit-scrollbar{display:none}
+  .filter-chip{flex:none;padding:12px 20px;min-height:44px}
+  .featured-card{padding:30px 24px 32px}
+  .note-card{padding:28px 22px 30px}
   .newsletter{padding:64px 0}
   .newsletter form{flex-direction:column}
   .newsletter .btn{width:100%}
@@ -469,10 +449,10 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     </a>
     <nav aria-label="Main">
       <ul class="nav-links">
-        <li><a href="/apex" class="active" aria-current="page">Home</a></li>
+        <li><a href="/apex">Home</a></li>
         <li><a href="/apex/community">Community</a></li>
         <li><a href="/apex/progress">Progress</a></li>
-        <li><a href="/apex/updates">Updates</a></li>
+        <li><a href="/apex/updates" class="active" aria-current="page">Updates</a></li>
       </ul>
     </nav>
     <div class="nav-right">
@@ -485,10 +465,10 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     </div>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-    <a href="/apex" class="active" aria-current="page">Home</a>
+    <a href="/apex">Home</a>
     <a href="/apex/community">Community</a>
     <a href="/apex/progress">Progress</a>
-    <a href="/apex/updates">Updates</a>
+    <a href="/apex/updates" class="active" aria-current="page">Updates</a>
     <a class="btn btn-green" href="/apex/progress" data-donate>Donate
       <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
     </a>
@@ -498,101 +478,112 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
 <main id="main">
   <!-- hero -->
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="badge enter"><span class="dot"></span>Now growing a shared community home</span>
-        <h1 class="enter">A joyful home for every culture to gather, learn, and celebrate.</h1>
-        <p class="lede enter">Apex Multicultural Community Center is building a permanent, welcoming place where neighbors can host traditions, share resources, and make belonging feel easy.</p>
-        <div class="hero-ctas enter">
-          <a class="btn btn-green" href="/apex/progress" data-donate>Support the build
-            <svg class="arrow heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0 1 12 6.9 5.4 5.4 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
-          </a>
-          <a class="btn btn-white" href="/apex/community">Meet the community
-            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 12h8m0 0-3-3m3 3-3 3"/></svg>
-          </a>
-        </div>
-        <ul class="hero-meta enter">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>501(c)(3) pending</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Community-led</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>40+ member communities</li>
-        </ul>
-      </div>
-      <div class="hero-card enter">
-        <div class="hero-card-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/><path d="M15 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M9 7h2m-2 4h2m-2 4h2m6 6v-9h2a2 2 0 0 1 2 2v7"/></svg>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/></svg>
-        </div>
-        <h3><span class="count" data-count="40">40</span>+ communities, one welcoming place</h3>
-        <p>Apex is raising funds, bringing partners together, and preparing the programs that make a center feel alive from day one.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- community -->
-  <section class="community" id="community">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Our community</span>
-        <h2>A center that feels like a celebration of everyone.</h2>
-        <p>Less like a campaign dashboard, more like a living room for culture, food, language, music, planning, and friendship.</p>
-      </div>
-      <div class="cards">
-        <div class="card green reveal">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/><path d="M15 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <h3>Room to gather</h3>
-          <p>Flexible space for meetings, celebrations, classes, and community-led traditions.</p>
-        </div>
-        <div class="card blue reveal" data-delay="120">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 15h2m4 0h2"/></svg>
-          <h3>Programs with heart</h3>
-          <p>Planning for workshops, language learning, intergenerational events, and cultural exchange.</p>
-        </div>
-        <div class="card yellow reveal" data-delay="240">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/></svg>
-          <h3>Partners welcome</h3>
-          <p>Donors, advisors, volunteers, and local organizations can help shape what comes next.</p>
-        </div>
+      <div class="hero-inner">
+        <span class="eyebrow enter">Updates</span>
+        <h1 class="enter">Follow the build with us.</h1>
+        <p class="lede enter">Friendly notes about site progress, community planning, and ways to help &mdash; a few times a year, no noise. Every note we&rsquo;ve sent so far lives right here.</p>
       </div>
     </div>
   </section>
 
-  <!-- progress -->
-  <section class="progress-section" id="progress">
-    <div class="wrap progress-grid">
-      <div class="panel panel-campaign reveal">
-        <span class="eyebrow">Capital campaign</span>
-        <h2>Every gift helps make the home real.</h2>
-        <div class="meter" role="progressbar" aria-label="Campaign progress" aria-valuemin="0" aria-valuemax="2400000" aria-valuenow="0">
-          <div class="meter-fill" id="meterFill"></div>
-        </div>
-        <div class="meter-labels">
-          <span><strong id="raisedLabel">$0</strong> raised</span>
-          <span><strong>$2.4M</strong> goal</span>
-        </div>
-        <a class="btn btn-green" href="mailto:hello@apexmcc.org?subject=Donation%20or%20pledge%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>Donate or pledge
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12h6m0 0-2.5-2.5M15 12l-2.5 2.5"/></svg>
-        </a>
+  <!-- updates -->
+  <section class="updates" id="notes">
+    <div class="wrap">
+      <div class="filters reveal" role="group" aria-label="Filter updates by topic">
+        <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="filter-chip" data-filter="campaign" aria-pressed="false">Campaign</button>
+        <button type="button" class="filter-chip" data-filter="community" aria-pressed="false">Community</button>
+        <button type="button" class="filter-chip" data-filter="site" aria-pressed="false">Site</button>
       </div>
-      <div class="panel reveal">
-        <span class="eyebrow">What&rsquo;s next</span>
-        <h2>A clear path to opening day</h2>
-        <ol class="steps">
-          <li><span class="num">1</span><span>Raise early gifts and pledges.</span></li>
-          <li><span class="num">2</span><span>Confirm site and community partners.</span></li>
-          <li><span class="num">3</span><span>Launch first-phase programs and celebrations.</span></li>
-        </ol>
-        <a class="btn btn-dark" href="mailto:hello@apexmcc.org?subject=Briefing%20request%20%E2%80%94%20Apex%20MCC">Request a briefing</a>
+      <p class="filter-note" id="filterNote" role="status" aria-live="polite"></p>
+
+      <!-- featured -->
+      <article class="featured-card reveal" data-tag="campaign">
+        <div class="note-meta">
+          <span class="tag tag-campaign">Campaign</span>
+          <time datetime="2026-07">July 2026</time>
+        </div>
+        <h2>The quiet phase begins</h2>
+        <p>Something lovely is happening before we&rsquo;ve asked anyone for anything. The campaign hasn&rsquo;t launched publicly &mdash; the thermometer on our <a href="/apex/progress">Progress page</a> still reads $0 &mdash; and yet the first pledge conversations have already started. Neighbors are writing to us first.</p>
+        <p>To our early believers: thank you. You&rsquo;re proof that this center isn&rsquo;t a pitch, it&rsquo;s a plan people were already waiting for. Quiet-phase gifts and pledges are what let us walk into site conversations with real momentum at our back &mdash; a number on the board before the board even goes up.</p>
+        <p>What happens next: we keep gathering pledges gently through the fall, our advisors narrow the site shortlist, and when the moment is right we open the campaign to everyone &mdash; still aiming to open doors in 2027. If you&rsquo;d like your name in that very first chapter, we&rsquo;d be honored.</p>
+        <a class="text-cta" href="mailto:hello@apexmcc.org?subject=One%20of%20the%20first%20gifts%20%E2%80%94%20Apex%20MCC%20capital%20campaign" data-donate>be one of the first gifts
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- update grid -->
+      <div class="notes-grid">
+        <article class="note-card green reveal" data-tag="community">
+          <div class="note-meta">
+            <span class="tag tag-community">Community</span>
+            <time datetime="2026-06">June 2026</time>
+          </div>
+          <h3>14 dinners. 40+ communities. One listening tour.</h3>
+          <p>We spent June eating our way through the neighborhood &mdash; fourteen potluck dinners, hundreds of conversations. What neighbors asked for most, in order: a real kitchen, a dance floor that can take a beating, and one quiet room for prayer, homework, and deep breaths.</p>
+          <a class="text-cta" href="mailto:hello@apexmcc.org?subject=Send%20me%20the%20full%20note%20%E2%80%94%20The%20listening%20tour%20(June%202026)">read the full note
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <article class="note-card blue reveal" data-delay="100" data-tag="site">
+          <div class="note-meta">
+            <span class="tag tag-site">Site</span>
+            <time datetime="2026-05">May 2026</time>
+          </div>
+          <h3>What we&rsquo;re looking for in a home</h3>
+          <p>Our wish list, honestly ranked: close to a bus line, one hall big enough for a wedding or a hundred folding chairs, a kitchen that can feed a crowd, and daylight &mdash; as much of it as we can get. If that building exists, we&rsquo;ll find it.</p>
+          <a class="text-cta" href="mailto:hello@apexmcc.org?subject=Send%20me%20the%20full%20note%20%E2%80%94%20What%20we%27re%20looking%20for%20in%20a%20home%20(May%202026)">read the full note
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <article class="note-card yellow reveal" data-delay="200" data-tag="community">
+          <div class="note-meta">
+            <span class="tag tag-community">Community</span>
+            <time datetime="2026-04">April 2026</time>
+          </div>
+          <h3>Meet our first advisors</h3>
+          <p>Elders who remember what this neighborhood used to be, teachers who know what it needs next, and organizers who know how to get it done. Our first advisory circle is small, opinionated, and exactly who should be steering this.</p>
+          <a class="text-cta" href="mailto:hello@apexmcc.org?subject=Send%20me%20the%20full%20note%20%E2%80%94%20Meet%20our%20first%20advisors%20(April%202026)">read the full note
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <article class="note-card green reveal" data-delay="100" data-tag="campaign">
+          <div class="note-meta">
+            <span class="tag tag-campaign">Campaign</span>
+            <time datetime="2026-03">March 2026</time>
+          </div>
+          <h3>Why a permanent home?</h3>
+          <p>Renting rooms by the hour means packing your culture into a tote bag at 9pm sharp. Owning a home means the drums stay set up, the recipes live in the kitchen, and nobody asks permission to belong. That&rsquo;s the whole case, really &mdash; $2.4M to root it forever.</p>
+          <a class="text-cta" href="mailto:hello@apexmcc.org?subject=Send%20me%20the%20full%20note%20%E2%80%94%20Why%20a%20permanent%20home%3F%20(March%202026)">read the full note
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <article class="note-card blue reveal" data-delay="200" data-tag="community">
+          <div class="note-meta">
+            <span class="tag tag-community">Community</span>
+            <time datetime="2026-02">February 2026</time>
+          </div>
+          <h3>Apex says hello</h3>
+          <p>Our very first note. We&rsquo;re a group of neighbors from 40+ communities with one stubborn idea: every culture in this region deserves a place that&rsquo;s always open to it. Here&rsquo;s who we are, and how this whole thing started over one very long dinner.</p>
+          <a class="text-cta" href="mailto:hello@apexmcc.org?subject=Send%20me%20the%20full%20note%20%E2%80%94%20Apex%20says%20hello%20(February%202026)">read the full note
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+          </a>
+        </article>
       </div>
     </div>
   </section>
 
   <!-- newsletter -->
-  <section class="newsletter" id="updates">
+  <section class="newsletter" id="newsletter">
     <div class="wrap newsletter-grid">
-      <h2 class="reveal">Follow the build with us.</h2>
+      <h2 class="reveal">Get the next note first.</h2>
       <div class="reveal">
-        <p>Get friendly notes about site progress, community planning, and ways to help &mdash; a few times a year, no noise.</p>
+        <p>We write when there&rsquo;s something real to share &mdash; a few times a year, no noise, just notes like these landing gently in your inbox.</p>
         <form id="newsletterForm" novalidate>
           <input type="email" id="newsletterEmail" name="email" placeholder="your@email.com" autocomplete="email" aria-label="Email address" required>
           <button class="btn btn-dark" type="submit">Keep me posted
@@ -682,12 +673,9 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
 (function(){
   "use strict";
 
-  /* campaign figures — update RAISED as gifts come in */
-  var GOAL = 2400000;
-  var RAISED = 0;
-
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* header scrolled state */
   var header = document.querySelector('.site-header');
   if (header){
     var onScroll = function(){ header.classList.toggle('scrolled', window.scrollY > 8); };
@@ -738,59 +726,6 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     revealEls.forEach(function(el){ ro.observe(el); });
   }
 
-  /* campaign meter */
-  var fill = document.getElementById('meterFill');
-  var raisedLabel = document.getElementById('raisedLabel');
-  var meter = document.querySelector('.meter');
-  var fmt = function(n){
-    if (n >= 1000000) return '$' + (Math.round(n/100000)/10) + 'M';
-    if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
-    return '$' + n.toLocaleString('en-US');
-  };
-  if (fill && raisedLabel && meter){
-    raisedLabel.textContent = fmt(RAISED);
-    meter.setAttribute('aria-valuenow', String(RAISED));
-    var pct = Math.min(100, RAISED / GOAL * 100);
-    var animateMeter = function(){ fill.style.width = pct + '%'; };
-    if (reduced || !('IntersectionObserver' in window)) {
-      animateMeter();
-    } else {
-      var mo = new IntersectionObserver(function(entries){
-        if (entries[0].isIntersecting){ requestAnimationFrame(animateMeter); mo.disconnect(); }
-      }, {threshold:.4});
-      mo.observe(meter);
-    }
-  }
-
-  /* newsletter */
-  var form = document.getElementById('newsletterForm');
-  var email = document.getElementById('newsletterEmail');
-  var note = document.getElementById('formNote');
-  if (form && email && note){
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      var val = email.value.trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val)) {
-        email.classList.add('error');
-        note.className = 'form-note';
-        note.textContent = 'Please enter a valid email address.';
-        email.focus();
-        return;
-      }
-      email.classList.remove('error');
-      try { localStorage.setItem('apex-newsletter', val); } catch(_) {}
-      var formRect = form.getBoundingClientRect();
-      form.style.display = 'none';
-      note.className = 'form-note success';
-      note.textContent = "You're on the list — we'll keep you posted.";
-      confettiBurst(formRect.left + formRect.width / 2, formRect.top + formRect.height / 2);
-    });
-    email.addEventListener('input', function(){
-      email.classList.remove('error');
-      if (!note.classList.contains('success')) note.textContent = '';
-    });
-  }
-
   /* toast */
   var toast = document.getElementById('toast');
   var toastTimer;
@@ -825,6 +760,79 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     setTimeout(function(){ box.remove(); }, 1900);
   }
 
+  /* update filters */
+  var filterChips = Array.prototype.slice.call(document.querySelectorAll('.filter-chip'));
+  var filterables = Array.prototype.slice.call(document.querySelectorAll('[data-tag]'));
+  var filterNote = document.getElementById('filterNote');
+  var strippedReveal = false;
+  if (filterChips.length && filterables.length){
+    var applyFilter = function(tag){
+      /* once the user starts filtering, hand the cards over from the
+         scroll-reveal transition to the snappier filter transition */
+      if (!strippedReveal){
+        filterables.forEach(function(el){
+          el.classList.remove('reveal','visible');
+          el.style.transitionDelay = '';
+        });
+        strippedReveal = true;
+      }
+      var shown = 0;
+      filterables.forEach(function(el){
+        var match = tag === 'all' || el.getAttribute('data-tag') === tag;
+        if (match){
+          shown++;
+          el.classList.remove('is-gone');
+          void el.offsetWidth; /* reflow so the fade-in transition runs */
+          el.classList.remove('is-hidden');
+        } else {
+          el.classList.add('is-hidden');
+          setTimeout(function(){
+            if (el.classList.contains('is-hidden')) el.classList.add('is-gone');
+          }, 340);
+        }
+      });
+      if (filterNote){
+        filterNote.textContent = 'Showing ' + shown + (tag === 'all' ? '' : ' ' + tag) + ' update' + (shown === 1 ? '' : 's') + '.';
+      }
+    };
+    filterChips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        if (chip.getAttribute('aria-pressed') === 'true') return;
+        filterChips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        applyFilter(chip.getAttribute('data-filter'));
+      });
+    });
+  }
+
+  /* newsletter */
+  var form = document.getElementById('newsletterForm');
+  var email = document.getElementById('newsletterEmail');
+  var note = document.getElementById('formNote');
+  if (form && email && note){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var val = email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val)) {
+        email.classList.add('error');
+        note.className = 'form-note';
+        note.textContent = 'Please enter a valid email address.';
+        email.focus();
+        return;
+      }
+      email.classList.remove('error');
+      try { localStorage.setItem('apex-newsletter', val); } catch(_) {}
+      var formRect = form.getBoundingClientRect();
+      form.style.display = 'none';
+      note.className = 'form-note success';
+      note.textContent = "You're on the list — we'll keep you posted.";
+      confettiBurst(formRect.left + formRect.width / 2, formRect.top + formRect.height / 2);
+    });
+    email.addEventListener('input', function(){
+      email.classList.remove('error');
+      if (!note.classList.contains('success')) note.textContent = '';
+    });
+  }
+
   /* button ripple */
   document.addEventListener('click', function(e){
     var btn = e.target.closest('.btn');
@@ -840,48 +848,10 @@ h1{font-size:clamp(38px,5.2vw,58px);line-height:1.08;letter-spacing:-.022em;marg
     setTimeout(function(){ r.remove(); }, 600);
   });
 
-  /* count-up */
-  var countEl = document.querySelector('.count');
-  if (countEl){
-    var target = Number(countEl.getAttribute('data-count')) || 0;
-    if (reduced){
-      countEl.textContent = target;
-    } else {
-      countEl.textContent = '0';
-      var t0 = null;
-      var DUR = 1300;
-      var tick = function(ts){
-        if (!t0) t0 = ts;
-        var k = Math.min(1, (ts - t0) / DUR);
-        k = 1 - Math.pow(1 - k, 3);
-        countEl.textContent = Math.round(target * k);
-        if (k < 1) requestAnimationFrame(tick);
-      };
-      setTimeout(function(){ requestAnimationFrame(tick); }, 500);
-      /* safety net if rAF is throttled (hidden tab etc.) */
-      setTimeout(function(){ countEl.textContent = target; }, 500 + DUR + 400);
-    }
-  }
-
-  /* release entrance animations so hover/tilt transforms can take over */
+  /* release entrance animations so hover transforms can take over */
   document.querySelectorAll('.enter').forEach(function(el){
     el.addEventListener('animationend', function(){ el.classList.remove('enter'); }, {once:true});
   });
-
-  /* hero card tilt */
-  var heroCard = document.querySelector('.hero-card');
-  if (heroCard && !reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
-    heroCard.style.transition = 'transform .18s ease-out, box-shadow .3s ease';
-    heroCard.addEventListener('mousemove', function(e){
-      var r = heroCard.getBoundingClientRect();
-      var rx = ((e.clientY - r.top) / r.height - .5) * -6;
-      var ry = ((e.clientX - r.left) / r.width - .5) * 6;
-      heroCard.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
-    });
-    heroCard.addEventListener('mouseleave', function(){
-      heroCard.style.transform = '';
-    });
-  }
 
   /* donate modal */
   var modal = document.getElementById('donateModal');
