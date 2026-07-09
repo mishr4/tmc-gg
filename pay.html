@@ -91,6 +91,18 @@
     @media (max-width: 1020px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) { .plans-grid { grid-template-columns: 1fr; } }
 
+    /* Klarna promo */
+    .klarna-ad {
+      display: flex; align-items: center; gap: 10px 26px; flex-wrap: wrap;
+      margin-top: clamp(22px, 3vw, 34px); background: #ffb3c7; color: #0a0a0a;
+      border-radius: var(--r-lg); padding: 20px 26px;
+    }
+    .klarna-ad .k-logo { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; line-height: 1; }
+    .klarna-ad .k-copy { flex: 1; min-width: 240px; }
+    .klarna-ad .k-copy strong { display: block; font-size: 1rem; font-weight: 700; }
+    .klarna-ad .k-copy span { font-size: 0.88rem; color: rgba(10, 10, 10, 0.75); }
+    .klarna-ad .k-note { font-size: 0.72rem; color: rgba(10, 10, 10, 0.55); flex-basis: 100%; }
+
     /* invoice how-it-works steps */
     .steps { display: grid; gap: 18px; }
     .step { display: flex; gap: 14px; align-items: flex-start; }
@@ -140,7 +152,7 @@
         <h1>Pay online. Done in a minute.</h1>
         <p class="lede">Plans, services and invoices — checkout is handled end-to-end by Stripe, and your card details never reach our servers. No account needed.</p>
         <div class="paypills" aria-label="Accepted payment methods">
-          <span>💳 Card</span><span> Apple Pay</span><span>Google Pay</span><span>Cash App</span><span>Link</span><span>Amazon Pay</span><span>Bank (ACH)</span>
+          <span>💳 Card</span><span> Apple Pay</span><span>Google Pay</span><span>Cash App</span><span>Klarna</span><span>Link</span><span>Amazon Pay</span><span>Bank (ACH)</span>
         </div>
       </div>
     </section>
@@ -225,6 +237,15 @@
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Instant email receipt</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg>Refunds within 14 days — just reply to your receipt</span>
         </div>
+
+        <aside class="klarna-ad" aria-label="Klarna — buy now, pay later">
+          <span class="k-logo">Klarna.</span>
+          <span class="k-copy">
+            <strong>Buy now, pay later.</strong>
+            <span>Split your purchase into 4 interest-free payments — just pick Klarna at checkout.</span>
+          </span>
+          <span class="k-note">Available on eligible one-time payments in supported regions. Subject to Klarna approval.</span>
+        </aside>
       </div>
     </section>
 
