@@ -1,4 +1,4 @@
-/*  SeehedCustomerSupport — a self-contained FAQ chat widget for tmc.gg.
+/*  Seehed CustomerSupport — a self-contained FAQ chat widget for tmc.gg.
  *  Injects its own styles + DOM; no dependencies. Add with:
  *    <script src="/seehed-support.js" defer></script>
  *  Canned FAQ (no server) with a "typing…" beat for a human feel.
@@ -35,7 +35,7 @@
   var AI_MODEL = 'Qwen2.5-0.5B-Instruct-q4f16_1-MLC';
 
   var SYSTEM_PROMPT = [
-    "You are SeehedCustomerSupport, the AI support assistant for The Mavion Corporation (TMC) — a California-based media & technology company, on the website tmc.gg.",
+    "You are Seehed CustomerSupport, the AI support assistant for The Mavion Corporation (TMC) — a California-based media & technology company, on the website tmc.gg.",
     "Answer visitor questions about TMC and its services helpfully and briefly: 1–3 short sentences, warm and professional, plain-spoken, no emoji.",
     "",
     "About TMC: an independent media & technology company that builds and operates media brands, publishing platforms and broadcast technology. Main brands: Mavion News (journalism), TMCast (internet radio), UnoNoticias (Spanish-language news). Based in California, USA; operates online worldwide.",
@@ -54,6 +54,15 @@
     "- You cannot change accounts, take payments, or access a user's data — never claim to.",
     "- Keep replies short: a direct answer plus at most one relevant link. When unsure, say: \"I'm not certain — the fastest way is to email tagnz@tmc.gg and a person will help.\""
   ].join('\n');
+
+  var SUPPORT_EMAIL = 'tagnz@tmc.gg';
+  // Optional Web3Forms access key → escalations land in the inbox directly (else falls back
+  // to opening the visitor's mail app). Grab a free key at web3forms.com (enter tagnz@tmc.gg).
+  var SUPPORT_FORM_KEY = '';
+  // Optional server-side AI (Groq via the Vercel /api/seehed function — key stays secret,
+  // no big download). Set GROQ_API_KEY in Vercel to enable; otherwise the widget falls back
+  // to the in-browser model, then the canned FAQ.
+  var AI_ENDPOINT = '/api/seehed';
 
   // ── Styles ──
   var css = ''
@@ -122,6 +131,17 @@
     + '.sh-ai-load:hover{background:#6ba0ff}.sh-ai-load[disabled]{opacity:.6;cursor:default}'
     + '.sh-ai-load:focus-visible{outline:2px solid #fafafa;outline-offset:2px}'
 
+    /* "Get more help" chip + escalation email form */
+    + '.sh-help-chip{border-color:rgba(76,141,255,.5);color:#8fb4ff}'
+    + '.sh-help-chip:hover{background:#14203a;color:#cfe0ff;border-color:#4c8dff}'
+    + '.sh-bubble.sh-form{max-width:288px;width:100%}'
+    + '.sh-form-t{font-size:13px;color:#cdd0d8;margin-bottom:9px}'
+    + '.sh-form input,.sh-form textarea{width:100%;background:#08090b;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#fafafa;font:inherit;font-size:13.5px;padding:8px 10px;margin-bottom:7px;outline:none;resize:vertical;display:block}'
+    + '.sh-form input:focus,.sh-form textarea:focus{border-color:#4c8dff}'
+    + '.sh-f-err{color:#ff6b5e;font-size:12px;margin:-2px 0 7px}'
+    + '.sh-f-send{width:100%;background:#4c8dff;color:#06122b;border:0;border-radius:9px;font:inherit;font-weight:600;font-size:13.5px;padding:9px;cursor:pointer}'
+    + '.sh-f-send:hover{background:#6ba0ff}.sh-f-send[disabled]{opacity:.6;cursor:default}'
+
     /* input */
     + '.sh-input{display:flex;gap:8px;padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);background:#0e0f12;flex:none}'
     + '.sh-input input{flex:1;background:#08090b;border:1px solid rgba(255,255,255,.1);border-radius:999px;color:#fafafa;'
@@ -142,18 +162,18 @@
   root.setAttribute('data-open', 'false');
   root.innerHTML =
     '<span class="sh-nudge" id="sh-nudge">Need a hand? Chat with us.</span>'
-    + '<button class="sh-launch" id="sh-launch" aria-label="Open SeehedCustomerSupport">'
+    + '<button class="sh-launch" id="sh-launch" aria-label="Open Seehed CustomerSupport">'
     + '<img src="' + AVATAR + '" alt=""><span class="sh-on"></span></button>'
-    + '<div class="sh-panel" role="dialog" aria-label="SeehedCustomerSupport">'
+    + '<div class="sh-panel" role="dialog" aria-label="Seehed CustomerSupport">'
     + '<div class="sh-head">'
     + '<img class="sh-av" src="' + AVATAR + '" alt="">'
-    + '<div class="sh-id"><div class="sh-name">SeehedCustomerSupport</div>'
+    + '<div class="sh-id"><div class="sh-name">Seehed CustomerSupport</div>'
     + '<div class="sh-status" id="sh-status"><span class="sh-live"></span>Online</div></div>'
     + '<button class="sh-close" id="sh-close" aria-label="Close support">×</button></div>'
     + '<div class="sh-log" id="sh-log" role="log" aria-live="polite"></div>'
     + '<div class="sh-chips" id="sh-chips"></div>'
     + '<form class="sh-input" id="sh-form"><input id="sh-in" type="text" placeholder="Ask a question…" autocomplete="off" aria-label="Ask a question"><button type="submit" aria-label="Send">→</button></form>'
-    + '<div class="sh-foot">SeehedCustomerSupport · TMC</div>'
+    + '<div class="sh-foot">Seehed CustomerSupport · TMC</div>'
     + '</div>';
 
   function mount() {
@@ -205,8 +225,13 @@
         b.addEventListener('click', function () { ask(f); });
         chips.appendChild(b);
       });
+      var help = document.createElement('button');
+      help.className = 'sh-chip sh-help-chip'; help.type = 'button'; help.textContent = 'Get more help';
+      help.addEventListener('click', function () { userMsg('I need more help'); escalate(''); });
+      chips.appendChild(help);
     }
     function ask(f) { userMsg(f.q); botSay(f.a); }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
     function match(text) {
       var t = text.toLowerCase(), best = null, score = 0;
@@ -220,9 +245,10 @@
     function open() {
       root.setAttribute('data-open', 'true');
       nudge.classList.remove('show');
+      probeHosted();
       if (!greeted) {
         greeted = true;
-        botSay("Hi — I'm <b>SeehedCustomerSupport</b>, TMC's support assistant. Pick a question below, or type your own.");
+        botSay("Hi — I'm <b>Seehed CustomerSupport</b>, TMC's support assistant. Pick a question below, or type your own.");
         renderChips();
       }
       setTimeout(function () { root.querySelector('#sh-in').focus(); }, 60);
@@ -291,13 +317,84 @@
       });
     }
 
+    // ── Server-side AI (Groq via /api/seehed) — preferred: light + fast, key stays secret ──
+    var hosted = { ready: false, checked: false, history: [] };
+    function probeHosted() {
+      if (hosted.checked) return;
+      hosted.checked = true;
+      fetch(AI_ENDPOINT, { method: 'GET' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { hosted.ready = !!(d && d.ready); })
+        .catch(function () { hosted.ready = false; });
+    }
+    function hostedAI(text) {
+      hosted.history.push({ role: 'user', content: text });
+      if (hosted.history.length > 8) hosted.history = hosted.history.slice(-8);
+      setStatus('typing');
+      var typing = row('bot', '<div class="sh-bubble sh-typing"><span></span><span></span><span></span></div>');
+      fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: hosted.history }) })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+        .then(function (d) {
+          typing.remove(); setStatus('online');
+          if (d && d.reply) { row('bot', '<div class="sh-bubble"></div>').querySelector('.sh-bubble').textContent = d.reply; hosted.history.push({ role: 'assistant', content: d.reply }); }
+          else faqFallback(text);
+        })
+        .catch(function () { typing.remove(); setStatus('online'); hosted.ready = false; if (ai.status === 'idle') offerAI(text); else faqFallback(text); });
+    }
+
+    function faqFallback(text) {
+      var f = match(text);
+      if (f) return botSay(f.a);
+      botSay("I'm not sure about that one — tap <b>Get more help</b> below to reach a person, or email <a href=\"mailto:tagnz@tmc.gg\">tagnz@tmc.gg</a>.");
+    }
+
+    // ── Escalation: validated email + message → delivered to the team (Web3Forms or mailto) ──
+    function escalate(prefill) {
+      setStatus('online');
+      var wrap = row('bot', '<div class="sh-bubble sh-form"></div>').querySelector('.sh-bubble');
+      wrap.innerHTML =
+        '<div class="sh-form-t">Send it to our team — we\'ll email you back.</div>'
+        + '<input class="sh-f-email" type="email" placeholder="Your email" autocomplete="email">'
+        + '<textarea class="sh-f-msg" rows="3" placeholder="What do you need help with?"></textarea>'
+        + '<div class="sh-f-err" hidden></div>'
+        + '<button class="sh-f-send" type="button">Send to support</button>';
+      var email = wrap.querySelector('.sh-f-email'), msg = wrap.querySelector('.sh-f-msg'),
+          err = wrap.querySelector('.sh-f-err'), send = wrap.querySelector('.sh-f-send');
+      if (prefill) msg.value = prefill;
+      setTimeout(function () { email.focus(); }, 40);
+      send.addEventListener('click', function () {
+        var e = email.value.trim(), m = msg.value.trim();
+        err.hidden = true;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { err.textContent = 'Please enter a valid email address.'; err.hidden = false; email.focus(); return; }
+        if (!m) { err.textContent = 'Add a short message so we know how to help.'; err.hidden = false; msg.focus(); return; }
+        send.disabled = true; send.textContent = 'Sending…';
+        sendSupport(e, m).then(function (ok) {
+          wrap.innerHTML = ok
+            ? "Thanks — your message is on its way to our team. We'll reply to <b>" + esc(e) + "</b>."
+            : "Opening your email app to send it. If nothing happened, email <a href=\"mailto:" + SUPPORT_EMAIL + "\">" + SUPPORT_EMAIL + "</a> directly.";
+          scrollDown();
+        });
+      });
+    }
+    function sendSupport(email, message) {
+      var subject = 'Seehed support request — ' + email;
+      if (SUPPORT_FORM_KEY) {
+        return fetch('https://api.web3forms.com/submit', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ access_key: SUPPORT_FORM_KEY, subject: subject, from_name: 'Seehed CustomerSupport', email: email, message: message })
+        }).then(function (r) { return r.ok; }).catch(function () { return false; });
+      }
+      var href = 'mailto:' + SUPPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Reply to: ' + email + '\n\n' + message);
+      try { window.location.href = href; } catch (e2) {}
+      return Promise.resolve(false);
+    }
+
     function handleQuery(text) {
-      if (ai.status === 'ready') return aiAnswer(text);
+      if (ai.status === 'ready') return aiAnswer(text);            // in-browser model already loaded
       if (ai.status === 'loading') return botSay('One sec — still loading the model, then ask me again.');
-      if (ai.status === 'idle') return offerAI(text);
-      var f = match(text); // unsupported/error → keyword FAQ + fallback
-      if (f) botSay(f.a);
-      else botSay("I'm not sure about that one — try a question below, or email <a href=\"mailto:tagnz@tmc.gg\">tagnz@tmc.gg</a> and a person will help.");
+      if (hosted.ready) return hostedAI(text);                     // server AI (Groq) — light + fast
+      if (ai.status === 'idle') return offerAI(text);              // offer the in-browser model
+      return faqFallback(text);                                    // no AI available → FAQ + escalation
     }
 
     root.querySelector('#sh-form').addEventListener('submit', function (e) {
