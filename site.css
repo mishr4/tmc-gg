@@ -445,7 +445,10 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-top { display: grid; grid-template-columns: 1.7fr repeat(4, 1fr); gap: 48px 40px; padding-block: 64px 52px; }
 @media (max-width: 980px) { .footer-top { grid-template-columns: 1fr 1fr 1fr; gap: 36px 28px; } .footer-brand { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .footer-top { grid-template-columns: 1fr 1fr; gap: 30px 20px; } }
-.footer-brand img { height: 22px; margin-bottom: 18px; }
+.footer-mark { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.footer-mark img { height: 26px; width: auto; }
+.footer-mark span { font-weight: 600; color: var(--ink); font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; }
+.footer-col a[href^="tel"] { white-space: nowrap; }
 .footer-brand p { font-size: 0.88rem; color: var(--muted); max-width: 34ch; line-height: 1.7; }
 .footer-social { display: flex; gap: 10px; margin-top: 22px; }
 .footer-social a { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--glass); border: 1px solid var(--line-soft); color: var(--muted); transition: color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
