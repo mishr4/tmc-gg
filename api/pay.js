@@ -6,10 +6,11 @@
 //   POST { kind: "invoice", invoice, amount (USD cents), email? }  → { url }
 
 const CATALOG = {
-  'tmcast-hosting': { name: 'TMCast Station Hosting — 1 Month', amount: 1000 },
-  'tmcast-setup':   { name: 'TMCast Station Setup & Onboarding', amount: 2500 },
-  'ndc-deposit':    { name: 'NDC Project Deposit', amount: 5000 },
-  'priority-pass':  { name: 'Priority Support Pass', amount: 500 },
+  'tmcast-hosting':         { name: 'TMCast Station Hosting — 1 Month', amount: 1000 },
+  'tmcast-hosting-monthly': { name: 'TMCast Station Hosting', amount: 1000, interval: 'month' },
+  'tmcast-setup':           { name: 'TMCast Station Setup & Onboarding', amount: 2500 },
+  'ndc-deposit':            { name: 'NDC Project Deposit', amount: 5000 },
+  'priority-pass':          { name: 'Priority Support Pass', amount: 500 },
 };
 
 const MIN_CENTS = 100;      // $1.00
@@ -40,12 +41,12 @@ module.exports = async function handler(req, res) {
     if (!body || typeof body !== 'object') body = {};
 
     const email = String(body.email || '').trim().slice(0, 200);
-    let name, amount, ref;
+    let name, amount, ref, interval = null;
 
     if (body.kind === 'item') {
       const item = CATALOG[String(body.item || '')];
       if (!item) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'unknown_item' })); }
-      name = item.name; amount = item.amount; ref = String(body.item);
+      name = item.name; amount = item.amount; ref = String(body.item); interval = item.interval || null;
     } else if (body.kind === 'invoice') {
       ref = String(body.invoice || '').trim().slice(0, 60);
       amount = Math.round(Number(body.amount));
@@ -59,7 +60,7 @@ module.exports = async function handler(req, res) {
     }
 
     const form = new URLSearchParams();
-    form.set('mode', 'payment');
+    form.set('mode', interval ? 'subscription' : 'payment');
     form.set('success_url', 'https://tmc.gg/pay?status=success');
     form.set('cancel_url', 'https://tmc.gg/pay?status=canceled');
     form.set('line_items[0][price_data][currency]', 'usd');
@@ -67,6 +68,11 @@ module.exports = async function handler(req, res) {
     form.set('line_items[0][price_data][unit_amount]', String(amount));
     form.set('line_items[0][quantity]', '1');
     form.set('metadata[ref]', ref);
+    if (interval) {
+      form.set('line_items[0][price_data][recurring][interval]', interval);
+      // carry the ref onto the subscription itself so a future auth API can look it up
+      form.set('subscription_data[metadata][ref]', ref);
+    }
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) form.set('customer_email', email);
 
     const stripe = await fetch('https://api.stripe.com/v1/checkout/sessions', {

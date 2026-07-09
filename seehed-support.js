@@ -31,6 +31,15 @@
       a: "We're based in California, USA, and operate online worldwide." }
   ];
 
+  // ── Plans Seehed can sell in-chat (checkout happens on Stripe via /api/pay) ──
+  var PLANS = [
+    { id: 'tmcast-hosting-monthly', label: 'TMCast Hosting — $10/month', note: 'Subscription — renews monthly, cancel anytime', k: ['tmcast', 'hosting', 'host', 'radio', 'station', 'stream'] },
+    { id: 'tmcast-hosting', label: 'TMCast Hosting — $10 one-time', note: 'One month, no auto-renew', k: ['tmcast', 'hosting', 'host', 'radio', 'station', 'stream'] },
+    { id: 'tmcast-setup', label: 'Station Setup — $25 one-time', note: 'Full provisioning + guided onboarding', k: ['tmcast', 'setup', 'onboarding', 'station'] },
+    { id: 'priority-pass', label: 'Priority Support — $5 / 30 days', note: 'Your tickets jump the queue', k: ['priority', 'pass', 'fast', 'queue'] },
+    { id: 'ndc-deposit', label: 'NDC Project Deposit — $50', note: 'Applied in full against your first invoice', k: ['ndc', 'project', 'deposit', 'web', 'site'] }
+  ];
+
   // ── On-device AI (no API): WebLLM runs a small model in the browser via WebGPU. ──
   // Opt-in: nothing downloads until the visitor turns it on. Swap the model id for a
   // bigger/smaller one from WebLLM's prebuilt list. q4f16_1 0.5B ≈ ~500MB, cached after first load.
@@ -44,6 +53,7 @@
     "",
     "Facts you may use (do not invent any others — no prices, dates, URLs, phone numbers or policies beyond these):",
     "- Support / contact: email tagnz@tmc.gg, Discord discord.gg/cirya, phone +1 (202) 350-0343 ext. 806. The team usually replies within a day.",
+    "- Buying / pricing: payments happen at tmc.gg/pay (secure Stripe checkout). TMCast station hosting is $10/month as a subscription or $10 one-time for a single month; station setup & onboarding $25 one-time; priority support pass $5 for 30 days; NDC project deposit $50. Invoices can be paid there too.",
     "- Listen to TMCast: cast.tmc.gg, or tmc.gg/radio.",
     "- Careers: tmc.gg/careers.  Appeal a ban or decision: tmc.gg/appeal.",
     "- Partnerships: tmc.gg/partners.  Music / ASCAP licensing: mavion.tmc.gg/licensing.",
@@ -55,7 +65,7 @@
     "- Only discuss TMC and its services. If asked anything off-topic (general knowledge, coding, personal questions, other companies), politely decline and say you can only help with TMC.",
     "- Never invent facts. If you don't know, say so plainly.",
     "- For anything account-specific, private, legal, billing, press, or that needs a human, don't guess — tell them to email tagnz@tmc.gg or use the Discord.",
-    "- You cannot change accounts, take payments, or access a user's data — never claim to.",
+    "- You cannot change accounts or access a user's data — never claim to. For purchases, point people to tmc.gg/pay; the chat may also show them payment buttons.",
     "- Keep replies short: a direct answer plus at most one relevant link. When unsure, say: \"I'm not certain — the fastest way is to email tagnz@tmc.gg and a person will help.\""
   ].join('\n');
 
@@ -138,6 +148,16 @@
     + '.sh-ai-load{font:inherit;font-size:12.5px;font-weight:600;color:#06122b;background:#4c8dff;border:0;border-radius:9px;padding:6px 12px;margin:6px 4px 2px 0;cursor:pointer}'
     + '.sh-ai-load:hover{background:#6ba0ff}.sh-ai-load[disabled]{opacity:.6;cursor:default}'
     + '.sh-ai-load:focus-visible{outline:2px solid #fafafa;outline-offset:2px}'
+
+    /* plan picker (payment buttons inside a bot bubble) */
+    + '.sh-bubble.sh-plans{max-width:288px;width:100%}'
+    + '.sh-plan{display:block;width:100%;text-align:left;font:inherit;background:#0e1320;border:1px solid rgba(76,141,255,.35);'
+    + 'border-radius:11px;padding:9px 12px;margin-top:8px;cursor:pointer;transition:.14s}'
+    + '.sh-plan:hover{border-color:#4c8dff;background:#14203a}'
+    + '.sh-plan:focus-visible{outline:2px solid #4c8dff;outline-offset:1px}'
+    + '.sh-plan[disabled]{opacity:.55;cursor:default}'
+    + '.sh-plan .sh-plan-l{display:block;font-size:13.5px;font-weight:600;color:#cfe0ff}'
+    + '.sh-plan .sh-plan-n{display:block;font-size:11.5px;color:#9a9ca2;margin-top:1px}'
 
     /* "Get more help" chip + escalation email form */
     + '.sh-help-chip{border-color:rgba(76,141,255,.5);color:#8fb4ff}'
@@ -233,6 +253,10 @@
         b.addEventListener('click', function () { ask(f); });
         chips.appendChild(b);
       });
+      var shop = document.createElement('button');
+      shop.className = 'sh-chip sh-help-chip'; shop.type = 'button'; shop.textContent = 'Buy a plan';
+      shop.addEventListener('click', function () { userMsg('I want to buy a plan'); showPlans(PLANS); });
+      chips.appendChild(shop);
       var help = document.createElement('button');
       help.className = 'sh-chip sh-help-chip'; help.type = 'button'; help.textContent = 'Get more help';
       help.addEventListener('click', function () { userMsg('I need more help'); escalate(''); });
@@ -356,6 +380,63 @@
       botSay("I'm not sure about that one — tap <b>Get more help</b> below to reach a person, or email <a href=\"mailto:tagnz@tmc.gg\">tagnz@tmc.gg</a>.");
     }
 
+    // ── In-chat purchases: intent → plan picker bubble → Stripe Checkout ──
+    function buyIntent(text) {
+      var t = text.toLowerCase();
+      var buy = /(buy|purchase|subscribe|subscription|order|sign\s?up|upgrade|pay\s?for|get\s+(a|the|tmcast|hosting|priority|setup)|checkout)/.test(t);
+      var price = /(how much|price|pricing|cost|per month|monthly)/.test(t);
+      var prod = /(tmcast|hosting|host|station|radio|priority|pass|ndc|deposit|setup|plan|service)/.test(t);
+      if (!(buy || price) || !prod) return null;
+      var hits = PLANS.filter(function (p) {
+        return p.k.some(function (k) { return t.indexOf(k) !== -1; });
+      });
+      return hits.length ? hits : PLANS;
+    }
+
+    function showPlans(plans, intro) {
+      setStatus('typing');
+      var typing = row('bot', '<div class="sh-bubble sh-typing"><span></span><span></span><span></span></div>');
+      setTimeout(function () {
+        typing.remove(); setStatus('online');
+        var wrap = row('bot', '<div class="sh-bubble sh-plans"></div>').querySelector('.sh-bubble');
+        var t = document.createElement('div');
+        t.className = 'sh-form-t';
+        t.textContent = intro || 'Yes! Which plan would you like? Pick one and I’ll take you to secure checkout (Stripe):';
+        wrap.appendChild(t);
+        plans.forEach(function (p) {
+          var b = document.createElement('button');
+          b.className = 'sh-plan'; b.type = 'button';
+          b.innerHTML = '<span class="sh-plan-l"></span><span class="sh-plan-n"></span>';
+          b.querySelector('.sh-plan-l').textContent = p.label;
+          b.querySelector('.sh-plan-n').textContent = p.note;
+          b.addEventListener('click', function () { startCheckout(p, b, wrap); });
+          wrap.appendChild(b);
+        });
+        scrollDown();
+      }, 700);
+    }
+
+    function startCheckout(plan, btn, wrap) {
+      var all = wrap.querySelectorAll('.sh-plan');
+      for (var i = 0; i < all.length; i++) all[i].disabled = true;
+      btn.querySelector('.sh-plan-n').textContent = 'Opening secure checkout…';
+      fetch('/api/pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'item', item: plan.id })
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok && res.d.url) { window.location.href = res.d.url; return; }
+          throw new Error((res.d && (res.d.detail || res.d.error)) || 'checkout_failed');
+        })
+        .catch(function () {
+          for (var i = 0; i < all.length; i++) all[i].disabled = false;
+          btn.querySelector('.sh-plan-n').textContent = plan.note;
+          botMsg("Hmm, checkout didn't open — try again in a moment, or head to <a href=\"/pay\">tmc.gg/pay</a> and pay there.");
+        });
+    }
+
     // ── Escalation: validated email + message → delivered to the team (Web3Forms or mailto) ──
     function escalate(prefill) {
       setStatus('online');
@@ -405,6 +486,8 @@
     }
 
     function handleQuery(text) {
+      var plans = buyIntent(text);
+      if (plans) return showPlans(plans);                          // purchases: buttons beat prose
       if (hosted.ready) return hostedAI(text);                     // Groq (8B) — the good path, preferred
       if (ai.status === 'ready') return aiAnswer(text);            // in-browser model (only if enabled + loaded)
       if (ai.status === 'loading') return botSay('One sec — still loading the model, then ask me again.');
