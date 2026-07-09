@@ -41,7 +41,7 @@
         { id: 'tmcast-hosting-monthly', label: 'Subscribe — $10/month', note: 'Renews monthly · cancel anytime', vk: ['month', 'subscribe', 'subscription', 'recurring'] },
         { id: 'tmcast-hosting', label: 'Pay once — $10', note: 'One month · no auto-renew', vk: ['once', 'one-time', 'one time', 'single'] }
       ],
-      addon: { id: 'tmcast-setup', text: 'Want us to set it up for you? Add Station Setup — $25' }
+      addon: { id: 'tmcast-setup', text: 'Add Station Setup — $25 one-time, billed together' }
     },
     setup: {
       name: 'Station Setup', from: '$25 one-time',
@@ -73,7 +73,7 @@
     "",
     "Facts you may use (do not invent any others — no prices, dates, URLs, phone numbers or policies beyond these):",
     "- Support / contact: email tagnz@tmc.gg, Discord discord.gg/cirya, phone +1 (202) 350-0343 ext. 806. The team usually replies within a day.",
-    "- Buying / pricing: payments happen at tmc.gg/pay (secure Stripe checkout). TMCast station hosting is $10/month as a subscription or $10 one-time for a single month; station setup & onboarding $25 one-time; priority support pass $5 for 30 days; NDC project deposit $50. Invoices can be paid there too.",
+    "- Buying / pricing: payments happen at tmc.gg/pay (secure Stripe checkout). TMCast station hosting is $10/month as a subscription or $10 one-time for a single month; station setup & onboarding $25 one-time (can be added to a hosting checkout and billed together); priority support pass $5 for 30 days; NDC project deposit $50. Invoices can be paid there too.",
     "- Listen to TMCast: cast.tmc.gg, or tmc.gg/radio.",
     "- Careers: tmc.gg/careers.  Appeal a ban or decision: tmc.gg/appeal.",
     "- Partnerships: tmc.gg/partners.  Music / ASCAP licensing: mavion.tmc.gg/licensing.",
@@ -181,6 +181,8 @@
     + '.sh-plan.sh-plan-addon{background:transparent;border-style:dashed;border-color:rgba(255,255,255,.16)}'
     + '.sh-plan.sh-plan-addon:hover{border-color:#4c8dff}'
     + '.sh-plan.sh-plan-addon .sh-plan-n{color:#8fb4ff}'
+    + '.sh-plan.sh-plan-addon.on{border-style:solid;border-color:rgba(62,207,142,.6);background:rgba(62,207,142,.07)}'
+    + '.sh-plan.sh-plan-addon.on .sh-plan-n{color:#3ecf8e}'
 
     /* "Get more help" chip + escalation email form */
     + '.sh-help-chip{border-color:rgba(76,141,255,.5);color:#8fb4ff}'
@@ -500,15 +502,25 @@
           ? 'Yes! ' + p.name + ' — how would you like to pay?'
           : 'Yes! ' + p.name + ' — tap below and I’ll take you to secure checkout:');
         wrap.appendChild(t);
+        // the setup add-on is a toggle: separate line item, same checkout, one bill
+        var addonOn = false;
         (only || p.variants).forEach(function (v) {
-          planButton(wrap, v.label, v.note, function (btn) { startCheckout(v, btn, wrap); });
+          planButton(wrap, v.label, v.note, function (btn) {
+            var ids = addonOn && p.addon ? [v.id, p.addon.id] : [v.id];
+            startCheckout({ ids: ids }, btn, wrap);
+          });
         });
         if (p.addon) {
           var a = document.createElement('button');
           a.className = 'sh-plan sh-plan-addon'; a.type = 'button';
           a.innerHTML = '<span class="sh-plan-n"></span>';
-          a.querySelector('.sh-plan-n').textContent = p.addon.text;
-          a.addEventListener('click', function () { startCheckout({ id: p.addon.id, note: p.addon.text }, a, wrap); });
+          var an = a.querySelector('.sh-plan-n');
+          an.textContent = '+ ' + p.addon.text;
+          a.addEventListener('click', function () {
+            addonOn = !addonOn;
+            a.classList.toggle('on', addonOn);
+            an.textContent = (addonOn ? '✓ ' : '+ ') + p.addon.text;
+          });
           wrap.appendChild(a);
         }
       });
@@ -523,7 +535,7 @@
       fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind: 'item', item: plan.id })
+        body: JSON.stringify({ kind: 'item', items: plan.ids })
       })
         .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (res) {

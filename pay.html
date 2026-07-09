@@ -83,6 +83,11 @@
     .pc-alt button { background: none; border: 0; padding: 0; font-size: inherit; color: var(--accent); }
     .pc-alt button:hover { color: var(--accent-hover); }
     .pc-alt button[disabled] { color: var(--faint); cursor: default; }
+    .pc-addon {
+      display: flex; gap: 9px; align-items: center; margin-bottom: 14px;
+      font-size: 0.84rem; color: var(--muted); cursor: pointer; user-select: none;
+    }
+    .pc-addon input { accent-color: var(--accent); width: 15px; height: 15px; flex: none; cursor: pointer; }
     @media (max-width: 1020px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) { .plans-grid { grid-template-columns: 1fr; } }
 
@@ -171,6 +176,7 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Metadata &amp; now-playing API</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Cancel anytime, no lock-in</li>
             </ul>
+            <label class="pc-addon"><input type="checkbox" id="addon-setup"> Add Station Setup — +$25 one-time, billed together</label>
             <button class="btn btn-primary btn-lg pc-cta" onclick="payItem('tmcast-hosting-monthly', this)">Subscribe</button>
             <p class="pc-alt">or <button type="button" onclick="payItem('tmcast-hosting', this)">pay once for one month — $10</button></p>
           </article>
@@ -359,7 +365,10 @@
     }
 
     function payItem(item, btn) {
-      createCheckout({ kind: 'item', item }, 'svc-error', btn);
+      const items = [item];
+      const addon = document.getElementById('addon-setup');
+      if (addon && addon.checked && item.indexOf('tmcast-hosting') === 0) items.push('tmcast-setup');
+      createCheckout({ kind: 'item', items }, 'svc-error', btn);
     }
   </script>
   <script src="/site.js" defer></script>

@@ -3,6 +3,8 @@
 // Prices for catalog items live HERE (server-side) so the client can't tamper with them.
 //   GET  → { ok, ready }   (ready = key set AND the Stripe account can actually charge)
 //   POST { kind: "item", item: "<catalog id>", email? }            → { url }
+//   POST { kind: "item", items: ["<id>", ...], email? }            → { url }  (bundle — one checkout,
+//         separate line items; if any item recurs it's a subscription and one-times bill on the first invoice)
 //   POST { kind: "invoice", invoice, amount (USD cents), email? }  → { url }
 
 const CATALOG = {
@@ -41,38 +43,45 @@ module.exports = async function handler(req, res) {
     if (!body || typeof body !== 'object') body = {};
 
     const email = String(body.email || '').trim().slice(0, 200);
-    let name, amount, ref, interval = null;
+    let lines, ref; // lines: [{ name, amount, interval? }]
 
     if (body.kind === 'item') {
-      const item = CATALOG[String(body.item || '')];
-      if (!item) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'unknown_item' })); }
-      name = item.name; amount = item.amount; ref = String(body.item); interval = item.interval || null;
+      const ids = (Array.isArray(body.items) && body.items.length ? body.items : [body.item])
+        .slice(0, 4).map(String);
+      const defs = ids.map((id) => CATALOG[id]);
+      if (!defs.length || defs.some((d) => !d)) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'unknown_item' })); }
+      lines = defs;
+      ref = ids.join('+');
     } else if (body.kind === 'invoice') {
       ref = String(body.invoice || '').trim().slice(0, 60);
-      amount = Math.round(Number(body.amount));
+      const amount = Math.round(Number(body.amount));
       if (!ref) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'no_invoice' })); }
       if (!Number.isFinite(amount) || amount < MIN_CENTS || amount > MAX_CENTS) {
         res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_amount' }));
       }
-      name = 'TMC Invoice ' + ref;
+      lines = [{ name: 'TMC Invoice ' + ref, amount }];
     } else {
       res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_kind' }));
     }
 
+    // one recurring item makes the whole checkout a subscription; one-time items
+    // (like setup) ride along as separate line items billed on the first invoice
+    const subscription = lines.some((li) => li.interval);
+
     const form = new URLSearchParams();
-    form.set('mode', interval ? 'subscription' : 'payment');
+    form.set('mode', subscription ? 'subscription' : 'payment');
     form.set('success_url', 'https://tmc.gg/pay?status=success');
     form.set('cancel_url', 'https://tmc.gg/pay?status=canceled');
-    form.set('line_items[0][price_data][currency]', 'usd');
-    form.set('line_items[0][price_data][product_data][name]', name);
-    form.set('line_items[0][price_data][unit_amount]', String(amount));
-    form.set('line_items[0][quantity]', '1');
+    lines.forEach((li, i) => {
+      form.set('line_items[' + i + '][price_data][currency]', 'usd');
+      form.set('line_items[' + i + '][price_data][product_data][name]', li.name);
+      form.set('line_items[' + i + '][price_data][unit_amount]', String(li.amount));
+      form.set('line_items[' + i + '][quantity]', '1');
+      if (li.interval) form.set('line_items[' + i + '][price_data][recurring][interval]', li.interval);
+    });
     form.set('metadata[ref]', ref);
-    if (interval) {
-      form.set('line_items[0][price_data][recurring][interval]', interval);
-      // carry the ref onto the subscription itself so a future auth API can look it up
-      form.set('subscription_data[metadata][ref]', ref);
-    }
+    // carry the ref onto the subscription itself so a future auth API can look it up
+    if (subscription) form.set('subscription_data[metadata][ref]', ref);
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) form.set('customer_email', email);
 
     const stripe = await fetch('https://api.stripe.com/v1/checkout/sessions', {
