@@ -59,10 +59,13 @@
   // Optional Web3Forms access key → escalations land in the inbox directly (else falls back
   // to opening the visitor's mail app). Grab a free key at web3forms.com (enter tagnz@tmc.gg).
   var SUPPORT_FORM_KEY = '';
-  // Optional server-side AI (Groq via the Vercel /api/seehed function — key stays secret,
-  // no big download). Set GROQ_API_KEY in Vercel to enable; otherwise the widget falls back
-  // to the in-browser model, then the canned FAQ.
+  // Server-side AI (Groq via the Vercel /api/seehed function — key stays secret, no big
+  // download, an actually-capable 8B model). Set GROQ_API_KEY in Vercel to enable.
   var AI_ENDPOINT = '/api/seehed';
+  // The in-browser model (WebLLM) is only ~0.5B — too small to answer support questions
+  // reliably (it makes things up), so it's OFF by default. Free-text uses Groq when
+  // configured, otherwise the accurate canned FAQ + "Get more help". Set true to re-enable.
+  var USE_INBROWSER_AI = false;
 
   // ── Styles ──
   var css = ''
@@ -390,11 +393,11 @@
     }
 
     function handleQuery(text) {
-      if (ai.status === 'ready') return aiAnswer(text);            // in-browser model already loaded
+      if (hosted.ready) return hostedAI(text);                     // Groq (8B) — the good path, preferred
+      if (ai.status === 'ready') return aiAnswer(text);            // in-browser model (only if enabled + loaded)
       if (ai.status === 'loading') return botSay('One sec — still loading the model, then ask me again.');
-      if (hosted.ready) return hostedAI(text);                     // server AI (Groq) — light + fast
-      if (ai.status === 'idle') return offerAI(text);              // offer the in-browser model
-      return faqFallback(text);                                    // no AI available → FAQ + escalation
+      if (USE_INBROWSER_AI && ai.status === 'idle') return offerAI(text);
+      return faqFallback(text);                                    // no smart AI → accurate FAQ + "Get more help"
     }
 
     root.querySelector('#sh-form').addEventListener('submit', function (e) {
