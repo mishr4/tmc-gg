@@ -30,6 +30,56 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
 
+  <style>
+    /* TMCast product-depth sections — page-scoped, tokens only, no gradients */
+    .stepnum { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ff-mono); font-size: 0.7rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--c-cast); font-weight: 600; }
+    .stepnum::before { content: ""; width: 24px; height: 1px; background: var(--c-cast); opacity: .55; }
+
+    .ticks { list-style: none; display: grid; gap: 14px; margin: 0; }
+    .ticks li { display: flex; gap: 13px; align-items: flex-start; font-size: 0.98rem; color: var(--muted); line-height: 1.5; }
+    .ticks li svg { width: 20px; height: 20px; flex: 0 0 20px; color: var(--ok); margin-top: 3px; }
+    .ticks li b { color: var(--ink); font-weight: 600; }
+
+    /* priority-layer stack */
+    .glabel { font-family: var(--ff-mono); font-size: 0.66rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--faint); margin: 26px 0 12px; }
+    .glabel:first-child { margin-top: 0; }
+    .layers { display: grid; gap: 12px; }
+    .layer { display: grid; grid-template-columns: 62px 1fr; gap: 20px; align-items: start; background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r); padding: 20px 22px; transition: border-color .4s var(--ease), transform .4s var(--ease); }
+    .layer:hover { border-color: var(--line); transform: translateY(-2px); }
+    .layer.is-live { border-left: 2px solid var(--accent); }
+    .layer.is-dj { border-left: 2px solid var(--c-cast); }
+    .layer .pbox { display: grid; gap: 3px; padding-right: 18px; border-right: 1px solid var(--line-soft); height: 100%; }
+    .layer .pk { font-family: var(--ff-mono); font-size: 0.56rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--faint); }
+    .layer .pn { font-family: var(--ff-display); font-size: 1.7rem; font-weight: 500; color: var(--ink); line-height: 1; letter-spacing: -0.02em; }
+    .layer h4 { font-size: 1.04rem; color: var(--ink); margin-bottom: 6px; }
+    .layer p { font-size: 0.94rem; color: var(--muted); margin: 0; }
+    @media (max-width: 560px) { .layer { grid-template-columns: 1fr; gap: 12px; } .layer .pbox { border-right: 0; border-bottom: 1px solid var(--line-soft); padding: 0 0 12px; grid-auto-flow: column; justify-content: start; gap: 10px; align-items: baseline; } }
+
+    .fallback { margin-top: 24px; display: flex; gap: 15px; align-items: flex-start; background: var(--surface-sunk); border: 1px solid var(--line-soft); border-radius: var(--r); padding: 22px 24px; }
+    .fallback svg { width: 22px; height: 22px; flex: 0 0 22px; color: var(--ok); margin-top: 2px; }
+    .fallback p { font-size: 0.96rem; color: var(--muted); margin: 0; }
+    .fallback b { color: var(--ink); font-weight: 600; }
+
+    .pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    @media (max-width: 760px) { .pick { grid-template-columns: 1fr; } }
+    .pick .p-item { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r); padding: 20px 22px; }
+    .pick .p-item h4 { font-family: var(--ff-display); font-weight: 500; font-size: 1.08rem; color: var(--ink); margin-bottom: 5px; }
+    .pick .p-item p { font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .chip { font-family: var(--ff-mono); font-size: 0.78rem; color: var(--ink-2); background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-pill); padding: 7px 15px; }
+
+    .compare .c-head { font-family: var(--ff-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; display: block; }
+    .compare .card h3 { margin-bottom: 8px; }
+
+    .scene { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r); padding: 26px; transition: border-color .4s var(--ease), transform .4s var(--ease); }
+    .scene:hover { border-color: var(--line); transform: translateY(-3px); }
+    .scene .who { display: inline-flex; align-items: center; gap: 9px; font-family: var(--ff-mono); font-size: 0.64rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--c-cast); margin-bottom: 12px; }
+    .scene .who .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-cast); }
+    .scene h3 { font-size: 1.12rem; color: var(--ink); margin-bottom: 9px; }
+    .scene p { font-size: 0.95rem; color: var(--muted); margin: 0; }
+  </style>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -53,6 +103,9 @@
       { "@type": "Question", "name": "What is TMCast?", "acceptedAnswer": { "@type": "Answer", "text": "TMCast is TMC's broadcast platform. It powers our internal radio operations and is available for public hosting — anyone can run their own internet radio station on our infrastructure." } },
       { "@type": "Question", "name": "Do I need ASCAP licensing?", "acceptedAnswer": { "@type": "Answer", "text": "If you plan to stream copyrighted music, yes. TMCast hosting does not include music licensing. We offer an ASCAP licensing service through mavion.tmc.gg/licensing." } },
       { "@type": "Question", "name": "Can I go live with a microphone or DJ software?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pro and Business plans support live DJ connections via standard broadcasting software such as BUTT, Mixxx or SAM Broadcaster, with dedicated mount points for seamless handoff between AutoDJ and live." } },
+      { "@type": "Question", "name": "How do the five priority layers work?", "acceptedAnswer": { "@type": "Answer", "text": "Guest DJ input, Studio input, scheduled playlists, weighted rotation and random library. The highest layer with audio wins and each falls back to the next automatically, so a partial schedule or a dropped live feed never leaves dead air. Use one layer or all five." } },
+      { "@type": "Question", "name": "What audio formats can I upload?", "acceptedAnswer": { "@type": "Answer", "text": "MP3, WAV, FLAC and OGG. TMCast reads the ID3 tags, caches the cover art, and runs loudness normalization on upload so tracks sit at a consistent volume." } },
+      { "@type": "Question", "name": "Can I embed the player on my own site?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, on every plan. Embed the responsive player or individual widgets with a copy-paste snippet, and use HLS, Icecast MP3 and M3U/PLS stream URLs for third-party directories." } },
       { "@type": "Question", "name": "How do I get started?", "acceptedAnswer": { "@type": "Answer", "text": "Join our Discord, pick a plan, and we'll have your station set up and streaming within 24 hours with full access to the TMCast dashboard." } }
     ]
   }
@@ -86,7 +139,7 @@
       <div class="wrap">
         <p class="badge-live"><span class="pulse"></span> On air</p>
         <h1 class="mt-s">Internet radio hosting, fully managed.</h1>
-        <p class="lede">Run your own station on TMC infrastructure — AutoDJ, live DJ connections, song requests and listener analytics. You bring the music; we keep it streaming 24/7.</p>
+        <p class="lede">Run your own station on TMC infrastructure. Upload a library and go, or stack live shows, schedules and weighted rotation on top — five priority layers with automatic fallback, so you never go dark. We keep it streaming 24/7.</p>
         <div class="hero-cta">
           <a class="btn btn-primary btn-lg" href="mailto:tagnz@tmc.gg?subject=TMCast%20Hosting%20—%20New%20Station%20Request&body=Hi%20TMC%20team%2C%0A%0AI'd%20like%20to%20set%20up%20a%20TMCast%20radio%20station.%0A%0APlan%20interested%20in%3A%20%5BStarter%20%2F%20Pro%20%2F%20Business%5D%0AStation%20name%3A%20%0AGenre%3A%20%0A%0AThanks!">Get started</a>
           <a class="btn btn-ghost btn-lg" href="https://cast.tmc.gg" target="_blank" rel="noopener">Open portal</a>
@@ -121,18 +174,214 @@
           </article>
           <article class="card feature reveal">
             <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
-            <h3>AutoDJ</h3>
-            <p>Upload your library and let AutoDJ handle scheduling automatically.</p>
+            <h3>Layered AutoDJ</h3>
+            <p>Five priority layers — live, scheduled, rotation, random — with automatic fallback between them.</p>
           </article>
           <article class="card feature reveal">
             <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
-            <h3>Live metadata</h3>
-            <p>Now-playing, album art and listener stats in real time.</p>
+            <h3>Live metadata &amp; loudness</h3>
+            <p>Now-playing, album art and listener stats in real time — with loudness levelling baked in.</p>
           </article>
           <article class="card feature reveal">
             <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
-            <h3>Full dashboard</h3>
-            <p>Manage everything from a clean web-based control panel.</p>
+            <h3>Anywhere you listen</h3>
+            <p>HLS CDN, embeddable player and widgets, plus direct stream URLs for any directory.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 1 · Upload -->
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="stepnum">Step 1 · Upload</p>
+          <h2 class="mt-s">Get your music in.</h2>
+          <p>Drag and drop MP3, WAV, FLAC or OGG. We read the ID3 tags, cache the cover art, and run loudness normalization so every track sits at a consistent volume. Reuse your existing library — no re-tagging.</p>
+        </div>
+        <div class="grid cols-2 reveal" style="align-items:start;gap:clamp(20px,3vw,44px)">
+          <ul class="ticks">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg><span><b>Bulk upload with automatic metadata.</b> Title, artist, album, BPM and genre read straight from your files.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg><span><b>Cover art auto-fetched</b> and cached for every track, so the player always looks right.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg><span><b>Loudness levelled</b> so jingles and quiet tracks never blow out your listeners.</span></li>
+          </ul>
+          <article class="card pad-lg">
+            <p class="eyebrow muted">What you get</p>
+            <h3 class="mt-s">A tagged library, ready to play.</h3>
+            <p class="mt-s">Title, artist, album, BPM and genre — organised and searchable the moment the upload finishes. No further setup required to go on air.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2 · Choose how it plays -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="stepnum">Step 2 · Choose how it plays</p>
+          <h2 class="mt-s">Pick your automation depth.</h2>
+          <p>Five priority layers, top to bottom. The highest layer with audio wins. Use one, use all, mix freely — TMCast handles the fallback for you.</p>
+        </div>
+
+        <div class="reveal">
+          <p class="glabel">Live inputs · optional · use one, both, or neither</p>
+          <p class="note" style="margin:-4px 0 4px;max-width:64ch">Running a fully automated station? Skip this whole section — AutoDJ handles 24/7 on its own.</p>
+          <div class="layers">
+            <div class="layer is-live">
+              <div class="pbox"><span class="pk">Priority</span><span class="pn">1</span></div>
+              <div><h4>Guest DJ input</h4><p>A second live slot so a co-host or invited DJ can take over for an hour without kicking you offline. When they disconnect, your Studio feed is right there waiting.</p></div>
+            </div>
+            <div class="layer is-live">
+              <div class="pbox"><span class="pk">Priority</span><span class="pn">2</span></div>
+              <div><h4>Studio input — your encoder</h4><p>Broadcast live from your own software — SAM Broadcaster, BUTT, Mixxx, RadioBOSS, Virtual DJ, OBS, or any Icecast/Shoutcast source. Keep the workflow you know. On air the moment you connect.</p></div>
+            </div>
+          </div>
+
+          <p class="glabel">AutoDJ · each layer falls back to the next</p>
+          <div class="layers">
+            <div class="layer is-dj">
+              <div class="pbox"><span class="pk">Priority</span><span class="pn">3</span></div>
+              <div><h4>Scheduled playlists</h4><p>For the programmer. Run specific shows at specific hours — morning show, drivetime, weekend specials. You don't need to fill the whole week: empty slots fall through to rotation automatically, so partial schedules just work.</p></div>
+            </div>
+            <div class="layer is-dj">
+              <div class="pbox"><span class="pk">Priority</span><span class="pn">4</span></div>
+              <div><h4>Weighted rotation</h4><p>For the CentovaCast veteran. The familiar rotation model — A-list, B-list, jingles, sweepers, each with a weight. More control than random, without the work of a full schedule.</p></div>
+            </div>
+            <div class="layer is-dj">
+              <div class="pbox"><span class="pk">Priority</span><span class="pn">5</span></div>
+              <div><h4>Random library</h4><p>Upload and be live. AutoDJ shuffles your whole library forever — perfect as a simple music-only station, or as your emergency fallback when the studio drops and nothing is scheduled. You never go dark.</p></div>
+            </div>
+          </div>
+
+          <div class="fallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <p><b>Smart fallback, built in.</b> The highest layer with audio wins. No live show? The schedule plays. Empty schedule slot? Rotation plays. Empty rotation? Your library plays. You never need to fill every hour manually.</p>
+          </div>
+
+          <div class="pick">
+            <div class="p-item"><h4>Just a library</h4><p>A simple station, always on.</p></div>
+            <div class="p-item"><h4>Add weighted rotation</h4><p>Structured sound without scheduling.</p></div>
+            <div class="p-item"><h4>Add a schedule on top</h4><p>Timed programming when you want it.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 · Go live -->
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="stepnum">Step 3 · Go live · optional</p>
+          <h2 class="mt-s">Keep your studio software.</h2>
+          <p>Already broadcasting with SAM Broadcaster, BUTT, Mixxx, RadioBOSS, Virtual DJ, OBS or a hardware encoder? Keep using it. Point it at your Studio input, hit connect, and you're live — AutoDJ steps aside. Disconnect and AutoDJ resumes exactly where the schedule left off.</p>
+        </div>
+        <div class="grid cols-2 reveal" style="gap:clamp(16px,2.4vw,26px)">
+          <article class="card pad-lg">
+            <h3>Hand off without a beat of silence.</h3>
+            <p class="mt-s">Need a co-host for an hour? They connect to the separate Guest input. Your Studio stream keeps running underneath, so when they hop off you're right back on air — no dead air, no reconnects.</p>
+          </article>
+          <article class="card pad-lg">
+            <h3>Running fully automated?</h3>
+            <p class="mt-s">Skip this step entirely — most of our stations do. Point any Icecast- or Shoutcast-compatible encoder at your TMCast Studio input when you want it; the only thing that changes is the server address.</p>
+          </article>
+        </div>
+        <p class="eyebrow muted reveal" style="margin-top:34px">Works with your studio software</p>
+        <div class="chips reveal">
+          <span class="chip">SAM Broadcaster</span>
+          <span class="chip">BUTT</span>
+          <span class="chip">Mixxx</span>
+          <span class="chip">RadioBOSS</span>
+          <span class="chip">Virtual DJ</span>
+          <span class="chip">OBS</span>
+          <span class="chip">RadioDJ</span>
+          <span class="chip">PlayIt Live</span>
+          <span class="chip">Any Icecast / Shoutcast source</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4 · Drive listeners -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="stepnum">Step 4 · Drive listeners</p>
+          <h2 class="mt-s">Put your station anywhere.</h2>
+          <p>Every plan includes the ways to reach listeners — from your own site and apps to third-party directories.</p>
+        </div>
+        <div class="grid cols-3">
+          <article class="card feature reveal">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/><polygon points="10 9 14 11.5 10 14 10 9" fill="currentColor" stroke="none"/></svg></span>
+            <h3>Embeddable web player</h3>
+            <p>Six themes, responsive, with live album art and now-playing. One snippet drops onto any page — WordPress, Squarespace, plain HTML, you name it.</p>
+          </article>
+          <article class="card feature reveal">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+            <h3>Embeddable widgets</h3>
+            <p>Drop now-playing, listener count, recent history or stream status onto any page. One-line script tags, copy-paste from your dashboard.</p>
+          </article>
+          <article class="card feature reveal">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+            <h3>Direct stream URLs</h3>
+            <p>HLS, Icecast MP3, and M3U/PLS files for VLC, car stereos, TuneIn, Radio Garden and any directory that accepts a stream URL.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How we're different -->
+    <section class="section alt compare">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow muted">How we're different</p>
+          <h2>Fewer constraints than the incumbents.</h2>
+        </div>
+        <div class="grid cols-3">
+          <article class="card pad-lg reveal">
+            <span class="c-head">vs schedule-first platforms</span>
+            <h3>No forced scheduling.</h3>
+            <p>Some platforms push you toward scheduled playlists for every hour of the week. With TMCast, scheduling is one option among three — empty slots fall through to rotation or library automatically.</p>
+          </article>
+          <article class="card pad-lg reveal">
+            <span class="c-head">vs CentovaCast / SonicPanel</span>
+            <h3>Same rotation model, modern panel.</h3>
+            <p>If you came from CentovaCast or SonicPanel, the weighted rotation feels familiar. TMCast Studio is our own panel, built from scratch — no PHP cron jobs, no licensing fees, and an HLS CDN included so mobile listeners stop buffering.</p>
+          </article>
+          <article class="card pad-lg reveal">
+            <span class="c-head">vs self-hosting</span>
+            <h3>Unlimited listeners, flat price.</h3>
+            <p>No per-listener bills, no Liquidsoap config, no TLS renewals at 3am. Self-hosted setups drift out of sync, run out of disk, or quietly stop transcoding on an update. We monitor and patch all of that for you.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- In practice -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow muted">In practice</p>
+          <h2>What it looks like in the real world.</h2>
+        </div>
+        <div class="grid cols-2">
+          <article class="scene reveal">
+            <span class="who"><span class="dot"></span> Working DJ · SAM Broadcaster</span>
+            <h3>Live at 8pm, automated by midnight.</h3>
+            <p>Connect SAM at 8pm for your live show — AutoDJ pauses, your stream takes over. At 10pm you disconnect and the scheduled "Late Night Chill" playlist resumes. At midnight the schedule ends and weighted rotation carries on till morning.</p>
+          </article>
+          <article class="scene reveal">
+            <span class="who"><span class="dot"></span> Cafe · automation only</span>
+            <h3>Upload once, walk away.</h3>
+            <p>Upload 800 tracks of acoustic chill. No schedule, no rotation, no live input — random library plays forever. The cafe just needs a URL on the speakers. Zero ongoing work.</p>
+          </article>
+          <article class="scene reveal">
+            <span class="who"><span class="dot"></span> 24/7 studio · outage</span>
+            <h3>The power blinks — nobody notices.</h3>
+            <p>Your studio is always live. Then the ISP drops for ten minutes. AutoDJ kicks in instantly, listeners stay connected and keep hearing music, and when your studio comes back the live feed fades in smoothly. No reconnects, no listeners lost.</p>
+          </article>
+          <article class="scene reveal">
+            <span class="who"><span class="dot"></span> Community station · guest DJs</span>
+            <h3>Volunteers on, no dead air.</h3>
+            <p>Your studio runs the house mix 24/7. When a volunteer wants a guest show, they connect to the Guest input and take over. When they disconnect, your studio feed comes right back — never a second of silence.</p>
           </article>
         </div>
       </div>
@@ -142,7 +391,7 @@
     <section class="section alt">
       <div class="wrap">
         <div class="section-head reveal">
-          <p class="eyebrow muted">How it works</p>
+          <p class="eyebrow muted">Getting started</p>
           <h2>Up and running in 24 hours.</h2>
           <p>No forms, no sales calls. Three steps from idea to on-air.</p>
         </div>
@@ -245,11 +494,11 @@
         </div>
         <div class="grid cols-3">
           <article class="card reveal"><h3>TMC global infrastructure</h3><p class="mt-s">Your station runs on our 7-cluster network across 4 continents for low latency worldwide.</p></article>
+          <article class="card reveal"><h3>HLS CDN included</h3><p class="mt-s">Adaptive HLS delivery on our CDN so mobile listeners stop buffering — no extra cost, no config.</p></article>
+          <article class="card reveal"><h3>99.9% uptime</h3><p class="mt-s">Fully managed hosting with automatic failover, 24/7 monitoring and patching handled by us.</p></article>
+          <article class="card reveal"><h3>Layered AutoDJ &amp; scheduling</h3><p class="mt-s">Live, scheduled playlists, weighted rotation and random library — with smart fallback between every layer.</p></article>
+          <article class="card reveal"><h3>Player, widgets &amp; stream URLs</h3><p class="mt-s">Embeddable player and widgets, plus HLS, Icecast, M3U and PLS URLs for any directory.</p></article>
           <article class="card reveal"><h3>Zero-retention privacy</h3><p class="mt-s">We don't track your listeners. No data sold, no analytics shared with third parties.</p></article>
-          <article class="card reveal"><h3>99.9% uptime</h3><p class="mt-s">Fully managed hosting with automatic failover and 24/7 monitoring.</p></article>
-          <article class="card reveal"><h3>AutoDJ &amp; scheduling</h3><p class="mt-s">Upload tracks, build playlists and schedule programming that runs when you're not live.</p></article>
-          <article class="card reveal"><h3>Discord support</h3><p class="mt-s">Get help from the TMC team directly in our Discord server.</p></article>
-          <article class="card reveal"><h3>Embed widget</h3><p class="mt-s">Drop a player widget onto your own website with a single line of code.</p></article>
         </div>
       </div>
     </section>
@@ -275,12 +524,24 @@
             <div class="faq-a">Yes. Pro and Business plans support live DJ connections via standard broadcasting software like BUTT, Mixxx or SAM Broadcaster. You get dedicated mount points for seamless handoff between AutoDJ and live.</div>
           </details>
           <details class="faq-item">
+            <summary class="faq-q">How do the five priority layers work? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+            <div class="faq-a">Guest DJ input (1), Studio input (2), scheduled playlists (3), weighted rotation (4) and random library (5). The highest layer with audio playing wins, and each falls back to the next automatically — so a partial schedule, or a dropped live feed, never leaves you with dead air. Use one layer or all five.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-q">What audio formats can I upload? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+            <div class="faq-a">MP3, WAV, FLAC and OGG. We read the ID3 tags, cache the cover art, and run loudness normalization on upload so tracks sit at a consistent volume. Reuse your existing library — there's no re-tagging.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-q">Can I embed the player on my own site? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+            <div class="faq-a">Yes, on every plan. Drop the responsive embeddable player (six themes, live album art and now-playing) or individual widgets — now-playing, listener count, recent history, stream status — onto any page with a copy-paste snippet. You also get HLS, Icecast MP3, and M3U/PLS URLs for VLC, TuneIn, Radio Garden and other directories.</div>
+          </details>
+          <details class="faq-item">
             <summary class="faq-q">How do I get started? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
             <div class="faq-a">Join our Discord, pick a plan, and we'll have your station set up and streaming within 24 hours. You'll get access to the full TMCast dashboard to manage your station.</div>
           </details>
           <details class="faq-item">
             <summary class="faq-q">Can I use a custom domain? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
-            <div class="faq-a">Pro and Business plans support custom domains. Point your domain (e.g. radio.yourdomain.com) to your TMCast station and we'll configure SSL automatically.</div>
+            <div class="faq-a">Yes — Pro and Business plans support custom domains. Custom domains need a quick consultation first so we can set up the IPs and redirects on our side. It's fairly easy: about 5–10 minutes of setup, then 1–2 days for everything to be fully live and propagated. Point your domain (e.g. radio.yourdomain.com) at your TMCast station and we'll configure SSL automatically.</div>
           </details>
           <details class="faq-item">
             <summary class="faq-q">Can I cancel anytime? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
