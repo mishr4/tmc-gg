@@ -495,6 +495,9 @@ a.row-item:hover .arr { transform: translateX(4px); color: var(--accent); }
 .footer-badge { display: block; width: fit-content; margin-top: 18px; line-height: 0; }
 .footer-badge img { height: 40px; width: auto; border-radius: 8px; border: 0; box-shadow: 0 6px 18px -6px rgba(213, 0, 0, 0.45); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
 .footer-badge:hover img { transform: translateY(-2px); box-shadow: 0 10px 22px -6px rgba(213, 0, 0, 0.55); }
+.footer-cert { display: block; width: fit-content; margin-top: 14px; line-height: 0; }
+.footer-cert img { height: 44px; width: auto; opacity: .92; transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.footer-cert:hover img { opacity: 1; transform: translateY(-2px); }
 .footer-col h4 { font-family: var(--ff-mono); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
 .footer-col a, .footer-col .f-static { display: block; padding: 6px 0; font-size: 0.88rem; color: var(--muted); width: fit-content; }
 .footer-col a { transition: color .25s var(--ease); }
