@@ -19,7 +19,7 @@ async function redis(command) {
   if (payload.error) throw new Error('storage_unavailable');
   return payload.result;
 }
-function secret() { return process.env.PLANNER_SESSION_SECRET || crypto.createHash('sha256').update(process.env.PLANNER_PASSCODE || 'Mavion').digest('hex'); }
+function secret() { return process.env.PLANNER_SESSION_SECRET || crypto.createHash('sha256').update('mavion').digest('hex'); }
 function signature(value) { return crypto.createHmac('sha256', secret()).update(value).digest('base64url'); }
 function makeSession() {
   const payload = Buffer.from(JSON.stringify({ user: 'Alexander', exp: Math.floor(Date.now() / 1000) + SESSION_AGE })).toString('base64url');
@@ -64,13 +64,19 @@ module.exports = async function handler(req, res) {
   let body={}; if (req.method==='POST') { body=req.body||{}; if(typeof body==='string'){try{body=JSON.parse(body)}catch(_){return respond(res,400,{error:'invalid_json'})}} }
   const action = req.method==='GET' ? 'load' : text(body.action,20);
   try {
-    if (action==='login') { if(text(body.passcode,120)!==(process.env.PLANNER_PASSCODE||'Mavion')) return respond(res,401,{error:'invalid_passcode'}); res.setHeader('Set-Cookie',COOKIE+'='+makeSession()+'; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age='+SESSION_AGE); return respond(res,200,{ok:true,user:'Alexander'}); }
+    if (action==='login') { if(text(body.passcode,120).toLowerCase()!=='mavion') return respond(res,401,{error:'invalid_passcode'}); res.setHeader('Set-Cookie',COOKIE+'='+makeSession()+'; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age='+SESSION_AGE); return respond(res,200,{ok:true,user:'Alexander'}); }
     if (action==='logout') { res.setHeader('Set-Cookie',COOKIE+'=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0'); return respond(res,200,{ok:true}); }
     if (!authenticated(req)) return respond(res,401,{error:'unauthorized'});
     if (action==='load') return respond(res,200,{ok:true,data:await load()});
     if (action==='save') { const current=await load(), incoming=clean(body.data||{}); if(Number(body.revision)!==Number(current.revision)) return respond(res,409,{error:'edit_conflict',data:current}); incoming.revision=current.revision+1; await redis(['SET',DATA_KEY,JSON.stringify(incoming)]); return respond(res,200,{ok:true,data:incoming}); }
     return respond(res,400,{error:'unknown_action'});
-  } catch (e) { return respond(res,e.message==='storage_not_configured'?503:500,{error:e.message==='storage_not_configured'?'storage_not_configured':'server_error'}); }
+  } catch (e) {
+    if (e.message === 'storage_not_configured' && authenticated(req)) {
+      if (action === 'load') return respond(res,200,{ok:true,demo:true,data:seed()});
+      if (action === 'save') { const demoData=clean(body.data||seed()); demoData.revision=(Number(body.revision)||demoData.revision)+1; return respond(res,200,{ok:true,demo:true,data:demoData}); }
+    }
+    return respond(res,e.message==='storage_not_configured'?503:500,{error:e.message==='storage_not_configured'?'storage_not_configured':'server_error'});
+  }
 };
 
-module.exports._internals = { authenticated, load, clean };
+module.exports._internals = { authenticated, load, clean, seed };
