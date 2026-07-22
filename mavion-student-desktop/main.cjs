@@ -1,12 +1,21 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, powerMonitor, screen } = require('electron');
+const { spawn } = require('child_process');
 const path = require('path');
 let controlWindow, lockWindow, noticeWindow, emergencyWindow, tray;
 let quitting = false, idleLockEnabled = true, idleNoticeTimer = null, noticeMode = null, idleIgnoreUntil = 0;
 const iconPath = path.join(__dirname, 'assets', 'mavion-lock.ico');
 const pos = (width, height, top = false) => { const area = screen.getPrimaryDisplay().workArea; return { x: area.x + area.width - width - 18, y: top ? area.y + 12 : area.y + area.height - height - 18 }; };
 function showControl() { controlWindow.show(); controlWindow.focus(); }
-function showLock() { hideNotice(); lockWindow.webContents.send('reset-lock'); lockWindow.show(); lockWindow.focus(); }
+function showLock() { hideNotice(); lockWindow.webContents.send('reset-lock'); lockWindow.show(); lockWindow.focus(); lockWindow.webContents.send('play-lock-animation'); }
 function hideLock() { lockWindow.hide(); }
+function sendMediaKey(command) {
+  const keys = { previous: 0xB1, playpause: 0xB3, next: 0xB0 };
+  const key = keys[command];
+  if (!key) return;
+  const script = "Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public static class MavionMedia { [DllImport(\"user32.dll\")] public static extern void keybd_event(byte k, byte s, uint f, UIntPtr x); public static void Send(byte k) { keybd_event(k,0,0,UIntPtr.Zero); keybd_event(k,0,2,UIntPtr.Zero); } }'; [MavionMedia]::Send(" + key + ")";
+  const child = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], { windowsHide: true });
+  child.on('error', () => {});
+}
 function showNotice(mode) { if (noticeWindow.isVisible()) return; noticeMode = mode; const p = pos(370, mode === 'idle' ? 158 : 112); noticeWindow.setBounds({ x:p.x,y:p.y,width:370,height:mode === 'idle' ? 158 : 112 }); noticeWindow.webContents.send('show-notice', mode); noticeWindow.showInactive(); if (mode === 'standard') setTimeout(() => { if (noticeMode === 'standard') hideNotice(); }, 5000); if (mode === 'idle') idleNoticeTimer = setTimeout(() => { hideNotice(); showLock(); }, 30000); }
 function hideNotice() { clearTimeout(idleNoticeTimer); idleNoticeTimer = null; noticeMode = null; if (noticeWindow) noticeWindow.hide(); }
 function showEmergency() { hideNotice(); hideLock(); emergencyWindow.webContents.send('reset-emergency'); emergencyWindow.show(); emergencyWindow.focus(); }
@@ -17,5 +26,5 @@ function createNoticeWindow() { noticeWindow = securedWindow({ width:370,height:
 function createEmergencyWindow() { const area=screen.getPrimaryDisplay().workArea; emergencyWindow = securedWindow({ x:area.x,y:area.y,width:area.width,height:64,backgroundColor:'#00000000',show:false,focusable:true }); emergencyWindow.setAlwaysOnTop(true,'screen-saver'); emergencyWindow.loadFile(path.join(__dirname,'renderer','emergency.html')); }
 function createControlWindow() { controlWindow = new BrowserWindow({ width:1060,height:710,minWidth:860,minHeight:570,backgroundColor:'#111318',autoHideMenuBar:true,title:'Mavion Go',icon:iconPath,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,preload:path.join(__dirname,'preload.cjs')} }); controlWindow.loadFile(path.join(__dirname,'renderer','control.html')); controlWindow.on('close',e=>{if(!quitting){e.preventDefault();controlWindow.hide()}}); if(app.getLoginItemSettings().wasOpenedAtLogin)controlWindow.once('ready-to-show',()=>controlWindow.hide()); }
 function createTray() { tray = new Tray(iconPath); tray.setToolTip('Mavion Go Lock'); tray.setContextMenu(Menu.buildFromTemplate([{label:'Lock desktop',click:showLock},{label:'Open Mavion Go',click:showControl},{type:'separator'},{label:'Quit',click:()=>{quitting=true;app.quit()}}])); tray.on('click',showControl); }
-ipcMain.handle('activate-lock',showLock); ipcMain.handle('release-lock',hideLock); ipcMain.handle('show-notification',()=>showNotice('standard')); ipcMain.handle('show-inactivity',()=>showNotice('idle')); ipcMain.handle('notice-stay',()=>{hideNotice();idleIgnoreUntil=Date.now()+300000}); ipcMain.handle('notice-lock',()=>{hideNotice();showLock()}); ipcMain.handle('emergency-override',showEmergency); ipcMain.handle('end-emergency',(_,code)=>{if(String(code||'').trim()==='Mavion'){emergencyWindow.hide();return true}return false}); ipcMain.handle('get-startup',()=>app.getLoginItemSettings().openAtLogin); ipcMain.handle('set-startup',(_,enabled)=>app.setLoginItemSettings({openAtLogin:Boolean(enabled)})); ipcMain.handle('get-idle-lock',()=>idleLockEnabled); ipcMain.handle('set-idle-lock',(_,enabled)=>{idleLockEnabled=Boolean(enabled)});
+ipcMain.handle('activate-lock',showLock); ipcMain.handle('release-lock',hideLock); ipcMain.handle('media-command',(_,command)=>sendMediaKey(command)); ipcMain.handle('show-notification',()=>showNotice('standard')); ipcMain.handle('show-inactivity',()=>showNotice('idle')); ipcMain.handle('notice-stay',()=>{hideNotice();idleIgnoreUntil=Date.now()+300000}); ipcMain.handle('notice-lock',()=>{hideNotice();showLock()}); ipcMain.handle('emergency-override',showEmergency); ipcMain.handle('end-emergency',(_,code)=>{if(String(code||'').trim()==='Mavion'){emergencyWindow.hide();return true}return false}); ipcMain.handle('get-startup',()=>app.getLoginItemSettings().openAtLogin); ipcMain.handle('set-startup',(_,enabled)=>app.setLoginItemSettings({openAtLogin:Boolean(enabled)})); ipcMain.handle('get-idle-lock',()=>idleLockEnabled); ipcMain.handle('set-idle-lock',(_,enabled)=>{idleLockEnabled=Boolean(enabled)});
 app.whenReady().then(()=>{createControlWindow();createLockWindow();createNoticeWindow();createEmergencyWindow();createTray();setInterval(checkSystemIdle,2000);app.on('activate',showControl)}); app.on('window-all-closed',e=>{if(!quitting)e.preventDefault()});

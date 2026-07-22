@@ -1,1 +1,41 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mavion Go Lock</title><link rel="stylesheet" href="lock.css"></head><body><main class="overlay"><header><img src="../assets/mavion-go-logo.png" alt="Mavion Go"><span>LOCKED</span></header><section class="lock-card"><div class="lock-icon" aria-hidden="true">▣</div><h1>Desktop locked</h1><p>Enter your access code to continue.</p><form id="unlockForm"><label for="accessCode">Access code</label><div><input id="accessCode" type="password" autocomplete="off" placeholder="Enter code"><button type="submit">Unlock</button></div><small id="error" hidden>That code did not match.</small></form></section><footer>For assistance, press F6</footer><section id="emergency" class="emergency" hidden><div><p>EMERGENCY OVERRIDE</p><h2>Open desktop?</h2><button id="overrideYes">Yes</button><button id="overrideNo">No</button></div></section></main><script src="lock.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mavion Go Lock</title>
+  <link rel="stylesheet" href="lock.css">
+</head>
+<body>
+  <main id="overlay" class="overlay">
+    <header>
+      <div class="brand"><img src="../assets/mavion-go-logo.png" alt="Mavion Go"><span>LOCKED</span></div>
+      <time id="clock" aria-label="Current time"></time>
+    </header>
+    <section class="lock-card" aria-labelledby="lockTitle">
+      <div class="lock-icon" aria-hidden="true"><i></i></div>
+      <p class="eyebrow">SESSION PROTECTED</p>
+      <h1 id="lockTitle">Desktop locked</h1>
+      <p class="subcopy">Enter your access code to continue.</p>
+      <form id="unlockForm">
+        <label for="accessCode">Access code</label>
+        <div class="unlock-row"><input id="accessCode" type="password" autocomplete="off" placeholder="Enter code"><button type="submit">Unlock</button></div>
+        <small id="error" hidden>That code did not match.</small>
+      </form>
+      <section class="media" aria-label="System media controls">
+        <div class="media-label"><span class="media-dot"></span>Media controls</div>
+        <div class="media-actions">
+          <button data-media="previous" aria-label="Previous track" title="Previous track">&#9664;&#9664;</button>
+          <button class="media-play" data-media="playpause" aria-label="Play or pause" title="Play or pause">&#9654;</button>
+          <button data-media="next" aria-label="Next track" title="Next track">&#9654;&#9654;</button>
+        </div>
+      </section>
+    </section>
+    <footer>For assistance, press F6</footer>
+    <section id="emergency" class="emergency" hidden>
+      <div><p>EMERGENCY OVERRIDE</p><h2>Open desktop?</h2><button id="overrideYes">Yes</button><button id="overrideNo">No</button></div>
+    </section>
+  </main>
+  <script src="lock.js"></script>
+</body>
+</html>
