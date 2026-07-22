@@ -1,0 +1,29 @@
+{
+  "name": "mavion-student-desktop",
+  "version": "1.0.0",
+  "description": "Mavion Student Desktop for Windows",
+  "main": "main.cjs",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "gg.tmc.mavionstudentdesktop",
+    "productName": "Mavion Student Desktop",
+    "asar": true,
+    "files": ["main.cjs", "preload.cjs", "renderer/**/*", "assets/**/*", "package.json"],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }] },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mavion Student Desktop"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mavion Student Desktop</title><link rel="stylesheet" href="app.css"></head>
+<body>
+  <main class="desktop" id="desktop" aria-label="Mavion Student Desktop">
+    <div class="wallpaper" aria-hidden="true"><i></i><i></i><i></i></div>
+    <section class="desktop-content" aria-label="Student desktop">
+      <header><img src="../assets/mavion-go-logo.png" alt="Mavion Go"><span>Student Desktop</span><button id="signOut" type="button">Lock</button></header>
+      <div class="tiles">
+        <article><b>Study space</b><p>Start a focused tutoring session.</p><button type="button">Open</button></article>
+        <article><b>Assignments</b><p>Keep your schoolwork organized.</p><button type="button">View</button></article>
+        <article><b>Resources</b><p>Helpful learning materials.</p><button type="button">Browse</button></article>
+      </div>
+    </section>
+    <section id="lockScreen" class="lock-screen" aria-labelledby="welcomeTitle">
+      <div class="lock-card">
+        <img src="../assets/mavion-go-logo.png" alt="Mavion Go" class="logo">
+        <p class="state">Logged out</p>
+        <div class="avatar" aria-hidden="true">A</div>
+        <h1 id="welcomeTitle">Alexander</h1>
+        <p class="subtitle">Mavion Student Desktop</p>
+        <form id="loginForm" novalidate>
+          <label for="accessCode">Access code</label>
+          <div><input id="accessCode" type="password" autocomplete="off" placeholder="Enter access code" required><button type="submit">Sign in</button></div>
+          <p id="error" role="alert" hidden>That access code did not match.</p>
+        </form>
+        <p class="nfc"><span>⌁</span> NFC readers configured as a keyboard can enter the code here.</p>
+        <p class="notice">This app does not bypass school or network monitoring. Use it in accordance with your school’s policies.</p>
+      </div>
+    </section>
+    <section id="welcome" class="welcome" hidden aria-live="polite"><div><img src="../assets/mavion-go-logo.png" alt=""><p>Welcome, Alexander</p></div></section>
+    <aside id="idlePrompt" class="idle-prompt" hidden aria-live="assertive" aria-labelledby="idleTitle">
+      <div class="idle-icon" aria-hidden="true">⌑</div>
+      <div class="idle-copy"><strong id="idleTitle">Are you there?</strong><p>Your session locks in <span id="countdown">30</span> seconds.</p></div>
+      <div class="idle-actions"><button id="staySignedIn" type="button">Yes</button><button id="closeSession" type="button">No, Close this Session</button></div>
+    </aside>
+    <div id="locking" class="locking" hidden aria-live="polite"><span aria-hidden="true">▣</span><p>Locking your session…</p></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
