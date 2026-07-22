@@ -257,6 +257,7 @@
     { icon: 'MN', title: 'Mavion News', desc: 'Publishing and media', url: 'https://mavion.tmc.gg', external: true },
     { icon: 'TC', title: 'TMCast', desc: 'Broadcast control and hosting', url: 'https://cast.tmc.gg', external: true },
     { icon: 'GO', title: 'Mavion Go', desc: 'Focused student workspace', url: '/go' },
+    { icon: 'PL', title: 'Mavion Planner', desc: 'Classes, assignments, notes, and study plans', url: '/planner' },
     { icon: 'DR', title: 'Team Directory', desc: 'People inside Mavion', url: '#team' },
     { icon: 'PO', title: 'Staff POS', desc: 'Checkout and receipts', url: '/pay/pos' },
     { icon: 'API', title: 'Developers', desc: 'Documentation and integrations', url: '/developers' },
