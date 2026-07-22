@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
-contextBridge.exposeInMainWorld('mavionLock', {
-  openDesktop: () => ipcRenderer.invoke('open-desktop'),
+contextBridge.exposeInMainWorld('mavion', {
+  activateLock: () => ipcRenderer.invoke('activate-lock'),
+  releaseLock: () => ipcRenderer.invoke('release-lock'),
   testNotification: () => ipcRenderer.invoke('test-notification')
 });
