@@ -104,6 +104,22 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
+  /* Home hero: restrained depth movement for the 3D network illustration. */
+  var heroStage = document.querySelector('.hero-stage');
+  if (heroStage && !reduce && window.matchMedia('(pointer: fine)').matches) {
+    heroStage.addEventListener('pointermove', function (e) {
+      var box = heroStage.getBoundingClientRect();
+      var x = ((e.clientX - box.left) / box.width - .5) * 2;
+      var y = ((e.clientY - box.top) / box.height - .5) * 2;
+      heroStage.style.setProperty('--stage-x', (x * 7).toFixed(2) + 'px');
+      heroStage.style.setProperty('--stage-y', (y * 7).toFixed(2) + 'px');
+    });
+    heroStage.addEventListener('pointerleave', function () {
+      heroStage.style.setProperty('--stage-x', '0px');
+      heroStage.style.setProperty('--stage-y', '0px');
+    });
+  }
+
   /* Single-open FAQ */
   var faq = document.querySelector('.faq[data-single]');
   if (faq) {
