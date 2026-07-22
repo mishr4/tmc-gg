@@ -1,0 +1,1 @@
+(() => {const f=document.getElementById('clear'),code=document.getElementById('code'),error=document.getElementById('error');function reset(){code.value='';error.hidden=true;code.focus()}f.onsubmit=async e=>{e.preventDefault();if(await window.mavion.endEmergency(code.value))return;error.hidden=false;code.select()};window.mavion.onResetEmergency(reset);reset()})();
