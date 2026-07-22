@@ -61,14 +61,16 @@ module.exports = async function handler(req, res) {
       }
       lines = [{ name: 'TMC Invoice ' + ref, amount }];
     } else if (body.kind === 'pos') {
-      const label = String(body.label || '').trim().replace(/\s+/g, ' ').slice(0, 80);
-      const amount = Math.round(Number(body.amount));
-      if (label.length < 2) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_label' })); }
-      if (!Number.isFinite(amount) || amount < MIN_CENTS || amount > MAX_CENTS) {
-        res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_amount' }));
-      }
-      ref = 'pos-' + label;
-      lines = [{ name: 'TMC POS — ' + label, amount }];
+      const rawItems = Array.isArray(body.items) && body.items.length ? body.items.slice(0, 12) : [body];
+      lines = rawItems.map((item) => {
+        const label = String(item.label || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+        const amount = Math.round(Number(item.amount));
+        const quantity = Math.max(1, Math.min(99, Math.round(Number(item.quantity || 1))));
+        if (label.length < 2 || !Number.isFinite(amount) || amount < MIN_CENTS || amount > MAX_CENTS) return null;
+        return { name: 'TMC POS — ' + label, amount, quantity };
+      });
+      if (!lines.length || lines.some((line) => !line)) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_pos_items' })); }
+      ref = 'pos-' + lines.map((line) => line.name.slice(10)).join('+').slice(0, 140);
     } else {
       res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_kind' }));
     }
@@ -80,13 +82,13 @@ module.exports = async function handler(req, res) {
     const form = new URLSearchParams();
     form.set('mode', subscription ? 'subscription' : 'payment');
     const returnBase = body.kind === 'pos' ? 'https://tmc.gg/pay/pos' : 'https://tmc.gg/pay';
-    form.set('success_url', returnBase + '?status=success');
+    form.set('success_url', returnBase + '?status=success&session_id={CHECKOUT_SESSION_ID}');
     form.set('cancel_url', returnBase + '?status=canceled');
     lines.forEach((li, i) => {
       form.set('line_items[' + i + '][price_data][currency]', 'usd');
       form.set('line_items[' + i + '][price_data][product_data][name]', li.name);
       form.set('line_items[' + i + '][price_data][unit_amount]', String(li.amount));
-      form.set('line_items[' + i + '][quantity]', '1');
+      form.set('line_items[' + i + '][quantity]', String(li.quantity || 1));
       if (li.interval) form.set('line_items[' + i + '][price_data][recurring][interval]', li.interval);
     });
     form.set('metadata[ref]', ref);
