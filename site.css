@@ -290,7 +290,7 @@ body.menu-open { overflow: hidden; }
 .hero-home::before { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 76% 45%, rgba(61, 93, 255, 0.16), transparent 28%), linear-gradient(118deg, transparent 42%, rgba(255,255,255,0.018)); content: ""; }
 .hero-home-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(360px, .86fr); gap: clamp(30px, 6vw, 96px); align-items: center; }
 .hero-copy { position: relative; z-index: 1; }
-.hero-home h1 { max-width: 12ch; font-size: clamp(3rem, 5.4vw, 5.5rem); line-height: .96; letter-spacing: -.065em; }
+.hero-home h1 { max-width: 11ch; font-family: var(--ff-text); font-size: clamp(2.8rem, 5vw, 5.15rem); font-weight: 700; line-height: .98; letter-spacing: -.065em; }
 .hero-home .lede { max-width: 47ch; }
 .hero-scroll { display: inline-flex; align-items: center; gap: 10px; margin-top: 39px; color: var(--muted); font-family: var(--ff-mono); font-size: .7rem; letter-spacing: .09em; text-transform: uppercase; }
 .hero-scroll span { width: 24px; height: 36px; border: 1px solid var(--line); border-radius: 13px; position: relative; }
