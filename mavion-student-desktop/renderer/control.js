@@ -1,1 +1,26 @@
-(() => { const idle=document.getElementById('idleEnabled'),startup=document.getElementById('startupEnabled'),toast=document.getElementById('toast'); let idleTimer,toastTimer; const activate=()=>{window.clearTimeout(idleTimer);window.mavion.activateLock()}; const arm=()=>{window.clearTimeout(idleTimer);if(idle.checked)idleTimer=window.setTimeout(activate,5*60*1000)}; const showToast=()=>{window.clearTimeout(toastTimer);toast.hidden=false;toastTimer=window.setTimeout(()=>toast.hidden=true,5000)}; document.getElementById('lockDesktop').addEventListener('click',activate); document.getElementById('headerLock').addEventListener('click',activate); document.getElementById('testNotification').addEventListener('click',showToast); document.getElementById('closeToast').addEventListener('click',()=>toast.hidden=true); idle.addEventListener('change',arm); startup.addEventListener('change',()=>window.mavion.setStartup(startup.checked)); window.mavion.getStartup().then(enabled=>startup.checked=enabled); ['mousemove','mousedown','keydown','touchstart','scroll'].forEach(name=>window.addEventListener(name,arm,{passive:true})); document.querySelectorAll('.nav').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.nav,.page').forEach(el=>el.classList.remove('active'));button.classList.add('active');document.getElementById(button.dataset.page).classList.add('active')})); arm(); })();
+(() => {
+  const idle = document.getElementById('idleEnabled');
+  const startup = document.getElementById('startupEnabled');
+  const toast = document.getElementById('toast');
+  const idleToast = document.getElementById('idleToast');
+  const countdown = document.getElementById('idleCountdown');
+  let idleTimer, toastTimer, countdownTimer, seconds = 30;
+  const activate = () => { clearInactivity(); window.mavion.activateLock(); };
+  const arm = () => { window.clearTimeout(idleTimer); if (idle.checked && idleToast.hidden) idleTimer = window.setTimeout(showInactivity, 5 * 60 * 1000); };
+  const clearInactivity = () => { window.clearInterval(countdownTimer); idleToast.hidden = true; seconds = 30; countdown.textContent = seconds; };
+  const showToast = () => { window.clearTimeout(toastTimer); toast.hidden = false; toastTimer = window.setTimeout(() => toast.hidden = true, 5000); };
+  const showInactivity = () => { window.clearTimeout(idleTimer); clearInactivity(); idleToast.hidden = false; countdownTimer = window.setInterval(() => { seconds -= 1; countdown.textContent = seconds; if (seconds <= 0) activate(); }, 1000); };
+  document.getElementById('lockDesktop').addEventListener('click', activate);
+  document.getElementById('headerLock').addEventListener('click', activate);
+  document.getElementById('testNotification').addEventListener('click', showToast);
+  document.getElementById('testInactivity').addEventListener('click', showInactivity);
+  document.getElementById('closeToast').addEventListener('click', () => toast.hidden = true);
+  document.getElementById('idleStay').addEventListener('click', () => { clearInactivity(); arm(); });
+  document.getElementById('idleLock').addEventListener('click', activate);
+  idle.addEventListener('change', arm);
+  startup.addEventListener('change', () => window.mavion.setStartup(startup.checked));
+  window.mavion.getStartup().then(enabled => startup.checked = enabled);
+  ['mousemove','mousedown','keydown','touchstart','scroll'].forEach(name => window.addEventListener(name, () => { if (idleToast.hidden) arm(); }, { passive: true }));
+  document.querySelectorAll('.nav').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.nav,.page').forEach(el => el.classList.remove('active')); button.classList.add('active'); document.getElementById(button.dataset.page).classList.add('active'); }));
+  arm();
+})();
