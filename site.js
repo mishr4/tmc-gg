@@ -104,21 +104,27 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
-  /* Home hero: restrained depth movement for the 3D network illustration. */
-  var heroStage = document.querySelector('.hero-stage');
-  if (heroStage && !reduce && window.matchMedia('(pointer: fine)').matches) {
-    heroStage.addEventListener('pointermove', function (e) {
-      var box = heroStage.getBoundingClientRect();
-      var x = ((e.clientX - box.left) / box.width - .5) * 2;
-      var y = ((e.clientY - box.top) / box.height - .5) * 2;
-      heroStage.style.setProperty('--stage-x', (x * 7).toFixed(2) + 'px');
-      heroStage.style.setProperty('--stage-y', (y * 7).toFixed(2) + 'px');
+  /* Pointer-reactive depth for the homepage product surfaces. */
+  function wireDepthSurface(surface, strength) {
+    if (!surface || reduce || !window.matchMedia('(pointer: fine)').matches) return;
+    surface.addEventListener('pointermove', function (e) {
+      var box = surface.getBoundingClientRect();
+      var px = (e.clientX - box.left) / box.width;
+      var py = (e.clientY - box.top) / box.height;
+      surface.style.setProperty('--tilt-x', ((.5 - py) * strength).toFixed(2) + 'deg');
+      surface.style.setProperty('--tilt-y', ((px - .5) * strength).toFixed(2) + 'deg');
+      surface.style.setProperty('--mouse-x', (px * 100).toFixed(1) + '%');
+      surface.style.setProperty('--mouse-y', (py * 100).toFixed(1) + '%');
     });
-    heroStage.addEventListener('pointerleave', function () {
-      heroStage.style.setProperty('--stage-x', '0px');
-      heroStage.style.setProperty('--stage-y', '0px');
+    surface.addEventListener('pointerleave', function () {
+      surface.style.setProperty('--tilt-x', '0deg');
+      surface.style.setProperty('--tilt-y', '0deg');
+      surface.style.setProperty('--mouse-x', '50%');
+      surface.style.setProperty('--mouse-y', '50%');
     });
   }
+  wireDepthSurface(document.querySelector('.hero-product'), 7);
+  wireDepthSurface(document.querySelector('.app-workbench'), 2.6);
 
   /* Interactive homepage product previews. */
   function wireTabs(rootSelector, tabSelector, panelSelector, tabKey, panelKey) {
@@ -143,6 +149,31 @@
   wireTabs('[data-product-demo]', '[data-product-tab]', '[data-product-view]', 'data-product-tab', 'data-product-view');
   wireTabs('[data-app-workbench]', '[data-app-tab]', '[data-app-panel]', 'data-app-tab', 'data-app-panel');
 
+  /* Cycle the compact hero preview until the visitor takes control. */
+  var productDemo = document.querySelector('[data-product-demo]');
+  if (productDemo && !reduce) {
+    var autoTabs = Array.prototype.slice.call(productDemo.querySelectorAll('[data-product-tab]'));
+    var autoIndex = 0;
+    var autoPaused = false;
+    var autoTimer = setInterval(function () {
+      if (autoPaused || document.hidden) return;
+      autoIndex = (autoIndex + 1) % autoTabs.length;
+      autoTabs[autoIndex].click();
+    }, 6500);
+    productDemo.addEventListener('pointerenter', function () { autoPaused = true; });
+    productDemo.addEventListener('pointerleave', function () { autoPaused = false; });
+    productDemo.addEventListener('focusin', function () { autoPaused = true; });
+    window.addEventListener('pagehide', function () { clearInterval(autoTimer); }, { once: true });
+  }
+
+  document.querySelectorAll('.app-panel button,.go-grid button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      button.classList.remove('ui-pulse');
+      void button.offsetWidth;
+      button.classList.add('ui-pulse');
+    });
+  });
+
   /* Slim scroll progress indicator for long landing pages. */
   if (document.body.classList.contains('home-page')) {
     var progress = document.createElement('div');
@@ -152,6 +183,8 @@
     var updateProgress = function () {
       var max = document.documentElement.scrollHeight - window.innerHeight;
       progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+      var heroProduct = document.querySelector('.hero-product');
+      if (heroProduct && !reduce) heroProduct.style.setProperty('--scroll-y', Math.min(window.scrollY * .045, 24).toFixed(1) + 'px');
     };
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
