@@ -286,6 +286,12 @@ body.menu-open { overflow: hidden; }
 .hero .hero-cta { animation: rise .7s .25s var(--ease) both; }
 .hero .note { animation: rise .7s .33s var(--ease) both; }
 .hero aside { animation: rise .75s .3s var(--ease) both; }
+.hero-brief { display: flex; min-height: 100%; flex-direction: column; justify-content: space-between; }
+.hero-brief .hero-brief-lead { max-width: 13ch; margin: 0; color: var(--ink); font-family: var(--ff-display); font-size: clamp(1.65rem, 3vw, 2.35rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.04em; }
+.hero-brief > p:not(.hero-brief-lead) { max-width: 34ch; margin: 28px 0; line-height: 1.7; }
+.hero-brief-links { display: flex; flex-wrap: wrap; gap: 9px 17px; padding-top: 18px; border-top: 1px solid var(--line); }
+.hero-brief-links a { color: var(--ink); font-size: 0.82rem; font-weight: 600; }
+.hero-brief-links a:hover { color: var(--accent); }
 
 /* Cards */
 .card {
