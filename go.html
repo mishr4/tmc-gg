@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f5f6ff">
+  <title>Mavion Go — Student tutoring space</title>
+  <meta name="description" content="Mavion Go is a student tutoring space for study-focused conversations and learning support.">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/go.css">
+</head>
+<body>
+  <a class="skip-link" href="#go-main">Skip to workspace</a>
+
+  <main id="accessGate" class="gate" aria-labelledby="gateTitle">
+    <section class="gate-card">
+      <img class="go-logo" src="/mavion-go-logo.png" alt="Mavion Go">
+      <p class="eyebrow">Student tutoring space</p>
+      <h1 id="gateTitle">Welcome to Mavion Go</h1>
+      <p class="gate-copy">Enter your student access code to open the study workspace.</p>
+      <form id="accessForm" class="access-form" novalidate>
+        <label for="accessCode">Student access code</label>
+        <div class="code-row">
+          <input id="accessCode" name="accessCode" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Enter code" required>
+          <button type="submit">Continue <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="accessError" class="form-error" role="alert" hidden>That code did not match. Try again.</p>
+      </form>
+      <aside class="gate-notice"><strong>Important:</strong> This access code is only a lightweight entry gate. It does not make activity private or bypass school or network policies.</aside>
+    </section>
+  </main>
+
+  <div id="goApp" class="go-app" hidden>
+    <header class="go-header">
+      <a class="go-brand" href="/" aria-label="Mavion home">
+        <img class="go-logo" src="/mavion-go-logo.png" alt="Mavion Go">
+        <span class="brand-divider"></span>
+        <span class="brand-title">Independent Student</span>
+      </a>
+      <div class="header-actions">
+        <span class="online-dot"><i></i> Study space open</span>
+        <button id="lockButton" class="icon-btn" type="button" title="Lock this device" aria-label="Lock this device">⌁</button>
+      </div>
+    </header>
+
+    <main id="go-main" class="go-main">
+      <section class="welcome-card">
+        <div>
+          <p class="eyebrow">Learning hub</p>
+          <h1>Start a tutoring session</h1>
+          <p>Choose a class, ask a study question, and keep the conversation focused on learning.</p>
+        </div>
+        <div class="week" aria-label="Weekday study availability">
+          <span>M</span><span>T</span><span class="off">W</span><span>T</span><span>F</span>
+        </div>
+      </section>
+
+      <section class="safety-card" aria-labelledby="safetyTitle">
+        <div class="safety-icon" aria-hidden="true">!</div>
+        <div>
+          <h2 id="safetyTitle">Student safety notice</h2>
+          <p>School-managed devices and networks may monitor activity. Do not share passwords, personal contact details, school account credentials, or private links. Follow your school’s rules and use approved support channels when needed.</p>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Tutoring workspace">
+        <aside class="courses" aria-label="Classes">
+          <div class="section-heading"><h2>Classes</h2><span>4 active</span></div>
+          <div id="courseList" class="course-list">
+            <button class="course active" type="button" data-course="Political Science" data-code="#9293-2"><span class="course-color blue"></span><span><b>Political Science</b><small>#9293-2</small></span></button>
+            <button class="course" type="button" data-course="English" data-code="#GEN-ENG-2"><span class="course-color violet"></span><span><b>English</b><small>#GEN-ENG-2</small></span></button>
+            <button class="course" type="button" data-course="Dual Enrollment" data-code="#MJC-3922"><span class="course-color sky"></span><span><b>Dual Enrollment</b><small>#MJC-3922</small></span></button>
+            <button class="course" type="button" data-course="Computer Science" data-code="#6295-F"><span class="course-color green"></span><span><b>Computer Science</b><small>#6295-F</small></span></button>
+          </div>
+          <button id="clearChat" class="clear-btn" type="button">Clear messages on this device</button>
+        </aside>
+
+        <section class="chat-panel" aria-labelledby="chatTitle">
+          <header class="chat-header">
+            <div class="tutor-avatar" aria-hidden="true">M</div>
+            <div><h2 id="chatTitle">Political Science study chat</h2><p><span class="presence"></span><span id="chatStatus">Tutoring prompts ready</span></p></div>
+            <button id="helpButton" class="help-btn" type="button">Study tips</button>
+          </header>
+          <div id="chatNotice" class="chat-notice" role="status">Messages in this demo are stored only in this browser. They are not private from your device, school, or network administrator.</div>
+          <ol id="messages" class="messages" aria-live="polite"></ol>
+          <form id="messageForm" class="message-form">
+            <label class="sr-only" for="messageInput">Your study message</label>
+            <textarea id="messageInput" rows="1" maxlength="600" placeholder="Ask a study question…" required></textarea>
+            <button type="submit" aria-label="Send study message">Send <span aria-hidden="true">↑</span></button>
+          </form>
+        </section>
+      </section>
+    </main>
+    <footer class="go-footer">Mavion Go is an independent student study workspace. It is not affiliated with a school and does not replace instruction, counseling, or approved school services.</footer>
+  </div>
+
+  <dialog id="tipsDialog" class="tips-dialog">
+    <button id="closeTips" class="dialog-close" type="button" aria-label="Close study tips">×</button>
+    <p class="eyebrow">Study tips</p>
+    <h2>Get better help faster</h2>
+    <ul><li>Name the subject and the part you are stuck on.</li><li>Share the problem in your own words, not account details.</li><li>Ask for an explanation or a practice example.</li></ul>
+  </dialog>
+  <script src="/go.js"></script>
+</body>
+</html>
