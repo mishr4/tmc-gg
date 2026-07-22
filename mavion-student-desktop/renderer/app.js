@@ -9,6 +9,7 @@
   const idlePrompt = document.getElementById('idlePrompt');
   const countdown = document.getElementById('countdown');
   const locking = document.getElementById('locking');
+  const emergency = document.getElementById('emergencyOverride');
   let idleTimer;
   let countdownTimer;
   let seconds = 30;
@@ -22,6 +23,9 @@
   document.getElementById('signOut').addEventListener('click', finishLock);
   document.getElementById('staySignedIn').addEventListener('click', armIdle);
   document.getElementById('closeSession').addEventListener('click', finishLock);
+  document.getElementById('emergencyYes').addEventListener('click', () => { emergency.hidden = true; unlock(); });
+  document.getElementById('emergencyNo').addEventListener('click', () => { emergency.hidden = true; if (signedIn) armIdle(); else input.focus(); });
+  window.addEventListener('keydown', event => { if (event.key === 'F6' && !signedIn && !lock.hidden) { event.preventDefault(); emergency.hidden = false; document.getElementById('emergencyNo').focus(); } });
   ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(name => window.addEventListener(name, () => { if (signedIn && idlePrompt.hidden) armIdle(); }, { passive: true }));
   input.focus();
 })();

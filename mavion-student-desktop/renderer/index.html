@@ -35,6 +35,16 @@
       <div class="idle-actions"><button id="staySignedIn" type="button">Yes</button><button id="closeSession" type="button">No, Close this Session</button></div>
     </aside>
     <div id="locking" class="locking" hidden aria-live="polite"><span aria-hidden="true">▣</span><p>Locking your session…</p></div>
+    <section id="emergencyOverride" class="emergency" hidden aria-labelledby="emergencyTitle" role="dialog" aria-modal="true">
+      <div>
+        <span aria-hidden="true">!</span>
+        <p class="emergency-label">F6 SAFETY CONTROL</p>
+        <h2 id="emergencyTitle">Emergency Override</h2>
+        <p>Override the lock and reopen Alexander’s desktop?</p>
+        <button id="emergencyYes" type="button">Yes, Override Lock</button>
+        <button id="emergencyNo" type="button">No, Stay Locked</button>
+      </div>
+    </section>
   </main>
   <script src="app.js"></script>
 </body>

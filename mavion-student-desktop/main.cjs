@@ -13,6 +13,7 @@ function createWindow() {
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, preload: path.join(__dirname, 'preload.cjs') }
   });
   window.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  window.maximize();
 }
 
 app.whenReady().then(() => {

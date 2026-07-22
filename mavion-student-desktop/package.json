@@ -1,6 +1,6 @@
 {
   "name": "mavion-student-desktop",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Mavion Student Desktop for Windows",
   "main": "main.cjs",
   "private": true,
