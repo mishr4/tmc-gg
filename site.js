@@ -174,6 +174,59 @@
     });
   });
 
+  /* Editable newsroom demo with local draft and publish feedback. */
+  var storyTitle = document.querySelector('[data-story-title]');
+  var storyBody = document.querySelector('[data-story-body]');
+  var publishButton = document.querySelector('[data-publish-story]');
+  var publishStatus = document.querySelector('[data-publish-status]');
+  if (storyTitle && storyBody && publishButton && publishStatus) {
+    try {
+      storyTitle.textContent = localStorage.getItem('tmc-demo-story-title') || storyTitle.textContent;
+      storyBody.textContent = localStorage.getItem('tmc-demo-story-body') || storyBody.textContent;
+    } catch (e) {}
+    var saveDraft = function () {
+      try {
+        localStorage.setItem('tmc-demo-story-title', storyTitle.textContent.trim());
+        localStorage.setItem('tmc-demo-story-body', storyBody.textContent.trim());
+      } catch (e) {}
+      publishStatus.textContent = 'Draft saved locally';
+    };
+    storyTitle.addEventListener('input', saveDraft);
+    storyBody.addEventListener('input', saveDraft);
+    publishButton.addEventListener('click', function () {
+      if (!storyTitle.textContent.trim() || !storyBody.textContent.trim()) {
+        publishStatus.textContent = 'Add a headline and story first';
+        return;
+      }
+      publishStatus.textContent = 'Published in demo at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      publishButton.textContent = 'Published';
+      setTimeout(function () { publishButton.textContent = 'Publish story'; }, 2200);
+    });
+  }
+
+  /* Working TMCast transport demo. */
+  var castTracks = ['Evening Rotation', 'Night Signal', 'Independent Air', 'Mavion After Dark'];
+  var castTrack = document.querySelector('[data-cast-track]');
+  var castStatus = document.querySelector('[data-cast-status]');
+  var castWave = document.querySelector('[data-cast-wave]');
+  var castIndex = 0;
+  var castPlaying = true;
+  document.querySelectorAll('[data-cast-action]').forEach(function (control) {
+    control.addEventListener('click', function () {
+      var action = control.getAttribute('data-cast-action');
+      if (action === 'previous') castIndex = (castIndex - 1 + castTracks.length) % castTracks.length;
+      if (action === 'next') castIndex = (castIndex + 1) % castTracks.length;
+      if (action === 'play') {
+        castPlaying = !castPlaying;
+        control.textContent = castPlaying ? 'Ⅱ' : '▶';
+        control.setAttribute('aria-label', castPlaying ? 'Pause broadcast' : 'Resume broadcast');
+        if (castWave) castWave.classList.toggle('paused', !castPlaying);
+        if (castStatus) castStatus.textContent = castPlaying ? 'On air' : 'Paused';
+      }
+      if (castTrack) castTrack.textContent = castTracks[castIndex];
+    });
+  });
+
   /* Slim scroll progress indicator for long landing pages. */
   if (document.body.classList.contains('home-page')) {
     var progress = document.createElement('div');
