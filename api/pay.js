@@ -60,6 +60,15 @@ module.exports = async function handler(req, res) {
         res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_amount' }));
       }
       lines = [{ name: 'TMC Invoice ' + ref, amount }];
+    } else if (body.kind === 'pos') {
+      const label = String(body.label || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+      const amount = Math.round(Number(body.amount));
+      if (label.length < 2) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_label' })); }
+      if (!Number.isFinite(amount) || amount < MIN_CENTS || amount > MAX_CENTS) {
+        res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_amount' }));
+      }
+      ref = 'pos-' + label;
+      lines = [{ name: 'TMC POS — ' + label, amount }];
     } else {
       res.statusCode = 400; return res.end(JSON.stringify({ error: 'bad_kind' }));
     }
@@ -70,8 +79,9 @@ module.exports = async function handler(req, res) {
 
     const form = new URLSearchParams();
     form.set('mode', subscription ? 'subscription' : 'payment');
-    form.set('success_url', 'https://tmc.gg/pay?status=success');
-    form.set('cancel_url', 'https://tmc.gg/pay?status=canceled');
+    const returnBase = body.kind === 'pos' ? 'https://tmc.gg/pay/pos' : 'https://tmc.gg/pay';
+    form.set('success_url', returnBase + '?status=success');
+    form.set('cancel_url', returnBase + '?status=canceled');
     lines.forEach((li, i) => {
       form.set('line_items[' + i + '][price_data][currency]', 'usd');
       form.set('line_items[' + i + '][price_data][product_data][name]', li.name);
