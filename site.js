@@ -120,6 +120,43 @@
     });
   }
 
+  /* Interactive homepage product previews. */
+  function wireTabs(rootSelector, tabSelector, panelSelector, tabKey, panelKey) {
+    document.querySelectorAll(rootSelector).forEach(function (root) {
+      var tabs = root.querySelectorAll(tabSelector);
+      var panels = root.querySelectorAll(panelSelector);
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var value = tab.getAttribute(tabKey);
+          tabs.forEach(function (item) {
+            var active = item === tab;
+            item.classList.toggle('active', active);
+            item.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+          panels.forEach(function (panel) {
+            panel.classList.toggle('active', panel.getAttribute(panelKey) === value);
+          });
+        });
+      });
+    });
+  }
+  wireTabs('[data-product-demo]', '[data-product-tab]', '[data-product-view]', 'data-product-tab', 'data-product-view');
+  wireTabs('[data-app-workbench]', '[data-app-tab]', '[data-app-panel]', 'data-app-tab', 'data-app-panel');
+
+  /* Slim scroll progress indicator for long landing pages. */
+  if (document.body.classList.contains('home-page')) {
+    var progress = document.createElement('div');
+    progress.className = 'scroll-progress';
+    progress.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(progress);
+    var updateProgress = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+    };
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+  }
+
   /* Single-open FAQ */
   var faq = document.querySelector('.faq[data-single]');
   if (faq) {

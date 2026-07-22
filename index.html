@@ -53,7 +53,7 @@
   }
   </script>
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <aside class="announce" aria-label="Announcement">
@@ -115,23 +115,29 @@
               <a class="btn btn-primary btn-lg" href="/companies">Explore the network</a>
               <a class="btn btn-ghost btn-lg" href="/about">About Mavion</a>
             </div>
-            <a class="hero-scroll" href="#signal"><span></span>Scroll to explore</a>
+            <a class="hero-scroll" href="#platform"><span></span>Explore the platform</a>
           </div>
-          <div class="hero-stage" aria-label="Mavion media network illustration">
-            <div class="stage-glow"></div>
-            <div class="stage-orbit orbit-one"></div><div class="stage-orbit orbit-two"></div>
-            <div class="stage-core"><img src="/mavion-logo.png" alt="Mavion"></div>
-            <div class="stage-panel panel-news"><span>01</span><strong>News</strong><i></i></div>
-            <div class="stage-panel panel-cast"><span>02</span><strong>Broadcast</strong><i></i></div>
-            <div class="stage-panel panel-build"><span>03</span><strong>Platforms</strong><i></i></div>
-            <div class="stage-ground"></div>
+          <div class="hero-product" data-product-demo>
+            <div class="product-chrome"><span></span><span></span><span></span><p>platform.tmc.gg</p><b>Live</b></div>
+            <div class="product-shell">
+              <div class="product-rail" role="tablist" aria-label="Preview a Mavion product">
+                <button class="active" type="button" role="tab" aria-selected="true" data-product-tab="news" aria-label="Preview newsroom">N</button>
+                <button type="button" role="tab" aria-selected="false" data-product-tab="cast" aria-label="Preview TMCast">C</button>
+                <button type="button" role="tab" aria-selected="false" data-product-tab="go" aria-label="Preview Mavion Go">G</button>
+              </div>
+              <div class="product-canvas">
+                <section class="product-view active" data-product-view="news"><div class="pv-head"><div><small>Mavion News</small><h3>Good evening.</h3></div><i class="live-dot"></i></div><div class="pv-feature"><span>Now publishing</span><strong>The newsroom is live</strong><p>Stories, broadcasts, and audience updates in one editorial workspace.</p></div><div class="pv-lines"><i></i><i></i><i></i></div></section>
+                <section class="product-view" data-product-view="cast"><div class="pv-head"><div><small>TMCast</small><h3>Broadcast control</h3></div><i class="live-dot"></i></div><div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="cast-row"><span>Live source</span><strong>Primary stream</strong><b>ON AIR</b></div><div class="cast-row"><span>Next</span><strong>Evening rotation</strong><b>18:30</b></div></section>
+                <section class="product-view" data-product-view="go"><div class="pv-head"><div><small>Mavion Go</small><h3>Focused workspace</h3></div><i class="ready-dot"></i></div><div class="go-grid"><button type="button">Study space</button><button type="button">Assignments</button><button type="button">Resources</button><button type="button">Messages</button></div><p class="go-note">One calm place for the work that matters.</p></section>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="signal" class="signal-band" aria-label="Mavion capabilities">
-      <div class="signal-track"><span>Independent media</span><b></b><span>Broadcast technology</span><b></b><span>Digital publishing</span><b></b><span>Creative infrastructure</span><b></b><span>Independent media</span></div>
+    <section class="capability-strip" aria-label="Mavion capabilities">
+      <div class="wrap"><a href="#platform"><span>01</span>Publish</a><a href="#platform"><span>02</span>Broadcast</a><a href="#platform"><span>03</span>Operate</a><a href="#platform"><span>04</span>Connect</a></div>
     </section>
 
     <!-- Who we are -->
@@ -165,13 +171,22 @@
       </div>
     </section>
 
-    <section class="section route-section">
+    <section id="platform" class="section app-lab">
       <div class="wrap">
-        <div class="route-intro reveal"><p class="eyebrow muted">From idea to audience</p><h2>One connected media system.</h2><p>Every part of Mavion is built to carry work further, from first draft to a live audience.</p></div>
-        <div class="route-steps reveal">
-          <article><span>01</span><h3>Build</h3><p>Create a newsroom, station, portal, or digital product on a foundation you control.</p></article>
-          <article><span>02</span><h3>Operate</h3><p>Run publishing, scheduling, and community experiences without stitching together disconnected tools.</p></article>
-          <article><span>03</span><h3>Reach</h3><p>Deliver work through the platforms and networks your audience already uses.</p></article>
+        <div class="app-lab-head reveal"><div><p class="eyebrow muted">The platform</p><h2>Use what we build.</h2></div><p>Switch between live interface previews to see how Mavion products turn publishing, broadcasting, payments, and organization into usable tools.</p></div>
+        <div class="app-workbench reveal" data-app-workbench>
+          <nav class="app-switcher" role="tablist" aria-label="Mavion product previews">
+            <button class="active" type="button" role="tab" aria-selected="true" data-app-tab="newsroom"><span>Newsroom</span><small>Editorial publishing</small></button>
+            <button type="button" role="tab" aria-selected="false" data-app-tab="broadcast"><span>TMCast</span><small>Broadcast control</small></button>
+            <button type="button" role="tab" aria-selected="false" data-app-tab="directory"><span>Directory</span><small>People and communications</small></button>
+            <button type="button" role="tab" aria-selected="false" data-app-tab="checkout"><span>Checkout</span><small>Simple staff payments</small></button>
+          </nav>
+          <div class="app-display">
+            <section class="app-panel active" data-app-panel="newsroom"><div class="app-toolbar"><strong>Newsroom</strong><span>Draft saved</span><button type="button">Publish</button></div><div class="news-editor"><aside><i></i><i></i><i></i><i></i></aside><div><small>STORY DRAFT</small><h3>A clearer place to tell the story.</h3><p>Bring writing, review, scheduling, and publishing into one focused workflow.</p><div class="editor-lines"><i></i><i></i><i></i><i></i></div></div></div></section>
+            <section class="app-panel" data-app-panel="broadcast"><div class="app-toolbar"><strong>TMCast Control</strong><span class="on-air">On air</span><button type="button">Open console</button></div><div class="broadcast-board"><div class="big-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="broadcast-meta"><p><span>Source</span><strong>Studio A</strong></p><p><span>Listeners</span><strong>Connected</strong></p><p><span>Health</span><strong>Stable</strong></p></div></div></section>
+            <section class="app-panel" data-app-panel="directory"><div class="app-toolbar"><strong>Organization Directory</strong><span>8 people</span><button type="button">Invite</button></div><div class="directory-grid"><article><b>AM</b><div><strong>Alex Mishra</strong><span>Executive</span></div></article><article><b>CD</b><div><strong>Cody Devbro</strong><span>Technology</span></div></article><article><b>HC</b><div><strong>Hashtag Cyberistic</strong><span>Operations</span></div></article><article><b>SS</b><div><strong>Seehed Shaffer</strong><span>Vision</span></div></article></div></section>
+            <section class="app-panel" data-app-panel="checkout"><div class="app-toolbar"><strong>Staff Checkout</strong><span>Demo mode</span><button type="button">New sale</button></div><div class="checkout-grid"><div class="checkout-items"><p><span>Media setup</span><strong>$0.00</strong></p><p><span>Broadcast support</span><strong>$0.00</strong></p><p><span>Custom service</span><strong>$0.00</strong></p></div><div class="checkout-total"><span>Total</span><strong>$0.00</strong><button type="button">Complete demo</button></div></div></section>
+          </div>
         </div>
       </div>
     </section>
