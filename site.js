@@ -172,6 +172,7 @@
   }
   wireTabs('[data-product-demo]', '[data-product-tab]', '[data-product-view]', 'data-product-tab', 'data-product-view');
   wireTabs('[data-app-workbench]', '[data-app-tab]', '[data-app-panel]', 'data-app-tab', 'data-app-panel');
+  wireTabs('[data-audience-section]', '[data-audience-tab]', '[data-audience-panel]', 'data-audience-tab', 'data-audience-panel');
 
   /* Cycle the compact hero preview until the visitor takes control. */
   var productDemo = document.querySelector('[data-product-demo]');
@@ -251,6 +252,78 @@
     });
   });
 
+  /* Searchable command palette for products and key pages. */
+  var commandItems = [
+    { icon: 'MN', title: 'Mavion News', desc: 'Publishing and media', url: 'https://mavion.tmc.gg', external: true },
+    { icon: 'TC', title: 'TMCast', desc: 'Broadcast control and hosting', url: 'https://cast.tmc.gg', external: true },
+    { icon: 'GO', title: 'Mavion Go', desc: 'Focused student workspace', url: '/go' },
+    { icon: 'DR', title: 'Team Directory', desc: 'People inside Mavion', url: '#team' },
+    { icon: 'PO', title: 'Staff POS', desc: 'Checkout and receipts', url: '/pay/pos' },
+    { icon: 'API', title: 'Developers', desc: 'Documentation and integrations', url: '/developers' },
+    { icon: 'CO', title: 'Companies', desc: 'The Mavion network', url: '/companies' },
+    { icon: 'NW', title: 'Newsroom', desc: 'Corporate announcements', url: '/newsroom' },
+    { icon: 'CA', title: 'Careers', desc: 'Work with Mavion', url: '/careers' },
+    { icon: 'CT', title: 'Contact', desc: 'Reach the corporation', url: '/contact' }
+  ];
+  var commandOverlay = document.querySelector('[data-command-overlay]');
+  var commandInput = document.querySelector('[data-command-input]');
+  var commandResults = document.querySelector('[data-command-results]');
+  var commandFiltered = commandItems.slice();
+  var commandIndex = 0;
+  function renderCommands() {
+    if (!commandResults) return;
+    if (!commandFiltered.length) {
+      commandResults.innerHTML = '<p class="command-empty">No matching Mavion destination.</p>';
+      return;
+    }
+    commandResults.innerHTML = commandFiltered.map(function (item, index) {
+      return '<button class="command-result' + (index === commandIndex ? ' active' : '') + '" type="button" data-command-index="' + index + '"><span>' + item.icon + '</span><span><strong>' + item.title + '</strong><small>' + item.desc + '</small></span><b>' + (item.external ? '↗' : '→') + '</b></button>';
+    }).join('');
+  }
+  function closeCommands() {
+    if (!commandOverlay) return;
+    commandOverlay.hidden = true;
+    document.body.classList.remove('command-open');
+  }
+  function openCommands() {
+    if (!commandOverlay || !commandInput) return;
+    commandOverlay.hidden = false;
+    document.body.classList.add('command-open');
+    commandInput.value = '';
+    commandFiltered = commandItems.slice();
+    commandIndex = 0;
+    renderCommands();
+    setTimeout(function () { commandInput.focus(); }, 30);
+  }
+  function openCommandItem(item) {
+    if (!item) return;
+    if (item.external) window.open(item.url, '_blank', 'noopener');
+    else window.location.href = item.url;
+    closeCommands();
+  }
+  document.querySelectorAll('[data-command-open]').forEach(function (button) { button.addEventListener('click', openCommands); });
+  if (commandOverlay && commandInput && commandResults) {
+    commandInput.addEventListener('input', function () {
+      var query = commandInput.value.trim().toLowerCase();
+      commandFiltered = commandItems.filter(function (item) { return (item.title + ' ' + item.desc).toLowerCase().indexOf(query) !== -1; });
+      commandIndex = 0;
+      renderCommands();
+    });
+    commandResults.addEventListener('click', function (e) {
+      var button = e.target.closest('[data-command-index]');
+      if (button) openCommandItem(commandFiltered[Number(button.getAttribute('data-command-index'))]);
+    });
+    commandOverlay.addEventListener('click', function (e) { if (e.target === commandOverlay) closeCommands(); });
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); commandOverlay.hidden ? openCommands() : closeCommands(); return; }
+      if (commandOverlay.hidden) return;
+      if (e.key === 'Escape') { closeCommands(); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); commandIndex = Math.min(commandIndex + 1, commandFiltered.length - 1); renderCommands(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); commandIndex = Math.max(commandIndex - 1, 0); renderCommands(); }
+      if (e.key === 'Enter' && commandFiltered.length) { e.preventDefault(); openCommandItem(commandFiltered[commandIndex]); }
+    });
+  }
+
   /* Slim scroll progress indicator for long landing pages. */
   if (document.body.classList.contains('home-page')) {
     var progress = document.createElement('div');
@@ -259,6 +332,7 @@
     document.body.appendChild(progress);
     var scrollCards = document.querySelectorAll('[data-scroll-card]');
     var globeSection = document.querySelector('[data-globe-section]');
+    var dockLinks = document.querySelectorAll('.page-dock a[href^="#"]');
     var updateProgress = function () {
       var max = document.documentElement.scrollHeight - window.innerHeight;
       progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
@@ -277,6 +351,15 @@
           globe.style.setProperty('--globe-ry', (globeTravel * 42).toFixed(2) + 'deg');
         }
       }
+      var closestDock = null;
+      var closestDistance = Infinity;
+      dockLinks.forEach(function (link) {
+        var target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        var distance = Math.abs(target.getBoundingClientRect().top - window.innerHeight * .32);
+        if (distance < closestDistance) { closestDistance = distance; closestDock = link; }
+      });
+      dockLinks.forEach(function (link) { link.classList.toggle('active', link === closestDock); });
     };
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });

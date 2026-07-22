@@ -86,6 +86,8 @@
     </div>
   </header>
 
+  <nav class="page-dock" aria-label="Homepage sections"><a href="#main" aria-label="Top"><span>Top</span></a><a href="#platform" aria-label="Products"><span>Products</span></a><a href="#network-launchpad" aria-label="Network"><span>Network</span></a><a href="#team" aria-label="Team"><span>Team</span></a></nav>
+
   <!-- Radio provider notice -->
   <section class="provider-notice" role="region" aria-label="Radio provider changes">
     <div class="wrap">
@@ -213,6 +215,16 @@
       </div>
     </section>
 
+    <section class="section audience-section" data-audience-section>
+      <div class="wrap"><div class="section-head reveal"><p class="eyebrow muted">Built around your work</p><h2>Choose your way into Mavion.</h2><p>Tell the page what you are trying to do. The experience below changes with you.</p></div>
+        <div class="audience-console reveal"><div class="audience-tabs" role="tablist" aria-label="Choose an audience"><button class="active" type="button" role="tab" aria-selected="true" data-audience-tab="publisher">I publish</button><button type="button" role="tab" aria-selected="false" data-audience-tab="broadcaster">I broadcast</button><button type="button" role="tab" aria-selected="false" data-audience-tab="organization">I run a team</button><button type="button" role="tab" aria-selected="false" data-audience-tab="student">I am learning</button></div>
+          <div class="audience-stage"><section class="audience-panel active" data-audience-panel="publisher"><p class="eyebrow bare">For publishers</p><h3>Move from draft to audience without losing the story.</h3><p>Use an editorial workspace, publish through Mavion News, and connect the final story to broadcast and community channels.</p><div><a class="btn btn-primary" href="https://mavion.tmc.gg" target="_blank" rel="noopener">Open Mavion News</a><a class="btn-link" href="#platform">Try the editor</a></div></section><section class="audience-panel" data-audience-panel="broadcaster"><p class="eyebrow bare">For broadcasters</p><h3>Control the signal without fighting the software.</h3><p>Manage playback, programming, source health, and scheduled content from the TMCast environment.</p><div><a class="btn btn-primary" href="https://cast.tmc.gg" target="_blank" rel="noopener">Open TMCast</a><a class="btn-link" href="/tmcast">See the platform</a></div></section><section class="audience-panel" data-audience-panel="organization"><p class="eyebrow bare">For organizations</p><h3>Keep people, tools, and payments in one understandable system.</h3><p>Use directories, staff workflows, simple checkout tools, and shared infrastructure without building every operation from scratch.</p><div><a class="btn btn-primary" href="#team">View the team</a><a class="btn-link" href="/pay/pos">Staff checkout</a></div></section><section class="audience-panel" data-audience-panel="student"><p class="eyebrow bare">For learners</p><h3>Enter a calmer workspace built around focus.</h3><p>Mavion Go brings resources, messages, and focused sessions into one student-friendly place.</p><div><a class="btn btn-primary" href="/go">Open Mavion Go</a><a class="btn-link" href="#platform">Preview it here</a></div></section></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="network-launchpad" class="section launchpad-section"><div class="wrap"><div class="section-head row reveal"><div><p class="eyebrow muted">Launchpad</p><h2>Go directly to the work.</h2></div><button class="btn btn-ghost" type="button" data-command-open>Search everything <kbd>Ctrl K</kbd></button></div><div class="launchpad-grid reveal"><a href="https://mavion.tmc.gg" target="_blank" rel="noopener"><span>MN</span><div><h3>Mavion News</h3><p>Publishing, stories, and media.</p></div><b>↗</b></a><a href="https://cast.tmc.gg" target="_blank" rel="noopener"><span>TC</span><div><h3>TMCast</h3><p>Broadcast control and hosting.</p></div><b>↗</b></a><a href="/go"><span>GO</span><div><h3>Mavion Go</h3><p>Focused student workspace.</p></div><b>→</b></a><a href="#team"><span>DR</span><div><h3>Team Directory</h3><p>People inside Mavion.</p></div><b>↓</b></a><a href="/pay/pos"><span>PO</span><div><h3>Staff POS</h3><p>Self-checkout and receipts.</p></div><b>→</b></a><a href="/developers"><span>API</span><div><h3>Developers</h3><p>Documentation and integrations.</p></div><b>→</b></a></div></div></section>
+
     <!-- What we build -->
     <section class="section">
       <div class="wrap">
@@ -273,7 +285,7 @@
     </section>
 
     <!-- Team -->
-    <section class="section team-section">
+    <section id="team" class="section team-section">
       <div class="wrap"><div class="section-head row reveal"><div><p class="eyebrow muted">Current staff</p><h2>The people inside Mavion.</h2></div><a class="btn-link" href="/corporate">Corporate structure <span class="arr">→</span></a></div>
         <div class="staff-grid reveal" aria-label="Current Mavion staff">
           <article><span class="staff-avatar tone-1">CG</span><div><h3>CeleGamerYT</h3><p>Team member</p></div><i></i></article>
@@ -308,6 +320,8 @@
     </section>
 
     <!-- Contact CTA -->
+    <section class="section faq-home"><div class="wrap"><div class="split"><div class="reveal"><p class="eyebrow muted">Questions</p><h2>What Mavion actually does.</h2><p class="mt-s measure">A quick explanation of the company, its products, and how the pieces fit together.</p></div><div class="faq reveal" data-single><details class="faq-item"><summary class="faq-q">Is Mavion one product?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="faq-a">No. Mavion is a parent company and shared technology layer for products including Mavion News, TMCast, Mavion Go, Directory, and staff tools.</div></details><details class="faq-item"><summary class="faq-q">Can I use TMCast outside Mavion?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="faq-a">Yes. TMCast is the part of the network designed to support independent broadcasters as well as Mavion-operated stations.</div></details><details class="faq-item"><summary class="faq-q">Are the homepage previews functional?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="faq-a">Yes. You can edit and publish a local demo story, operate the TMCast transport preview, switch products, and explore the staff and checkout interfaces.</div></details><details class="faq-item"><summary class="faq-q">How do I find a specific page?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="faq-a">Press Ctrl K, or Command K on macOS, to open the Mavion command search from anywhere on this homepage.</div></details></div></div></div></section>
+
     <section class="section">
       <div class="wrap">
         <div class="cta reveal">
@@ -323,6 +337,9 @@
       </div>
     </section>
   </main>
+
+  <button class="command-fab" type="button" data-command-open aria-label="Search Mavion"><span>⌕</span><kbd>Ctrl K</kbd></button>
+  <div class="command-overlay" data-command-overlay hidden><div class="command-dialog" role="dialog" aria-modal="true" aria-label="Search Mavion"><div class="command-search"><span>⌕</span><input type="search" data-command-input placeholder="Search Mavion products and pages" autocomplete="off"><kbd>Esc</kbd></div><div class="command-results" data-command-results></div><p class="command-help">Type to search. Use arrow keys and Enter to open.</p></div></div>
 
   <footer class="site-footer">
     <div class="wrap">
