@@ -1,7 +1,7 @@
 {
-  "name": "mavion-student-desktop",
-  "version": "1.0.2",
-  "description": "Mavion Student Desktop for Windows",
+  "name": "mavion-go-lock",
+  "version": "1.1.0",
+  "description": "Mavion Go Lock for Windows",
   "main": "main.cjs",
   "private": true,
   "scripts": {
@@ -14,7 +14,8 @@
   },
   "build": {
     "appId": "gg.tmc.mavionstudentdesktop",
-    "productName": "Mavion Student Desktop",
+  "productName": "Mavion Go Lock",
+    "icon": "assets/mavion-lock.ico",
     "asar": true,
     "files": ["main.cjs", "preload.cjs", "renderer/**/*", "assets/**/*", "package.json"],
     "win": { "target": [{ "target": "nsis", "arch": ["x64"] }] },
@@ -23,7 +24,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Mavion Student Desktop"
+      "shortcutName": "Mavion Go Lock"
     }
   }
 }

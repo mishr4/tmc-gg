@@ -1,1 +1,5 @@
-// Intentionally empty: the renderer has no direct Node or operating-system access.
+const { contextBridge, ipcRenderer } = require('electron');
+contextBridge.exposeInMainWorld('mavionLock', {
+  openDesktop: () => ipcRenderer.invoke('open-desktop'),
+  testNotification: () => ipcRenderer.invoke('test-notification')
+});

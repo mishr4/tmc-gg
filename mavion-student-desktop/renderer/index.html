@@ -1,50 +1,35 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mavion Student Desktop</title><link rel="stylesheet" href="app.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mavion Go Lock</title><link rel="stylesheet" href="app.css"></head>
 <body>
-  <main class="desktop" id="desktop" aria-label="Mavion Student Desktop">
-    <div class="wallpaper" aria-hidden="true"><i></i><i></i><i></i></div>
-    <section class="desktop-content" aria-label="Student desktop">
-      <header><img src="../assets/mavion-go-logo.png" alt="Mavion Go"><span>Student Desktop</span><button id="signOut" type="button">Lock</button></header>
-      <div class="tiles">
-        <article><b>Study space</b><p>Start a focused tutoring session.</p><button type="button">Open</button></article>
-        <article><b>Assignments</b><p>Keep your schoolwork organized.</p><button type="button">View</button></article>
-        <article><b>Resources</b><p>Helpful learning materials.</p><button type="button">Browse</button></article>
-      </div>
-    </section>
-    <section id="lockScreen" class="lock-screen" aria-labelledby="welcomeTitle">
-      <div class="lock-card">
-        <img src="../assets/mavion-go-logo.png" alt="Mavion Go" class="logo">
-        <p class="state">Logged out</p>
-        <div class="avatar" aria-hidden="true">A</div>
-        <h1 id="welcomeTitle">Alexander</h1>
-        <p class="subtitle">Mavion Student Desktop</p>
+  <main class="overlay" aria-label="Mavion Go Lock overlay">
+    <section id="lockView" class="lock-view" aria-labelledby="appTitle">
+      <header class="topbar"><img src="../assets/mavion-go-logo.png" alt="Mavion Go"><span class="product-name">Lock</span><button id="settingsButton" type="button" aria-label="Open settings">⚙</button></header>
+      <div class="lock-panel">
+        <p class="status"><i></i> LOCKED</p>
+        <div class="shield" aria-hidden="true">⌑</div>
+        <h1 id="appTitle">Mavion Go Lock</h1>
+        <p class="description">Your desktop is ready when you are.</p>
         <form id="loginForm" novalidate>
           <label for="accessCode">Access code</label>
-          <div><input id="accessCode" type="password" autocomplete="off" placeholder="Enter access code" required><button type="submit">Sign in</button></div>
-          <p id="error" role="alert" hidden>That access code did not match.</p>
+          <div class="code-row"><input id="accessCode" type="password" autocomplete="off" placeholder="Enter code"><button type="submit">Unlock</button></div>
+          <p id="error" hidden role="alert">That access code did not match.</p>
         </form>
-        <p class="nfc"><span>⌁</span> NFC readers configured as a keyboard can enter the code here.</p>
-        <p class="notice">This app does not bypass school or network monitoring. Use it in accordance with your school’s policies.</p>
+        <button id="openDesktop" class="open-desktop" type="button">Open Desktop <span>↗</span></button>
+        <p class="recovery">F6: Emergency recovery override</p>
       </div>
+      <footer>Overlay only — this does not replace Windows sign-in or bypass device/network policies.</footer>
     </section>
-    <section id="welcome" class="welcome" hidden aria-live="polite"><div><img src="../assets/mavion-go-logo.png" alt=""><p>Welcome, Alexander</p></div></section>
-    <aside id="idlePrompt" class="idle-prompt" hidden aria-live="assertive" aria-labelledby="idleTitle">
-      <div class="idle-icon" aria-hidden="true">⌑</div>
-      <div class="idle-copy"><strong id="idleTitle">Are you there?</strong><p>Your session locks in <span id="countdown">30</span> seconds.</p></div>
-      <div class="idle-actions"><button id="staySignedIn" type="button">Yes</button><button id="closeSession" type="button">No, Close this Session</button></div>
+
+    <aside id="settingsPanel" class="settings-panel" hidden aria-labelledby="settingsTitle">
+      <div class="settings-head"><div><p>LOCK SETTINGS</p><h2 id="settingsTitle">Controls</h2></div><button id="closeSettings" type="button" aria-label="Close settings">×</button></div>
+      <label class="switch-row"><span>Show inactivity reminder</span><input id="idleEnabled" type="checkbox" checked><i></i></label>
+      <button id="testNotification" class="setting-button" type="button">Send test notification</button>
+      <p class="settings-note">The test notification comes from the installed Windows app.</p>
     </aside>
-    <div id="locking" class="locking" hidden aria-live="polite"><span aria-hidden="true">▣</span><p>Locking your session…</p></div>
-    <section id="emergencyOverride" class="emergency" hidden aria-labelledby="emergencyTitle" role="dialog" aria-modal="true">
-      <div>
-        <span aria-hidden="true">!</span>
-        <p class="emergency-label">F6 SAFETY CONTROL</p>
-        <h2 id="emergencyTitle">Emergency Override</h2>
-        <p>Override the lock and reopen Alexander’s desktop?</p>
-        <button id="emergencyYes" type="button">Yes, Override Lock</button>
-        <button id="emergencyNo" type="button">No, Stay Locked</button>
-      </div>
-    </section>
+
+    <aside id="idlePrompt" class="idle-prompt" hidden aria-live="assertive"><div class="idle-icon" aria-hidden="true">⌑</div><div class="idle-copy"><strong>Are you there?</strong><p>Overlay resumes in <span id="countdown">30</span> seconds.</p></div><div class="idle-actions"><button id="staySignedIn" type="button">Yes</button><button id="closeSession" type="button">No, Show Lock</button></div></aside>
+    <section id="emergencyOverride" class="emergency" hidden aria-labelledby="emergencyTitle" role="dialog" aria-modal="true"><div><span aria-hidden="true">!</span><p>F6 SAFETY CONTROL</p><h2 id="emergencyTitle">Emergency Override</h2><p>Override the lock and open your desktop?</p><button id="emergencyYes" type="button">Yes, Open Desktop</button><button id="emergencyNo" type="button">No, Stay Locked</button></div></section>
   </main>
   <script src="app.js"></script>
 </body>
