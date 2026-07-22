@@ -43,24 +43,31 @@
         <span class="brand-title">Independent Student</span>
       </a>
       <div class="header-actions">
-        <span class="online-dot"><i></i> Study space open</span>
-        <button id="lockButton" class="icon-btn" type="button" title="Lock this device" aria-label="Lock this device">⌁</button>
+        <button class="nav-icon" type="button" aria-label="Home" title="Home">⌂</button>
+        <button class="nav-icon" type="button" aria-label="Classes" title="Classes">☷</button>
+        <button class="nav-icon" type="button" aria-label="Learning hub" title="Learning hub">◇</button>
+        <button id="lockButton" class="nav-icon" type="button" title="Lock this device" aria-label="Lock this device">⌁</button>
       </div>
     </header>
 
     <main id="go-main" class="go-main">
+      <section class="hero-grid">
       <section class="welcome-card">
         <div>
           <p class="eyebrow">Learning hub</p>
           <h1>Start a tutoring session</h1>
-          <p>Choose a class, ask a study question, and keep the conversation focused on learning.</p>
+          <p>Get focused tutoring help when you need it.</p>
+          <div class="hero-actions"><button id="startButton" type="button">Start now</button><button id="hubButton" class="secondary" type="button">Visit the Learning Hub</button></div>
         </div>
         <div class="week" aria-label="Weekday study availability">
           <span>M</span><span>T</span><span class="off">W</span><span>T</span><span>F</span>
         </div>
       </section>
+      <section class="school-card"><span>◇</span><p>Your School</p><h2>Homeschool/Public</h2></section>
+      <aside class="support-card"><h2>Support this project?</h2><p>Mavion Go was developed by a student for students. Help keep it available for learning.</p><a href="/pay">Donate to us</a></aside>
+      </section>
 
-      <section class="safety-card" aria-labelledby="safetyTitle">
+      <section id="safetyCard" class="safety-card" aria-labelledby="safetyTitle" hidden>
         <div class="safety-icon" aria-hidden="true">!</div>
         <div>
           <h2 id="safetyTitle">Student safety notice</h2>
@@ -68,7 +75,14 @@
         </div>
       </section>
 
-      <section class="workspace" aria-label="Tutoring workspace">
+      <section class="course-preview" aria-label="Your classes">
+        <button class="preview-course" type="button" data-open-course="Political Science"><span>Political Sci</span><small>#9293-2</small></button>
+        <button class="preview-course" type="button" data-open-course="English"><span>Eng (Unspecified)</span><small>#GEN-ENG-2</small></button>
+        <button class="preview-course" type="button" data-open-course="Dual Enrollment"><span>Dual Enrollment</span><small>#MJC-3922</small></button>
+        <button class="preview-course" type="button" data-open-course="Computer Science"><span>Computer Scie</span><small>#6295-F</small></button>
+      </section>
+
+      <section id="workspace" class="workspace" aria-label="Tutoring workspace" hidden>
         <aside class="courses" aria-label="Classes">
           <div class="section-heading"><h2>Classes</h2><span>4 active</span></div>
           <div id="courseList" class="course-list">
@@ -96,7 +110,7 @@
         </section>
       </section>
     </main>
-    <footer class="go-footer">Mavion Go is an independent student study workspace. It is not affiliated with a school and does not replace instruction, counseling, or approved school services.</footer>
+    <footer class="go-footer"><span>Try our fun quiz!</span><strong>Guess how many lawsuits GoGuardian has had</strong><p>This website was engineered for students, by students. Mavion is not affiliated with any schools or students using this program, and does not supplement instructional learning.</p></footer>
   </div>
 
   <dialog id="tipsDialog" class="tips-dialog">
