@@ -1,0 +1,26 @@
+.unlock-methods{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 14px;padding:4px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.16)}
+.method{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 8px;border:0;background:transparent;color:#aeb8d8;font-size:12px;font-weight:650;transition:.16s}
+.method:hover{color:#fff;background:rgba(255,255,255,.06)}
+.method.active{background:#fff;color:#101831;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.method-icon{position:relative;display:inline-block;width:16px;height:16px}
+.nfc-icon:before,.nfc-icon:after{position:absolute;inset:2px 4px;border:1.5px solid currentColor;border-top-color:transparent;border-bottom-color:transparent;border-radius:50%;content:""}
+.nfc-icon:after{inset:5px 7px}
+.code-icon:before{position:absolute;inset:3px 1px;border:1.5px solid currentColor;content:""}
+.code-icon:after{position:absolute;top:7px;left:5px;width:6px;height:2px;background:currentColor;content:""}
+.method-panel{display:none}
+.method-panel.active{display:block}
+.nfc-reader{position:relative;display:grid;min-height:132px;place-content:center;padding:18px;border:1px solid rgba(145,161,239,.58);background:radial-gradient(circle at 50% 48%,rgba(91,110,255,.18),transparent 56%),rgba(255,255,255,.035);outline:none;transition:.2s}
+.nfc-reader:focus{border-color:#9aa7ff;box-shadow:0 0 0 2px rgba(105,124,255,.18)}
+.nfc-reader b{margin-top:7px;font-size:14px}
+.nfc-reader p{margin:4px 0 0;color:#bdc6e2;font-size:12px}
+.scan-waves{position:relative;width:35px;height:32px;margin:auto}
+.scan-waves i{position:absolute;inset:4px 13px;border:1.5px solid #bac5ff;border-top-color:transparent;border-bottom-color:transparent;border-radius:50%}
+.scan-waves i:nth-child(2){inset:1px 8px}
+.scan-waves i:nth-child(3){inset:-2px 3px}
+.scanner-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;border:0!important;opacity:0;pointer-events:none}
+.nfc-reader.reading .scan-waves{animation:nfc-pulse .55s ease-in-out infinite alternate}
+.nfc-reader.accepted{border-color:#5fe0a4;background:rgba(24,149,99,.16)}
+.nfc-reader.denied{border-color:#ff8b8b;background:rgba(188,37,37,.16);animation:nfc-shake .25s linear}
+.method-error{display:block;margin-top:8px;color:#ffb3b3;text-align:left}
+@keyframes nfc-pulse{to{transform:scale(1.14);filter:drop-shadow(0 0 7px #7d91ff)}}
+@keyframes nfc-shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}

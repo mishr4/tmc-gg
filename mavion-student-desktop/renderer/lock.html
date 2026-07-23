@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Mavion Go Lock</title>
   <link rel="stylesheet" href="lock.css">
+  <link rel="stylesheet" href="nfc.css">
 </head>
 <body>
   <main id="overlay" class="overlay">
@@ -16,8 +17,21 @@
       <div class="lock-icon" aria-hidden="true"><i></i></div>
       <p class="eyebrow">SESSION PROTECTED</p>
       <h1 id="lockTitle">Desktop locked</h1>
-      <p class="subcopy">Enter your access code to continue.</p>
-      <form id="unlockForm">
+      <p id="subcopy" class="subcopy">Choose how you want to unlock.</p>
+      <div class="unlock-methods" role="tablist" aria-label="Unlock method">
+        <button id="nfcTab" class="method active" type="button" role="tab" aria-selected="true" aria-controls="nfcPanel"><span class="method-icon nfc-icon" aria-hidden="true"></span>NFC card</button>
+        <button id="codeTab" class="method" type="button" role="tab" aria-selected="false" aria-controls="codePanel"><span class="method-icon code-icon" aria-hidden="true"></span>Access code</button>
+      </div>
+      <section id="nfcPanel" class="method-panel active" role="tabpanel" aria-labelledby="nfcTab">
+        <div id="nfcReader" class="nfc-reader" tabindex="0">
+          <span class="scan-waves" aria-hidden="true"><i></i><i></i><i></i></span>
+          <b id="nfcTitle">Ready to scan</b>
+          <p id="nfcStatus">Tap your card on the connected reader.</p>
+          <input id="nfcInput" class="scanner-input" inputmode="numeric" autocomplete="off" aria-label="NFC reader input">
+        </div>
+        <small id="nfcError" class="method-error" hidden>Card not recognized. Try again or use your access code.</small>
+      </section>
+      <form id="unlockForm" class="method-panel" role="tabpanel" aria-labelledby="codeTab">
         <label for="accessCode">Access code</label>
         <div class="unlock-row"><input id="accessCode" type="password" autocomplete="off" placeholder="Enter code"><button type="submit">Unlock</button></div>
         <small id="error" hidden>That code did not match.</small>
