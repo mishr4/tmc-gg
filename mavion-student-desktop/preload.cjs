@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('mavion', {
   validateNfcCard: value => ipcRenderer.invoke('validate-nfc-card', value),
   saveNfcCard: card => ipcRenderer.invoke('save-nfc-card', card),
   removeNfcCard: id => ipcRenderer.invoke('remove-nfc-card', id),
+  onNfcScan: fn => ipcRenderer.on('nfc-scan', (_, value) => fn(value)),
   onResetLock: fn => ipcRenderer.on('reset-lock', fn),
   onPlayLockAnimation: fn => ipcRenderer.on('play-lock-animation', fn),
   onShowNotice: fn => ipcRenderer.on('show-notice', (_, mode) => fn(mode)),

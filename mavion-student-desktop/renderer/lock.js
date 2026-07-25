@@ -44,9 +44,9 @@
   const animate = () => { overlay.classList.remove('locking'); void overlay.offsetWidth; overlay.classList.add('locking'); setTimeout(() => overlay.classList.remove('locking'), 650); };
   const updateClock = () => { clock.textContent = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date()); };
   form.addEventListener('submit', event => { event.preventDefault(); if (input.value.trim() === 'Mavion') window.mavion.releaseLock(); else { error.hidden = false; input.select(); } });
-  const finishScan = () => {
+  const finishScan = rawValue => {
     clearTimeout(scanTimer);
-    const scanned = nfcInput.value.replace(/\s+/g, '').toUpperCase();
+    const scanned = String(rawValue || nfcInput.value).replace(/\s+/g, '').toUpperCase();
     nfcInput.value = '';
     if (!scanned) return;
     nfcReader.classList.add('reading');
@@ -112,5 +112,9 @@
   });
   window.mavion.onResetLock(reset);
   window.mavion.onPlayLockAnimation(animate);
+  window.mavion.onNfcScan(value => {
+    if (mode !== 'nfc') return;
+    finishScan(value);
+  });
   updateClock(); setInterval(updateClock, 1000); reset();
 })();

@@ -1,6 +1,6 @@
 {
   "name": "mavion-go-lock",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Mavion Go Lock for Windows",
   "main": "main.cjs",
   "private": true,
@@ -14,11 +14,26 @@
   },
   "build": {
     "appId": "gg.tmc.mavionstudentdesktop",
-  "productName": "Mavion Go Lock",
+    "productName": "Mavion Go Lock",
     "icon": "assets/mavion-lock.ico",
     "asar": true,
-    "files": ["main.cjs", "preload.cjs", "renderer/**/*", "assets/**/*", "package.json"],
-    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }] },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "renderer/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
@@ -26,5 +41,11 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Mavion Go Lock"
     }
+  },
+  "dependencies": {
+    "koffi": "^2.16.3"
+  },
+  "dependencies": {
+    "koffi": "^2.12.0"
   }
 }

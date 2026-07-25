@@ -104,6 +104,11 @@
   });
   window.mavion.getStartup().then(value => startup.checked = value);
   window.mavion.getIdleLock().then(value => idle.checked = value);
+  window.mavion.onNfcScan(value => {
+    if (!enrolling || !$('enrollForm').hidden) return;
+    scanBuffer = String(value || '');
+    finishScan();
+  });
   document.querySelectorAll('.nav').forEach(button => button.addEventListener('click', () => {
     document.querySelectorAll('.nav,.page').forEach(element => element.classList.remove('active'));
     button.classList.add('active');
