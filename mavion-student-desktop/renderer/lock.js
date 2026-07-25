@@ -14,12 +14,6 @@
   const emergency = document.getElementById('emergency');
   const overlay = document.getElementById('overlay');
   const clock = document.getElementById('clock');
-  const NFC_CARDS = new Map([
-    ['3689635517', 'Alexander'],
-    ['3687763661', 'Andre'],
-    ['3289073650', 'Guest'],
-    ['3331995442', 'Guest']
-  ]);
   let mode = 'nfc';
   let scanTimer;
   const focusCurrent = () => setTimeout(() => (mode === 'nfc' ? nfcInput : input).focus(), 0);
@@ -52,15 +46,16 @@
   form.addEventListener('submit', event => { event.preventDefault(); if (input.value.trim() === 'Mavion') window.mavion.releaseLock(); else { error.hidden = false; input.select(); } });
   const finishScan = () => {
     clearTimeout(scanTimer);
-    const scanned = nfcInput.value.replace(/\D/g, '');
+    const scanned = nfcInput.value.replace(/\s+/g, '').toUpperCase();
     nfcInput.value = '';
     if (!scanned) return;
     nfcReader.classList.add('reading');
     nfcTitle.textContent = 'Reading card';
     nfcStatus.textContent = 'Hold it near the reader…';
-    setTimeout(() => {
-      if (NFC_CARDS.has(scanned)) {
-        const name = NFC_CARDS.get(scanned);
+    setTimeout(async () => {
+      const result = await window.mavion.validateNfcCard(scanned);
+      if (result && result.ok) {
+        const name = result.name;
         nfcReader.classList.remove('reading');
         nfcReader.classList.add('accepted');
         nfcTitle.textContent = `Welcome, ${name}.`;
@@ -84,7 +79,7 @@
   nfcInput.addEventListener('input', () => {
     nfcError.hidden = true;
     clearTimeout(scanTimer);
-    scanTimer = setTimeout(finishScan, 110);
+    scanTimer = setTimeout(finishScan, 350);
   });
   nfcInput.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
@@ -105,7 +100,7 @@
       return;
     }
     if (mode === 'nfc' && event.target !== nfcInput) {
-      if (/^\d$/.test(event.key)) {
+      if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
         event.preventDefault();
         nfcInput.value += event.key;
         nfcInput.dispatchEvent(new Event('input'));

@@ -1,9 +1,47 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, powerMonitor, screen } = require('electron');
 const { spawn } = require('child_process');
+const fs = require('fs');
 const path = require('path');
 let controlWindow, lockWindow, noticeWindow, emergencyWindow, tray;
 let quitting = false, idleLockEnabled = true, idleNoticeTimer = null, noticeMode = null, idleIgnoreUntil = 0;
 const iconPath = path.join(__dirname, 'assets', 'mavion-lock.ico');
+const defaultCards = [
+  { id: '3689635517', name: 'Alexander' },
+  { id: '3687763661', name: 'Andre' },
+  { id: '3289073650', name: 'Guest' },
+  { id: '3331995442', name: 'Guest' }
+];
+const normalizeCard = value => String(value || '').replace(/\s+/g, '').toUpperCase().slice(0, 128);
+const cardFile = () => path.join(app.getPath('userData'), 'nfc-cards.json');
+function loadCards() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(cardFile(), 'utf8'));
+    if (Array.isArray(parsed.cards)) return parsed.cards.filter(card => normalizeCard(card.id)).map(card => ({ id: normalizeCard(card.id), name: String(card.name || 'Guest').trim().slice(0, 40) || 'Guest' }));
+  } catch (_) {}
+  return defaultCards.slice();
+}
+function saveCards(cards) {
+  const clean = cards.slice(0, 50).map(card => ({ id: normalizeCard(card.id), name: String(card.name || 'Guest').trim().slice(0, 40) || 'Guest' })).filter(card => card.id);
+  const target = cardFile();
+  const temp = target + '.tmp';
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(temp, JSON.stringify({ version: 1, cards: clean }, null, 2), { encoding: 'utf8', mode: 0o600 });
+  fs.renameSync(temp, target);
+  return clean;
+}
+function detectImprivataReader() {
+  return new Promise(resolve => {
+    const script = "$d=Get-PnpDevice -PresentOnly -ErrorAction SilentlyContinue|Where-Object{$_.InstanceId -match 'VID_0C27&PID_3BFA'}|Select-Object -First 1; if($d){'connected|'+$d.InstanceId}else{'disconnected|'}";
+    const child = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], { windowsHide: true });
+    let output = '';
+    child.stdout.on('data', chunk => { output += chunk; });
+    child.on('error', () => resolve({ connected: false, model: 'Imprivata HDW-IMP-80-MINI', detail: 'Detection unavailable' }));
+    child.on('close', () => {
+      const connected = output.trim().startsWith('connected|');
+      resolve({ connected, model: 'Imprivata HDW-IMP-80-MINI', detail: connected ? 'rf IDEAS USB reader · VID 0C27 / PID 3BFA' : 'Reader not detected' });
+    });
+  });
+}
 const pos = (width, height, top = false) => { const area = screen.getPrimaryDisplay().workArea; return { x: area.x + area.width - width - 18, y: top ? area.y + 12 : area.y + area.height - height - 18 }; };
 function showControl() { controlWindow.show(); controlWindow.focus(); }
 function showLock() { hideNotice(); lockWindow.webContents.send('reset-lock'); lockWindow.show(); lockWindow.focus(); lockWindow.webContents.send('play-lock-animation'); }
@@ -27,4 +65,18 @@ function createEmergencyWindow() { const area=screen.getPrimaryDisplay().workAre
 function createControlWindow() { controlWindow = new BrowserWindow({ width:1060,height:710,minWidth:860,minHeight:570,backgroundColor:'#111318',autoHideMenuBar:true,title:'Mavion Go',icon:iconPath,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,preload:path.join(__dirname,'preload.cjs')} }); controlWindow.loadFile(path.join(__dirname,'renderer','control.html')); controlWindow.on('close',e=>{if(!quitting){e.preventDefault();controlWindow.hide()}}); if(app.getLoginItemSettings().wasOpenedAtLogin)controlWindow.once('ready-to-show',()=>controlWindow.hide()); }
 function createTray() { tray = new Tray(iconPath); tray.setToolTip('Mavion Go Lock'); tray.setContextMenu(Menu.buildFromTemplate([{label:'Lock desktop',click:showLock},{label:'Open Mavion Go',click:showControl},{type:'separator'},{label:'Quit',click:()=>{quitting=true;app.quit()}}])); tray.on('click',showControl); }
 ipcMain.handle('activate-lock',showLock); ipcMain.handle('release-lock',hideLock); ipcMain.handle('media-command',(_,command)=>sendMediaKey(command)); ipcMain.handle('show-notification',()=>showNotice('standard')); ipcMain.handle('show-inactivity',()=>showNotice('idle')); ipcMain.handle('notice-stay',()=>{hideNotice();idleIgnoreUntil=Date.now()+300000}); ipcMain.handle('notice-lock',()=>{hideNotice();showLock()}); ipcMain.handle('emergency-override',showEmergency); ipcMain.handle('end-emergency',(_,code)=>{if(String(code||'').trim()==='Mavion'){emergencyWindow.hide();return true}return false}); ipcMain.handle('get-startup',()=>app.getLoginItemSettings().openAtLogin); ipcMain.handle('set-startup',(_,enabled)=>app.setLoginItemSettings({openAtLogin:Boolean(enabled)})); ipcMain.handle('get-idle-lock',()=>idleLockEnabled); ipcMain.handle('set-idle-lock',(_,enabled)=>{idleLockEnabled=Boolean(enabled)});
+ipcMain.handle('get-nfc-config', async () => ({ cards: loadCards(), reader: await detectImprivataReader() }));
+ipcMain.handle('validate-nfc-card', (_, raw) => {
+  const id = normalizeCard(raw);
+  const card = loadCards().find(item => item.id === id);
+  return card ? { ok: true, name: card.name } : { ok: false };
+});
+ipcMain.handle('save-nfc-card', (_, card) => {
+  const id = normalizeCard(card && card.id);
+  if (!id) return { ok: false, error: 'invalid_card' };
+  const cards = loadCards().filter(item => item.id !== id);
+  cards.push({ id, name: String(card.name || 'Guest').trim().slice(0, 40) || 'Guest' });
+  return { ok: true, cards: saveCards(cards) };
+});
+ipcMain.handle('remove-nfc-card', (_, id) => ({ ok: true, cards: saveCards(loadCards().filter(item => item.id !== normalizeCard(id))) }));
 app.whenReady().then(()=>{createControlWindow();createLockWindow();createNoticeWindow();createEmergencyWindow();createTray();setInterval(checkSystemIdle,2000);app.on('activate',showControl)}); app.on('window-all-closed',e=>{if(!quitting)e.preventDefault()});
