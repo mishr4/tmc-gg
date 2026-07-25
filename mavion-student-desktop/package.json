@@ -1,6 +1,6 @@
 {
   "name": "mavion-go-lock",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Mavion Go Lock for Windows",
   "main": "main.cjs",
   "private": true,

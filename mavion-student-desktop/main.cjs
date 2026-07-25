@@ -56,13 +56,21 @@ function cardCandidates(bytes) {
   return [...new Set([toDecimal([...used].reverse()), toDecimal(used), used.toString('hex').toUpperCase()])];
 }
 function emitReaderScan(candidates) {
-  const known = new Set(loadCards().map(card => card.id));
+  const cards = loadCards();
+  const known = new Set(cards.map(card => card.id));
   const id = candidates.find(value => known.has(normalizeCard(value))) || candidates[0];
   if (!id || (id === lastReaderScan && Date.now() - lastReaderScanAt < 1800)) return;
   lastReaderScan = id;
   lastReaderScanAt = Date.now();
-  for (const win of [controlWindow, lockWindow]) {
-    if (win && !win.isDestroyed()) win.webContents.send('nfc-scan', id);
+  if (controlWindow && !controlWindow.isDestroyed()) controlWindow.webContents.send('nfc-scan', id);
+  if (lockWindow && !lockWindow.isDestroyed() && lockWindow.isVisible()) {
+    const card = cards.find(item => item.id === normalizeCard(id));
+    lockWindow.webContents.send('nfc-auth-result', card ? { ok: true, name: card.name } : { ok: false });
+    if (card) {
+      setTimeout(() => {
+        if (lockWindow && !lockWindow.isDestroyed() && lockWindow.isVisible()) hideLock();
+      }, 850);
+    }
   }
 }
 function stopReaderSdk() {

@@ -112,9 +112,25 @@
   });
   window.mavion.onResetLock(reset);
   window.mavion.onPlayLockAnimation(animate);
-  window.mavion.onNfcScan(value => {
+  window.mavion.onNfcAuthResult(result => {
     if (mode !== 'nfc') return;
-    finishScan(value);
+    nfcReader.classList.remove('reading', 'accepted', 'denied');
+    if (result && result.ok) {
+      nfcReader.classList.add('accepted');
+      nfcTitle.textContent = `Welcome, ${result.name}.`;
+      nfcStatus.textContent = 'Opening your desktop…';
+    } else {
+      nfcReader.classList.add('denied');
+      nfcTitle.textContent = 'Card not recognized';
+      nfcStatus.textContent = 'Try again or choose Access code.';
+      nfcError.hidden = false;
+      setTimeout(() => {
+        nfcReader.classList.remove('denied');
+        nfcTitle.textContent = 'Ready to scan';
+        nfcStatus.textContent = 'Tap your card on the connected reader.';
+        focusCurrent();
+      }, 1500);
+    }
   });
   updateClock(); setInterval(updateClock, 1000); reset();
 })();
