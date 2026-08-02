@@ -1,0 +1,6 @@
+Contact: mailto:tagnz@tmc.gg
+Expires: 2027-08-02T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://tmc.gg/.well-known/security.txt
+Policy: https://tmc.gg/safety
+Hiring: https://tmc.gg/careers
